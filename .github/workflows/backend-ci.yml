@@ -1,0 +1,32 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - "fithub_back/**"
+    branches: ["main"]
+  pull_request:
+    paths:
+      - "fithub_back/**"
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: fithub_back
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Build with Maven
+        run: mvn clean install
