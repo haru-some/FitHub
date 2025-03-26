@@ -130,7 +130,7 @@ body {
 }
 .header-logo-text {
   font-size: 30px;
-  font-family: ms-b;
+  font-family: bg-b;
   text-decoration: none;
   color: white;
 }
@@ -148,7 +148,7 @@ body {
   font-size: 16px;
 }
 /* 로그인/회원가입 메뉴 */
-.user-menu {
+.member-menu {
   display: flex;
   align-items: center;
   gap: 35px;
@@ -156,7 +156,7 @@ body {
   margin: 0;
   padding: 0;
 }
-.user-menu a {
+.member-menu a {
   text-decoration: none;
   color: white;
   font-size: 16px;
