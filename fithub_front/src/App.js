@@ -1,4 +1,3 @@
-import { Route, Routes } from "react-router-dom";
 import { Link, Route, Routes } from "react-router-dom";
 import Footer from "./component/common/Footer";
 import Header from "./component/common/Header";
@@ -11,6 +10,7 @@ import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
 import AdminMain from "./component/Admin/AdminMain";
 import ShopList from "./component/shop/ShopList";
+import Login from "./component/member/Login";
 
 import CommunityMain from "./component/community/CommunityMain";
 
