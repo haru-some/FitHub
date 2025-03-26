@@ -17,10 +17,12 @@
   justify-content: space-between;
   border-bottom: 1px solid #ccc;
   padding-bottom: 20px;
+  cursor: pointer;
 }
 .user-info {
   display: flex;
   gap: 7px;
+  cursor: pointer;
 }
 .user-info > div {
   display: flex;
@@ -52,6 +54,7 @@
 }
 .community-img > img {
   width: 150px;
+  border-radius: 10px;
 }
 .post-item-wrap {
   padding: 0;
@@ -60,6 +63,10 @@
   list-style: none;
   margin-bottom: 10px;
   border-bottom: 1px solid #ccc;
+  margin-top: 10px;
+}
+.community-post-item > div {
+  padding: 5px 0;
 }
 .community-post-item p {
   margin: 5px;
@@ -72,6 +79,16 @@
 .community-post-item > .community-member {
   display: flex;
   gap: 10px;
+}
+.community-likes {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.community-comments {
+  display: flex;
+  gap: 3px;
+  align-items: center;
 }
 
 .community-view {

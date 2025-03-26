@@ -43,7 +43,7 @@ const MainNavi = () => {
           <Link to="/myfit/fit">My Fit</Link>
         </li>
         <li>
-          <Link to="/community">Community</Link>
+          <Link to="/community/list">Community</Link>
         </li>
         <li>
           <Link to="/market">Market</Link>

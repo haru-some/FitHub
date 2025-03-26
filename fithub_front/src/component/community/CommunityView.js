@@ -38,7 +38,7 @@ const CommunityView = () => {
           <div className="comment-text">
             <p className="comment-user">KING.JOJI</p>
             <p className="comment-content">
-              씨범이랑 살찌는 여정에서 이제 나온 하체 부트리드리기 가자
+              씨범이형 상체는 여전하네 이제 나랑 하체 부러트리러 가자
             </p>
           </div>
         </div>
@@ -51,7 +51,7 @@ const CommunityView = () => {
           <div className="comment-text">
             <p className="comment-user">S.LINE</p>
             <p className="comment-content">
-              씨범이 오해 나 다이어트 하는거 도와주자링..
+              씨범이 오빠 나 다이어트 하는거 도와주라잉..
             </p>
           </div>
         </div>
