@@ -4,11 +4,11 @@
   margin: 0 auto;
   width: 1400px;
 }
-.side-menu {
+.admin-section .side-menu {
   display: flex;
   flex-direction: column;
 }
-.side-menu a {
+.admin-section .side-menu a {
   list-style-type: none;
   margin: 0 auto;
   margin-top: 10px;
@@ -21,19 +21,18 @@
   color: white;
 }
 
-.today-section {
+.admin-section .today-section {
   width: 1000px;
   background-color: #8f8f8f;
   border-radius: 30px;
 }
-.page-title {
+.admin-section .page-title {
   margin: 20px auto;
-}
-
-.side-menu .active-tab {
-  background-color: #252525;
-}
-
-li > a {
+  text-align: center;
   color: white;
+  font-size: 32px;
+}
+
+.admin-section .side-menu .active-tab {
+  background-color: #252525;
 }

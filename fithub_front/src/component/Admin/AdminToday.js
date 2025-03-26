@@ -10,10 +10,10 @@ const AdminToday = () => {
           <MemberChart />
           <SiteVisitChart />
         </div>
-        <div className="mt-4">
+        <div className="chart-second">
           <PostChart />
         </div>
-        <div className="mt-4">
+        <div className="chart-third">
           <SalesChart />
         </div>
       </div>

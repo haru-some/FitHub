@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
 import AdminMain from "./component/Admin/AdminMain";
 import ShopList from "./component/shop/ShopList";
+import Login from "./component/member/Login";
 
 import CommunityMain from "./component/community/CommunityMain";
 
@@ -48,6 +49,7 @@ function App() {
       <main className="content">
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />
