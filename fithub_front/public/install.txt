@@ -13,3 +13,6 @@ npm install quill-image-resize-module-react
 전한기 2025-03-26 14:14 - MUI Date and Time Pickers
 npm install @mui/x-date-pickers
 npm install dayjs
+
+전한기 2025-03-26 17:10 - nivo 그래프 라이브러리 설치
+npm install @nivo/core @nivo/line

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import BasicDateCalendar from "./calendar";
+import { Link } from "react-router-dom";
 
 const MyFit = () => {
   const [date, setDate] = useState(null);
@@ -33,8 +34,9 @@ const ExerciseRecord = () => {
         <p>하체</p>
         <p>스쿼트, 렉스텐션, 레그프레스, 레그컬스탠딩</p>
       </div>
-
-      <button className="edit-button">기록 수정</button>
+      <Link to="/myfit/record">
+        <button className="edit-button">기록 수정</button>
+      </Link>
     </div>
   );
 };
