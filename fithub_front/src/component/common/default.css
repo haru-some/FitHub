@@ -1,0 +1,266 @@
+:root {
+  /* main color */
+  --main1: #191c19;
+  --main2: #293a2c;
+  --main3: #589c5f;
+  --main4: #daf4e5;
+
+  /* gray */
+  --gray1: #3c3c3c;
+  --gray2: #616161;
+  --gray3: #9ba099;
+
+  /*line-color*/
+  --line1: #222222;
+  --line2: #d6d6d6;
+  --line3: #eaeced;
+  --line4: #f6f6f6;
+  --line5: #f8f9fa;
+}
+@font-face {
+  font-family: ms-l;
+  src: url(/public/font/Montserrat-Light.otf);
+}
+@font-face {
+  font-family: ms-r;
+  src: url(/public/font/Montserrat-Regular.otf);
+}
+@font-face {
+  font-family: ms-b;
+  src: url(/public/font/Montserrat-Bold.otf);
+}
+@font-face {
+  font-family: ms-black;
+  src: url(/public/font/Montserrat-Black.otf);
+}
+@font-face {
+  font-family: ns-l;
+  src: url(/public/font/NotoSansKR-Light.ttf);
+}
+@font-face {
+  font-family: ns-r;
+  src: url(/public/font/NotoSansKR-Regular.ttf);
+}
+@font-face {
+  font-family: ns-b;
+  src: url(/public/font/NotoSansKR-Bold.ttf);
+}
+@font-face {
+  font-family: ns-black;
+  src: url(/public/font/NotoSansKR-Black.ttf);
+}
+@font-face {
+  font-family: pd-l;
+  src: url(/public/font/Pretendard-Light.otf);
+}
+@font-face {
+  font-family: pd-r;
+  src: url(/public/font/Pretendard-Regular.otf);
+}
+@font-face {
+  font-family: pd-b;
+  src: url(/public/font/Pretendard-Bold.otf);
+}
+@font-face {
+  font-family: pd-black;
+  src: url(/public/font/Pretendard-Black.otf);
+}
+@font-face {
+  font-family: bg-l;
+  src: url(/public/font/BricolageGrotesque-Light.ttf);
+}
+@font-face {
+  font-family: bg-r;
+  src: url(/public/font/BricolageGrotesque-Regular.ttf);
+}
+@font-face {
+  font-family: bg-b;
+  src: url(/public/font/BricolageGrotesque-Bold.ttf);
+}
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  font-family: pd-r;
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-width: 800px;
+  position: relative;
+  background-color: var(--gray1);
+}
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 헤더 */
+.header {
+  background-color: var(--main1);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-family: ms-b;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+.logo-img {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+  object-fit: contain;
+}
+.header-logo-text {
+  font-size: 30px;
+  font-family: bg-b;
+  text-decoration: none;
+  color: white;
+}
+/* 네비게이션 메뉴 */
+.nav ul {
+  display: flex;
+  gap: 150px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+}
+/* 로그인/회원가입 메뉴 */
+.member-menu {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.member-menu a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+}
+.signup {
+  background-color: #314438;
+  padding: 8px 25px;
+  border-radius: 999px;
+}
+
+.content {
+  width: 100%;
+  max-width: 1400px;
+  margin: 30px auto;
+  flex: 1;
+}
+
+/* 푸터 */
+.footer {
+  background-color: var(--main1);
+  color: white;
+  padding: 30px 40px;
+  padding-bottom: 0;
+  font-family: "Arial", sans-serif;
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+.footer-middle {
+  text-align: right;
+  color: var(--gray2);
+  margin-bottom: 20px;
+}
+.footer-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.footer-logo img {
+  width: 47px;
+  height: 47px;
+}
+.footer-logo span {
+  font-size: 56px;
+  font-family: bg-b;
+  color: white;
+}
+.footer-info {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.info-block .label {
+  font-size: 14px;
+  color: #999999;
+  margin-bottom: 10px;
+}
+.info-block .value {
+  font-size: 20px;
+  font-family: bg-b;
+  color: #eceeec;
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 32px;
+}
+.footer-explore {
+  background-image: url("/public/image/footer_bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.explore-text p {
+  margin: 0;
+  margin-left: 30px;
+  font-size: 30px;
+  font-family: bg-r;
+}
+.explore-arrow {
+  font-size: 32px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+.explore-arrow:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+.footer-bottom .copyright {
+  font-size: 14px;
+  color: #aaa;
+  text-align: right;
+}

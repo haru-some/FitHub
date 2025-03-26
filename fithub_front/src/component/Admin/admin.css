@@ -1,0 +1,39 @@
+.admin-section {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 1400px;
+}
+.side-menu {
+  display: flex;
+  flex-direction: column;
+}
+.side-menu a {
+  list-style-type: none;
+  margin: 0 auto;
+  margin-top: 10px;
+  padding: 20px 20px;
+  width: 200px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  text-align: center;
+  background-color: #8f8f8f;
+  color: white;
+}
+
+.today-section {
+  width: 1000px;
+  background-color: #8f8f8f;
+  border-radius: 30px;
+}
+.page-title {
+  margin: 20px auto;
+}
+
+.side-menu .active-tab {
+  background-color: #252525;
+}
+
+li > a {
+  color: white;
+}
