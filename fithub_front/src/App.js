@@ -8,7 +8,7 @@ function App() {
       <div className="content">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="myfit" element={<MyFitMain />} />
+          <Route path="/myfit/*" element={<MyFitMain />} />
         </Routes>
       </div>
     </div>

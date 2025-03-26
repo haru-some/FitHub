@@ -1,0 +1,93 @@
+.myfit-profile-card {
+  width: 790px;
+  background-color: #222;
+  color: white;
+  border-radius: 10px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.myfit-profile-header {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.myfit-profile-icon {
+  width: 100px;
+  height: 100px;
+  background-color: #666;
+  border-radius: 50%;
+  margin-right: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+}
+
+.myfit-profile-stats {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name-wrap {
+  width: 100px;
+  text-align: left;
+}
+.myfit-profile-info {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.myfit-profile-info h2 {
+  margin: 0;
+}
+
+.myfit-profile-stats p {
+  margin: 4px;
+  font-size: 18px;
+}
+
+.myfit-profile-actions {
+  display: flex;
+  gap: 50px;
+  justify-content: space-around;
+  margin-bottom: 50px;
+}
+
+.myfit-profile-button {
+  width: 250px;
+  background-color: #555;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.myfit-profile-button:hover {
+  background-color: #444;
+}
+
+.myfit-profile-summary h3 {
+  margin-top: 0;
+}
+
+.myfit-profile-summary ul {
+  list-style: none;
+  padding: 0;
+}
+
+.myfit-profile-summary li {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
