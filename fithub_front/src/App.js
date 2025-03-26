@@ -1,3 +1,4 @@
+import { Route, Routes } from "react-router-dom";
 import { Link, Route, Routes } from "react-router-dom";
 import Footer from "./component/common/Footer";
 import Header from "./component/common/Header";
