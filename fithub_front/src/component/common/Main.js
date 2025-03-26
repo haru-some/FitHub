@@ -4,6 +4,7 @@ const Main = () => {
   return (
     <div>
       <Link to="/myfit">My Fit</Link>
+      <Link to="/community/list">community</Link>
       <hr></hr>
       <Link to="/admin/today">Admin</Link>
       <hr></hr>

@@ -1,0 +1,111 @@
+.member-wrap {
+  display: flex;
+  width: 1300px;
+  height: 900px;
+  margin: 50px auto;
+  background-color: white;
+  font-family: pd-r;
+}
+.member-left {
+  width: 820px;
+  background-image: url("/public/image/login_bg.png"); /* ← public 기준 경로 */
+  background-size: cover;
+  background-position: center;
+}
+.member-right {
+  width: 360px;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.member-welcome {
+  color: #999;
+  font-size: 16px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+.member-title {
+  font-size: 32px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+.member-sub {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.member-sub a {
+  color: var(--main1);
+  text-decoration: none;
+}
+.member-input-wrap {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.member-input-wrap label {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.member-input-wrap input {
+  padding: 14px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.btn-primary.lg.full {
+  width: 100%;
+  padding: 14px;
+  background-color: #2f3e2f;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.member-link-box {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.member-link-box a {
+  text-decoration: none;
+  color: #333;
+  margin: 0 6px;
+}
+.divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 24px 0 12px;
+}
+.easy-login-title {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+  text-align: center;
+}
+/* 이미지 버튼 스타일 */
+.login-btn-image {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 999px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.google-login {
+  background-image: url("/public/image/google_login.png");
+}
+.kakao-login {
+  background-image: url("/public/image/kakao_login.png");
+}

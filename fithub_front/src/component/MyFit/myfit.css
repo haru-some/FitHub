@@ -6,6 +6,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  min-height: 600px;
 }
 
 .myfit-content {
@@ -27,18 +28,18 @@
   gap: 50px;
 }
 
-.sidebar {
+.myfit-wrap .sidebar {
   border-radius: 10px;
   width: 180px;
 }
 
-.sidebar-box {
+.myfit-wrap .sidebar-box {
   display: flex;
   flex-direction: column;
   padding: 5px;
 }
 
-.sidebar a {
+.myfit-wrap .sidebar a {
   height: 24px;
   font-size: 18px;
   background: #888;
@@ -51,47 +52,51 @@
   text-decoration: none;
 }
 
-.sidebar .active {
+.myfit-wrap .sidebar .active {
   background: #222;
 }
 
-.calendar {
+.myfit-wrap .calendar {
   background: #222;
   padding: 20px;
   border-radius: 10px;
   width: 350px;
 }
 
-.calendar h2 {
+.myfit-wrap .calendar h2 {
   margin-bottom: 10px;
 }
 
-.calendar-grid {
+.myfit-wrap .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
 }
 
-.day-header {
+.myfit-wrap .day-header {
   color: gray;
 }
 
-.day {
+.myfit-wrap .day {
   padding: 5px;
   border-radius: 50%;
   text-align: center;
 }
 
-.highlight {
+.myfit-wrap .highlight {
   background: green;
   color: white;
 }
 
 .exercise-record {
   background: #222;
-  padding: 20px;
+  padding: 50px 20px;
   border-radius: 10px;
   width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .exercise-record-content {
@@ -99,8 +104,10 @@
   text-align: left;
 }
 
-.edit-button {
-  background: green;
+.fit-wrap .edit-button {
+  font-size: px;
+  width: 120px;
+  background: #589c5f;
   color: white;
   border: none;
   padding: 10px;

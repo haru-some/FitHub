@@ -2,7 +2,7 @@
   background: #222;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 790px;
   text-align: center;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .record-wrap .submit-button {
-  background: green;
+  background: #589c5f;
   color: white;
   border: none;
   padding: 10px;
@@ -70,5 +70,5 @@
 }
 
 .record-wrap .submit-button:hover {
-  background: darkgreen;
+  background: #45944d;
 }
