@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, NavLink, Route, Routes } from "react-router-dom";
 import AdminToday from "./AdminToday";
 import AdminAds from "./AdminAds";
 import "./admin.css";
@@ -30,23 +30,36 @@ const Sidebar = () => {
   };
   return (
     <div className="side-menu">
-      <ul>
-        <li className="main-navi" onClick={activeTab}>
-          <Link to="/admin/today">관리자 페이지</Link>
-        </li>
-        <li className="member-navi" onClick={activeTab}>
-          <Link to="/admin/member">회원 관리</Link>
-        </li>
-        <li className="sales-navi" onClick={activeTab}>
-          <Link to="/admin/sales">매출 관리</Link>
-        </li>
-        <li className="contect-navi" onClick={activeTab}>
-          <Link to="/admin/contect">문의 확인</Link>
-        </li>
-        <li className="ads-navi" onClick={activeTab}>
-          <Link to="/admin/ads">광고 관리</Link>
-        </li>
-      </ul>
+      <NavLink
+        to="/admin/today"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        관리자 페이지
+      </NavLink>
+      <NavLink
+        to="/admin/member"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        회원 통계
+      </NavLink>
+      <NavLink
+        to="/admin/sales"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        매출 통계
+      </NavLink>
+      <NavLink
+        to="/admin/contect"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        문의 관리
+      </NavLink>
+      <NavLink
+        to="/admin/ads"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        광고 관리
+      </NavLink>
     </div>
   );
 };
