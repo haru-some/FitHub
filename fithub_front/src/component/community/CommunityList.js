@@ -65,7 +65,7 @@ const CommunityList = () => {
           </div>
         </div>
         <div className="community-content">
-          <ul className="post-item-wrap">
+          <ul className="community-item-wrap">
             {communityList.map((community, index) => {
               return (
                 <CommunityItem
