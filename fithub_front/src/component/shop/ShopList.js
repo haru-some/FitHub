@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./shopLIst.css";
+import ProductPage from "./ProductPage";
 
 const allProducts = [
   {
@@ -227,14 +228,14 @@ const Advertisements = () => {
   const previousAd = () => {
     setCurrentAd((prevAd) => (prevAd - 1 + ads.length) % ads.length);
   };
-  // 자동 클릭을 위한 interval 설정
+
   useEffect(() => {
     const intervalId = setInterval(() => {
-      nextAd(); // 자동으로 광고를 전환
+      nextAd();
     }, 5000); // 5초마다 광고 전환
 
-    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 클리어
-  }, []); // 빈 배열로만 처음에 한 번 실행
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div className="Banner-wrap">
@@ -256,7 +257,7 @@ const ProductList = () => {
   };
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category); // 카테고리 변경 시 상태 업데이트
   };
 
   const filteredProducts = allProducts.filter((product) =>
@@ -310,13 +311,18 @@ const ProductList = () => {
 
 const ShopList = () => {
   const [selectedCategory, setSelectedCategory] = useState("모두");
+
   return (
     <div>
       <h2 style={{ textAlign: "center", margin: "20px 0" }}>
         {selectedCategory}
       </h2>
+      {/* 선택된 카테고리를 중앙에 표시 */}
       <Advertisements />
-      <ProductList setSelectedCategory={setSelectedCategory} />
+      <ProductList
+        products={allProducts} // allProducts를 전달
+        setSelectedCategory={setSelectedCategory}
+      />
     </div>
   );
 };
