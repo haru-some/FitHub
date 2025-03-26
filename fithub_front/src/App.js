@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
 import ShopList from "./component/shop/ShopList";
