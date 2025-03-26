@@ -313,7 +313,7 @@ const ShopList = () => {
   const [selectedCategory, setSelectedCategory] = useState("모두");
 
   return (
-    <div>
+    <div className="shop-list-wrap">
       <h2 style={{ textAlign: "center", margin: "20px 0" }}>
         {selectedCategory}
       </h2>
