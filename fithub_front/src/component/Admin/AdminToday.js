@@ -7,14 +7,14 @@ const AdminToday = () => {
       <h1 className="page-title">하루 통계</h1>
       <div className="chart-list">
         <div className="chart-first">
-          <MemberStats />
-          <SiteVisitStats />
+          <MemberChart />
+          <SiteVisitChart />
         </div>
         <div className="mt-4">
-          <PostStats />
+          <PostChart />
         </div>
         <div className="mt-4">
-          <SalesStats />
+          <SalesChart />
         </div>
       </div>
     </section>
@@ -22,7 +22,7 @@ const AdminToday = () => {
 };
 
 // 회원 통계 컴포넌트
-const MemberStats = () => {
+const MemberChart = () => {
   return (
     <div>
       <h3>회원 통계</h3>
@@ -31,7 +31,7 @@ const MemberStats = () => {
 };
 
 // 사이트 방문 통계 컴포넌트
-const SiteVisitStats = () => {
+const SiteVisitChart = () => {
   return (
     <div>
       <h3>사이트 방문 통계</h3>
@@ -40,7 +40,7 @@ const SiteVisitStats = () => {
 };
 
 // 게시글 생성 통계 컴포넌트
-const PostStats = () => {
+const PostChart = () => {
   return (
     <div>
       <h3>게시글 생성 통계</h3>
@@ -49,7 +49,7 @@ const PostStats = () => {
 };
 
 // 매출 통계 컴포넌트
-const SalesStats = () => {
+const SalesChart = () => {
   return (
     <div>
       <h3>매출 통계</h3>

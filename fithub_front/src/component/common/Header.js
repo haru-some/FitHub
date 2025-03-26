@@ -7,6 +7,9 @@ import {
   memberTypeState,
 } from "../utils/RecoilData";
 import axios from "axios";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const Header = () => {
   return (
@@ -19,7 +22,7 @@ const Header = () => {
             className="logo-img"
           />
           <Link to="/" className="header-logo-text">
-            FitHub
+            fitHub
           </Link>
         </div>
         <MainNavi />
@@ -40,7 +43,7 @@ const MainNavi = () => {
           <Link to="/myfit/fit">My Fit</Link>
         </li>
         <li>
-          <Link to="/community">Community</Link>
+          <Link to="/community/list">Community</Link>
         </li>
         <li>
           <Link to="/market">Market</Link>
@@ -61,15 +64,31 @@ const HeaderLink = () => {
     window.localStorage.removeItem("refreshToken");
   };
   return (
-    <ul className="user-menu">
+    <ul className="member-menu">
       {isLogin ? (
         <>
           <li>
-            <Link to="/member">{memberId}</Link>
+            <Link
+              to={memberType === 1 ? "/admin" : "/member"}
+              className="member-name"
+            >
+              {memberId}
+            </Link>
+          </li>
+          <li>
+            {memberType === 1 ? (
+              <Link to="/admin/today">
+                <SettingsIcon />
+              </Link>
+            ) : (
+              <Link to="/cart">
+                <ShoppingCartIcon />
+              </Link>
+            )}
           </li>
           <li>
             <Link to="/" onClick={logOut}>
-              로그아웃
+              <LogoutIcon />
             </Link>
           </li>
         </>
