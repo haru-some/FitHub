@@ -1,0 +1,74 @@
+.record-wrap {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+.record-wrap h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.time-inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.time-inputs div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-inputs label {
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.time-inputs input {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.exercise-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.exercise-content label {
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.exercise-content textarea {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  resize: none;
+}
+
+.submit-button {
+  background: green;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.submit-button:hover {
+  background: darkgreen;
+}

@@ -1,0 +1,167 @@
+body {
+  background-color: #3c3c3c;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.myfit-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.myfit-content {
+  width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.myfit-content-box {
+  width: 920px;
+  display: flex;
+  justify-content: center;
+}
+
+.fit-wrap {
+  display: flex;
+  gap: 50px;
+}
+
+.sidebar {
+  border-radius: 10px;
+  width: 180px;
+}
+
+.sidebar-box {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.sidebar a {
+  height: 24px;
+  font-size: 18px;
+  background: #888;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sidebar .active {
+  background: #222;
+}
+
+.calendar {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+}
+
+.calendar h2 {
+  margin-bottom: 10px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day-header {
+  color: gray;
+}
+
+.day {
+  padding: 5px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.highlight {
+  background: green;
+  color: white;
+}
+
+.exercise-record {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+}
+
+.exercise-record-content {
+  padding: 20px;
+  text-align: left;
+}
+
+.edit-button {
+  background: green;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fit-wrap .calendar .css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root {
+  color: white;
+}
+
+.fit-wrap .calendar .css-qct7wd-MuiButtonBase-root-MuiPickersDay-root {
+  color: white;
+}
+
+.fit-wrap
+  .calendar
+  .css-17f9e7e-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  color: white;
+}
+
+.fit-wrap
+  .calendar
+  .css-14yom7c-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon {
+  fill: white;
+}
+
+.fit-wrap .calendar .css-1ckov0h-MuiSvgIcon-root {
+  fill: white;
+}
+
+.fit-wrap
+  .calendar
+  .css-qct7wd-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+  border: 1px solid #589c5f;
+}
+
+.fit-wrap
+  .calendar
+  .css-qct7wd-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: #589c5f;
+}
+
+.fit-wrap
+  .calendar
+  .css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: #589c5f;
+}
+
+.fit-wrap .calendar .css-osh0x1 {
+}
+
+.fit-wrap .calendar .css-osh0x1 {
+  width: 320px;
+  padding: 0;
+}
+
+.fit-wrap .calendar .css-1rv8zyt-MuiStack-root {
+  overflow: hidden;
+}
