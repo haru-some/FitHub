@@ -4,8 +4,11 @@
   margin: 0 auto;
   width: 1400px;
 }
-
-.side-menu li {
+.side-menu {
+  display: flex;
+  flex-direction: column;
+}
+.side-menu a {
   list-style-type: none;
   margin: 0 auto;
   margin-top: 10px;
@@ -21,16 +24,16 @@
 .today-section {
   width: 1000px;
   background-color: #8f8f8f;
+  border-radius: 30px;
 }
 .page-title {
   margin: 20px auto;
 }
 
-.active-tab {
+.side-menu .active-tab {
   background-color: #252525;
 }
 
-.li > a {
-  width: 100%;
-  height: 100%;
+li > a {
+  color: white;
 }
