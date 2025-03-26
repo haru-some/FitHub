@@ -49,6 +49,7 @@ function App() {
       <main className="content">
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />
