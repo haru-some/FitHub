@@ -1,11 +1,7 @@
-body {
-  background-color: #3c3c3c;
+.myfit-wrap {
   color: white;
   font-family: Arial, sans-serif;
   text-align: center;
-}
-
-.myfit-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -12,25 +12,25 @@
   margin-bottom: 15px;
 }
 
-.time-inputs {
+.record-wrap .time-inputs {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
 
-.time-inputs div {
+.record-wrap .time-inputs div {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.time-inputs label {
+.record-wrap .time-inputs label {
   font-size: 0.9em;
   margin-bottom: 5px;
 }
 
-.time-inputs input {
+.record-wrap .time-inputs input {
   background: #333;
   color: white;
   border: none;
@@ -38,7 +38,7 @@
   border-radius: 5px;
 }
 
-.exercise-content {
+.record-wrap .exercise-content {
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -50,7 +50,7 @@
   margin-bottom: 5px;
 }
 
-.exercise-content textarea {
+.record-wrap .exercise-content textarea {
   background: #333;
   color: white;
   border: none;
@@ -59,7 +59,7 @@
   resize: none;
 }
 
-.submit-button {
+.record-wrap .submit-button {
   background: green;
   color: white;
   border: none;
@@ -69,6 +69,6 @@
   width: 100%;
 }
 
-.submit-button:hover {
+.record-wrap .submit-button:hover {
   background: darkgreen;
 }
