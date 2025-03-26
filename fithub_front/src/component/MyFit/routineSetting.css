@@ -1,0 +1,66 @@
+.routine-wrap {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  width: 790px;
+  text-align: center;
+}
+
+.routine-days {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 25px;
+}
+
+.routine-days button {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  font-size: 1em;
+}
+
+.routine-days .selected {
+  background: green;
+}
+
+.routine-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.routine-content label {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.routine-content textarea {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  resize: none;
+  min-height: 200px;
+}
+
+.routine-wrap .save-button {
+  background: green;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.routine-wrap .save-button:hover {
+  background: darkgreen;
+}

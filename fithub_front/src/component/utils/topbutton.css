@@ -1,0 +1,31 @@
+.top-button {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  padding: 12px;
+  background-color: var(--main1);
+  border: 1px solid #252624;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.top-button.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.top-button:hover {
+  background-color: #252624;
+}
+
+.top-button svg {
+  font-size: 24px;
+  fill: white;
+}
