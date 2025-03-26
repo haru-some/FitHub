@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from "react-router-dom";
 import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
+import AdminMain from "./component/Admin/AdminMain";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="myfit" element={<MyFitMain />} />
+          <Route path="/admin/*" element={<AdminMain />} />
         </Routes>
       </div>
     </div>
