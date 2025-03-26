@@ -8,6 +8,8 @@ import { useRecoilState } from "recoil";
 import { loginIdState, memberTypeState } from "./component/utils/RecoilData";
 import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
+import AdminMain from "./component/Admin/AdminMain";
+import ShopList from "./component/shop/ShopList";
 
 function App() {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
@@ -44,7 +46,9 @@ function App() {
       <main className="content">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/myfit" element={<MyFitMain />} />
+          <Route path="/myfit/*" element={<MyFitMain />} />
+          <Route path="/admin/*" element={<AdminMain />} />
+          <Route path="shop" element={<ShopList />} />
         </Routes>
       </main>
       <TopButton />
