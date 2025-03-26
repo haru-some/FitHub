@@ -37,7 +37,7 @@ const MainNavi = () => {
           <Link to="/">Main</Link>
         </li>
         <li>
-          <Link to="/myfit">My Fit</Link>
+          <Link to="/myfit/fit">My Fit</Link>
         </li>
         <li>
           <Link to="/community">Community</Link>
