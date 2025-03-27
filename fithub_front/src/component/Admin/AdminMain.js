@@ -10,14 +10,18 @@ import AdminContect from "./AdminContect";
 const AdminMain = () => {
   return (
     <section className="section admin-section">
-      <Sidebar />
-      <Routes>
-        <Route path="today" element={<AdminToday />} />
-        <Route path="member" element={<AdminMember />} />
-        <Route path="sales" element={<AdminSales />} />
-        <Route path="contect" element={<AdminContect />} />
-        <Route path="Ads" element={<AdminAds />} />
-      </Routes>
+      <div className="navi-bar">
+        <Sidebar />
+      </div>
+      <div className="section-page">
+        <Routes>
+          <Route path="today" element={<AdminToday />} />
+          <Route path="member" element={<AdminMember />} />
+          <Route path="sales" element={<AdminSales />} />
+          <Route path="contect" element={<AdminContect />} />
+          <Route path="Ads" element={<AdminAds />} />
+        </Routes>
+      </div>
     </section>
   );
 };
