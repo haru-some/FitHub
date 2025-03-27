@@ -6,7 +6,11 @@ import RoutineSetting from "./RoutineSetting";
 import ProfileCard from "./ProfileCard ";
 import { useRef, useState } from "react";
 import { selectClasses } from "@mui/material";
+import dayjs from "dayjs";
+import "dayjs/locale/ko"; // 한글 locale 추가
+
 const MyFitMain = () => {
+  const [date, setDate] = useState(dayjs());
   const [pageTitle, setPageTitle] = useState("My Fit");
   return (
     <div className="myfit-wrap">
@@ -15,9 +19,9 @@ const MyFitMain = () => {
         <Sidebar setPageTitle={setPageTitle} />
         <div className="myfit-content-box">
           <Routes>
-            <Route path="fit" element={<MyFit />} />
+            <Route path="fit" element={<MyFit date={date} setDate={setDate} />} />
             <Route path="record" element={<ExerciseLog />} />
-            <Route path="routine" element={<RoutineSetting />} />
+            <Route path="routine" element={<RoutineSetting date={date} />} />
             <Route path="activity/*" element={<ProfileCard />} />
           </Routes>
         </div>

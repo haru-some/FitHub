@@ -5,8 +5,9 @@ import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
 dayjs.locale("ko");
-const MyFit = () => {
-  const [date, setDate] = useState(dayjs());
+const MyFit = (props) => {
+  const date = props.date
+  const setDate = props.setDate
   const [memberNo, setMemberNo] = useState(1);
   const [record, setRecord] = useState(null);
   const [routine, setRoutine] = useState(null);
@@ -85,7 +86,7 @@ const MyFit = () => {
                 return record
                   ? record.recordContent
                   : `${
-                      routine ? routine.routineContent : "<p>루틴없음</p>"
+                      routine ? routine.routineContent : "<h4>루틴없음</h4>"
                     }<br><br>오늘의 운동을 완료했다면 기록해보세요!`;
               } else {
                 return routine ? routine.routineContent : "루틴없음";

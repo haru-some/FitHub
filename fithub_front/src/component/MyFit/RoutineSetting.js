@@ -3,8 +3,10 @@ import "./routineSetting.css";
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 
-const RoutineSetting = () => {
-  const [selectedDay, setSelectedDay] = useState("목");
+const RoutineSetting = (props) => {
+  const date = props.date
+  const weekday = date.format("dddd").charAt(0);
+  const [selectedDay, setSelectedDay] = useState(weekday);
   const [routine, setRoutine] = useState("");
 
   return (
