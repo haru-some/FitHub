@@ -70,7 +70,7 @@ const Login = () => {
         <h2 className="member-title">로그인</h2>
         <p className="member-sub">
           처음이신가요?{" "}
-          <Link to="/register">
+          <Link to="/join">
             <strong>지금 바로 시작해보세요 - 무료입니다!</strong>
           </Link>
         </p>
@@ -131,7 +131,7 @@ const Login = () => {
           </button>
 
           <div className="member-link-box">
-            <Link to="/register">회원가입</Link>
+            <Link to="/join">회원가입</Link>
             <span> | </span>
             <Link to="/findid">아이디</Link>
             <span>/</span>
