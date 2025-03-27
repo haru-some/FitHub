@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
-import { loginIdState, memberTypeState } from "../utils/RecoilData";
+import { loginIdState, memberLevelState } from "../utils/RecoilData";
 import "./member.css";
 
 import Box from "@mui/material/Box";
@@ -16,7 +16,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 
 const Login = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberType, setMemberType] = useRecoilState(memberTypeState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => {
@@ -41,12 +41,11 @@ const Login = () => {
       });
       return;
     }
-
     axios
       .post(`${backServer}/member/login`, member)
       .then((res) => {
         setMemberId(res.data.memberId);
-        setMemberType(res.data.memberType);
+        setMemberLevel(res.data.memberLevel);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         window.localStorage.setItem("refreshToken", res.data.refreshToken);
         navigate("/");
@@ -70,7 +69,7 @@ const Login = () => {
         <h2 className="member-title">로그인</h2>
         <p className="member-sub">
           처음이신가요?{" "}
-          <Link to="/join">
+          <Link to="/jointerms">
             <strong>지금 바로 시작해보세요 - 무료입니다!</strong>
           </Link>
         </p>
@@ -131,7 +130,7 @@ const Login = () => {
           </button>
 
           <div className="member-link-box">
-            <Link to="/join">회원가입</Link>
+            <Link to="/jointerms">회원가입</Link>
             <span> | </span>
             <Link to="/findid">아이디</Link>
             <span>/</span>

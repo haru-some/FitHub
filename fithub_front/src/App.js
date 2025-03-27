@@ -5,18 +5,18 @@ import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginIdState, memberTypeState } from "./component/utils/RecoilData";
+import { loginIdState, memberLevelState } from "./component/utils/RecoilData";
 import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
 import AdminMain from "./component/Admin/AdminMain";
 import ShopList from "./component/shop/ShopList";
 import Login from "./component/member/Login";
-
 import CommunityMain from "./component/community/CommunityMain";
+import JoinTerms from "./component/member/JoinTerms";
 
 function App() {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberType, setMemberType] = useRecoilState(memberTypeState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   useEffect(() => {
     refreshLogin();
@@ -30,14 +30,14 @@ function App() {
         .get(`${backServer}/member/refresh`)
         .then((res) => {
           setMemberId(res.data.memberId);
-          setMemberType(res.data.memberType);
+          setMemberLevel(res.data.memberLevel);
           axios.defaults.headers.common["Authorization"] = res.data.accessToken;
           window.localStorage.setItem("refreshToken", res.data.refreshToken);
         })
         .catch((error) => {
           console.error(error);
           setMemberId("");
-          setMemberType(0);
+          setMemberLevel(0);
           delete axios.defaults.headers.common["Authorization"];
           window.localStorage.removeItem("refreshToken");
         });
@@ -50,6 +50,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />

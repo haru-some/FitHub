@@ -8,8 +8,8 @@ const loginIdState = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
-const memberTypeState = atom({
-  key: "memberTypeState",
+const memberLevelState = atom({
+  key: "memberLevelState",
   default: 0,
   effects_UNSTABLE: [persistAtom],
 });
@@ -21,4 +21,4 @@ const isLoginState = selector({
   },
 });
 
-export { loginIdState, memberTypeState, isLoginState };
+export { loginIdState, memberLevelState, isLoginState };
