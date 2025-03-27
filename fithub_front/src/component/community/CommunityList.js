@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./community.css"; // CSS 파일 불러오기
 
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import axios from "axios";
 
 const CommunityList = () => {
   const navigate = useNavigate();
@@ -38,6 +39,11 @@ const CommunityList = () => {
       comments: 45,
     },
   ]);
+  /*
+  useEffect(() => {
+    axios.get(`${backServer}/community/${memberNo}`).then((res)=>{}).catch((err)=>{});
+  }, []);
+*/
 
   return (
     <div className="community-list">
@@ -57,11 +63,7 @@ const CommunityList = () => {
                 navigate("/community/write");
               }}
             />
-            <PersonIcon
-              onClick={() => {
-                navigate("/community/mycommunity");
-              }}
-            />
+            <PersonIcon />
           </div>
         </div>
         <div className="community-content">
@@ -82,7 +84,6 @@ const CommunityList = () => {
 };
 
 const CommunityItem = (props) => {
-  const [isLikes, setIsLikes] = useState(0);
   const navigate = useNavigate();
   const community = props.community;
 
@@ -101,7 +102,7 @@ const CommunityItem = (props) => {
         }}
       >
         <div className="member-img">
-          <img src="/image/박재훈.webp"></img>
+          <img src="/image/communityImage/박재훈.webp"></img>
         </div>
         <div className="community-member">
           <p>{community.username}</p>
@@ -114,7 +115,7 @@ const CommunityItem = (props) => {
         <p>{community.text}</p>
       </div>
       <div className="community-img">
-        <img src="/image/씨범.webp"></img>
+        <img src="/image/communityImage/씨범.webp"></img>
       </div>
       <div className="community-sub-zone">
         <div className="community-likes">
