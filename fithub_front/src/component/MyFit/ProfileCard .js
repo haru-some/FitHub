@@ -47,19 +47,33 @@ const ProfileCard = () => {
       </div>
       <div className="myfit-profile-summary">
         {act === 1 ? (
-          <div>
+          <div className="summary-wrap">
             <h3>요약</h3>
             <ul>
-              <li>총 운동 일수 : 21일</li>
-              <li>총 운동 시간 : 53시간</li>
-              <li>지난 1주 운동 일수 : 4일</li>
-              <li>지난 1주 운동 시간 : 7시간</li>
+              <li>
+                <span>총 운동 일수 : </span>
+                <span>21일</span>
+              </li>
+              <li>
+                <span>총 운동 시간 : </span>
+                <span>53시간</span>
+              </li>
+              <li>
+                <span>지난 1주 운동 일수 : </span>
+                <span>4일</span>
+              </li>
+              <li>
+                <span>지난 1주 운동 시간 : </span>
+                <span>7시간</span>
+              </li>
             </ul>
           </div>
         ) : (
           <div>
-            <h3>그래프 들어갈 자리</h3>
-            <ResponsiveLine />
+            <h3>주간 운동 통계</h3>
+            <div className="chart-wrap">
+              <MyLineChart />
+            </div>
           </div>
         )}
       </div>
@@ -67,38 +81,126 @@ const ProfileCard = () => {
   );
 };
 
-const data = [
-  {
-    id: "japan",
-    data: [
-      { x: "January", y: 55 },
-      { x: "February", y: 80 },
-      { x: "March", y: 45 },
-    ],
-  },
-];
-const MyLineChart = () => (
-  <div style={{ height: 400 }}>
-    <ResponsiveLine
-      data={data}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-      xScale={{ type: "point" }}
-      yScale={{ type: "linear", min: "auto", max: "auto" }}
-      axisBottom={{
-        orient: "bottom",
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-      }}
-      axisLeft={{
-        orient: "left",
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-      }}
-      colors={{ scheme: "nivo" }}
-    />
-  </div>
-);
+const MyLineChart = () => {
+  const dates = [];
+  const today = new Date();
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+
+    // 날짜 포맷 (예: YYYY-MM-DD)
+    const formatted = date.toISOString().split("T")[0];
+    dates.push(formatted);
+  }
+  const data = [
+    {
+      id: "japan",
+      color: "hsl(327, 70%, 50%)",
+      data: [
+        {
+          x: dates[0],
+          y: 2,
+        },
+        {
+          x: dates[1],
+          y: 3,
+        },
+        {
+          x: dates[2],
+          y: 4,
+        },
+        {
+          x: dates[3],
+          y: 1,
+        },
+        {
+          x: dates[4],
+          y: 4,
+        },
+        {
+          x: dates[5],
+          y: 2,
+        },
+        {
+          x: dates[6],
+          y: 5,
+        },
+      ],
+    },
+  ];
+
+  return (
+    <div style={{ height: 400, width: 700 }}>
+      <ResponsiveLine
+        data={data}
+        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+        xScale={{ type: "point" }}
+        yScale={{
+          type: "linear",
+          min: "auto",
+          max: "auto",
+          stacked: true,
+          reverse: false,
+        }}
+        yFormat=" >-.2f"
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "주간 운동 통계",
+          legendOffset: 36,
+          legendPosition: "middle",
+          truncateTickAt: 0,
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "운동 시간",
+          legendOffset: -40,
+          legendPosition: "middle",
+          truncateTickAt: 0,
+        }}
+        pointSize={10}
+        pointColor={{ theme: "background" }}
+        pointBorderWidth={2}
+        pointBorderColor={{ from: "serieColor" }}
+        pointLabel="data.yFormatted"
+        pointLabelYOffset={-12}
+        enableTouchCrosshair={true}
+        useMesh={true}
+        legends={[
+          {
+            anchor: "bottom-right",
+            direction: "column",
+            justify: false,
+            translateX: 100,
+            translateY: 0,
+            itemsSpacing: 0,
+            itemDirection: "left-to-right",
+            itemWidth: 80,
+            itemHeight: 20,
+            itemOpacity: 0.75,
+            symbolSize: 12,
+            symbolShape: "circle",
+            symbolBorderColor: "rgba(0, 0, 0, .5)",
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemBackground: "rgba(0, 0, 0, .03)",
+                  itemOpacity: 1,
+                },
+              },
+            ],
+          },
+        ]}
+      />
+    </div>
+  );
+};
 
 export default ProfileCard;

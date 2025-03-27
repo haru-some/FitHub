@@ -1,3 +1,4 @@
+/* 로그인 페이지 스타일 */
 .member-wrap {
   display: flex;
   width: 1300px;
@@ -5,12 +6,26 @@
   margin: 50px auto;
   background-color: white;
   font-family: pd-r;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
 }
 .member-left {
   width: 820px;
-  background-image: url("/public/image/login_bg.png"); /* ← public 기준 경로 */
+  height: calc(100% + 2px); /* 이미지 하단 공백 보정용 */
+  background-image: url("/public/image/login_bg.png"); /* public 기준 경로 */
   background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  font-size: 0;
+  box-sizing: border-box;
 }
 .member-right {
   width: 360px;
@@ -27,7 +42,7 @@
 }
 .member-title {
   font-size: 32px;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
   text-align: center;
 }
 .member-sub {
@@ -49,14 +64,10 @@
   font-size: 14px;
   margin-bottom: 6px;
 }
-
 .member-input-wrap input {
   padding: 14px;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
 }
-
 .btn-primary.lg.full {
   width: 100%;
   padding: 14px;
@@ -68,12 +79,11 @@
   cursor: pointer;
   margin-bottom: 24px;
 }
-
 .member-link-box {
   font-size: 14px;
   color: #555;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 .member-link-box a {
   text-decoration: none;
@@ -92,20 +102,63 @@
   text-align: center;
 }
 /* 이미지 버튼 스타일 */
-.login-btn-image {
+.social-login-btn {
+  display: block;
   width: 100%;
-  height: 50px;
+  height: auto;
+  padding: 0;
+  margin-bottom: 15px;
   border: none;
-  border-radius: 999px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
+  background: none;
   cursor: pointer;
-  margin-bottom: 12px;
 }
-.google-login {
-  background-image: url("/public/image/google_login.png");
+.social-login-btn img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 999px;
 }
-.kakao-login {
-  background-image: url("/public/image/kakao_login.png");
+/* MUI : INPUT BOX 설정 */
+/* 포커스 시 라벨 텍스트 색상 */
+.member-right .MuiInputLabel-root.Mui-focused {
+  color: var(--gray1) !important;
+}
+/* hover 시 테두리 색 */
+.member-right .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--main2);
+}
+/* MUI Input Box 둥근 테두리 적용 */
+.member-right .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-radius: 8px;
+}
+/* 포커스 시 테두리 색 */
+.member-right
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--main2);
+}
+/* 포커스 시 라벨 폰트 굵기 */
+.member-right .MuiInputLabel-root.Mui-focused {
+  font-weight: 700;
+}
+.login-divider-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
+  margin: 24px 0;
+}
+.divider {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #ddd;
+  border: none;
+  margin: 0;
+}
+.divider-text {
+  font-size: 14px;
+  color: #555;
+  white-space: nowrap;
+  padding: 0 8px;
 }

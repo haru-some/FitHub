@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.fithub.member.model.dao.MemberDao">
+	<insert id="joinMember">
+	  INSERT INTO member (
+	    member_no, member_id, member_pw, member_name, member_phone,
+	    member_email, member_addr, member_thumb, member_profile,
+	    member_level, warning_level, del_status, login_type, oauth_id, join_date
+	  )
+	  VALUES (
+	    member_seq.NEXTVAL,
+	    #{memberId}, #{memberPw}, #{memberName}, #{memberPhone},
+	    #{memberEmail}, #{memberAddr}, NULL, NULL,
+	    2, 0, 'N', 'local', NULL,
+	    TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	  )
+	</insert>
+	
+	<select id="exists" resultType="int">
+		select count(*) from member where member_id=#{memberId}
+	</select>
+	
+	<select id="selectOneMember" resultType="member">
+		select * from member where member_id = #{memberId}
+	</select>
+	
+	<update id="updateMember">
+		update member set
+			member_name = #{memberName},
+			member_phone = #{memberPhone},
+			member_thumb = #{memberThumb},
+			member_profile = #{memberProfile}
+		where member_id = #{memberId}
+	</update>
+	
+	<delete id="deleteMember">
+		delete from member where member_id = #{memberId}
+	</delete>
+	
+	<update id="changePw">
+		update member set member_pw = #{memberPw}
+		where member_id = #{memberId}
+	</update>
+</mapper>

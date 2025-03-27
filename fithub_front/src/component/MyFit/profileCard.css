@@ -79,15 +79,38 @@
 }
 
 .myfit-profile-summary h3 {
+  font-size: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .myfit-profile-summary ul {
+  width: 250px;
+  text-align: left;
   list-style: none;
   padding: 0;
 }
 
 .myfit-profile-summary li {
-  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
   font-size: 14px;
+}
+
+.myfit-profile-summary li span {
+  font-size: 20px;
+}
+
+.summary-wrap {
+  padding-top: 50px;
+  height: 230px;
+}
+
+.myfit-profile-card g text {
+  fill: #fff !important;
+}
+
+.myfit-profile-card .chart-wrap {
+  padding-left: 30px;
 }
