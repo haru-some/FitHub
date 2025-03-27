@@ -30,6 +30,7 @@ public class MyfitController {
 		record.setRecordDate(recordDate);
 		Record r = myfitService.selectRecord(record);
 		System.out.println(r);
+		
 		return ResponseEntity.ok(r);
 	}
 	
