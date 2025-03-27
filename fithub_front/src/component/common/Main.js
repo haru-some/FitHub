@@ -6,7 +6,7 @@ const Main = () => {
       <Link to="/myfit">My Fit</Link>
       <Link to="/community/list">community</Link>
       <hr></hr>
-      <Link to="/admin/today">Admin</Link>
+      <Link to="/admin/*">Admin</Link>
       <hr></hr>
       <Link to="/shop">Shopping</Link>
     </div>
