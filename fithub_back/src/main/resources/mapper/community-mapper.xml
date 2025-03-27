@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="kr.co.fithub.community.model.dto.CommunityDTO">
-
+<mapper namespace="kr.co.fithub.community.model.dao.CommunityDao">
+	<select id="selectCommunityList" resultType="community">
+		 select member_thumb, member_id, community_no, community_content, to_char(community_date,'yyyy-mm-dd') as community_date, community_status from community join member using(member_no)
+	</select>
+	
+	<select id="selectOneCommunity" resultType="community">
+		select member_thumb, member_id, community_no, community_content, to_char(community_date,'yyyy-mm-dd') as community_date, community_status from community join member using(member_no) where community_no = #{communityNo}
+	</select>
 </mapper>

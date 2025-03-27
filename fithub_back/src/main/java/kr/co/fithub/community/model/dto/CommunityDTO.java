@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Alias(value="/community")
+@Alias(value="community")
 public class CommunityDTO {
 	private int communityNo;
 	private String communityContent;
-	private String communityWriter;
+	private String memberThumb;
+	private String memberId;
 	private String communityDate;
 	private int communityStatus;
 }
