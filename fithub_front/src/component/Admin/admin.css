@@ -1,39 +1,49 @@
 .admin-section {
   display: flex;
-  justify-content: space-between;
   margin: 0 auto;
   width: 1400px;
-}
-.side-menu {
-  display: flex;
-  flex-direction: column;
-}
-.side-menu a {
-  list-style-type: none;
-  margin: 0 auto;
-  margin-top: 10px;
-  padding: 20px 20px;
-  width: 200px;
-  border: 1px solid transparent;
-  border-radius: 20px;
-  text-align: center;
-  background-color: #8f8f8f;
-  color: white;
+  gap: 50px;
 }
 
-.today-section {
-  width: 1000px;
+.admin-section .navi-bar {
+  border-radius: 10px;
+  width: 180px;
+}
+
+.admin-section .side-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.admin-section .side-menu a {
+  height: 24px;
+  font-size: 18px;
+  background: #888;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.admin-section .section-page {
+  width: 920px;
+}
+
+.admin-section .today-section {
+  width: 100%;
   background-color: #8f8f8f;
   border-radius: 30px;
 }
-.page-title {
+.admin-section .page-title {
   margin: 20px auto;
-}
-
-.side-menu .active-tab {
-  background-color: #252525;
-}
-
-li > a {
+  text-align: center;
   color: white;
+  font-size: 32px;
+}
+
+.admin-section .side-menu .active-tab {
+  background-color: #252525;
 }

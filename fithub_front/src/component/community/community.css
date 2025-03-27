@@ -19,6 +19,7 @@
   padding-bottom: 20px;
   cursor: pointer;
 }
+
 .user-info {
   display: flex;
   gap: 7px;
@@ -56,9 +57,7 @@
   width: 150px;
   border-radius: 10px;
 }
-.post-item-wrap {
-  padding: 0;
-}
+
 .community-post-item {
   list-style: none;
   margin-bottom: 10px;
@@ -91,6 +90,7 @@
   align-items: center;
 }
 
+/*상세보기*/
 .community-view {
   width: 700px;
   background-color: #333;
