@@ -12,59 +12,52 @@ import axios from "axios";
 
 const CommunityList = () => {
   const navigate = useNavigate();
+  const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [communityList, setCommunityList] = useState([
-    {
-      username: "CBUM",
-      text: "오운완",
-      likes: "",
-      comments: 85,
-    },
-    {
-      username: "박재훈",
-      text: "득근",
-      likes: 51,
-      comments: 8,
-    },
-    {
-      username: "김건우",
-      text: "파이팅",
-      likes: 34,
-      comments: 5,
-    },
-    {
-      username: "김강민",
-      text: "덥다",
-      likes: 154,
-      comments: 45,
-    },
-  ]);
-  /*
+  const [communityList, setCommunityList] = useState([]);
+
   useEffect(() => {
-    axios.get(`${backServer}/community/${memberNo}`).then((res)=>{}).catch((err)=>{});
+    axios
+      .get(`${backServer}/community`)
+      .then((res) => {
+        setCommunityList(res.data);
+      })
+      .catch((err) => {});
   }, []);
-*/
 
   return (
     <div className="community-list">
       <div className="community-list-wrap">
         <div className="community-head">
-          <h2 className="community-title">
-            <Link to="/community/list">커뮤니티</Link>
-          </h2>
-          <div className="community-menu">
-            <SearchIcon
-              onClick={() => {
-                navigate("/community/search");
-              }}
-            />
-            <CreateIcon
-              onClick={() => {
-                navigate("/community/write");
-              }}
-            />
-            <PersonIcon />
+          <div className="community-head-title">
+            <h2 className="community-title">
+              <Link to="/community/list">커뮤니티</Link>
+            </h2>
+            <div className="community-menu">
+              <SearchIcon
+                onClick={() => {
+                  setShowInput(!showInput);
+                }}
+              />
+              <CreateIcon
+                onClick={() => {
+                  navigate("/community/write");
+                }}
+              />
+              <PersonIcon />
+            </div>
           </div>
+          {showInput && (
+            <div className="community-search-wrap">
+              <div className="community-search-input">
+                <input
+                  type="text"
+                  placeholder="검색"
+                  className="search-input"
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="community-content">
           <ul className="community-item-wrap">
@@ -84,14 +77,22 @@ const CommunityList = () => {
 };
 
 const CommunityItem = (props) => {
+  const [isLike, setIsLike] = useState(false);
   const navigate = useNavigate();
   const community = props.community;
-
+  const changeLike = (e) => {
+    if (isLike) {
+      setIsLike(false);
+    } else {
+      setIsLike(true);
+    }
+    e.stopPropagation();
+  };
   return (
     <li
       className="community-post-item"
       onClick={() => {
-        navigate("/community/view");
+        navigate(`/community/view/${community.communityNo}`);
       }}
     >
       <div
@@ -102,33 +103,27 @@ const CommunityItem = (props) => {
         }}
       >
         <div className="member-img">
-          <img src="/image/communityImage/박재훈.webp"></img>
+          <img src="/image/default_img.png"></img>
         </div>
         <div className="community-member">
-          <p>{community.username}</p>
+          <p>{community.memberId}</p>
           <button type="button" className="follow-btn">
             팔로우
           </button>
         </div>
       </div>
       <div className="community-content">
-        <p>{community.text}</p>
+        <p>{community.communityContent}</p>
       </div>
       <div className="community-img">
-        <img src="/image/communityImage/씨범.webp"></img>
+        <img src="/image/communityImage/박재훈.webp"></img>
       </div>
       <div className="community-sub-zone">
-        <div className="community-likes">
-          <FavoriteBorderIcon
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          />
-          {community.likes}
+        <div className="community-likes" onClick={changeLike}>
+          {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </div>
         <div className="community-comments">
           <ChatIcon />
-          {community.comments}
         </div>
       </div>
     </li>
