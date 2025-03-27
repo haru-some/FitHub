@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { ResponsivePieCanvas } from "@nivo/pie";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsiveLine } from "@nivo/line";
+import { ResponsiveCalendar } from "@nivo/calendar";
 
 // 메인 대시보드
-const AdminToday = () => {
+const AdminStat = () => {
   const [memberData, setMemberData] = useState([
     {
       id: "남성",
@@ -25,6 +26,7 @@ const AdminToday = () => {
       color: "#c8bf73",
     },
   ]);
+  const [visitData, setVisitData] = useState(null);
   const [salesData, setSalesData] = useState([
     {
       country: "",
@@ -77,45 +79,74 @@ const AdminToday = () => {
     },
   ]);
   useEffect(() => {
-    const arr = new Array();
+    //방문 데이터 입력
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 0(1월) ~ 11(12월)
+    const day = today.getDate(); // 오늘 날짜 (1~31)
+    const newData = [];
+
+    for (let i = 1; i <= day; i++) {
+      const dateString = new Date(year, month, i + 1)
+        .toISOString()
+        .split("T")[0]; // YYYY-MM-DD 형식
+      const randomValue = Math.floor(Math.random() * 100) + 1; // 1~100 사이 랜덤 숫자
+
+      newData.push({
+        value: randomValue,
+        day: dateString,
+      });
+    }
+    setVisitData(newData);
+
+    //매출 데이터 입력
+    const salesArr = new Array();
     for (let i = 0; i < 7; i++) {
-      const toDate = new Date();
-      toDate.setDate(toDate.getDate() - i);
+      const toDays = new Date();
+      toDays.setDate(toDays.getDate() - i);
       const days = ["일", "월", "화", "수", "목", "금", "토"];
       if (i === 0) {
-        arr.unshift("오늘(" + days[toDate.getDay()] + ")");
+        salesArr.unshift("오늘(" + days[toDays.getDay()] + ")");
       } else {
-        arr.unshift(days[toDate.getDay()]);
+        salesArr.unshift(days[toDays.getDay()]);
       }
     }
     setSalesData((prevData) =>
       prevData.map((item, index) => ({
         ...item,
-        country: arr[index], // arr의 값을 순서대로 id에 넣음
+        country: salesArr[index],
       }))
     );
   }, []);
   return (
     <section className="section today-section">
-      <h1 className="page-title">하루 통계</h1>
+      <h1 className="page-title">통계 관리</h1>
       <div className="chart-list">
         <div className="chart-first">
           <div className="chart-day-member">
-            <h3>회원 통계</h3>
-            <div style={{ height: "500px" }}>
+            <h3>총 회원 통계</h3>
+            <div style={{ height: "300px" }}>
               <MyResponsivePieCanvas memberData={memberData} />
             </div>
           </div>
-          <VisitChart />
+          <div className="chart-day-visit">
+            <h3>사이트 방문 통계</h3>
+            <div style={{ height: "300px" }}>
+              {visitData && <MyResponsiveCalendar visitData={visitData} />}
+            </div>
+          </div>
         </div>
         <div className="chart-second">
-          <PostChart />
+          <div className="chart-day-post">
+            <h3>게시글 생성 통계</h3>
+            <div style={{ height: "300px" }}></div>
+          </div>
         </div>
         <div className="chart-third">
           <div className="chart-day-sales">
             <h3>매출 통계</h3>
             <div style={{ height: "300px" }}>
-              <MyResponsiveBar salesData={salesData} />
+              {salesData && <MyResponsiveBar salesData={salesData} />}
             </div>
           </div>
         </div>
@@ -127,9 +158,9 @@ const AdminToday = () => {
 // 회원 통계 컴포넌트
 const MyResponsivePieCanvas = (props) => {
   const memberData = props.memberData;
-  const arr = new Array();
+  const memberArr = new Array();
   for (let i = 0; i < memberData.length; i++) {
-    arr.push(memberData[i].color);
+    memberArr.push(memberData[i].color);
   }
   return (
     <ResponsivePieCanvas
@@ -139,7 +170,7 @@ const MyResponsivePieCanvas = (props) => {
       padAngle={0.7}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
-      colors={arr}
+      colors={memberArr}
       borderWidth={1}
       borderColor={{
         from: "color",
@@ -218,11 +249,36 @@ const MyResponsivePieCanvas = (props) => {
   );
 };
 // 사이트 방문 통계 컴포넌트
-const VisitChart = () => {
+const MyResponsiveCalendar = (props) => {
+  const visitData = props.visitData;
   return (
-    <div className="chart-day-visit">
-      <h3>사이트 방문 통계</h3>
-    </div>
+    <ResponsiveCalendar
+      data={visitData}
+      from={visitData[0].day}
+      to={visitData[visitData.length - 1].day}
+      emptyColor="#ebebeb"
+      colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
+      minValue="auto"
+      margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+      yearSpacing={35}
+      monthSpacing={15}
+      monthBorderWidth={0}
+      monthBorderColor="#000000"
+      dayBorderWidth={2}
+      dayBorderColor="#ffffff"
+      legends={[
+        {
+          anchor: "bottom-right",
+          direction: "row",
+          translateY: 36,
+          itemCount: 4,
+          itemWidth: 42,
+          itemHeight: 36,
+          itemsSpacing: 14,
+          itemDirection: "right-to-left",
+        },
+      ]}
+    />
   );
 };
 
@@ -236,7 +292,6 @@ const PostChart = () => {
 };
 
 // 매출 통계 컴포넌트
-
 const MyResponsiveBar = (props) => {
   const salesData = props.salesData;
   return (
@@ -346,4 +401,4 @@ const MyResponsiveBar = (props) => {
   );
 };
 
-export default AdminToday;
+export default AdminStat;
