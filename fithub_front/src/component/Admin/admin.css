@@ -5,6 +5,9 @@
   gap: 50px;
 }
 
+.admin-section * {
+  color: white;
+}
 .admin-section .navi-bar {
   border-radius: 10px;
   width: 180px;
@@ -46,4 +49,29 @@
 
 .admin-section .side-menu .active-tab {
   background-color: #252525;
+}
+
+.admin-member-section {
+  width: 992px;
+  background-color: #252525;
+  padding: 20px;
+  border-radius: 30px;
+}
+
+.admin-member-navi {
+  display: flex;
+  justify-content: center;
+}
+
+.admin-tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-tbl th,
+td {
+  text-align: center;
+  color: white;
+  padding: 10px 5px;
+  border-bottom: 1px solid #eee;
 }
