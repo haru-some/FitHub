@@ -8,17 +8,17 @@ const AdminMember = () => {
     axios
       .get(`${backServer}/admin/member`)
       .then((res) => {
-        console.log(res);
+        setMemberList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
   return (
-    <div>
-      <div>회원 관리</div>
+    <section className="admin-member-section">
+      <div className="page-title">회원 관리</div>
       <MemberList memberList={memberList} />
-    </div>
+    </section>
   );
 };
 
@@ -26,8 +26,8 @@ const MemberList = (props) => {
   const memberList = props.memberList;
   return (
     <div>
-      <table>
-        <thead>
+      <table className="admin-tbl">
+        <thead className="admin-thead">
           <tr>
             <th>프로필</th>
             <th>아이디</th>
@@ -38,21 +38,38 @@ const MemberList = (props) => {
             <th>회원등급</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="admin-tbody">
           {memberList &&
             memberList.map((member, index) => {
-              <tr key={"member-" + index}>
-                <td>{member.memberThumb}</td>
-                <td>{member.memberId}</td>
-                <td>{member.joinDate}</td>
-                <td>{member.memberEmail}</td>
-                <td>{member.memberPhone}</td>
-                <td>{member.warningLevel}</td>
-                <td>{member.memberLevel}</td>
-              </tr>;
+              return (
+                <tr key={"member-" + index}>
+                  <td>
+                    {member.memberThumb ? (
+                      <img
+                        src="/image/default_img.png"
+                        style={{ width: "40px" }}
+                      />
+                    ) : (
+                      <img
+                        src="/image/default_img.png"
+                        style={{ width: "40px", height: "40px" }}
+                      />
+                    )}
+                  </td>
+                  <td>{member.memberId}</td>
+                  <td>{member.joinDate}</td>
+                  <td>{member.memberEmail}</td>
+                  <td>{member.memberPhone}</td>
+                  <td>{member.warningLevel}</td>
+                  <td>{member.memberLevel}</td>
+                </tr>
+              );
             })}
         </tbody>
       </table>
+      <div className="admin-member-navi">
+        <div>페이징 장소</div>
+      </div>
     </div>
   );
 };
