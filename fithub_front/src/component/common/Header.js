@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {
   isLoginState,
   loginIdState,
-  memberTypeState,
+  memberLevelState,
 } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -55,11 +55,11 @@ const MainNavi = () => {
 
 const HeaderLink = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberType, setMemberType] = useRecoilState(memberTypeState);
+  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const isLogin = useRecoilValue(isLoginState);
   const logOut = () => {
     setMemberId("");
-    setMemberType(0);
+    setMemberLevel(0);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
   };
@@ -69,14 +69,14 @@ const HeaderLink = () => {
         <>
           <li>
             <Link
-              to={memberType === 1 ? "/admin" : "/member"}
+              to={memberLevel === 1 ? "/admin" : "/member"}
               className="member-name"
             >
               {memberId}
             </Link>
           </li>
           <li>
-            {memberType === 1 ? (
+            {memberLevel === 1 ? (
               <Link to="/admin/today">
                 <SettingsIcon />
               </Link>
@@ -98,7 +98,7 @@ const HeaderLink = () => {
             <Link to="/login">로그인</Link>
           </li>
           <li>
-            <Link to="/join" className="signup">
+            <Link to="/jointerms" className="signup">
               회원가입
             </Link>
           </li>

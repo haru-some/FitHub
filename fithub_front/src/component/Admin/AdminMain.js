@@ -1,13 +1,12 @@
 import { Link, NavLink, Route, Routes } from "react-router-dom";
-import AdminToday from "./AdminToday";
 import AdminAds from "./AdminAds";
 import "./admin.css";
-import { useRef } from "react";
-import AdminSales from "./AdminSales";
 import AdminMember from "./AdminMember";
 import AdminContect from "./AdminContect";
+import AdminStat from "./AdminStat";
 
 const AdminMain = () => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   return (
     <section className="section admin-section">
       <div className="navi-bar">
@@ -15,9 +14,8 @@ const AdminMain = () => {
       </div>
       <div className="section-page">
         <Routes>
-          <Route path="today" element={<AdminToday />} />
           <Route path="member" element={<AdminMember />} />
-          <Route path="sales" element={<AdminSales />} />
+          <Route path="stat" element={<AdminStat />} />
           <Route path="contect" element={<AdminContect />} />
           <Route path="Ads" element={<AdminAds />} />
         </Routes>
@@ -28,29 +26,19 @@ const AdminMain = () => {
 
 // 사이드바 컴포넌트
 const Sidebar = () => {
-  const ref = useRef();
-  const activeTab = (e) => {
-    const tab = e.target.value;
-  };
   return (
     <div className="side-menu">
-      <NavLink
-        to="/admin/today"
-        className={({ isActive }) => (isActive ? "active-tab" : "")}
-      >
-        관리자 페이지
-      </NavLink>
       <NavLink
         to="/admin/member"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        회원 통계
+        회원 관리
       </NavLink>
       <NavLink
-        to="/admin/sales"
+        to="/admin/stat"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        매출 통계
+        통계 관리
       </NavLink>
       <NavLink
         to="/admin/contect"
