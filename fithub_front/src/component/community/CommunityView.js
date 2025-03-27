@@ -1,66 +1,49 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatIcon from "@mui/icons-material/Chat";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const CommunityView = () => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const params = useParams();
+  const communityNo = params.communityNo;
+  const [communityList, setCommunityList] = useState({});
+  useEffect(() => {
+    axios
+      .get(`${backServer}/community/${communityNo}`)
+      .then((res) => {
+        console.log(res);
+        setCommunityList(res.data);
+      })
+      .catch((err) => {});
+  }, []);
   return (
     <div className="community-view">
-      <div className="post-header">
-        <img className="profile-pic" src="/image/씨범.webp" alt="Profile" />
-        <div className="community-user-info">
-          <p>CBUM</p>
+      <div className="community-view-user">
+        <div className="member-img">
+          <img src="/image/default_img.png"></img>
+        </div>
+        <div className="community-member">
+          <p>{communityList.memberId}</p>
+          <p>{communityList.communityDate}</p>
+        </div>
+        <div className="community-follow-btn">
           <button type="button" className="follow-btn">
             팔로우
           </button>
-          <p className="community-date">2025-03-24</p>
         </div>
-      </div>
-      <div className="post-content">
-        <p className="post-caption">오늘 등근육 훈련 했다 독특근</p>
-        <img className="post-image" src="/image/씨범.webp" alt="Post" />
-      </div>
-      <div className="post-actions">
-        <div className="post-likes">
-          <FavoriteBorderIcon />
-          <span>284</span>
+        <div className="community-view-content">
+          <p>{communityList.communityContent}</p>
+          <img src="/image/default_img.png"></img>
         </div>
-        <div className="post-comments">
-          <ChatIcon />
-          <span>85</span>
+        <div className="post-input">
+          <textarea
+            placeholder="댓글을 입력하세요..."
+            className="input-box"
+          ></textarea>
+          <button type="button">전송</button>
         </div>
-      </div>
-      <div className="post-comments-section">
-        <div className="comment">
-          <img
-            className="comment-profile-pic"
-            src="https://via.placeholder.com/30"
-            alt="Profile"
-          />
-          <div className="comment-text">
-            <p className="comment-user">KING.JOJI</p>
-            <p className="comment-content">
-              씨범이형 상체는 여전하네 이제 나랑 하체 부러트리러 가자
-            </p>
-          </div>
-        </div>
-        <div className="comment">
-          <img
-            className="comment-profile-pic"
-            src="https://via.placeholder.com/30"
-            alt="Profile"
-          />
-          <div className="comment-text">
-            <p className="comment-user">S.LINE</p>
-            <p className="comment-content">
-              씨범이 오빠 나 다이어트 하는거 도와주라잉..
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="post-input">
-        <textarea
-          placeholder="댓글을 입력하세요..."
-          className="input-box"
-        ></textarea>
       </div>
     </div>
   );
