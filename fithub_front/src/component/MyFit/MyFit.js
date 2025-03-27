@@ -1,9 +1,10 @@
 import { useState } from "react";
 import BasicDateCalendar from "./calendar";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 const MyFit = () => {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(dayjs());
   console.log(date);
   return (
     <div className="fit-wrap">
