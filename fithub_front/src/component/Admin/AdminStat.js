@@ -6,26 +6,8 @@ import { ResponsiveCalendar } from "@nivo/calendar";
 
 // 메인 대시보드
 const AdminStat = () => {
-  const [memberData, setMemberData] = useState([
-    {
-      id: "남성",
-      label: "남성",
-      value: 863,
-      color: "#6495ed",
-    },
-    {
-      id: "여성",
-      label: "여성",
-      value: 242,
-      color: "#c8739a",
-    },
-    {
-      id: "비공개",
-      label: "비공개",
-      value: 341,
-      color: "#c8bf73",
-    },
-  ]);
+  const [tabChange, setTabChange] = useState(1);
+
   const [visitData, setVisitData] = useState(null);
   const [salesData, setSalesData] = useState([
     {
@@ -118,46 +100,98 @@ const AdminStat = () => {
       }))
     );
   }, []);
+  const changeTab = (e) => {
+    const member = e.target.id;
+    if (member === "member") {
+      setTabChange(1);
+    } else {
+      setTabChange(2);
+    }
+  };
   return (
-    <section className="section today-section">
-      <h1 className="page-title">통계 관리</h1>
-      <div className="chart-list">
-        <div className="chart-first">
-          <div className="chart-day-member">
-            <h3>총 회원 통계</h3>
-            <div style={{ height: "300px" }}>
-              <MyResponsivePieCanvas memberData={memberData} />
+    <section className="admin-stat-section">
+      <div className="admin-member-tab">
+        <div
+          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
+          id="member"
+          onClick={changeTab}
+        >
+          회원 활동 통계
+        </div>
+        <div
+          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
+          id="board"
+          onClick={changeTab}
+        >
+          매출 통계
+        </div>
+      </div>
+      <div className="admin-stat-tab-content">
+        {tabChange === 1 ? (
+          <div className="member-stat-chart">
+            <div className="chart-first">
+              <div>첫번째 차트</div>
             </div>
           </div>
-          <div className="chart-day-visit">
-            <h3>사이트 방문 통계</h3>
-            <div style={{ height: "300px" }}>
-              {visitData && <MyResponsiveCalendar visitData={visitData} />}
+        ) : (
+          <div className="sales-stat-chart">
+            <div className="chart-first">
+              <div className="chart-day-member">
+                <h3>총 회원 통계</h3>
+                <div style={{ height: "300px" }}>
+                  <MyResponsivePieCanvas />
+                </div>
+              </div>
+              <div className="chart-day-visit">
+                <h3>사이트 방문 통계</h3>
+                <div style={{ height: "300px" }}>
+                  {visitData && <MyResponsiveCalendar visitData={visitData} />}
+                </div>
+              </div>
+            </div>
+            <div className="chart-second">
+              <div className="chart-day-post">
+                <h3>게시글 생성 통계</h3>
+                <div style={{ height: "300px" }}></div>
+              </div>
+            </div>
+            <div className="chart-third">
+              <div className="chart-day-sales">
+                <h3>매출 통계</h3>
+                <div style={{ height: "300px" }}>
+                  {salesData && <MyResponsiveBar salesData={salesData} />}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="chart-second">
-          <div className="chart-day-post">
-            <h3>게시글 생성 통계</h3>
-            <div style={{ height: "300px" }}></div>
-          </div>
-        </div>
-        <div className="chart-third">
-          <div className="chart-day-sales">
-            <h3>매출 통계</h3>
-            <div style={{ height: "300px" }}>
-              {salesData && <MyResponsiveBar salesData={salesData} />}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );
 };
 
 // 회원 통계 컴포넌트
-const MyResponsivePieCanvas = (props) => {
-  const memberData = props.memberData;
+const MyResponsivePieCanvas = () => {
+  const [memberData, setMemberData] = useState([
+    {
+      id: "남성",
+      label: "남성",
+      value: 863,
+      color: "#6495ed",
+    },
+    {
+      id: "여성",
+      label: "여성",
+      value: 242,
+      color: "#c8739a",
+    },
+    {
+      id: "비공개",
+      label: "비공개",
+      value: 341,
+      color: "#c8bf73",
+    },
+  ]);
   const memberArr = new Array();
   for (let i = 0; i < memberData.length; i++) {
     memberArr.push(memberData[i].color);

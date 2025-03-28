@@ -9,16 +9,19 @@ import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { isLoginState } from "../utils/RecoilData";
 
 const CommunityList = () => {
+  // const [memberId, setMemberId] = useRecoilState(isLoginState);
+  const [memberId, setMemberId] = useState("user03");
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [communityList, setCommunityList] = useState([]);
-
   useEffect(() => {
     axios
-      .get(`${backServer}/community`)
+      .get(`${backServer}/community/list/${memberId}`)
       .then((res) => {
         setCommunityList(res.data);
       })
@@ -66,6 +69,9 @@ const CommunityList = () => {
                 <CommunityItem
                   key={"community-" + index}
                   community={community}
+                  communityList={communityList}
+                  setCommunityList={setCommunityList}
+                  memberId={memberId}
                 />
               );
             })}
@@ -77,17 +83,59 @@ const CommunityList = () => {
 };
 
 const CommunityItem = (props) => {
-  const [isLike, setIsLike] = useState(false);
-  const navigate = useNavigate();
+  const communityList = props.communityList;
+  const setCommunityList = props.setCommunityList;
+  const memberId = props.memberId;
   const community = props.community;
+  const [isLike, setIsLike] = useState(community.isLike === 1);
+
+  const navigate = useNavigate();
+
   const changeLike = (e) => {
     if (isLike) {
-      setIsLike(false);
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+        )
+        .then((res) => {
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === community.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === community.communityNo
+            )[0]
+          );
+          obj["likeCount"] = res.data;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
+          setIsLike(false);
+        });
     } else {
-      setIsLike(true);
+      axios
+        .post(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+        )
+        .then((res) => {
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === community.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === community.communityNo
+            )[0]
+          );
+          obj["likeCount"] = res.data;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
+          setIsLike(true);
+        });
     }
     e.stopPropagation();
   };
+
   return (
     <li
       className="community-post-item"
@@ -121,9 +169,11 @@ const CommunityItem = (props) => {
       <div className="community-sub-zone">
         <div className="community-likes" onClick={changeLike}>
           {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          {community.likeCount}
         </div>
         <div className="community-comments">
           <ChatIcon />
+          {community.commentCount}
         </div>
       </div>
     </li>

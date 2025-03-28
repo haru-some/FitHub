@@ -8,6 +8,9 @@
 .admin-section * {
   color: white;
 }
+.admin-section section {
+  width: 992px;
+}
 .admin-section .navi-bar {
   border-radius: 10px;
   width: 180px;
@@ -30,15 +33,8 @@
   cursor: pointer;
   text-decoration: none;
 }
-
-.admin-section .section-page {
-  width: 920px;
-}
-
-.admin-section .today-section {
-  width: 100%;
-  background-color: #8f8f8f;
-  border-radius: 30px;
+.admin-section .side-menu .active-tab {
+  background-color: #252525;
 }
 .admin-section .page-title {
   margin: 20px auto;
@@ -47,15 +43,35 @@
   font-size: 32px;
 }
 
-.admin-section .side-menu .active-tab {
-  background-color: #252525;
-}
+/*---------- AdminMember / 관리자 회원, 게시글 관리 ----------*/
 
 .admin-member-section {
-  width: 992px;
   background-color: #252525;
   padding: 20px;
   border-radius: 30px;
+}
+.admin-member-tab {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
+.admin-member-tab > .page-title {
+  border-bottom: 2px solid white;
+  width: calc(100% / 2);
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 6px;
+}
+.admin-member-tab > .page-title:hover {
+  color: #589c5f;
+  text-shadow: 0px 0px 8px #0ff;
+}
+.admin-member-tab > .active-tab {
+  background: #222;
+  box-shadow: 0px 0px 8px #0ff;
+  color: #589c5f;
 }
 
 .admin-member-navi {
@@ -74,4 +90,15 @@ td {
   color: white;
   padding: 10px 5px;
   border-bottom: 1px solid #eee;
+}
+
+.admin-section select {
+  background-color: #252525;
+}
+
+/*---------- AdminStat / 관리자 회원 활동, 매출 통계 관리 ----------*/
+.admin-stat-section {
+  background-color: #252525;
+  padding: 20px;
+  border-radius: 30px;
 }
