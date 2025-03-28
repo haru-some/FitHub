@@ -113,6 +113,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 }
 .community-view-user img {
   width: 50px;
@@ -129,21 +130,37 @@
 }
 /* 댓글 입력란 */
 .post-input {
-  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
-.input-box {
-  width: 96.8%;
+.comment-text-box {
+  display: flex;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid transparent;
   height: 40px;
-  padding: 8px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: white;
-  resize: none;
-  font-size: 0.9rem;
+  border-radius: 30px;
+  overflow: hidden;
 }
-.input-box::placeholder {
-  color: #bbb;
+.comment-text-box > input {
+  border: none;
+  width: 96.8%;
+  font-size: 16px;
+  background-color: transparent;
+  text-indent: 20px;
+}
+.comment-text-box > button {
+  border-radius: 15px;
+  border: none;
+  background-color: transparent;
+  color: #1e1e1e;
+  font-weight: 900;
+  margin-right: 20px;
+}
+.comment-text-box > button:hover {
+  cursor: pointer;
+  color: #007bff;
 }
 
 /*게시글 작성*/

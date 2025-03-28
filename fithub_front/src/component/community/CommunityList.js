@@ -19,6 +19,7 @@ const CommunityList = () => {
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [communityList, setCommunityList] = useState([]);
+
   useEffect(() => {
     axios
       .get(`${backServer}/community/list/${memberId}`)
