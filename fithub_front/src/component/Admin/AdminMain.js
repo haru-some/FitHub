@@ -2,8 +2,8 @@ import { Link, NavLink, Route, Routes } from "react-router-dom";
 import AdminAds from "./AdminAds";
 import "./admin.css";
 import AdminMember from "./AdminMember";
-import AdminContect from "./AdminContect";
 import AdminStat from "./AdminStat";
+import AdminChat from "./AdminChat";
 
 const AdminMain = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -16,7 +16,7 @@ const AdminMain = () => {
         <Routes>
           <Route path="member" element={<AdminMember />} />
           <Route path="stat" element={<AdminStat />} />
-          <Route path="contect" element={<AdminContect />} />
+          <Route path="chat" element={<AdminChat />} />
           <Route path="Ads" element={<AdminAds />} />
         </Routes>
       </div>

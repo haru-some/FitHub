@@ -4,4 +4,17 @@
 	<select id="memberList" resultType="member">
 		select * from member
 	</select>
+	
+	<update id="adminMemberChange">
+		update member set
+		<choose>
+			<when test="memberLevel > 0">
+				member_level = #{memberLevel}
+			</when>
+			<when test="warningLevel > 0">
+				warning_level = #{warningLevel}
+			</when>
+		</choose>
+		where member_id = #{memberId}
+	</update>
 </mapper>

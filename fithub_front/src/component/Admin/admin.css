@@ -75,3 +75,7 @@ td {
   padding: 10px 5px;
   border-bottom: 1px solid #eee;
 }
+
+.admin-section select {
+  background-color: #252525;
+}

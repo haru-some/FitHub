@@ -1,4 +1,4 @@
-const AdminContect = () => {
+const AdminChat = () => {
   return (
     <div>
       <div>문의 관리</div>
@@ -6,4 +6,4 @@ const AdminContect = () => {
   );
 };
 
-export default AdminContect;
+export default AdminChat;
