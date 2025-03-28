@@ -20,14 +20,14 @@ const JoinTerms = () => {
   };
   const handleSubmit = () => {
     if (termsAgree && privacyAgree) {
-      navigate("/join/form");
+      navigate("/join");
     } else {
       Swal.fire({
         title: "약관 동의",
-        text: "약관에 동의해주세요.",
+        text: "모든 약관에 동의해야 다음 단계로 진행할 수 있습니다.",
         icon: "info",
         confirmButtonText: "확인",
-        confirmButtonColor: "#333",
+        confirmButtonColor: "#2b3a2e",
       });
     }
   };
@@ -90,7 +90,10 @@ const JoinTerms = () => {
         </div>
 
         <div className="terms-btn-box">
-          <button className="btn-primary sm gray" onClick={() => navigate(-1)}>
+          <button
+            className="btn-primary sm gray"
+            onClick={() => navigate("/login")}
+          >
             이전
           </button>
           <button className="btn-primary sm" onClick={handleSubmit}>

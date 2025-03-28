@@ -3,7 +3,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
-import { loginIdState, memberLevelState } from "../utils/RecoilData";
+import {
+  loginIdState,
+  memberLevelState,
+  memberState,
+} from "../utils/RecoilData";
 import "./member.css";
 
 import Box from "@mui/material/Box";
@@ -16,6 +20,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 
 const Login = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
+  const [memberState, setMemberState] = useRecoilState(memberState);
   const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +42,7 @@ const Login = () => {
         text: "아이디 또는 비밀번호를 입력하세요.",
         icon: "info",
         confirmButtonText: "확인",
-        confirmButtonColor: "#333",
+        confirmButtonColor: "#2b3a2e",
       });
       return;
     }
@@ -46,6 +51,7 @@ const Login = () => {
       .then((res) => {
         setMemberId(res.data.memberId);
         setMemberLevel(res.data.memberLevel);
+        setMemberState(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         window.localStorage.setItem("refreshToken", res.data.refreshToken);
         navigate("/");
@@ -56,7 +62,7 @@ const Login = () => {
           text: "아이디 또는 비밀번호를 확인하세요.",
           icon: "warning",
           confirmButtonText: "확인",
-          confirmButtonColor: "#333",
+          confirmButtonColor: "#2b3a2e",
         });
       });
   };

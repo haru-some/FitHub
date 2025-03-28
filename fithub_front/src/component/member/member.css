@@ -13,7 +13,7 @@
 .member-left {
   width: 820px;
   height: calc(100% + 2px); /* 이미지 하단 공백 보정용 */
-  background-image: url("/public/image/login_bg.png"); /* public 기준 경로 */
+  background-image: url("/public/image/login_bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -68,16 +68,27 @@
   padding: 14px;
   font-size: 16px;
 }
+.btn-primary.lg {
+  background-color: #2b3a2e;
+  color: #fff;
+  padding: 14px 36px;
+  font-size: 18px;
+  font-family: pd-b;
+  border-radius: 10px;
+  border: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
 .btn-primary.lg.full {
   width: 100%;
   padding: 14px;
-  background-color: #2f3e2f;
-  color: white;
   font-size: 16px;
-  border: none;
   border-radius: 8px;
-  cursor: pointer;
   margin-bottom: 24px;
+  background-color: #2f3e2f;
+}
+.btn-primary.lg:hover {
+  background-color: #1e2a22;
 }
 .member-link-box {
   font-size: 14px;
@@ -101,7 +112,7 @@
   margin-bottom: 16px;
   text-align: center;
 }
-/* 이미지 버튼 스타일 */
+/* 소셜로그인 버튼 스타일 */
 .social-login-btn {
   display: block;
   width: 100%;
@@ -118,7 +129,17 @@
   display: block;
   border-radius: 999px;
 }
-/* MUI : INPUT BOX 설정 */
+.social-login-btn img {
+  width: 100%;
+  height: auto;
+  transition: all 0.2s ease;
+}
+.social-login-btn:hover img {
+  filter: brightness(0.9);
+}
+
+/* MUI : INPUT BOX 스타일 */
+
 /* 포커스 시 라벨 텍스트 색상 */
 .member-right .MuiInputLabel-root.Mui-focused {
   color: var(--gray1) !important;
@@ -163,13 +184,14 @@
   padding: 0 8px;
 }
 
-/* 약관동의 페이지 CSS */
+/* 약관동의 페이지 스타일 */
+
 /* 약관동의 전체 영역 */
 .terms-all-wrap {
   display: flex;
   width: 800px;
   height: 800px;
-  margin: 0px auto;
+  margin: 10px auto;
   background-color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
@@ -248,26 +270,21 @@
   transition: background-color 0.2s ease;
   color: #fff;
 }
-
 /* 이전 버튼 */
 .btn-primary.sm.gray {
   background-color: #9da29f;
 }
-
 .btn-primary.sm.gray:hover {
   background-color: #8d928f;
 }
-
 /* 다음 버튼 */
 .btn-primary.sm:not(.gray) {
   background-color: #2b3a2e;
 }
-
 .btn-primary.sm:not(.gray):hover {
   background-color: #1e2a22;
 }
-
-/* 전체 폼 수직 정렬 + 간격 */
+/* 전체 폼 수직 정렬 및 간격 */
 .terms-wrap {
   display: flex;
   flex-direction: column;
@@ -286,4 +303,108 @@
   font-family: pd-r;
   color: #333;
   line-height: 1.6;
+}
+
+/* 회원가입 메인 섹션 */
+/* 회원가입 */
+.join-wrap {
+  width: 520px;
+  margin: 10px auto;
+  padding: 50px 60px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: pd-r;
+}
+.join-title {
+  font-size: 32px;
+  font-family: pd-b;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.join-form {
+  display: flex;
+  flex-direction: column;
+}
+.join-input-wrap {
+  margin-bottom: 20px;
+}
+.join-input-msg {
+  font-size: 14px;
+  margin: 6px 0 14px;
+  color: #999;
+}
+.join-input-msg.valid {
+  color: #1976d2;
+}
+.join-input-msg.invalid {
+  color: red;
+}
+.join-button-box {
+  margin-top: 12px;
+}
+/* MUI : INPUT BOX 스타일 (회원가입) */
+
+/* 포커스 시 라벨 텍스트 색상 */
+.join-wrap .MuiInputLabel-root.Mui-focused {
+  color: var(--gray1) !important;
+}
+/* hover 시 테두리 색상 */
+.join-wrap .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--main2);
+}
+/* MUI Input Box 둥근 테두리 적용 */
+.join-wrap .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-radius: 8px;
+}
+/* 포커스 시 테두리 색상 */
+.join-wrap .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--main2);
+}
+/* 포커스 시 라벨 폰트 굵기 */
+.join-wrap .MuiInputLabel-root.Mui-focused {
+  font-weight: 700;
+}
+/* 이메일 그룹 */
+.email-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.email-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.email-inputs input[type="text"] {
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  flex: 1 0 140px;
+  box-sizing: border-box;
+}
+.email-inputs .at-symbol {
+  font-size: 18px;
+  color: #444;
+}
+.btn-email-send {
+  background-color: #2f3e2f;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  height: 40px;
+}
+.btn-email-send:hover {
+  background-color: #1e2a22;
+}
+.email-wrap .MuiTextField-root {
+  min-width: 0;
+}
+.MuiCollapse-wrapperInner {
+  transition: all 0.4s ease-in-out;
 }
