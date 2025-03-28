@@ -37,7 +37,7 @@ const Login = () => {
         text: "아이디 또는 비밀번호를 입력하세요.",
         icon: "info",
         confirmButtonText: "확인",
-        confirmButtonColor: "#333",
+        confirmButtonColor: "#2b3a2e",
       });
       return;
     }
@@ -56,7 +56,7 @@ const Login = () => {
           text: "아이디 또는 비밀번호를 확인하세요.",
           icon: "warning",
           confirmButtonText: "확인",
-          confirmButtonColor: "#333",
+          confirmButtonColor: "#2b3a2e",
         });
       });
   };
