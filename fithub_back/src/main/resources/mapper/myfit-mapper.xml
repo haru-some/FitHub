@@ -8,4 +8,20 @@
 	<select id="selectRoutine" resultType="routine">
 		select * from routine where member_no=#{memberNo} and routine_day = #{routineDay}
 	</select>
+	
+	<select id="selectRoutineList" resultType="routine">
+		select * from routine where member_no=#{memberNo}
+	</select>
+	
+	<select id="existRoutine" resultType="int">
+		select count(*) from routine where member_no = #{memberNo} and routine_day=#{routineDay}
+	</select>
+	
+	<update id="updateRoutine">
+		update routine set routine_content=#{routineContent} where member_no = #{memberNo} and routine_day=#{routineDay}
+	</update>
+	
+	<insert id="insertRoutine">
+		insert into routine values(routine_seq.nextval,#{memberNo},#{routineContent},#{routineDay})
+	</insert>
 </mapper>
