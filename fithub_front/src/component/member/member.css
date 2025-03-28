@@ -304,3 +304,107 @@
   color: #333;
   line-height: 1.6;
 }
+
+/* 회원가입 메인 섹션 */
+/* 회원가입 */
+.join-wrap {
+  width: 520px;
+  margin: 10px auto;
+  padding: 50px 60px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: pd-r;
+}
+.join-title {
+  font-size: 32px;
+  font-family: pd-b;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.join-form {
+  display: flex;
+  flex-direction: column;
+}
+.join-input-wrap {
+  margin-bottom: 20px;
+}
+.join-input-msg {
+  font-size: 14px;
+  margin: 6px 0 14px;
+  color: #999;
+}
+.join-input-msg.valid {
+  color: #1976d2;
+}
+.join-input-msg.invalid {
+  color: red;
+}
+.join-button-box {
+  margin-top: 12px;
+}
+/* MUI : INPUT BOX 스타일 (회원가입) */
+
+/* 포커스 시 라벨 텍스트 색상 */
+.join-wrap .MuiInputLabel-root.Mui-focused {
+  color: var(--gray1) !important;
+}
+/* hover 시 테두리 색상 */
+.join-wrap .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--main2);
+}
+/* MUI Input Box 둥근 테두리 적용 */
+.join-wrap .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-radius: 8px;
+}
+/* 포커스 시 테두리 색상 */
+.join-wrap .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--main2);
+}
+/* 포커스 시 라벨 폰트 굵기 */
+.join-wrap .MuiInputLabel-root.Mui-focused {
+  font-weight: 700;
+}
+/* 이메일 그룹 */
+.email-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.email-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.email-inputs input[type="text"] {
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  flex: 1 0 140px;
+  box-sizing: border-box;
+}
+.email-inputs .at-symbol {
+  font-size: 18px;
+  color: #444;
+}
+.btn-email-send {
+  background-color: #2f3e2f;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  height: 40px;
+}
+.btn-email-send:hover {
+  background-color: #1e2a22;
+}
+.email-wrap .MuiTextField-root {
+  min-width: 0;
+}
+.MuiCollapse-wrapperInner {
+  transition: all 0.4s ease-in-out;
+}
