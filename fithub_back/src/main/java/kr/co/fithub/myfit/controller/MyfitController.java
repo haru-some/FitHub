@@ -29,7 +29,6 @@ public class MyfitController {
 		record.setMemberNo(memberNo);
 		record.setRecordDate(recordDate);
 		Record r = myfitService.selectRecord(record);
-		System.out.println(r);
 		
 		return ResponseEntity.ok(r);
 	}
@@ -40,7 +39,6 @@ public class MyfitController {
 		routine.setMemberNo(memberNo);
 		routine.setRoutineDay(routineDay);
 		Routine r = myfitService.selectRoutine(routine);
-		System.out.println(r);
 		return ResponseEntity.ok(r);
 	}
 	

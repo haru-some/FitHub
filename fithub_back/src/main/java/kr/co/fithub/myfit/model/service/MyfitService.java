@@ -14,13 +14,11 @@ public class MyfitService {
 
 	public Record selectRecord(Record record) {
 		Record r = myfitDao.selectRecord(record);
-		System.out.println("서비스임: "+record.getRecordDate());
 		return r;
 	}
 
 	public Routine selectRoutine(Routine routine) {
 		Routine r = myfitDao.selectRoutine(routine);
-		System.out.println("서비스임"+r);
 		return r;
 	}
 
