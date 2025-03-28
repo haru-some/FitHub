@@ -104,8 +104,12 @@
   text-align: left;
 }
 
+.exercise-record-content h4 {
+  text-align: center;
+}
+
 .fit-wrap .edit-button {
-  font-size: px;
+  font-size: 16px;
   width: 120px;
   background: #589c5f;
   color: white;
