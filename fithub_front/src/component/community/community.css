@@ -84,10 +84,11 @@
 .community-post-item p {
   margin: 5px;
 }
-.community-post-item > .community-sub-zone {
+.community-sub-zone {
   display: flex;
   gap: 30px;
   margin-bottom: 10px;
+  width: 130px;
 }
 .community-post-item > .community-sub-zone:hover {
   cursor: pointer;
@@ -100,15 +101,31 @@
   display: flex;
   gap: 3px;
   align-items: center;
+  width: calc(100% / 2);
 }
 .community-comments {
   display: flex;
   gap: 3px;
   align-items: center;
+  width: calc(100% / 2);
 }
-.community-view-user > img {
+.community-view-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.community-view-user img {
   width: 50px;
   height: 50px;
+}
+.community-view-content {
+  padding-top: 10px;
+}
+.community-view-content > img {
+  width: 100%;
+  border-radius: 10px;
+  margin: 10px 0;
+  height: 500px;
 }
 /* 댓글 입력란 */
 .post-input {

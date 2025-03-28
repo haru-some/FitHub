@@ -13,8 +13,13 @@ import lombok.NoArgsConstructor;
 public class CommunityDTO {
 	private int communityNo;
 	private String communityContent;
-	private String memberThumb;
-	private String memberId;
+	private String memberNo;
 	private String communityDate;
 	private int communityStatus;
+	private String memberThumb;
+	private int likeCount;
+	private int isLike;
+	private String memberId;
+	private int commentCount;
+	private int isFollow;
 }
