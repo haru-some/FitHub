@@ -5,31 +5,99 @@ const AdminMember = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [memberList, setMemberList] = useState([]);
   const [delMemberList, setDelMemberList] = useState();
+  const [communityList, setCommunityList] = useState();
+  const [commentList, setCommentList] = useState();
+  const [pi, setPi] = useState({});
+  const [memberPage, setMemberPage] = useState(1);
+  const [delMemberPage, setDelMemberPage] = useState(1);
+  const [communityPage, setCommunityPage] = useState(1);
+  const [commentPage, setCommentPage] = useState(1);
+  const [tabChange, setTabChange] = useState(1);
   useEffect(() => {
-    axios
-      .get(`${backServer}/admin/member`)
-      .then((res) => {
-        setMemberList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (tabChange === 1) {
+      axios
+        .get(
+          `${backServer}/admin/memberList?memberPage=${memberPage}&delMemberPage=${delMemberPage}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("member 에러");
+        });
+    } else if (tabChange === 2) {
+      axios
+        .get(
+          `${backServer}/admin/boardList?communityPage=${communityPage}&commentPage=${commentPage}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("board 에러");
+        });
+    }
+  }, [tabChange]);
+  const changeTab = (e) => {
+    const member = e.target.id;
+    if (member === "member") {
+      setTabChange(1);
+    } else {
+      setTabChange(2);
+    }
+  };
   return (
     <section className="admin-member-section">
-      <div className="tab">
-        <div className="page-title">회원 관리</div>
-        <div className="page-title">게시글 관리</div>
+      <div className="admin-member-tab">
+        <div
+          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
+          id="member"
+          onClick={changeTab}
+        >
+          회원 관리
+        </div>
+        <div
+          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
+          id="board"
+          onClick={changeTab}
+        >
+          게시글 관리
+        </div>
       </div>
-      <div className="member-tab">
-        <MemberList memberList={memberList} setMemberList={setMemberList} />
+      <div className="admin-member-tab-content">
+        {tabChange === 1 ? (
+          <div className="member-manage">
+            <div className="member-list">
+              <MemberListTBL
+                memberList={memberList}
+                setMemberList={setMemberList}
+              />
+            </div>
+            <div className="del-member-list">
+              <DelMemberListTBL
+                delMemberList={delMemberList}
+                setDelMemberList={setDelMemberList}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="board-manage">
+            <div className="board-list">
+              <CommunityListTBL />
+            </div>
+            <div className="comment-list">
+              <CommentListTBL />
+            </div>
+          </div>
+        )}
       </div>
-      <div className="board-tab"></div>
     </section>
   );
 };
 
-const MemberList = (props) => {
+const MemberListTBL = (props) => {
   const memberList = props.memberList;
   const setMemberList = props.setMemberList;
 
@@ -62,7 +130,6 @@ const MemberList = (props) => {
         console.error("업데이트 실패:", err);
       });
   };
-  console.log(memberList);
   return (
     <div>
       <table className="admin-tbl">
@@ -126,6 +193,71 @@ const MemberList = (props) => {
               );
             })}
         </tbody>
+      </table>
+      <div className="admin-member-navi">
+        <div>페이징 장소</div>
+      </div>
+    </div>
+  );
+};
+
+const DelMemberListTBL = (props) => {
+  const delMemberList = props.delMemberList;
+  const setDelMemberList = props.setDelMemberList;
+  return (
+    <div>
+      <table className="admin-tbl">
+        <thead className="admin-thead">
+          <tr>
+            <th>아이디</th>
+            <th>가입일</th>
+            <th>탈퇴일</th>
+            <th>이메일</th>
+          </tr>
+        </thead>
+        <tbody className="admin-tbody"></tbody>
+      </table>
+      <div className="admin-member-navi">
+        <div>페이징 장소</div>
+      </div>
+    </div>
+  );
+};
+
+const CommunityListTBL = () => {
+  return (
+    <div>
+      <table className="admin-tbl">
+        <thead className="admin-thead">
+          <tr>
+            <th>아이디</th>
+            <th>가입일</th>
+            <th>탈퇴일</th>
+            <th>이메일</th>
+          </tr>
+        </thead>
+        <tbody className="admin-tbody"></tbody>
+      </table>
+      <div className="admin-member-navi">
+        <div>페이징 장소</div>
+      </div>
+    </div>
+  );
+};
+
+const CommentListTBL = () => {
+  return (
+    <div>
+      <table className="admin-tbl">
+        <thead className="admin-thead">
+          <tr>
+            <th>아이디</th>
+            <th>가입일</th>
+            <th>탈퇴일</th>
+            <th>이메일</th>
+          </tr>
+        </thead>
+        <tbody className="admin-tbody"></tbody>
       </table>
       <div className="admin-member-navi">
         <div>페이징 장소</div>

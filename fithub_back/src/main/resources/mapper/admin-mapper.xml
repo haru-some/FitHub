@@ -4,6 +4,28 @@
 	<select id="memberList" resultType="member">
 		select * from member
 	</select>
+	<select id="delMemberList" resultType="delMember">
+		select * from del_member
+	</select>
+	<select id="communityList" resultType="community">
+		select * from community
+	</select>
+	<select id="commentList" resultType="comment">
+		select * from comment
+	</select>
+	
+	<select id="memberTotalCount">
+		select count(*) from member
+	</select>
+	<select id="delMemberTotalCount">
+		select count(*) from del_member
+	</select>
+	<select id="communityTotalCount">
+		select count(*) from community
+	</select>
+	<select id="commentTotalCount">
+		select count(*) from comment
+	</select>
 	
 	<update id="adminMemberChange">
 		update member set
@@ -17,4 +39,5 @@
 		</choose>
 		where member_id = #{memberId}
 	</update>
+	
 </mapper>

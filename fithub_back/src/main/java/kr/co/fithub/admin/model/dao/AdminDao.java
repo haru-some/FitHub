@@ -13,4 +13,18 @@ public interface AdminDao {
 
 	int adminMemberChange(MemberDTO memberData);
 
+	List delMemberList();
+
+	List communityList();
+
+	List commentList();
+
+	int memberTotalCount();
+
+	int delMemberTotalCount();
+
+	int communityTotalCount();
+
+	int commnetTotalCount();
+
 }

@@ -1,8 +1,8 @@
 const AdminChat = () => {
   return (
-    <div>
+    <section>
       <div>문의 관리</div>
-    </div>
+    </section>
   );
 };
 

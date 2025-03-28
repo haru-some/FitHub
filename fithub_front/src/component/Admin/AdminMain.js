@@ -41,7 +41,7 @@ const Sidebar = () => {
         통계 관리
       </NavLink>
       <NavLink
-        to="/admin/contect"
+        to="/admin/chat"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
         문의 관리
