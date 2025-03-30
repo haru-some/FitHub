@@ -240,8 +240,6 @@ const MemberJoin = () => {
       });
   };
 
-  const phoneReg = /^01[016789]-?\d{3,4}-?\d{4}$/;
-
   const [phoneValid, setPhoneValid] = useState(null);
   const [phoneMsg, setPhoneMsg] = useState("");
 

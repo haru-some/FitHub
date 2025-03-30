@@ -35,7 +35,6 @@ public class MemberController {
 	
 	@PostMapping
 	public ResponseEntity<Integer> joinMember(@RequestBody MemberDTO member) {
-		System.out.println(member);
 		int result = memberService.joinMember(member);
 		return ResponseEntity.ok(result);
 	}
