@@ -35,6 +35,7 @@ public class MemberController {
 	
 	@PostMapping
 	public ResponseEntity<Integer> joinMember(@RequestBody MemberDTO member) {
+		System.out.println(member);
 		int result = memberService.joinMember(member);
 		return ResponseEntity.ok(result);
 	}
@@ -43,6 +44,12 @@ public class MemberController {
 	public ResponseEntity<Integer> exists(@RequestParam String memberId){
 		int result = memberService.exists(memberId);
 		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/exists/email")
+	public ResponseEntity<Integer> existsEmail(@RequestParam String memberEmail) {
+	    int result = memberService.existsEmail(memberEmail);
+	    return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping(value="/login")

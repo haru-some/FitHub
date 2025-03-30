@@ -20,6 +20,10 @@
 		select count(*) from member where member_id=#{memberId}
 	</select>
 	
+	<select id="existsEmail" resultType="int">
+ 		SELECT COUNT(*) FROM member WHERE member_email = #{memberEmail}
+	</select>
+	
 	<select id="selectOneMember" resultType="member">
 		select * from member where member_id = #{memberId}
 	</select>

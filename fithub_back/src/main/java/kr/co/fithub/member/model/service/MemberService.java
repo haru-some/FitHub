@@ -39,6 +39,11 @@ public class MemberService {
 		int result = memberDao.exists(memberId);
 		return result;
 	}
+	
+	public int existsEmail(String memberEmail) {
+		int result = memberDao.existsEmail(memberEmail);
+	    return result;
+	}
 
 	public LoginMemberDTO login(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());

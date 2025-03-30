@@ -326,12 +326,19 @@
   display: flex;
   flex-direction: column;
 }
-.join-input-wrap {
+.join-form-field {
   margin-bottom: 20px;
+}
+.join-input-wrap {
+  margin-bottom: 10px;
 }
 .join-input-msg {
   font-size: 14px;
-  margin: 6px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 12px;
+  padding-left: 4px;
   color: #999;
 }
 .join-input-msg.valid {
@@ -340,8 +347,23 @@
 .join-input-msg.invalid {
   color: red;
 }
+.join-input-msg.strong {
+  color: #1976d2;
+}
+.join-input-msg.medium {
+  color: orange;
+}
+.join-input-msg.weak {
+  color: red;
+}
 .join-button-box {
   margin-top: 12px;
+}
+.btn-primary:disabled {
+  background-color: #545454 !important;
+  color: #fff !important;
+  cursor: not-allowed;
+  opacity: 1;
 }
 /* MUI : INPUT BOX 스타일 (회원가입) */
 

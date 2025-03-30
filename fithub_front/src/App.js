@@ -5,7 +5,7 @@ import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginIdState, memberLevelState } from "./component/utils/RecoilData";
+import { loginIdState, memberState } from "./component/utils/RecoilData";
 import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
 import AdminMain from "./component/Admin/AdminMain";
@@ -17,7 +17,7 @@ import MemberJoin from "./component/member/MemberJoin";
 
 function App() {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   useEffect(() => {
     refreshLogin();
@@ -31,14 +31,14 @@ function App() {
         .get(`${backServer}/member/refresh`)
         .then((res) => {
           setMemberId(res.data.memberId);
-          setMemberLevel(res.data.memberLevel);
+          setMemberInfo(res.data);
           axios.defaults.headers.common["Authorization"] = res.data.accessToken;
           window.localStorage.setItem("refreshToken", res.data.refreshToken);
         })
         .catch((error) => {
           console.error(error);
           setMemberId("");
-          setMemberLevel(0);
+          setMemberInfo(null);
           delete axios.defaults.headers.common["Authorization"];
           window.localStorage.removeItem("refreshToken");
         });

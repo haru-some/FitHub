@@ -12,4 +12,5 @@ public interface MemberDao {
 	int updateMember(MemberDTO member);
 	int deleteMember(String memberId);
 	int changePw(MemberDTO member);
+	int existsEmail(String memberEmail);
 }
