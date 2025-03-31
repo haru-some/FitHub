@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./shopLIst.css";
 import ProductPage from "./ProductPage";
+import { useNavigate } from "react-router-dom";
 
 const allProducts = [
   {
@@ -292,6 +293,7 @@ const ProductList = () => {
   );
   const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
   const [clickedButton, setClickedButton] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -317,7 +319,11 @@ const ProductList = () => {
 
       <div className="product-container">
         {currentProducts.map((product) => (
-          <div className="product-card" key={product.id}>
+          <div
+            className="product-card"
+            key={product.id}
+            onClick={() => [navigate(`/shop/detail/`)]}
+          >
             <img src={product.image} alt={product.name} />
             <div className="product-details">
               <h3>{product.name}</h3>
@@ -339,6 +345,16 @@ const ProductList = () => {
         ))}
       </div>
     </div>
+  );
+};
+
+const ShopItem = () => {
+  const navigate = useNavigate();
+  return (
+    <div
+      className="product-card"
+      onClick={() => [navigate(`/shop/view/`)]}
+    ></div>
   );
 };
 

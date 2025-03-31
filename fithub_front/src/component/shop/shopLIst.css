@@ -1,6 +1,6 @@
 .shop-list-wrap {
   background-color: #ffffff;
-  min-height: 900px;
+  min-height: 1180px;
 }
 
 .shop-list-wrap div {
@@ -36,7 +36,6 @@
   margin: 10px 0;
 }
 
-/* 제품 카드 스타일 */
 .shop-list-wrap div.product-card {
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -135,9 +134,9 @@
   display: flex; /* 플렉스 박스를 사용하여 정렬 */
   justify-content: center; /* 가로 중앙 정렬 */
   position: absolute; /* 절대 위치 지정 */
-  bottom: 10px; /* 하단 10px 여백 */
-  left: 0; /* 왼쪽 기준 */
-  right: 0; /* 오른쪽 기준 */
+  bottom: 5px;
+  left: 0;
+  right: 0;
 }
 .shop-list-wrap .pagination button {
   background-color: #4caf50;
