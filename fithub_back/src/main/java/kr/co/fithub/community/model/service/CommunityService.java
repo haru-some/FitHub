@@ -9,25 +9,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.fithub.community.model.dao.CommunityDao;
 import kr.co.fithub.community.model.dto.CommunityDTO;
+import kr.co.fithub.member.model.dto.LoginMemberDTO;
+import kr.co.fithub.util.JwtUtils;
 
 @Service
 public class CommunityService {
 	@Autowired
 	private CommunityDao communityDao;
+	@Autowired
+	private JwtUtils jwtUtil;
 
-	public List selectCommunityList(String memberId) {
+	public List selectCommunityList(String accessToken) {
+		String memberId = null;
+		if(accessToken != null) {			
+			LoginMemberDTO loginMember = jwtUtil.checkToken(accessToken);
+			memberId = loginMember.getMemberId();			
+		}
 		int memberNo = communityDao.selectMemberNo(memberId);
+		System.out.println();
 		List list = communityDao.selectCommunityList(memberNo);
-
 		return list;
 	}
 
-	public CommunityDTO selectOneCommunity(int communityNo) {
-		CommunityDTO c = communityDao.selectOneCommunity(communityNo);
+	public CommunityDTO selectOneCommunity(int communityNo, String accessToken) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("communityNo", communityNo);
+		if(accessToken != null) {			
+			LoginMemberDTO loginMember = jwtUtil.checkToken(accessToken);
+			map.put("memberId", loginMember.getMemberId());
+		}else {			
+			map.put("memberId", null);
+		}
+		CommunityDTO c = communityDao.selectOneCommunity(map);
 		return c;
-	}
-
-	
+	}	
 	
 	@Transactional
 	public int deleteLike(String memberId, int communityNo) {
@@ -35,8 +50,7 @@ public class CommunityService {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("memberNo", memberNo);
 		map.put("communityNo", communityNo);
-		int result = communityDao.deleteLike(map);
-		
+		int result = communityDao.deleteLike(map);		
 		int likeCount = communityDao.selectLikeCount(communityNo);
 		return likeCount;
 	}
@@ -46,8 +60,7 @@ public class CommunityService {
 		int memberNo = communityDao.selectMemberNo(memberId);
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("memberNo", memberNo);
-		map.put("communityNo", communityNo);
-		
+		map.put("communityNo", communityNo);		
 		int result = communityDao.insertLike(map);
 		int likeCount = communityDao.selectLikeCount(communityNo);
 		return likeCount;

@@ -10,62 +10,36 @@ import { memberState } from "../utils/RecoilData";
 const CommunityView = () => {
   const [member, setMember] = useRecoilState(memberState);
   const memberId = member.memberId;
-
   const [isLike, setIsLike] = useState(0);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const communityNo = params.communityNo;
-  const [communityList, setCommunityList] = useState({});
+  const [community, setCommunity] = useState({});
+  console.log(community.isLike);
   useEffect(() => {
     axios
       .get(`${backServer}/community/${communityNo}`)
       .then((res) => {
         console.log(res);
-        setCommunityList(res.data);
+        setCommunity(res.data);
       })
       .catch((err) => {});
   }, []);
   const changeLike = (e) => {
     if (isLike) {
       axios
-        .delete(
-          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityList.communityNo}`
+        .post(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityNo}`
         )
         .then((res) => {
-          const obj = communityList.filter(
-            (item, i) => item.communityNo === communityList.communityNo
-          )[0];
-          const idx = communityList.indexOf(
-            communityList.filter(
-              (item, i) => item.communityNo === communityList.communityNo
-            )[0]
-          );
-          obj["likeCount"] = res.data;
-          communityList[idx] = obj;
-
-          setCommunityList([...communityList]);
-          setIsLike(false);
+          console.log(res);
         });
     } else {
       axios
-        .post(
-          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityList.communityNo}`
+        .delete(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityNo}`
         )
-        .then((res) => {
-          const obj = communityList.filter(
-            (item, i) => item.communityNo === communityList.communityNo
-          )[0];
-          const idx = communityList.indexOf(
-            communityList.filter(
-              (item, i) => item.communityNo === communityList.communityNo
-            )[0]
-          );
-          obj["likeCount"] = res.data;
-          communityList[idx] = obj;
-
-          setCommunityList([...communityList]);
-          setIsLike(true);
-        });
+        .then((res) => {});
     }
     e.stopPropagation();
   };
@@ -76,8 +50,8 @@ const CommunityView = () => {
           <img src="/image/default_img.png"></img>
         </div>
         <div className="community-member">
-          <p>{communityList.memberId}</p>
-          <p>{communityList.communityDate}</p>
+          <p>{community.memberId}</p>
+          <p>{community.communityDate}</p>
         </div>
         <div className="community-follow-btn">
           <button type="button" className="follow-btn">
@@ -86,17 +60,17 @@ const CommunityView = () => {
         </div>
       </div>
       <div className="community-view-content">
-        <p>{communityList.communityContent}</p>
+        <p>{community.communityContent}</p>
         <img src="/image/communityImage/박재훈.webp"></img>
       </div>
       <div className="community-sub-zone">
         <div className="community-likes" onClick={changeLike}>
-          {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          {communityList.likeCount}
+          {community.isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          {community.likeCount}
         </div>
         <div className="community-comments">
           <ChatIcon />
-          {communityList.commentCount}
+          {community.commentCount}
         </div>
       </div>
       <div className="post-input">

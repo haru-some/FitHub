@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,15 +34,15 @@ public class CommunityController {
 	@Value("${file.root}")
 	private String root;
 	
-	@GetMapping(value="/list/{memberId}")
-	public ResponseEntity<List> communityList(@PathVariable String memberId){
-		List list = communityService.selectCommunityList(memberId);
+	@GetMapping(value="/list")
+	public ResponseEntity<List> communityList(@RequestHeader(value="Authorization",required = false) String accessToken){
+		List list = communityService.selectCommunityList(accessToken);
 		return ResponseEntity.ok(list);
 	}
 	
 	@GetMapping(value="/{communityNo}")
-	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo){
-		CommunityDTO c = communityService.selectOneCommunity(communityNo);
+	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo,  @RequestHeader(value="Authorization",required = false) String accessToken){		
+		CommunityDTO c = communityService.selectOneCommunity(communityNo, accessToken);
 		return ResponseEntity.ok(c);
 	}
 	

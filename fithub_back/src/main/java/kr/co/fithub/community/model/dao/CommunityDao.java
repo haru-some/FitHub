@@ -13,8 +13,7 @@ public interface CommunityDao {
 
 	List selectCommunityList(int memberNo);
 
-	CommunityDTO selectOneCommunity(int communityNo);
-
+	CommunityDTO selectOneCommunity(HashMap<String, Object> map);
 
 	int selectMemberNo(String memberId);
 

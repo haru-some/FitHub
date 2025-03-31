@@ -13,8 +13,7 @@ import { useRecoilState } from "recoil";
 import { isLoginState } from "../utils/RecoilData";
 
 const CommunityList = () => {
-  // const [memberId, setMemberId] = useRecoilState(isLoginState);
-  const [memberId, setMemberId] = useState("user03");
+  const [memberId, setMemberId] = useRecoilState(isLoginState);
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -22,7 +21,7 @@ const CommunityList = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/community/list/${memberId}`)
+      .get(`${backServer}/community/list`)
       .then((res) => {
         console.log(res);
         setCommunityList(res.data);
