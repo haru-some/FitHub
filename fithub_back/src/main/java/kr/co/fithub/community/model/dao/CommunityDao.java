@@ -14,9 +14,8 @@ public interface CommunityDao {
 
 	List selectCommunityList(int memberNo);
 
-	CommunityDTO selectOneCommunity(HashMap<String, Object> map);
+	CommunityDTO selectOneCommunity(HashMap<String, Integer> map);
 
-	int selectMemberNo(String memberId);
 
 	int deleteLike(HashMap<String, Integer> map);
 

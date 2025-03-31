@@ -102,6 +102,7 @@
   gap: 3px;
   align-items: center;
   width: calc(100% / 2);
+  cursor: pointer;
 }
 .community-comments {
   display: flex;

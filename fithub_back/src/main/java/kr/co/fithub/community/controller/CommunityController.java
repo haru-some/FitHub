@@ -35,26 +35,26 @@ public class CommunityController {
 	private String root;
 	
 	@GetMapping(value="/list")
-	public ResponseEntity<List> communityList(@RequestHeader(value="Authorization",required = false) String accessToken){
-		List list = communityService.selectCommunityList(accessToken);
+	public ResponseEntity<List> communityList(@RequestParam int memberNo){
+		List list = communityService.selectCommunityList(memberNo);
 		return ResponseEntity.ok(list);
 	}
 	
 	@GetMapping(value="/{communityNo}")
-	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo,  @RequestHeader(value="Authorization",required = false) String accessToken){		
-		CommunityDTO c = communityService.selectOneCommunity(communityNo, accessToken);
+	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo, @RequestParam int memberNo){		
+		CommunityDTO c = communityService.selectOneCommunity(communityNo, memberNo);
 		return ResponseEntity.ok(c);
 	}
 	
-	@DeleteMapping(value="/{memberId}")
-	public ResponseEntity<Integer> deleteLike(@PathVariable String memberId, @RequestParam int communityNo){
-		int result = communityService.deleteLike(memberId, communityNo);
+	@DeleteMapping(value="/{memberNo}")
+	public ResponseEntity<Integer> deleteLike(@PathVariable int memberNo, @RequestParam int communityNo){
+		int result = communityService.deleteLike(memberNo, communityNo);
 		return ResponseEntity.ok(result);
 	}
 	
-	@PostMapping(value="/{memberId}")
-	public ResponseEntity<Integer> insertLike(@PathVariable String memberId, @RequestParam int communityNo){
-		int result = communityService.insertLike(memberId, communityNo);
+	@PostMapping(value="/{memberNo}")
+	public ResponseEntity<Integer> insertLike(@PathVariable int memberNo, @RequestParam int communityNo){
+		int result = communityService.insertLike(memberNo, communityNo);
 		return ResponseEntity.ok(result);
 	}
 	

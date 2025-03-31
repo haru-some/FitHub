@@ -10,10 +10,11 @@ import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginIdState } from "../utils/RecoilData";
+import { loginIdState, memberState } from "../utils/RecoilData";
 
 const CommunityList = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
+  const [member, setMember] = useRecoilState(memberState);
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -21,14 +22,14 @@ const CommunityList = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/community/list`)
+      .get(
+        `${backServer}/community/list?memberNo=${member ? member.memberNo : 0}`
+      )
       .then((res) => {
-        console.log(res);
         setCommunityList(res.data);
       })
       .catch((err) => {});
   }, []);
-
   return (
     <div className="community-list">
       <div className="community-list-wrap">
@@ -72,7 +73,7 @@ const CommunityList = () => {
                   community={community}
                   communityList={communityList}
                   setCommunityList={setCommunityList}
-                  memberId={memberId}
+                  member={member}
                 />
               );
             })}
@@ -86,17 +87,18 @@ const CommunityList = () => {
 const CommunityItem = (props) => {
   const communityList = props.communityList;
   const setCommunityList = props.setCommunityList;
-  const memberId = props.memberId;
+  const member = props.member;
   const community = props.community;
   const [isLike, setIsLike] = useState(community.isLike === 1);
   const navigate = useNavigate();
+  console.log(community.isLike);
 
   const changeLike = (e) => {
-    if (memberId) {
+    if (member) {
       if (isLike) {
         axios
           .delete(
-            `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+            `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberNo}?communityNo=${community.communityNo}`
           )
           .then((res) => {
             const obj = communityList.filter(
@@ -116,7 +118,7 @@ const CommunityItem = (props) => {
       } else {
         axios
           .post(
-            `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+            `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberNo}?communityNo=${community.communityNo}`
           )
           .then((res) => {
             const obj = communityList.filter(
@@ -157,7 +159,7 @@ const CommunityItem = (props) => {
         </div>
         <div className="community-member">
           <p>{community.memberId}</p>
-          {memberId && (
+          {member && (
             <button type="button" className="follow-btn">
               팔로우
             </button>

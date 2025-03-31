@@ -474,7 +474,9 @@ const GoodsList = () => {
           <div
             className="goods-card"
             key={goods.id}
-            onClick={() => [navigate(`/shop/detail/`)]}
+            onClick={() => {
+              navigate(`/shop/detail/`);
+            }}
           >
             <img src={goods.image} alt={goods.name} />
             <div className="goods-details">

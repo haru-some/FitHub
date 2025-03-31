@@ -25,9 +25,9 @@
 		    c.community_content,
 		    c.community_no,
 		    (select count(*) from community_like where community_no = c.community_no) as like_count,
-		    (select count(*) from community_like where community_no = c.community_no and member_no = (select member_no from member where member_id = #{memberId})) as is_like,
+		    (select count(*) from community_like where community_no = c.community_no and member_no = #{memberNo}) as is_like,
 		    (select count(*) from comment_tbl where community_no = c.community_no) as comment_count,
-		    (select count(*) from follow where follow_member_no = c.member_no and member_no = (select member_no from member where member_id = #{memberId})) as is_follow
+		    (select count(*) from follow where follow_member_no = c.member_no and member_no = #{memberNo}) as is_follow
 		    FROM
 		    community c
 		join
@@ -38,10 +38,6 @@
 	<insert id="insertLike">
 		insert into community_like values(#{communityNo}, #{memberNo})
 	</insert>
-	
-	<select id="selectMemberNo" resultType="int">
-		select member_no from member where member_id = #{memberId}
-	</select>
 	
 	<delete id="deleteLike">
 		delete from community_like where member_no = #{memberNo} and community_no = #{communityNo}
