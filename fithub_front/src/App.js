@@ -16,6 +16,7 @@ import JoinTerms from "./component/member/JoinTerms";
 import MemberJoin from "./component/member/MemberJoin";
 import ShopDetail from "./component/shop/ShopDetail";
 import FindInfo from "./component/member/FindInfo";
+import MemberMain from "./component/member/MemberMain";
 import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
           <Route path="/find" element={<FindInfo />} />
+          <Route path="/member" element={<MemberMain />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />

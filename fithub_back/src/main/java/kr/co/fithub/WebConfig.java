@@ -8,24 +8,22 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
-
-    @Value("${file.root}")
-    private String root;
-    
-    @Bean
-    public BCryptPasswordEncoder bCrypt() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-        .addResourceHandler("/member/thumb/**")
-        .addResourceLocations("file:///"+root+"/member/thumb/");
+public class WebConfig implements WebMvcConfigurer{
+	@Value("${file.root}")
+	private String root;
+	
+	@Bean
+	public BCryptPasswordEncoder bCrypt() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+		.addResourceHandler("/member/profileImage/**")
+		.addResourceLocations("file:///"+root+"/member/profileImage/");
         registry
         .addResourceHandler("/editor/**")
         .addResourceLocations("file:///"+root+"/editor/");
-    }
-
+	}
 }

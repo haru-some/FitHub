@@ -273,7 +273,7 @@ const MemberJoin = () => {
       member.memberName !== ""
     ) {
       const email = `${member.memberEmailFront}@${member.memberEmailBack}`;
-      const addr = `${member.memberAddr} ${member.memberAddrDetail}`;
+      const addr = `${member.memberAddr}, ${member.memberAddrDetail}`;
 
       axios
         .post(`${backServer}/member`, {
