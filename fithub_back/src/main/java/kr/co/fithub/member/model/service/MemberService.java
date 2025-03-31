@@ -50,7 +50,6 @@ public class MemberService {
 		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
 			String accessToken = jwtUtil.createAccessToken(m.getMemberId(),m.getMemberLevel());
 			String refreshToken = jwtUtil.createRefreshToken(m.getMemberId(),m.getMemberLevel());
-			//LoginMemberDTO loginMember = new LoginMemberDTO(accessToken, refreshToken, m.getMemberId(), m.getMemberLevel());
 			m.setAccessToken(accessToken);
 			m.setRefreshToken(refreshToken);
 			m.setMemberPw(null);
@@ -65,13 +64,16 @@ public class MemberService {
 		return m;
 	}
 
-	public LoginMemberDTO refresh(String refreshToken) {
+	//jwtUtil 수정 필요
+	public MemberDTO refresh(String refreshToken) {
 		LoginMemberDTO loginMember = jwtUtil.checkToken(refreshToken);
+		MemberDTO m = memberDao.selectOneMember(loginMember.getMemberId());
 		String accessToken = jwtUtil.createAccessToken(loginMember.getMemberId(),loginMember.getMemberLevel());
 		String newRefreshToken = jwtUtil.createRefreshToken(loginMember.getMemberId(),loginMember.getMemberLevel());
-		loginMember.setAccessToken(accessToken);
-		loginMember.setRefreshToken(newRefreshToken);
-		return loginMember;
+		m.setAccessToken(accessToken);
+		m.setRefreshToken(newRefreshToken);
+		m.setMemberPw(null);
+		return m;
 	}
 
 	//thumb 추가 해야함

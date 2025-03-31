@@ -71,8 +71,8 @@ public class MemberController {
 	}
 	
 	@GetMapping(value="/refresh")
-	public ResponseEntity<LoginMemberDTO> refresh(@RequestHeader("Authorization") String refreshToken){
-		LoginMemberDTO loginMember = memberService.refresh(refreshToken);
+	public ResponseEntity<MemberDTO> refresh(@RequestHeader("Authorization") String refreshToken){
+		MemberDTO loginMember = memberService.refresh(refreshToken);
 		return ResponseEntity.ok(loginMember);
 	}
 	
