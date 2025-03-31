@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./shopLIst.css";
 import ProductPage from "./ProductPage";
 import { useNavigate } from "react-router-dom";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 const allGoods = [
   {
@@ -207,6 +209,104 @@ const allGoods = [
     category: "스포츠웨어(여)",
     image: "/image/default_img.png",
   },
+  {
+    id: 30,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 31,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 32,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 33,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 34,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 35,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 36,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 37,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 38,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 39,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 40,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 41,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 42,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
+  {
+    id: 43,
+    name: "레깅스O",
+    price: "20,000원",
+    category: "스포츠웨어(여)",
+    image: "/image/default_img.png",
+  },
 ];
 
 const categories = [
@@ -254,6 +354,8 @@ const GoodsList = () => {
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
   const GoodsPerPage = 8;
+  const [clickedButton, setClickedButton] = useState(null);
+  const navigate = useNavigate();
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
@@ -289,8 +391,61 @@ const GoodsList = () => {
   const indexOfFirstGoods = indexOfLastGoods - GoodsPerPage;
   const currentGoods = sortedGoods.slice(indexOfFirstGoods, indexOfLastGoods);
   const totalPages = Math.ceil(sortedGoods.length / GoodsPerPage);
-  const [clickedButton, setClickedButton] = useState(null);
-  const navigate = useNavigate();
+
+  const renderPagination = () => {
+    const buttons = [];
+
+    // 이전 페이지 버튼
+    buttons.push(
+      <button
+        key="prev"
+        onClick={() => setCurrentPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <NavigateBeforeIcon />
+      </button>
+    );
+
+    // 페이지 번호 버튼
+    const totalPagesDisplayed = 5; // 항상 표시할 페이지 수
+    let startPage = Math.max(1, currentPage - 2); // 현재 페이지를 기준으로 시작 페이지
+    let endPage = Math.min(totalPages, startPage + totalPagesDisplayed - 1); // 끝 페이지
+
+    // 시작 페이지가 1일 때 조정
+    if (startPage === 1) {
+      endPage = Math.min(totalPagesDisplayed, totalPages);
+    }
+
+    // 끝 페이지가 totalPages일 때 조정
+    if (endPage === totalPages) {
+      startPage = Math.max(1, totalPages - totalPagesDisplayed + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i)}
+          disabled={currentPage === i} // 현재 페이지에서는 비활성화
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // 다음 페이지 버튼
+    buttons.push(
+      <button
+        key="next"
+        onClick={() => setCurrentPage(currentPage + 1)}
+        disabled={currentPage === totalPages} // 마지막 페이지에서는 비활성화
+      >
+        <NavigateNextIcon />
+      </button>
+    );
+
+    return buttons;
+  };
 
   return (
     <div>
@@ -330,17 +485,7 @@ const GoodsList = () => {
         ))}
       </div>
       {/* 페이지네이션 */}
-      <div className="pagination">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => setCurrentPage(index + 1)}
-            disabled={currentPage === index + 1} // 현재 페이지는 비활성화
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+      <div className="pagination">{renderPagination()}</div>
     </div>
   );
 };
