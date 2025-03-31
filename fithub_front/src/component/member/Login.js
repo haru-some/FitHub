@@ -46,6 +46,7 @@ const Login = () => {
       .then((res) => {
         setMemberId(res.data.memberId);
         setMemberInfo(res.data);
+        console.log(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         window.localStorage.setItem("refreshToken", res.data.refreshToken);
         navigate("/");

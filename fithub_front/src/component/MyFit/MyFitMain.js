@@ -9,9 +9,12 @@ import { selectClasses } from "@mui/material";
 import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { memberState } from "../utils/RecoilData";
 
 const MyFitMain = () => {
-  const [memberNo, setMemberNo] = useState(1);
+  const [member, setMember] = useRecoilState(memberState);
+  const memberNo = member.memberNo;
   const [record, setRecord] = useState(null);
   const [routine, setRoutine] = useState(null);
   const today = dayjs();
@@ -88,7 +91,6 @@ const MyFitMain = () => {
                   setDate={setDate}
                   setPageTitle={setPageTitle}
                   memberNo={memberNo}
-                  setMemberNo={setMemberNo}
                   record={record}
                   setRecord={setRecord}
                   routine={routine}

@@ -26,6 +26,7 @@ const RoutineSetting = (props) => {
     setText(obj[weekday]);
   }, [weekday]);
   const memberNo = props.memberNo;
+  console.log(memberNo);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}`)
@@ -39,7 +40,7 @@ const RoutineSetting = (props) => {
       })
       .catch((err) => {});
   }, []);
-  console.log(obj);
+
   return (
     <div className="routine-wrap">
       <div className="routine-days">
