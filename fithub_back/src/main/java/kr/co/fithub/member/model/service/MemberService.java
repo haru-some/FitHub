@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import kr.co.fithub.email.service.EmailService;
 import kr.co.fithub.member.model.dao.MemberDao;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
+import kr.co.fithub.util.FileUtils;
 import kr.co.fithub.util.JwtUtils;
 import kr.co.fithub.util.PageInfoUtil;
 
@@ -32,6 +34,10 @@ public class MemberService {
 	private PageInfoUtil pageInfoUtil;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+    private FileUtils fileUtils;
+    @Value("${file.root}")
+    private String root;
 	
 	@Transactional
 	public int joinMember(MemberDTO member) {
@@ -82,13 +88,12 @@ public class MemberService {
 		return m;
 	}
 
-	//thumb 추가 해야함
 	@Transactional
 	public int updateMember(MemberDTO member) {
 		int result = memberDao.updateMember(member);
 		return result;
 	}
-	
+
 	@Transactional
 	public int deleteMember(String memberId) {
 		int result = memberDao.deleteMember(memberId);
@@ -135,5 +140,6 @@ public class MemberService {
 	    }
 	    return false;
 	}
+	
 
 }
