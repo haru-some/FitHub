@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./member.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -672,10 +672,17 @@ const MemberJoin = () => {
             type="submit"
             className="btn-primary lg full"
             disabled={!isJoinValid}
+            style={{ height: "56px" }}
           >
             회원가입
           </button>
         </div>
+        <p className="join-sub">
+          이미 회원이신가요?{" "}
+          <Link to="/login" className="login-link">
+            <strong>로그인</strong>
+          </Link>
+        </p>
       </form>
     </section>
   );

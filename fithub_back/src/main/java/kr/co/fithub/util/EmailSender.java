@@ -24,7 +24,7 @@ public class EmailSender {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setSentDate(new Date());
-            helper.setFrom(new InternetAddress("h4rusome", "fithub 인증 시스템"));
+            helper.setFrom(new InternetAddress("h4rusome", "fithub Support"));
             helper.setTo(receiver);
             helper.setSubject(emailTitle);
             helper.setText(emailContent, true);

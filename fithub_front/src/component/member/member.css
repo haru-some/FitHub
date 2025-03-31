@@ -84,7 +84,6 @@
   padding: 14px;
   font-size: 16px;
   border-radius: 8px;
-  margin-bottom: 24px;
   background-color: #2f3e2f;
 }
 .btn-primary.lg:hover {
@@ -95,6 +94,7 @@
   color: #555;
   text-align: center;
   margin-bottom: 40px;
+  margin-top: 24px;
 }
 .member-link-box a {
   text-decoration: none;
@@ -189,7 +189,7 @@
 /* 약관동의 전체 영역 */
 .terms-all-wrap {
   display: flex;
-  width: 800px;
+  width: 700px;
   height: 800px;
   margin: 10px auto;
   background-color: white;
@@ -197,10 +197,13 @@
   border-radius: 12px;
   overflow: hidden;
 }
+/* 전체 폼 수직 정렬 및 간격 */
 .terms-wrap {
-  width: 700px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   margin: 0 auto;
-  padding: 30px 30px;
+  padding: 40px 60px;
   box-sizing: border-box;
 }
 /* 제목 */
@@ -284,15 +287,7 @@
 .btn-primary.sm:not(.gray):hover {
   background-color: #1e2a22;
 }
-/* 전체 폼 수직 정렬 및 간격 */
-.terms-wrap {
-  display: flex;
-  flex-direction: column;
-  width: 700px;
-  margin: 0 auto;
-  padding: 30px;
-  box-sizing: border-box;
-}
+
 /* 체크박스 수직정렬 보정용 클래스 */
 .terms-checkbox {
   align-items: flex-start;
@@ -310,7 +305,7 @@
 .join-wrap {
   width: 520px;
   margin: 10px auto;
-  padding: 50px 60px;
+  padding: 40px 60px;
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -355,9 +350,6 @@
 }
 .join-input-msg.weak {
   color: red;
-}
-.join-button-box {
-  margin-top: 12px;
 }
 .btn-primary:disabled {
   background-color: #545454 !important;
@@ -430,3 +422,18 @@
 .MuiCollapse-wrapperInner {
   transition: all 0.4s ease-in-out;
 }
+.join-sub {
+  font-size: 14px;
+  color: #444;
+  margin-top: 32px;
+  text-align: center;
+}
+.join-sub a {
+  color: var(--main1);
+  text-decoration: none;
+}
+.login-link {
+  margin-left: 5px;
+}
+
+/* 아이디 / 비밀번호 찾기 페이지 스타일 */
