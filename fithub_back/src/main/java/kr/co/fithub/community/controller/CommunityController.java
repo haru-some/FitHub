@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,27 +34,40 @@ public class CommunityController {
 	@Value("${file.root}")
 	private String root;
 	
-	@GetMapping(value="/list/{memberId}")
-	public ResponseEntity<List> communityList(@PathVariable String memberId){
-		List list = communityService.selectCommunityList(memberId);
+	@GetMapping(value="/list")
+	public ResponseEntity<List> communityList(@RequestParam int memberNo){
+		List list = communityService.selectCommunityList(memberNo);
 		return ResponseEntity.ok(list);
 	}
 	
-	@GetMapping(value="/{communityNo}/{memberId}")
-	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo, @PathVariable String memberId){
-		CommunityDTO c = communityService.selectOneCommunity(communityNo);
+	@GetMapping(value="/{communityNo}")
+	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo, @RequestParam int memberNo){		
+		CommunityDTO c = communityService.selectOneCommunity(communityNo, memberNo);
 		return ResponseEntity.ok(c);
 	}
 	
-	@DeleteMapping(value="/{memberId}")
-	public ResponseEntity<Integer> deleteLike(@PathVariable String memberId, @RequestParam int communityNo){
-		int result = communityService.deleteLike(memberId, communityNo);
+	@DeleteMapping(value="/{memberNo}")
+	public ResponseEntity<Integer> deleteLike(@PathVariable int memberNo, @RequestParam int communityNo){
+		int result = communityService.deleteLike(memberNo, communityNo);
 		return ResponseEntity.ok(result);
 	}
 	
-	@PostMapping(value="/{memberId}")
-	public ResponseEntity<Integer> insertLike(@PathVariable String memberId, @RequestParam int communityNo){
-		int result = communityService.insertLike(memberId, communityNo);
+	@PostMapping(value="/{memberNo}")
+	public ResponseEntity<Integer> insertLike(@PathVariable int memberNo, @RequestParam int communityNo){
+		int result = communityService.insertLike(memberNo, communityNo);
 		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping
+	public ResponseEntity<Integer> insertCommunity(@ModelAttribute CommunityDTO community){
+		int result = communityService.insertCommunity(community);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value="/image")
+	public ResponseEntity<String> image(@ModelAttribute MultipartFile image){
+		String savepath = root + "/editor/";
+		String filepath = fileUtils.upload(savepath, image);
+		return ResponseEntity.ok(filepath);
 	}
 }

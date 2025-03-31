@@ -24,6 +24,9 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 		registry
 		.addResourceHandler("/member/thumb/**")
 		.addResourceLocations("file:///"+root+"/member/thumb/");
+		registry
+		.addResourceHandler("/editor/**")
+		.addResourceLocations("file:///"+root+"/editor/");
 	}
 	
 	@Override
