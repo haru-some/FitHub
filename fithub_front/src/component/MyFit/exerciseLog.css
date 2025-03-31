@@ -4,6 +4,9 @@
   border-radius: 10px;
   width: 790px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .record-wrap h2 {
@@ -13,6 +16,7 @@
 }
 
 .record-wrap .time-inputs {
+  width: 400px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,24 +43,27 @@
 }
 
 .record-wrap .exercise-content {
+  width: 790px;
   display: flex;
   flex-direction: column;
   text-align: left;
-  margin-bottom: 15px;
+  margin-bottom: 60px;
 }
 
 .exercise-content label {
-  font-size: 0.9em;
-  margin-bottom: 5px;
+  font-size: 20px;
+  margin-bottom: 15px;
 }
 
-.record-wrap .exercise-content textarea {
-  background: #333;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  resize: none;
+.exercise-content .ql-editor.ql-blank::before {
+  color: #fff; /* 원하는 색상으로 변경 */
+  font-style: normal; /* 원하면 스타일도 수정 가능 */
+  opacity: 0.6; /* 흐릿하게 보이면 이걸로 조절 */
+}
+
+.exercise-content .quill .ql-editor {
+  height: 200px;
+  overflow-y: auto;
 }
 
 .record-wrap .submit-button {

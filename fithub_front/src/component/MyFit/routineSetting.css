@@ -41,16 +41,6 @@
   margin-bottom: 15px;
 }
 
-.routine-content textarea {
-  background: #333;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  resize: none;
-  min-height: 200px;
-}
-
 .routine-wrap .save-button {
   background: #589c5f;
   color: white;
@@ -69,4 +59,9 @@
   color: #fff; /* 원하는 색상으로 변경 */
   font-style: normal; /* 원하면 스타일도 수정 가능 */
   opacity: 0.6; /* 흐릿하게 보이면 이걸로 조절 */
+}
+
+.routine-wrap .quill .ql-editor {
+  height: 200px;
+  overflow-y: auto;
 }
