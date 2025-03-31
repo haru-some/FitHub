@@ -4,9 +4,13 @@ import ChatIcon from "@mui/icons-material/Chat";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { memberState } from "../utils/RecoilData";
 
-const CommunityView = (props) => {
-  const [memberId, setMemberId] = useState("user03");
+const CommunityView = () => {
+  const [member, setMember] = useRecoilState(memberState);
+  const memberId = member.memberId;
+
   const [isLike, setIsLike] = useState(0);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
@@ -14,7 +18,7 @@ const CommunityView = (props) => {
   const [communityList, setCommunityList] = useState({});
   useEffect(() => {
     axios
-      .get(`${backServer}/community/${communityNo}/${memberId}`)
+      .get(`${backServer}/community/${communityNo}`)
       .then((res) => {
         console.log(res);
         setCommunityList(res.data);

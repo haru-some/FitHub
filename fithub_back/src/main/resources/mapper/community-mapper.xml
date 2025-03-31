@@ -32,7 +32,7 @@
 		    community c
 		join
 		    member m ON c.member_no = m.member_no
-            where c.community_no = ${communityNo}
+            where c.community_no = #{communityNo};
 	</select>
 	
 	<insert id="insertLike">

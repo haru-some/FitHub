@@ -24,6 +24,7 @@ const CommunityList = () => {
     axios
       .get(`${backServer}/community/list/${memberId}`)
       .then((res) => {
+        console.log(res);
         setCommunityList(res.data);
       })
       .catch((err) => {});
