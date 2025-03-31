@@ -102,6 +102,9 @@ public class MemberService {
 		int result = memberDao.changePw(member);
 		return result;
 	}
-	
+
+	public MemberDTO findIdByNameAndEmail(String name, String email) {
+	    return memberDao.findIdByNameAndEmail(name, email);
+	}
 
 }

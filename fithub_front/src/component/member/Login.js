@@ -132,9 +132,9 @@ const Login = () => {
           <div className="member-link-box">
             <Link to="/jointerms">회원가입</Link>
             <span> | </span>
-            <Link to="/findid">아이디</Link>
+            <Link to="/find">아이디</Link>
             <span>/</span>
-            <Link to="/findpw">비밀번호 찾기</Link>
+            <Link to="/find">비밀번호 찾기</Link>
           </div>
           <div className="login-divider-wrap">
             <hr className="divider" />

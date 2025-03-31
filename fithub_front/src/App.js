@@ -14,6 +14,7 @@ import Login from "./component/member/Login";
 import CommunityMain from "./component/community/CommunityMain";
 import JoinTerms from "./component/member/JoinTerms";
 import MemberJoin from "./component/member/MemberJoin";
+import FindInfo from "./component/member/FindInfo";
 
 function App() {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
@@ -53,6 +54,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
+          <Route path="/find" element={<FindInfo />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />

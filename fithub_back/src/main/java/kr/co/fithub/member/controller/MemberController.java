@@ -1,7 +1,10 @@
 package kr.co.fithub.member.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -102,5 +105,15 @@ public class MemberController {
 	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/find/id")
+	public ResponseEntity<String> findId(@RequestParam String memberName, @RequestParam String memberEmail) {
+	    MemberDTO member = memberService.findIdByNameAndEmail(memberName, memberEmail);
+	    if (member != null) {
+	        return ResponseEntity.ok(member.getMemberId());
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
+	    }
 	}
 }

@@ -45,4 +45,10 @@
 		update member set member_pw = #{memberPw}
 		where member_id = #{memberId}
 	</update>
+	
+	<select id="findIdByNameAndEmail" resultType="member" parameterType="map">
+	  SELECT * 
+	  FROM member 
+	  WHERE member_name = #{memberName} AND member_email = #{memberEmail}
+	</select>
 </mapper>
