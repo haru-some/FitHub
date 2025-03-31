@@ -52,10 +52,10 @@ public class MemberController {
 	}
 	
 	@PostMapping(value="/login")
-	public ResponseEntity<LoginMemberDTO> login(@RequestBody MemberDTO member){
-		LoginMemberDTO loginMember = memberService.login(member);
-		if(loginMember != null) {
-			return ResponseEntity.ok(loginMember);
+	public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO member){
+		MemberDTO memberInfo = memberService.login(member);
+		if(memberInfo != null) {
+			return ResponseEntity.ok(memberInfo);
 		}else {
 			return ResponseEntity.status(404).build();
 		}

@@ -1,4 +1,8 @@
-/* 컨테이너 스타일 */
+.shop-list-wrap {
+  background-color: #ffffff;
+  min-height: 900px;
+}
+
 .shop-list-wrap div {
   margin: 20px;
   font-family: "Arial", sans-serif;
@@ -7,7 +11,7 @@
 /* 버튼 스타일 */
 .shop-list-wrap button {
   margin: 5px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
   border: none;
@@ -15,10 +19,14 @@
   background-color: #589c5f; /* 그린 색상 */
   color: white;
   transition: background-color 0.3s;
+  cursor: pointer;
 }
 
 .shop-list-wrap button:hover {
-  background-color: #589c5f; /* 호버 시 어두운 그린 */
+  background-color: #245329; /* 호버 시 어두운 그린 */
+}
+.shop-list-wrap button:disabled {
+  background-color: #245329;
 }
 
 /* 정렬 선택 박스 스타일 */
@@ -83,16 +91,18 @@
   justify-content: flex-start;
 }
 
-/* 각 제품 카드 스타일 */
 .shop-list-wrap .product-card {
-  flex: 0 1 calc(20% - 20px); /* 5개씩 보이도록 설정하며 간격을 고려 */
+  background-color: #f9f9f9;
+  flex: 0 1 calc(25% - 20px); /* 4개씩 보이도록 설정하며 간격을 고려 */
   box-sizing: border-box; /* 패딩과 보더를 포함하여 크기 계산 */
   border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 15px;
   text-align: center; /* 텍스트 가운데 정렬 */
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .shop-list-wrap .Banner-wrap {
   display: flex;
@@ -101,12 +111,12 @@
 
 .shop-list-wrap .adBanner {
   flex-grow: 1;
-  background-color: #f7f7f7;
+  background-color: #f2f2f2;
   padding: 20px;
   text-align: center;
   cursor: pointer;
   border-radius: 10px;
-  margin: 0 10px;
+  margin: 20px 0;
 }
 
 /* 제품 세부사항 스타일 */
@@ -114,4 +124,23 @@
   display: flex;
   flex-direction: column; /* 세부정보를 수직으로 정렬 */
   align-items: center; /* 가운데 정렬 */
+}
+
+/* 페이지네이션 스타일 */
+.shop-list-wrap .pagination button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.shop-list-wrap .pagination button:hover {
+  background-color: #45a049;
+}
+
+.shop-list-wrap .pagination button:disabled {
+  background-color: #245329;
 }

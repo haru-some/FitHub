@@ -45,14 +45,16 @@ public class MemberService {
 	    return result;
 	}
 
-	public LoginMemberDTO login(MemberDTO member) {
+	public MemberDTO login(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());
 		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
 			String accessToken = jwtUtil.createAccessToken(m.getMemberId(),m.getMemberLevel());
-			System.out.println("accessToken : "+accessToken);
 			String refreshToken = jwtUtil.createRefreshToken(m.getMemberId(),m.getMemberLevel());
-			LoginMemberDTO loginMember = new LoginMemberDTO(accessToken, refreshToken, m.getMemberId(), m.getMemberLevel());
-			return loginMember;
+			//LoginMemberDTO loginMember = new LoginMemberDTO(accessToken, refreshToken, m.getMemberId(), m.getMemberLevel());
+			m.setAccessToken(accessToken);
+			m.setRefreshToken(refreshToken);
+			m.setMemberPw(null);
+			return m;
 		}
 		return null;
 	}
