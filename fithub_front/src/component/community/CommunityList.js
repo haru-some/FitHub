@@ -167,7 +167,7 @@ const CommunityItem = (props) => {
         </div>
       </div>
       <div
-        className="community-content"
+        className="community-content-texteditor"
         dangerouslySetInnerHTML={{ __html: community.communityContent }}
       ></div>
 

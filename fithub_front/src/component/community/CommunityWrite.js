@@ -44,11 +44,11 @@ const CommunityWrite = () => {
         <div className="community-content">
           <TextEditor data={communityContent} setData={setCommunityContent} />
         </div>
-      </div>
-      <div className="write-btn-zone">
-        <button type="button" onClick={write}>
-          작성
-        </button>
+        <div className="write-btn-zone">
+          <button className="write-btn" type="button" onClick={write}>
+            작성
+          </button>
+        </div>
       </div>
     </div>
   );
