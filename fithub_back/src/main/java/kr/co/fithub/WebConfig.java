@@ -31,8 +31,8 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 	
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry
-			.addHandler(adminChat, "/allChat")
-			.setAllowedOrigins("*");
+//		registry
+//			.addHandler(adminChat, "/allChat")
+//			.setAllowedOrigins("*");
 	}
 }
