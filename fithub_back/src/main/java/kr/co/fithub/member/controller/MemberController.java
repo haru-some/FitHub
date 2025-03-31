@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,17 +77,29 @@ public class MemberController {
 		return ResponseEntity.ok(loginMember);
 	}
 	
-	@PatchMapping(value="/{memberId}")
-	public ResponseEntity<Integer> updateMember(@PathVariable String memberId, 
-												@ModelAttribute MultipartFile thumbnail,
-												@ModelAttribute MemberDTO member){
-		if(thumbnail != null) {
-			String savepath = root + "/member/thumb/";
-			String filepath = fileUtils.upload(savepath, thumbnail);
-			member.setMemberThumb(filepath);
-		}
-		int result = memberService.updateMember(member);
-		return ResponseEntity.ok(result);
+	@PutMapping
+	public ResponseEntity<?> updateMember(
+	        @ModelAttribute MemberDTO member,
+	        @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
+	    try {
+	        if (thumbnail != null && !thumbnail.isEmpty()) {
+	            String savepath = root + "/member/profileImage/";
+				String filepath = fileUtils.upload(savepath, thumbnail);
+				member.setMemberThumb(filepath);
+	        }
+
+	        int result = memberService.updateMember(member);
+	        if (result > 0) {
+	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                                 .body("회원 정보 수정 실패");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("서버 오류 발생");
+	    }
 	}
 	
 	@DeleteMapping(value="/{memberId}")

@@ -1,0 +1,129 @@
+.chat-section {
+  margin: 0 auto;
+  width: 700px;
+  background-color: var(--main1);
+  border-radius: 30px;
+  padding: 20px;
+}
+.chat-section * {
+  color: white;
+}
+.chat-section .page-title {
+  margin: 20px auto;
+  text-align: center;
+  color: white;
+  font-size: 32px;
+}
+
+.chat-section .member-chat-box {
+  margin: 0 auto;
+  width: 90%;
+  background-color: var(--gray2);
+  border-radius: 30px;
+  padding: 10px;
+}
+.chat-section .member-chat-list {
+  margin: 0 auto;
+  background-color: var(--main1);
+  height: 500px;
+  overflow: auto;
+  --scrollbar-color-track: var(--main1);
+  --scrollbar-color-thumb: var(--main3);
+  border-radius: 20px;
+}
+@supports (scrollbar-width: auto) {
+  .member-chat-list {
+    scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+  }
+
+  .warning {
+    display: none;
+  }
+}
+
+.chat-section .member-chat-room {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border-bottom: 2px solid var(--gray2);
+  padding: 10px;
+  overflow: hidden;
+}
+
+.chat-section .member-chat-room .chat-member-profile {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: var(--gray2);
+}
+
+.chat-section .chat-member-profile > img {
+  width: 100%;
+  height: 100%;
+}
+
+.chat-member-main {
+  width: 75%;
+}
+.chat-member-main .chat-member-id {
+  border-radius: 30px;
+  width: 100px;
+  padding: 5px;
+  text-align: center;
+  background-color: var(--main3);
+  margin-bottom: 10px;
+}
+.chat-member-type > div {
+  text-align: center;
+}
+.chat-section .chat-member-main .chat-member-content {
+  color: var(--main1);
+  font-size: 20px;
+}
+
+.chat-member-alarm {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chat-member-alarm > svg {
+  width: 70%;
+  height: 70%;
+}
+.chat-member-alarm > svg > path {
+  color: var(--main3);
+}
+
+.member-input {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--gray2);
+  padding: 10px;
+}
+.member-input > input {
+  border-radius: 10px;
+  width: 90%;
+  padding: 5px;
+  text-indent: 5px;
+  color: black !important;
+}
+.member-input > button {
+  width: 100px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: #fff;
+  background-color: var(--main1);
+  font-weight: 900;
+  font-size: 20px;
+}
+.member-input > button:hover {
+  cursor: pointer;
+  color: var(--main3);
+}

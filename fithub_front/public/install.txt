@@ -27,3 +27,6 @@ npm install @nivo/bar
 
 양현석 2025-03-27 15:30 - nivo 그래프 라이브러리 설치
 npm install @nivo/calendar
+
+최승현 2025-03-31 15:50 - 다음 우편번호 라이브러리 설치
+npm install react-daum-postcode
