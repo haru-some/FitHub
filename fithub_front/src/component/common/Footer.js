@@ -1,9 +1,10 @@
 import React from "react";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import "./default.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="footer">
       <div className="footer-wrap">
@@ -27,7 +28,7 @@ const Footer = () => {
             </div>
             <div className="info-block">
               <p className="label">Email</p>
-              <p className="value">fithubcs@fithub.co.kr</p>
+              <p className="value">support@fithub.co.kr</p>
             </div>
           </div>
         </div>
@@ -35,7 +36,7 @@ const Footer = () => {
           <p className="copyright">© 2025 — FitHub Copyright</p>
         </div>
         <div className="footer-bottom">
-          <div className="footer-explore">
+          <div className="footer-explore" onClick={() => navigate("/myfit")}>
             <div className="explore-text">
               <p>Explore</p>
               <p>Your Fitness</p>

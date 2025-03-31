@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.fithub.community.model.dao.CommunityDao">
+
+	<select id="selectCommunityList" resultType="community">
+		select
+		    m.member_id,
+		    m.member_thumb,
+		    c.community_content,
+		    c.community_no,
+		    (select count(*) from community_like where community_no = c.community_no) as like_count,
+		    (select count(*) from community_like where community_no = c.community_no and member_no = #{memberNo}) as is_like,
+		    (select count(*) from comment_tbl where community_no = c.community_no) as comment_count,
+		    (select count(*) from follow where follow_member_no = c.member_no and member_no = #{memberNo}) as is_follow
+		    FROM
+		    community c
+		join
+		    member m ON c.member_no = m.member_no order by community_no desc
+	</select>
+	
+	<select id="selectOneCommunity" resultType="community">
+		select
+		    m.member_id,
+		    m.member_thumb,
+		    c.community_content,
+		    c.community_no,
+		    (select count(*) from community_like where community_no = c.community_no) as like_count,
+		    (select count(*) from community_like where community_no = c.community_no and member_no = 3) as is_like,
+		    (select count(*) from comment_tbl where community_no = c.community_no) as comment_count,
+		    (select count(*) from follow where follow_member_no = c.member_no and member_no = 3) as is_follow
+		    FROM
+		    community c
+		join
+		    member m ON c.member_no = m.member_no
+            where c.community_no = ${communityNo}
+	</select>
+	
+	<insert id="insertLike">
+		insert into community_like values(#{communityNo}, #{memberNo})
+	</insert>
+	
+	<select id="selectMemberNo" resultType="int">
+		select member_no from member where member_id = #{memberId}
+	</select>
+	
+	<delete id="deleteLike">
+		delete from community_like where member_no = #{memberNo} and community_no = #{communityNo}
+	</delete>
+	
+	<select id="selectLikeCount" resultType="int">
+		select count(*) from community_like where community_no = #{communityNo}
+	</select>
+</mapper>

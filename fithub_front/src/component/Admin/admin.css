@@ -1,39 +1,104 @@
 .admin-section {
   display: flex;
-  justify-content: space-between;
   margin: 0 auto;
   width: 1400px;
+  gap: 50px;
 }
-.side-menu {
-  display: flex;
-  flex-direction: column;
-}
-.side-menu a {
-  list-style-type: none;
-  margin: 0 auto;
-  margin-top: 10px;
-  padding: 20px 20px;
-  width: 200px;
-  border: 1px solid transparent;
-  border-radius: 20px;
-  text-align: center;
-  background-color: #8f8f8f;
+
+.admin-section * {
   color: white;
 }
+.admin-section section {
+  width: 992px;
+}
+.admin-section .navi-bar {
+  border-radius: 10px;
+  width: 180px;
+}
 
-.today-section {
-  width: 1000px;
-  background-color: #8f8f8f;
+.admin-section .side-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.admin-section .side-menu a {
+  height: 24px;
+  font-size: 18px;
+  background: #888;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.admin-section .side-menu .active-tab {
+  background-color: #252525;
+}
+.admin-section .page-title {
+  margin: 20px auto;
+  text-align: center;
+  color: white;
+  font-size: 32px;
+}
+
+/*---------- AdminMember / 관리자 회원, 게시글 관리 ----------*/
+
+.admin-member-section {
+  background-color: #252525;
+  padding: 20px;
   border-radius: 30px;
 }
-.page-title {
-  margin: 20px auto;
+.admin-member-tab {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
+.admin-member-tab > .page-title {
+  border-bottom: 2px solid white;
+  width: calc(100% / 2);
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 6px;
+}
+.admin-member-tab > .page-title:hover {
+  color: #589c5f;
+  text-shadow: 0px 0px 8px #0ff;
+}
+.admin-member-tab > .active-tab {
+  background: #222;
+  box-shadow: 0px 0px 8px #0ff;
+  color: #589c5f;
 }
 
-.side-menu .active-tab {
+.admin-member-navi {
+  display: flex;
+  justify-content: center;
+}
+
+.admin-tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-tbl th,
+td {
+  text-align: center;
+  color: white;
+  padding: 10px 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-section select {
   background-color: #252525;
 }
 
-li > a {
-  color: white;
+/*---------- AdminStat / 관리자 회원 활동, 매출 통계 관리 ----------*/
+.admin-stat-section {
+  background-color: #252525;
+  padding: 20px;
+  border-radius: 30px;
 }

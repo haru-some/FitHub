@@ -166,14 +166,12 @@ body {
   padding: 8px 25px;
   border-radius: 999px;
 }
-
 .content {
   width: 100%;
   max-width: 1400px;
   margin: 30px auto;
   flex: 1;
 }
-
 /* 푸터 */
 .footer {
   background-color: var(--main1);
@@ -233,6 +231,7 @@ body {
   padding-top: 32px;
 }
 .footer-explore {
+  position: relative;
   background-image: url("/public/image/footer_bg.png");
   background-size: cover;
   background-position: center;
@@ -243,12 +242,35 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.footer-explore::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+  z-index: 1;
+}
+.footer-explore:hover::before {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.footer-explore > * {
+  position: relative;
+  z-index: 2;
 }
 .explore-text p {
   margin: 0;
-  margin-left: 30px;
   font-size: 30px;
-  font-family: bg-r;
+  font-family: ns-b;
+  color: #ececec;
+  transition: all 0.3s ease;
+  padding-left: 20px;
+}
+.footer-explore:hover .explore-text p {
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
 }
 .explore-arrow {
   font-size: 32px;
@@ -256,8 +278,8 @@ body {
   cursor: pointer;
 }
 .explore-arrow:hover {
-  transform: scale(1.1);
-  transition: transform 0.3s ease;
+  transform: scale(1.15);
+  transition: transform 0.25s ease;
 }
 .footer-bottom .copyright {
   font-size: 14px;

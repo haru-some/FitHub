@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./community.css"; // CSS 파일 불러오기
 
 import { Link, useNavigate } from "react-router-dom";
@@ -8,69 +8,71 @@ import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { isLoginState } from "../utils/RecoilData";
 
 const CommunityList = () => {
+  // const [memberId, setMemberId] = useRecoilState(isLoginState);
+  const [memberId, setMemberId] = useState("user03");
   const navigate = useNavigate();
+  const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [communityList, setCommunityList] = useState([
-    {
-      username: "CBUM",
-      text: "오운완",
-      likes: "",
-      comments: 85,
-    },
-    {
-      username: "박재훈",
-      text: "득근",
-      likes: 51,
-      comments: 8,
-    },
-    {
-      username: "김건우",
-      text: "파이팅",
-      likes: 34,
-      comments: 5,
-    },
-    {
-      username: "김강민",
-      text: "덥다",
-      likes: 154,
-      comments: 45,
-    },
-  ]);
+  const [communityList, setCommunityList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${backServer}/community/list/${memberId}`)
+      .then((res) => {
+        setCommunityList(res.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   return (
     <div className="community-list">
       <div className="community-list-wrap">
         <div className="community-head">
-          <h2 className="community-title">
-            <Link to="/community/list">커뮤니티</Link>
-          </h2>
-          <div className="community-menu">
-            <SearchIcon
-              onClick={() => {
-                navigate("/community/search");
-              }}
-            />
-            <CreateIcon
-              onClick={() => {
-                navigate("/community/write");
-              }}
-            />
-            <PersonIcon
-              onClick={() => {
-                navigate("/community/mycommunity");
-              }}
-            />
+          <div className="community-head-title">
+            <h2 className="community-title">
+              <Link to="/community/list">커뮤니티</Link>
+            </h2>
+            <div className="community-menu">
+              <SearchIcon
+                onClick={() => {
+                  setShowInput(!showInput);
+                }}
+              />
+              <CreateIcon
+                onClick={() => {
+                  navigate("/community/write");
+                }}
+              />
+              <PersonIcon />
+            </div>
           </div>
+          {showInput && (
+            <div className="community-search-wrap">
+              <div className="community-search-input">
+                <input
+                  type="text"
+                  placeholder="검색"
+                  className="search-input"
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="community-content">
-          <ul className="post-item-wrap">
+          <ul className="community-item-wrap">
             {communityList.map((community, index) => {
               return (
                 <CommunityItem
                   key={"community-" + index}
                   community={community}
+                  communityList={communityList}
+                  setCommunityList={setCommunityList}
+                  memberId={memberId}
                 />
               );
             })}
@@ -82,15 +84,64 @@ const CommunityList = () => {
 };
 
 const CommunityItem = (props) => {
-  const [isLikes, setIsLikes] = useState(0);
-  const navigate = useNavigate();
+  const communityList = props.communityList;
+  const setCommunityList = props.setCommunityList;
+  const memberId = props.memberId;
   const community = props.community;
+  const [isLike, setIsLike] = useState(community.isLike === 1);
+
+  const navigate = useNavigate();
+
+  const changeLike = (e) => {
+    if (isLike) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+        )
+        .then((res) => {
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === community.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === community.communityNo
+            )[0]
+          );
+          obj["likeCount"] = res.data;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
+          setIsLike(false);
+        });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+        )
+        .then((res) => {
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === community.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === community.communityNo
+            )[0]
+          );
+          obj["likeCount"] = res.data;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
+          setIsLike(true);
+        });
+    }
+    e.stopPropagation();
+  };
 
   return (
     <li
       className="community-post-item"
       onClick={() => {
-        navigate("/community/view");
+        navigate(`/community/view/${community.communityNo}`);
       }}
     >
       <div
@@ -101,33 +152,29 @@ const CommunityItem = (props) => {
         }}
       >
         <div className="member-img">
-          <img src="/image/박재훈.webp"></img>
+          <img src="/image/default_img.png"></img>
         </div>
         <div className="community-member">
-          <p>{community.username}</p>
+          <p>{community.memberId}</p>
           <button type="button" className="follow-btn">
             팔로우
           </button>
         </div>
       </div>
       <div className="community-content">
-        <p>{community.text}</p>
+        <p>{community.communityContent}</p>
       </div>
       <div className="community-img">
-        <img src="/image/씨범.webp"></img>
+        <img src="/image/communityImage/박재훈.webp"></img>
       </div>
       <div className="community-sub-zone">
-        <div className="community-likes">
-          <FavoriteBorderIcon
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          />
-          {community.likes}
+        <div className="community-likes" onClick={changeLike}>
+          {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          {community.likeCount}
         </div>
         <div className="community-comments">
           <ChatIcon />
-          {community.comments}
+          {community.commentCount}
         </div>
       </div>
     </li>

@@ -16,3 +16,12 @@ npm install dayjs
 
 전한기 2025-03-26 17:10 - nivo 그래프 라이브러리 설치
 npm install @nivo/core @nivo/line
+
+양현석 2025-03-26 19:00 - nivo 그래프 라이브러리 추가 설치
+npm install @nivo/pie
+
+양현석 2025-03-27 11:00 - nivo 그래프 라이브러리 설치
+npm install @nivo/bar
+
+양현석 2025-03-27 15:30 - nivo 그래프 라이브러리 설치
+npm install @nivo/calendar

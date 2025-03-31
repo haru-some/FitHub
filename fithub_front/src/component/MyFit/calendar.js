@@ -19,7 +19,7 @@ export default function DateCalendarValue(props) {
         margin: "0 auto",
       }}
     >
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
         <DemoContainer components={["DateCalendar", "DateCalendar"]}>
           <DemoItem label="날짜 선택">
             <DateCalendar

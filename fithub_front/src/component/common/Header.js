@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import "./default.css";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  isLoginState,
-  loginIdState,
-  memberTypeState,
-} from "../utils/RecoilData";
+import { isLoginState, loginIdState, memberState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -55,11 +51,11 @@ const MainNavi = () => {
 
 const HeaderLink = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberType, setMemberType] = useRecoilState(memberTypeState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const logOut = () => {
     setMemberId("");
-    setMemberType(0);
+    setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
   };
@@ -69,14 +65,14 @@ const HeaderLink = () => {
         <>
           <li>
             <Link
-              to={memberType === 1 ? "/admin" : "/member"}
+              to={memberInfo?.memberLevel === 1 ? "/admin" : "/member"}
               className="member-name"
             >
               {memberId}
             </Link>
           </li>
           <li>
-            {memberType === 1 ? (
+            {memberInfo?.memberLevel === 1 ? (
               <Link to="/admin/today">
                 <SettingsIcon />
               </Link>
@@ -98,7 +94,7 @@ const HeaderLink = () => {
             <Link to="/login">로그인</Link>
           </li>
           <li>
-            <Link to="/join" className="signup">
+            <Link to="/jointerms" className="signup">
               회원가입
             </Link>
           </li>

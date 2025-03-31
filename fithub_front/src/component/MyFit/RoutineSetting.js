@@ -1,20 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./routineSetting.css";
+import axios from "axios";
+import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
+import { useNavigate } from "react-router-dom";
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 
-const RoutineSetting = () => {
-  const [selectedDay, setSelectedDay] = useState("목");
-  const [routine, setRoutine] = useState("");
+const RoutineSetting = (props) => {
+  const [obj, setObj] = useState({
+    월: "",
+    화: "",
+    수: "",
+    목: "",
+    금: "",
+    토: "",
+    일: "",
+  });
 
+  const date = props.date;
+  const [weekday, setWeekDay] = useState(date.format("dddd").charAt(0));
+  const [text, setText] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    setText(obj[weekday]);
+  }, [weekday]);
+  const memberNo = props.memberNo;
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}`)
+      .then((res) => {
+        const newObj = {};
+        days.forEach((item) => {
+          newObj[item] = res.data[item] ? res.data[item].routineContent : "";
+        });
+        setObj(newObj);
+        setText(res.data[weekday] ? res.data[weekday].routineContent : "");
+      })
+      .catch((err) => {});
+  }, []);
+  console.log(obj);
   return (
     <div className="routine-wrap">
       <div className="routine-days">
         {days.map((day) => (
           <button
             key={day}
-            className={day === selectedDay ? "selected" : ""}
-            onClick={() => setSelectedDay(day)}
+            className={day === weekday ? "selected" : ""}
+            onClick={() => {
+              setWeekDay(day);
+              setObj({ ...obj, [weekday]: text });
+            }}
           >
             {day}
           </button>
@@ -23,14 +59,36 @@ const RoutineSetting = () => {
       <p>요일별로 나만의 루틴을 작성해보세요!</p>
       <div className="routine-content">
         <label>루틴</label>
-        <textarea
-          rows="4"
-          value={routine}
-          onChange={(e) => setRoutine(e.target.value)}
+        <ReactQuill
+          className="quill"
+          theme="snow"
+          value={text}
+          onChange={(value) => {
+            setText(value);
+          }}
           placeholder="루틴을 입력하세요..."
-        ></textarea>
+        />
       </div>
-      <button className="save-button">루틴 설정</button>
+      <button
+        className="save-button"
+        onClick={() => {
+          console.log(weekday);
+          setObj({ ...obj, [weekday]: text });
+          console.log(obj);
+          axios
+            .put(
+              `${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}`,
+              obj
+            )
+            .then((res) => {
+              console.log(res.data);
+              navigate("/myfit/fit");
+            })
+            .catch((err) => {});
+        }}
+      >
+        루틴 설정
+      </button>
     </div>
   );
 };

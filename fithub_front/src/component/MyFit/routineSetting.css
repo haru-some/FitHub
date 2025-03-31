@@ -64,3 +64,9 @@
 .routine-wrap .save-button:hover {
   background: #45944d;
 }
+
+.routine-wrap .ql-editor.ql-blank::before {
+  color: #fff; /* 원하는 색상으로 변경 */
+  font-style: normal; /* 원하면 스타일도 수정 가능 */
+  opacity: 0.6; /* 흐릿하게 보이면 이걸로 조절 */
+}

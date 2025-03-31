@@ -1,66 +1,108 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatIcon from "@mui/icons-material/Chat";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const CommunityView = () => {
+const CommunityView = (props) => {
+  const [memberId, setMemberId] = useState("user03");
+  const [isLike, setIsLike] = useState(0);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const params = useParams();
+  const communityNo = params.communityNo;
+  const [communityList, setCommunityList] = useState({});
+  useEffect(() => {
+    axios
+      .get(`${backServer}/community/${communityNo}/${memberId}`)
+      .then((res) => {
+        console.log(res);
+        setCommunityList(res.data);
+      })
+      .catch((err) => {});
+  }, []);
+  const changeLike = (e) => {
+    if (isLike) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityList.communityNo}`
+        )
+        .then((res) => {
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === communityList.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === communityList.communityNo
+            )[0]
+          );
+          obj["likeCount"] = res.data;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
+          setIsLike(false);
+        });
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityList.communityNo}`
+        )
+        .then((res) => {
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === communityList.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === communityList.communityNo
+            )[0]
+          );
+          obj["likeCount"] = res.data;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
+          setIsLike(true);
+        });
+    }
+    e.stopPropagation();
+  };
   return (
     <div className="community-view">
-      <div className="post-header">
-        <img className="profile-pic" src="/image/씨범.webp" alt="Profile" />
-        <div className="community-user-info">
-          <p>CBUM</p>
+      <div className="community-view-user">
+        <div className="member-img">
+          <img src="/image/default_img.png"></img>
+        </div>
+        <div className="community-member">
+          <p>{communityList.memberId}</p>
+          <p>{communityList.communityDate}</p>
+        </div>
+        <div className="community-follow-btn">
           <button type="button" className="follow-btn">
             팔로우
           </button>
-          <p className="community-date">2025-03-24</p>
         </div>
       </div>
-      <div className="post-content">
-        <p className="post-caption">오늘 등근육 훈련 했다 독특근</p>
-        <img className="post-image" src="/image/씨범.webp" alt="Post" />
+      <div className="community-view-content">
+        <p>{communityList.communityContent}</p>
+        <img src="/image/communityImage/박재훈.webp"></img>
       </div>
-      <div className="post-actions">
-        <div className="post-likes">
-          <FavoriteBorderIcon />
-          <span>284</span>
+      <div className="community-sub-zone">
+        <div className="community-likes" onClick={changeLike}>
+          {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          {communityList.likeCount}
         </div>
-        <div className="post-comments">
+        <div className="community-comments">
           <ChatIcon />
-          <span>85</span>
-        </div>
-      </div>
-      <div className="post-comments-section">
-        <div className="comment">
-          <img
-            className="comment-profile-pic"
-            src="https://via.placeholder.com/30"
-            alt="Profile"
-          />
-          <div className="comment-text">
-            <p className="comment-user">KING.JOJI</p>
-            <p className="comment-content">
-              씨범이형 상체는 여전하네 이제 나랑 하체 부러트리러 가자
-            </p>
-          </div>
-        </div>
-        <div className="comment">
-          <img
-            className="comment-profile-pic"
-            src="https://via.placeholder.com/30"
-            alt="Profile"
-          />
-          <div className="comment-text">
-            <p className="comment-user">S.LINE</p>
-            <p className="comment-content">
-              씨범이 오빠 나 다이어트 하는거 도와주라잉..
-            </p>
-          </div>
+          {communityList.commentCount}
         </div>
       </div>
       <div className="post-input">
-        <textarea
-          placeholder="댓글을 입력하세요..."
-          className="input-box"
-        ></textarea>
+        <div className="member-img">
+          <img src="/image/default_img.png"></img>
+        </div>
+        <div className="comment-text-box">
+          <input type="text"></input>
+          <button>send</button>
+        </div>
       </div>
     </div>
   );
