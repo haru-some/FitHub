@@ -231,9 +231,9 @@ const CommunityListTBL = () => {
         <thead className="admin-thead">
           <tr>
             <th>아이디</th>
-            <th>가입일</th>
-            <th>탈퇴일</th>
-            <th>이메일</th>
+            <th>내용</th>
+            <th>작성일</th>
+            <th>공개 설정</th>
           </tr>
         </thead>
         <tbody className="admin-tbody"></tbody>
@@ -252,9 +252,9 @@ const CommentListTBL = () => {
         <thead className="admin-thead">
           <tr>
             <th>아이디</th>
-            <th>가입일</th>
-            <th>탈퇴일</th>
-            <th>이메일</th>
+            <th>내용</th>
+            <th>관련글</th>
+            <th>작성일</th>
           </tr>
         </thead>
         <tbody className="admin-tbody"></tbody>

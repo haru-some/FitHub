@@ -11,7 +11,7 @@
 	    member_seq.NEXTVAL,
 	    #{memberId}, #{memberPw}, #{memberName}, #{memberPhone},
 	    #{memberEmail}, #{memberAddr}, NULL, NULL,
-	    2, 0, 'N', 'local', NULL,
+	    2, 1, 'N', 'local', NULL,
 	    TO_CHAR(SYSDATE, 'YYYY-MM-DD')
 	  )
 	</insert>
