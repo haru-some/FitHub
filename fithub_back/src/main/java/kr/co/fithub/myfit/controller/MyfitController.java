@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.fithub.member.model.dto.MemberDTO;
+import kr.co.fithub.myfit.model.dto.ActMember;
+import kr.co.fithub.myfit.model.dto.Graph;
 import kr.co.fithub.myfit.model.dto.Record;
 import kr.co.fithub.myfit.model.dto.Routine;
 import kr.co.fithub.myfit.model.service.MyfitService;
@@ -35,7 +38,6 @@ public class MyfitController {
 		record.setMemberNo(memberNo);
 		record.setRecordDate(recordDate);
 		Record r = myfitService.selectRecord(record);
-		
 		return ResponseEntity.ok(r);
 	}
 	
@@ -60,6 +62,30 @@ public class MyfitController {
 		
 		return ResponseEntity.ok(result);
 	}
+	
+	@PutMapping("record/{memberNo}")
+	public ResponseEntity<Integer> putMethodName(@PathVariable int memberNo, @RequestBody Record record) {
+		record.setMemberNo(memberNo);
+		int result = myfitService.updateRecord(record);
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/activity/{memberNo}")
+	public ResponseEntity<ActMember> selectFollow(@PathVariable int memberNo) {
+		ActMember m = myfitService.selectFollow(memberNo);
+		return ResponseEntity.ok(m);
+	}
+	
+	@GetMapping("/activity/graph/{memberNo}")
+	public ResponseEntity<List<Graph>> graph(@PathVariable int memberNo) {
+		List<Graph> list = myfitService.graph(memberNo);
+		
+		return ResponseEntity.ok(list);
+	}
+	
+	
+	
 	
 
 }

@@ -2,26 +2,157 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.fithub.myfit.model.dao.MyfitDao">
 	<select id="selectRecord" resultType="record">
-		select * from record where member_no=#{memberNo} and record_date = #{recordDate}
+		select * from record where
+		member_no=#{memberNo} and record_date = #{recordDate}
 	</select>
-	
+
 	<select id="selectRoutine" resultType="routine">
-		select * from routine where member_no=#{memberNo} and routine_day = #{routineDay}
+		select * from routine
+		where member_no=#{memberNo} and routine_day = #{routineDay}
 	</select>
-	
+
 	<select id="selectRoutineList" resultType="routine">
-		select * from routine where member_no=#{memberNo}
+		select * from routine
+		where member_no=#{memberNo}
 	</select>
-	
+
 	<select id="existRoutine" resultType="int">
-		select count(*) from routine where member_no = #{memberNo} and routine_day=#{routineDay}
+		select count(*) from
+		routine where member_no = #{memberNo} and routine_day=#{routineDay}
 	</select>
-	
+
 	<update id="updateRoutine">
-		update routine set routine_content=#{routineContent} where member_no = #{memberNo} and routine_day=#{routineDay}
+		update routine set routine_content=#{routineContent}
+		where member_no = #{memberNo} and routine_day=#{routineDay}
 	</update>
-	
+
 	<insert id="insertRoutine">
-		insert into routine values(routine_seq.nextval,#{memberNo},#{routineContent},#{routineDay})
+		insert into routine
+		values(routine_seq.nextval,#{memberNo},#{routineContent},#{routineDay})
 	</insert>
+
+	<insert id="insertRecord">
+		insert into record
+		values(record_seq.nextval,
+		#{memberNo},
+		#{recordDate},
+		#{recordStartTime},
+		#{recordEndTime},
+		(TO_DATE(#{recordEndTime},'HH24:MI') - TO_DATE(#{recordStartTime},
+		'HH24:MI')) * 24 * 60,
+		#{recordContent})
+	</insert>
+
+	<update id="updateRecord">
+		update record set
+		record_start_time=#{recordStartTime},
+		record_end_time=#{recordEndTime},
+		record_time=(TO_DATE(#{recordEndTime},'HH24:MI') -
+		TO_DATE(#{recordStartTime}, 'HH24:MI')) * 24 * 60,
+		record_content=#{recordContent} where member_no=#{memberNo} and
+		record_date=#{recordDate}
+	</update>
+
+	<select id="selectFollow" resultType="actMember">
+		SELECT
+		m.member_no,
+		NVL(f1.following_count, 0) AS following_count,
+		NVL(f2.follower_count,
+		0) AS follower_count,
+		NVL(c.community_count, 0) AS community_count,
+		NVL(r.total_days, 0) AS total_record_days,
+		NVL(r.total_time, 0) AS
+		total_record_time,
+		NVL(rw.week_days, 0) AS week_record_days,
+		NVL(rw.week_time, 0) AS week_record_time
+		FROM
+		member m
+		LEFT JOIN (
+		SELECT
+		member_no,
+		COUNT(*) AS following_count
+		FROM
+		follow
+		GROUP BY
+		member_no
+		) f1
+		ON m.member_no = f1.member_no
+		LEFT JOIN (
+		SELECT
+		follow_member_no AS
+		member_no,
+		COUNT(*) AS follower_count
+		FROM
+		follow
+		GROUP BY
+		follow_member_no
+		) f2 ON m.member_no = f2.member_no
+		LEFT JOIN (
+		SELECT
+		member_no,
+		COUNT(*) AS community_count
+		FROM
+		community
+		GROUP BY
+		member_no
+		) c
+		ON m.member_no = c.member_no
+		LEFT JOIN (
+		SELECT
+		member_no,
+		COUNT(DISTINCT
+		record_date) AS total_days,
+		SUM(record_time) AS total_time
+		FROM
+		record
+		GROUP BY
+		member_no
+		) r ON m.member_no = r.member_no
+		LEFT JOIN (
+		SELECT
+		member_no,
+		COUNT(DISTINCT record_date) AS week_days,
+		SUM(record_time) AS
+		week_time
+		FROM
+		record
+		WHERE
+		TO_DATE(record_date, 'YYYY-MM-DD') >=
+		TRUNC(SYSDATE) - 7
+		GROUP BY
+		member_no
+		) rw ON m.member_no = rw.member_no
+		where m.member_no=#{memberNo}
+	</select>
+
+
+	<select id="graph" resultType="graph">
+		WITH date_list AS (
+		SELECT TRUNC(SYSDATE) - LEVEL + 1 AS record_day
+		FROM dual
+		CONNECT BY LEVEL &lt;= 7
+		),
+		record_summary AS (
+		SELECT
+		TO_DATE(record_date, 'YYYY-MM-DD') AS record_day,
+		SUM(record_time) AS total_time
+		FROM
+		record
+		WHERE
+		member_no = #{memberNo}
+		AND TO_DATE(record_date, 'YYYY-MM-DD') >= TRUNC(SYSDATE) - 6
+		GROUP BY
+		TO_DATE(record_date, 'YYYY-MM-DD')
+		)
+		SELECT
+		TO_CHAR(d.record_day, 'YYYY-MM-DD') AS record_day,
+		ROUND(NVL(r.total_time, 0)) AS total_time
+		FROM
+		date_list d
+		LEFT JOIN record_summary r ON d.record_day = r.record_day
+		ORDER BY
+		d.record_day
+	</select>
+
+
 </mapper>

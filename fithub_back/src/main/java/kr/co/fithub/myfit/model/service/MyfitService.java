@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.myfit.model.dao.MyfitDao;
+import kr.co.fithub.myfit.model.dto.ActMember;
+import kr.co.fithub.myfit.model.dto.Graph;
 import kr.co.fithub.myfit.model.dto.Record;
 import kr.co.fithub.myfit.model.dto.Routine;
 
@@ -66,6 +69,32 @@ public class MyfitService {
 		    }
 		}
 		return result;
+	}
+
+	@Transactional
+	public int updateRecord(Record record) {
+		int result = 0;
+		
+		String content = record.getRecordContent();
+		 if (content != null && !content.replace("<p>", "").replace("</p>", "").replace("<br>", "").isBlank()) {
+			 if(record.getRecordNo() == 0) {
+				result += myfitDao.insertRecord(record);
+			}else {
+				result += myfitDao.updateRecord(record);
+			}
+		 }
+		
+		return result;
+	}
+
+	public ActMember selectFollow(int memberNo) {
+		ActMember m = myfitDao.selectFollow(memberNo);
+		return m;
+	}
+
+	public List<Graph> graph(int memberNo) {
+		List<Graph> list = myfitDao.graph(memberNo);
+		return list;
 	}
 
 }
