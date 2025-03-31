@@ -10,10 +10,10 @@ import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { isLoginState } from "../utils/RecoilData";
+import { loginIdState } from "../utils/RecoilData";
 
 const CommunityList = () => {
-  const [memberId, setMemberId] = useRecoilState(isLoginState);
+  const [memberId, setMemberId] = useRecoilState(loginIdState);
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -89,54 +89,55 @@ const CommunityItem = (props) => {
   const memberId = props.memberId;
   const community = props.community;
   const [isLike, setIsLike] = useState(community.isLike === 1);
-
   const navigate = useNavigate();
 
   const changeLike = (e) => {
-    if (isLike) {
-      axios
-        .delete(
-          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
-        )
-        .then((res) => {
-          const obj = communityList.filter(
-            (item, i) => item.communityNo === community.communityNo
-          )[0];
-          const idx = communityList.indexOf(
-            communityList.filter(
+    if (memberId) {
+      if (isLike) {
+        axios
+          .delete(
+            `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+          )
+          .then((res) => {
+            const obj = communityList.filter(
               (item, i) => item.communityNo === community.communityNo
-            )[0]
-          );
-          obj["likeCount"] = res.data;
-          communityList[idx] = obj;
+            )[0];
+            const idx = communityList.indexOf(
+              communityList.filter(
+                (item, i) => item.communityNo === community.communityNo
+              )[0]
+            );
+            obj["likeCount"] = res.data;
+            communityList[idx] = obj;
 
-          setCommunityList([...communityList]);
-          setIsLike(false);
-        });
-    } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
-        )
-        .then((res) => {
-          const obj = communityList.filter(
-            (item, i) => item.communityNo === community.communityNo
-          )[0];
-          const idx = communityList.indexOf(
-            communityList.filter(
+            setCommunityList([...communityList]);
+            setIsLike(false);
+          });
+      } else {
+        axios
+          .post(
+            `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${community.communityNo}`
+          )
+          .then((res) => {
+            const obj = communityList.filter(
               (item, i) => item.communityNo === community.communityNo
-            )[0]
-          );
-          obj["likeCount"] = res.data;
-          communityList[idx] = obj;
+            )[0];
+            const idx = communityList.indexOf(
+              communityList.filter(
+                (item, i) => item.communityNo === community.communityNo
+              )[0]
+            );
+            obj["likeCount"] = res.data;
+            communityList[idx] = obj;
 
-          setCommunityList([...communityList]);
-          setIsLike(true);
-        });
+            setCommunityList([...communityList]);
+            setIsLike(true);
+          });
+      }
     }
+
     e.stopPropagation();
   };
-
   return (
     <li
       className="community-post-item"
@@ -156,17 +157,18 @@ const CommunityItem = (props) => {
         </div>
         <div className="community-member">
           <p>{community.memberId}</p>
-          <button type="button" className="follow-btn">
-            팔로우
-          </button>
+          {memberId && (
+            <button type="button" className="follow-btn">
+              팔로우
+            </button>
+          )}
         </div>
       </div>
-      <div className="community-content">
-        <p>{community.communityContent}</p>
-      </div>
-      <div className="community-img">
-        <img src="/image/communityImage/박재훈.webp"></img>
-      </div>
+      <div
+        className="community-content"
+        dangerouslySetInnerHTML={{ __html: community.communityContent }}
+      ></div>
+
       <div className="community-sub-zone">
         <div className="community-likes" onClick={changeLike}>
           {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}

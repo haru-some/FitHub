@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.fithub.community.model.dto.CommentDTO;
 import kr.co.fithub.community.model.dto.CommunityDTO;
 
 
@@ -22,5 +23,9 @@ public interface CommunityDao {
 	int selectLikeCount(int communityNo);
 
 	int insertLike(HashMap<String, Integer> map);
+
+	CommentDTO selectCommentList(int communityNo);
+
+	int insertCommunity(CommunityDTO community);
 	
 }

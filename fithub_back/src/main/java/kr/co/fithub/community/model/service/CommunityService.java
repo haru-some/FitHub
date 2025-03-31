@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.fithub.community.model.dao.CommunityDao;
+import kr.co.fithub.community.model.dto.CommentDTO;
 import kr.co.fithub.community.model.dto.CommunityDTO;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.util.JwtUtils;
@@ -21,13 +22,16 @@ public class CommunityService {
 
 	public List selectCommunityList(String accessToken) {
 		String memberId = null;
+		List list = null;
 		if(accessToken != null) {			
 			LoginMemberDTO loginMember = jwtUtil.checkToken(accessToken);
 			memberId = loginMember.getMemberId();			
+			int memberNo = communityDao.selectMemberNo(memberId);
+			list = communityDao.selectCommunityList(memberNo);
+		}else {
+			list = communityDao.selectCommunityList(0);
+			
 		}
-		int memberNo = communityDao.selectMemberNo(memberId);
-		System.out.println();
-		List list = communityDao.selectCommunityList(memberNo);
 		return list;
 	}
 
@@ -41,6 +45,7 @@ public class CommunityService {
 			map.put("memberId", null);
 		}
 		CommunityDTO c = communityDao.selectOneCommunity(map);
+		CommentDTO com = communityDao.selectCommentList(communityNo);
 		return c;
 	}	
 	
@@ -64,5 +69,11 @@ public class CommunityService {
 		int result = communityDao.insertLike(map);
 		int likeCount = communityDao.selectLikeCount(communityNo);
 		return likeCount;
+	}
+
+	@Transactional
+	public int insertCommunity(CommunityDTO community) {
+		int result = communityDao.insertCommunity(community);
+		return result;
 	}
 }

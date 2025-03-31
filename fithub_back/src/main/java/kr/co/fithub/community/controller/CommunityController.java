@@ -57,4 +57,17 @@ public class CommunityController {
 		int result = communityService.insertLike(memberId, communityNo);
 		return ResponseEntity.ok(result);
 	}
+	
+	@PostMapping
+	public ResponseEntity<Integer> insertCommunity(@ModelAttribute CommunityDTO community){
+		int result = communityService.insertCommunity(community);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value="/image")
+	public ResponseEntity<String> image(@ModelAttribute MultipartFile image){
+		String savepath = root + "/editor/";
+		String filepath = fileUtils.upload(savepath, image);
+		return ResponseEntity.ok(filepath);
+	}
 }

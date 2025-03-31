@@ -14,7 +14,7 @@
 		    (select count(*) from follow where follow_member_no = c.member_no and member_no = #{memberNo}) as is_follow
 		    FROM
 		    community c
-		join
+		 join
 		    member m ON c.member_no = m.member_no order by community_no desc
 	</select>
 	
@@ -50,4 +50,12 @@
 	<select id="selectLikeCount" resultType="int">
 		select count(*) from community_like where community_no = #{communityNo}
 	</select>
+	
+	<select id="selectCommentList" resultType="comment">
+		select * from comment_tbl
+	</select>
+	
+	<insert id="insertCommunity">
+		insert into community values(community_seq.nextval, #{communityContent}, #{memberNo}, sysdate, 1)
+	</insert>
 </mapper>

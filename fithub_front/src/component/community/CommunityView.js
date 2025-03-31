@@ -1,7 +1,7 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatIcon from "@mui/icons-material/Chat";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
@@ -9,13 +9,12 @@ import { memberState } from "../utils/RecoilData";
 
 const CommunityView = () => {
   const [member, setMember] = useRecoilState(memberState);
-  const memberId = member.memberId;
   const [isLike, setIsLike] = useState(0);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const communityNo = params.communityNo;
   const [community, setCommunity] = useState({});
-  console.log(community.isLike);
+
   useEffect(() => {
     axios
       .get(`${backServer}/community/${communityNo}`)
@@ -26,23 +25,23 @@ const CommunityView = () => {
       .catch((err) => {});
   }, []);
   const changeLike = (e) => {
-    if (isLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityNo}`
-        )
-        .then((res) => {
-          console.log(res);
-        });
-    } else {
-      axios
-        .delete(
-          `${process.env.REACT_APP_BACK_SERVER}/community/${memberId}?communityNo=${communityNo}`
-        )
-        .then((res) => {});
+    if (member) {
+      if (isLike) {
+        axios
+          .post(
+            `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberId}?communityNo=${communityNo}`
+          )
+          .then((res) => {});
+      } else {
+        axios
+          .delete(
+            `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberId}?communityNo=${communityNo}`
+          )
+          .then((res) => {});
+      }
     }
-    e.stopPropagation();
   };
+
   return (
     <div className="community-view">
       <div className="community-view-user">
@@ -54,15 +53,17 @@ const CommunityView = () => {
           <p>{community.communityDate}</p>
         </div>
         <div className="community-follow-btn">
-          <button type="button" className="follow-btn">
-            팔로우
-          </button>
+          {member && (
+            <button type="button" className="follow-btn">
+              팔로우
+            </button>
+          )}
         </div>
       </div>
-      <div className="community-view-content">
-        <p>{community.communityContent}</p>
-        <img src="/image/communityImage/박재훈.webp"></img>
-      </div>
+      <div
+        className="community-view-content"
+        dangerouslySetInnerHTML={{ __html: community.communityContent }}
+      ></div>
       <div className="community-sub-zone">
         <div className="community-likes" onClick={changeLike}>
           {community.isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
@@ -72,6 +73,9 @@ const CommunityView = () => {
           <ChatIcon />
           {community.commentCount}
         </div>
+      </div>
+      <div className="community-comment-list">
+        <CommentList />
       </div>
       <div className="post-input">
         <div className="member-img">
@@ -83,6 +87,22 @@ const CommunityView = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const CommentList = () => {
+  return (
+    <ul>
+      <li className="comment-list">
+        <div className="comment-user-info">
+          <div className="member-img">
+            <img src="/image/default_img.png"></img>
+          </div>
+          <div className="member-id">user01</div>
+        </div>
+        <div className="comment-user-content">아브라카다브라</div>
+      </li>
+    </ul>
   );
 };
 
