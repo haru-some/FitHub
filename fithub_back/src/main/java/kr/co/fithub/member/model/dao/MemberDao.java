@@ -13,4 +13,5 @@ public interface MemberDao {
 	int deleteMember(String memberId);
 	int changePw(MemberDTO member);
 	int existsEmail(String memberEmail);
+	MemberDTO findIdByNameAndEmail(String name, String email);
 }

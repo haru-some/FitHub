@@ -151,10 +151,13 @@ body {
 .member-menu {
   display: flex;
   align-items: center;
-  gap: 35px;
+  gap: 45px;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+.member-menu svg {
+  vertical-align: middle;
 }
 .member-menu a {
   text-decoration: none;
@@ -162,6 +165,11 @@ body {
   font-size: 16px;
 }
 .signup {
+  background-color: #314438;
+  padding: 8px 25px;
+  border-radius: 999px;
+}
+.member-name {
   background-color: #314438;
   padding: 8px 25px;
   border-radius: 999px;
