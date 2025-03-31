@@ -489,7 +489,6 @@
 }
 
 /* 내 정보 - 마이페이지 info 스타일 */
-
 .info-wrap {
   width: 100%;
 }
@@ -501,6 +500,7 @@
 }
 .info-image-box {
   text-align: center;
+  margin-top: 50px;
   margin-bottom: 30px;
 }
 .info-image-box img {

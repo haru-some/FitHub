@@ -47,17 +47,14 @@ public class MemberService {
 		int result = memberDao.joinMember(member);
 		return result;
 	}
-
 	public int exists(String memberId) {
 		int result = memberDao.exists(memberId);
 		return result;
 	}
-	
 	public int existsEmail(String memberEmail) {
 		int result = memberDao.existsEmail(memberEmail);
 	    return result;
 	}
-
 	public MemberDTO login(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());
 		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
@@ -70,13 +67,15 @@ public class MemberService {
 		}
 		return null;
 	}
-
 	public MemberDTO selectOneMember(String memberId, String accessToken) {
 		MemberDTO m = memberDao.selectOneMember(memberId);
 		m.setMemberPw(null);
 		return m;
 	}
-
+	public MemberDTO findByMemberId(String memberId) {
+		MemberDTO m = memberDao.selectOneMember(memberId);
+        return m;
+    }
 	public MemberDTO refresh(String refreshToken) {
 		LoginMemberDTO loginMember = jwtUtil.checkToken(refreshToken);
 		MemberDTO m = memberDao.selectOneMember(loginMember.getMemberId());
@@ -87,19 +86,16 @@ public class MemberService {
 		m.setMemberPw(null);
 		return m;
 	}
-
 	@Transactional
 	public int updateMember(MemberDTO member) {
 		int result = memberDao.updateMember(member);
 		return result;
 	}
-
 	@Transactional
 	public int deleteMember(String memberId) {
 		int result = memberDao.deleteMember(memberId);
 		return result;
 	}
-
 	public int checkPw(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());
 		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
@@ -107,7 +103,6 @@ public class MemberService {
 		}
 		return 0;
 	}
-	
 	@Transactional
 	public int changePw(MemberDTO member) {
 		String encPw = encoder.encode(member.getMemberPw());
@@ -115,7 +110,6 @@ public class MemberService {
 		int result = memberDao.changePw(member);
 		return result;
 	}
-
 	public MemberDTO findIdByNameAndEmail(String name, String email) {
 		HashMap<String, String> nameEmail = new HashMap<>();
 		nameEmail.put("memberName", name);
@@ -123,7 +117,6 @@ public class MemberService {
 		MemberDTO m = memberDao.findIdByNameAndEmail(nameEmail);
 	    return m;
 	}
-
 	@Transactional
 	public boolean sendTempPasswordByIdAndEmail(String memberId, String memberEmail) {
 	    Map<String, String> idEmail = new HashMap<>();
@@ -140,6 +133,4 @@ public class MemberService {
 	    }
 	    return false;
 	}
-	
-
 }
