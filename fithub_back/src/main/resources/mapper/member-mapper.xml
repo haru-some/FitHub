@@ -20,6 +20,10 @@
 		select count(*) from member where member_id=#{memberId}
 	</select>
 	
+	<select id="existsEmail" resultType="int">
+ 		SELECT COUNT(*) FROM member WHERE member_email = #{memberEmail}
+	</select>
+	
 	<select id="selectOneMember" resultType="member">
 		select * from member where member_id = #{memberId}
 	</select>
@@ -41,4 +45,17 @@
 		update member set member_pw = #{memberPw}
 		where member_id = #{memberId}
 	</update>
+	
+	<select id="findIdByNameAndEmail" resultType="member">
+	  SELECT * 
+	  FROM member 
+	  WHERE member_name = #{memberName} AND member_email = #{memberEmail}
+	</select>
+	
+	<select id="findPwByIdAndEmail" resultType="member">
+	  SELECT * 
+	  FROM member 
+	  WHERE member_id = #{memberId} 
+	    AND member_email = #{memberEmail}
+	</select>
 </mapper>

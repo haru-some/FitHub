@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Alias(value="communityFile")
-public class CommunityFileDTO {
-	private int communityFileNo;
+@Alias(value="comment")
+public class CommentDTO {
+	private int commentNo;
 	private int communityNo;
-	private String filename;
-	private String filepath;
+	private int memberNo;
+	private String commentContent;
+	private String commentDate;
 }

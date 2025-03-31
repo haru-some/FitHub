@@ -1,5 +1,8 @@
 package kr.co.fithub.member.model.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.fithub.member.model.dto.MemberDTO;
@@ -12,4 +15,7 @@ public interface MemberDao {
 	int updateMember(MemberDTO member);
 	int deleteMember(String memberId);
 	int changePw(MemberDTO member);
+	int existsEmail(String memberEmail);
+	MemberDTO findIdByNameAndEmail(HashMap<String, String> nameEmail);
+	MemberDTO findPwByIdAndEmail(Map<String, String> idEmail);
 }

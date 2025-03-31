@@ -27,4 +27,6 @@ public class MemberDTO {
     private String loginType;          // 로그인 방식 ('local', 'kakao', 'google')
     private String oauthId;            // 소셜 로그인 식별자
     private String joinDate;		   // 가입일
+	private String accessToken;
+	private String refreshToken;
 }

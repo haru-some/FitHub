@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import "./default.css";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  isLoginState,
-  loginIdState,
-  memberLevelState,
-} from "../utils/RecoilData";
+import { isLoginState, loginIdState, memberState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -46,7 +42,7 @@ const MainNavi = () => {
           <Link to="/community/list">Community</Link>
         </li>
         <li>
-          <Link to="/shop">Market</Link>
+          <Link to="/shop/list">Market</Link>
         </li>
       </ul>
     </nav>
@@ -55,11 +51,11 @@ const MainNavi = () => {
 
 const HeaderLink = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const logOut = () => {
     setMemberId("");
-    setMemberLevel(0);
+    setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
   };
@@ -68,15 +64,12 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link
-              to={memberLevel === 1 ? "/admin" : "/member"}
-              className="member-name"
-            >
+            <Link to="/member" className="member-name">
               {memberId}
             </Link>
           </li>
           <li>
-            {memberLevel === 1 ? (
+            {memberInfo?.memberLevel === 1 ? (
               <Link to="/admin/today">
                 <SettingsIcon />
               </Link>

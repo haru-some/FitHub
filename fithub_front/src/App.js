@@ -5,7 +5,7 @@ import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginIdState, memberLevelState } from "./component/utils/RecoilData";
+import { loginIdState, memberState } from "./component/utils/RecoilData";
 import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
 import AdminMain from "./component/Admin/AdminMain";
@@ -14,10 +14,12 @@ import Login from "./component/member/Login";
 import CommunityMain from "./component/community/CommunityMain";
 import JoinTerms from "./component/member/JoinTerms";
 import MemberJoin from "./component/member/MemberJoin";
+import ShopDetail from "./component/shop/ShopDetail";
+import FindInfo from "./component/member/FindInfo";
 
 function App() {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
-  const [memberLevel, setMemberLevel] = useRecoilState(memberLevelState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   useEffect(() => {
     refreshLogin();
@@ -31,14 +33,14 @@ function App() {
         .get(`${backServer}/member/refresh`)
         .then((res) => {
           setMemberId(res.data.memberId);
-          setMemberLevel(res.data.memberLevel);
+          setMemberInfo(res.data);
           axios.defaults.headers.common["Authorization"] = res.data.accessToken;
           window.localStorage.setItem("refreshToken", res.data.refreshToken);
         })
         .catch((error) => {
           console.error(error);
           setMemberId("");
-          setMemberLevel(0);
+          setMemberInfo(null);
           delete axios.defaults.headers.common["Authorization"];
           window.localStorage.removeItem("refreshToken");
         });
@@ -53,10 +55,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
+          <Route path="/find" element={<FindInfo />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />
-          <Route path="shop" element={<ShopList />} />
+          <Route path="shop/*" element={<ShopList />} />
+          <Route path="shop/detail" element={<ShopDetail />} />
         </Routes>
       </main>
       <TopButton />

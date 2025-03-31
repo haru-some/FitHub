@@ -6,66 +6,20 @@ import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
 dayjs.locale("ko");
 const MyFit = (props) => {
-  const date = props.date
-  const setDate = props.setDate
-  const [memberNo, setMemberNo] = useState(1);
-  const [record, setRecord] = useState(null);
-  const [routine, setRoutine] = useState(null);
-  const zeroDate =
-    String(date.$M + 1).length === 1 ? "0" + (date.$M + 1) : date.$M + 1;
+  const setPageTitle = props.setPageTitle;
+  const date = props.date;
+  const setDate = props.setDate;
+  const memberNo = props.memberNo;
+  const setMemberNo = props.setMemberNo;
+  const record = props.record;
+  const setRecord = props.setRecord;
+  const routine = props.routine;
+  const setRoutine = props.setRoutine;
+  const today = props.today;
+  const title = props.title;
+  const inputDate = props.inputDate;
 
-  const inputDate = dayjs(date.$y + "-" + (date.$M + 1) + "-" + date.$D);
-  const today = dayjs();
   const [content, setContent] = useState();
-  const weekday = date.format("dddd").charAt(0);
-  const [title, setTitle] = useState(weekday + "요일 루틴");
-
-  useEffect(() => {
-    if (inputDate.isBefore(today, "day")) {
-      setTitle("운동기록");
-      //과거이면 기록 조회
-      axios
-        .get(
-          `${
-            process.env.REACT_APP_BACK_SERVER
-          }/myfit/record/${memberNo}?recordDate=${
-            date.$y + "-" + zeroDate + "-" + date.$D
-          }`
-        )
-        .then((res) => {
-          console.log(res);
-          setRecord(res.data);
-        })
-        .catch((err) => {});
-    } else {
-      if (inputDate.isSame(today, "day")) {
-        axios
-          .get(
-            `${
-              process.env.REACT_APP_BACK_SERVER
-            }/myfit/record/${memberNo}?recordDate=${
-              date.$y + "-" + zeroDate + "-" + date.$D
-            }`
-          )
-          .then((res) => {
-            console.log(res);
-            setRecord(res.data);
-          })
-          .catch((err) => {});
-      }
-      setTitle(weekday + "요일 루틴");
-      //오늘이나 미래이면 루틴 조회
-      axios
-        .get(
-          `${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}?routineDay=${weekday}`
-        )
-        .then((res) => {
-          console.log(res);
-          setRoutine(res.data);
-        })
-        .catch((err) => {});
-    }
-  }, [date]);
 
   return (
     <div className="fit-wrap">
@@ -101,28 +55,63 @@ const MyFit = (props) => {
             if (inputDate.isBefore(today, "day")) {
               return record ? (
                 <Link to="/myfit/record">
-                  <button className="edit-button">기록 수정</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setPageTitle("운동 기록");
+                    }}
+                  >
+                    기록 수정
+                  </button>
                 </Link>
               ) : (
                 <Link to="/myfit/record">
-                  <button className="edit-button">기록하기</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setPageTitle("운동 기록");
+                    }}
+                  >
+                    기록하기
+                  </button>
                 </Link>
               );
             } else if (inputDate.isSame(today, "day")) {
               return record ? (
                 <Link to="/myfit/record">
-                  <button className="edit-button">기록 수정</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setPageTitle("운동 기록");
+                    }}
+                  >
+                    기록 수정
+                  </button>
                 </Link>
               ) : (
                 <Link to="/myfit/record">
-                  <button className="edit-button">기록하기</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setPageTitle("운동 기록");
+                    }}
+                  >
+                    기록하기
+                  </button>
                 </Link>
               );
             } else {
               // 미래
               return routine ? null : (
                 <Link to="/myfit/routine">
-                  <button className="edit-button">루틴 설정하기</button>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setPageTitle("나의 루틴");
+                    }}
+                  >
+                    루틴 설정하기
+                  </button>
                 </Link>
               );
             }

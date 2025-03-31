@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import "./exerciseLog.css";
-const ExerciseLog = () => {
+const ExerciseLog = (props) => {
+  const dateFormat = props.dateFormat;
+  console.log(dateFormat);
+  const date = dateFormat.split("-");
   return (
     <div className="record-wrap">
-      <h2>2025년 03월 14일</h2>
+      <h2>{`${date[0]}년 ${date[1]}월 ${date[2]}일 (${date[3]})`}</h2>
       <div className="time-inputs">
         <div>
           <label>시작 시각</label>

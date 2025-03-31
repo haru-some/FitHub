@@ -1,7 +1,10 @@
 package kr.co.fithub.member.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,11 +48,17 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping("/exists/email")
+	public ResponseEntity<Integer> existsEmail(@RequestParam String memberEmail) {
+	    int result = memberService.existsEmail(memberEmail);
+	    return ResponseEntity.ok(result);
+	}
+	
 	@PostMapping(value="/login")
-	public ResponseEntity<LoginMemberDTO> login(@RequestBody MemberDTO member){
-		LoginMemberDTO loginMember = memberService.login(member);
-		if(loginMember != null) {
-			return ResponseEntity.ok(loginMember);
+	public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO member){
+		MemberDTO memberInfo = memberService.login(member);
+		if(memberInfo != null) {
+			return ResponseEntity.ok(memberInfo);
 		}else {
 			return ResponseEntity.status(404).build();
 		}
@@ -62,8 +71,8 @@ public class MemberController {
 	}
 	
 	@GetMapping(value="/refresh")
-	public ResponseEntity<LoginMemberDTO> refresh(@RequestHeader("Authorization") String refreshToken){
-		LoginMemberDTO loginMember = memberService.refresh(refreshToken);
+	public ResponseEntity<MemberDTO> refresh(@RequestHeader("Authorization") String refreshToken){
+		MemberDTO loginMember = memberService.refresh(refreshToken);
 		return ResponseEntity.ok(loginMember);
 	}
 	
@@ -96,5 +105,29 @@ public class MemberController {
 	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value="/find/id")
+	public ResponseEntity<String> findId(@RequestBody MemberDTO member) {
+		String name = member.getMemberName();
+		String email = member.getMemberEmail();
+	    MemberDTO m = memberService.findIdByNameAndEmail(name, email);
+	    if (m != null) {
+	        return ResponseEntity.ok(m.getMemberId());
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
+	    }
+	}
+	
+	@PostMapping("/find/pw")
+	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
+	    String memberId = member.getMemberId();
+	    String memberEmail = member.getMemberEmail();
+	    boolean result = memberService.sendTempPasswordByIdAndEmail(memberId, memberEmail);
+	    if (result) {
+	        return ResponseEntity.ok("임시 비밀번호가 전송되었습니다.");
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
+	    }
 	}
 }

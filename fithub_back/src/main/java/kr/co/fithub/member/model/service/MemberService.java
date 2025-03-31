@@ -1,5 +1,9 @@
 package kr.co.fithub.member.model.service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.fithub.email.service.EmailService;
 import kr.co.fithub.member.model.dao.MemberDao;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
@@ -25,6 +30,8 @@ public class MemberService {
 	private JwtUtils jwtUtil;
 	@Autowired
 	private PageInfoUtil pageInfoUtil;
+	@Autowired
+	private EmailService emailService;
 	
 	@Transactional
 	public int joinMember(MemberDTO member) {
@@ -39,15 +46,21 @@ public class MemberService {
 		int result = memberDao.exists(memberId);
 		return result;
 	}
+	
+	public int existsEmail(String memberEmail) {
+		int result = memberDao.existsEmail(memberEmail);
+	    return result;
+	}
 
-	public LoginMemberDTO login(MemberDTO member) {
+	public MemberDTO login(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());
 		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
 			String accessToken = jwtUtil.createAccessToken(m.getMemberId(),m.getMemberLevel());
-			System.out.println("accessToken : "+accessToken);
 			String refreshToken = jwtUtil.createRefreshToken(m.getMemberId(),m.getMemberLevel());
-			LoginMemberDTO loginMember = new LoginMemberDTO(accessToken, refreshToken, m.getMemberId(), m.getMemberLevel());
-			return loginMember;
+			m.setAccessToken(accessToken);
+			m.setRefreshToken(refreshToken);
+			m.setMemberPw(null);
+			return m;
 		}
 		return null;
 	}
@@ -58,13 +71,15 @@ public class MemberService {
 		return m;
 	}
 
-	public LoginMemberDTO refresh(String refreshToken) {
+	public MemberDTO refresh(String refreshToken) {
 		LoginMemberDTO loginMember = jwtUtil.checkToken(refreshToken);
+		MemberDTO m = memberDao.selectOneMember(loginMember.getMemberId());
 		String accessToken = jwtUtil.createAccessToken(loginMember.getMemberId(),loginMember.getMemberLevel());
 		String newRefreshToken = jwtUtil.createRefreshToken(loginMember.getMemberId(),loginMember.getMemberLevel());
-		loginMember.setAccessToken(accessToken);
-		loginMember.setRefreshToken(newRefreshToken);
-		return loginMember;
+		m.setAccessToken(accessToken);
+		m.setRefreshToken(newRefreshToken);
+		m.setMemberPw(null);
+		return m;
 	}
 
 	//thumb 추가 해야함
@@ -95,6 +110,30 @@ public class MemberService {
 		int result = memberDao.changePw(member);
 		return result;
 	}
-	
+
+	public MemberDTO findIdByNameAndEmail(String name, String email) {
+		HashMap<String, String> nameEmail = new HashMap<>();
+		nameEmail.put("memberName", name);
+		nameEmail.put("memberEmail", email);
+		MemberDTO m = memberDao.findIdByNameAndEmail(nameEmail);
+	    return m;
+	}
+
+	@Transactional
+	public boolean sendTempPasswordByIdAndEmail(String memberId, String memberEmail) {
+	    Map<String, String> idEmail = new HashMap<>();
+	    idEmail.put("memberId", memberId);
+	    idEmail.put("memberEmail", memberEmail);
+	    MemberDTO member = memberDao.findPwByIdAndEmail(idEmail);
+	    if (member != null) {
+	        String tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+	        String encPw = encoder.encode(tempPw);
+	        member.setMemberPw(encPw);
+	        memberDao.changePw(member);
+	        emailService.sendTempPasswordEmail(memberEmail, tempPw);
+	        return true;
+	    }
+	    return false;
+	}
 
 }

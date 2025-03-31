@@ -39,8 +39,8 @@ public class CommunityController {
 		return ResponseEntity.ok(list);
 	}
 	
-	@GetMapping(value="/{communityNo}")
-	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo){
+	@GetMapping(value="/{communityNo}/{memberId}")
+	public ResponseEntity<CommunityDTO> selectOneCommunity(@PathVariable int communityNo, @PathVariable String memberId){
 		CommunityDTO c = communityService.selectOneCommunity(communityNo);
 		return ResponseEntity.ok(c);
 	}

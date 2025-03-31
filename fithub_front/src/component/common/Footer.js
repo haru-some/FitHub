@@ -28,7 +28,7 @@ const Footer = () => {
             </div>
             <div className="info-block">
               <p className="label">Email</p>
-              <p className="value">fithubcs@fithub.co.kr</p>
+              <p className="value">support@fithub.co.kr</p>
             </div>
           </div>
         </div>
