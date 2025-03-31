@@ -64,10 +64,7 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link
-              to={memberInfo?.memberLevel === 1 ? "/admin" : "/member"}
-              className="member-name"
-            >
+            <Link to="/member" className="member-name">
               {memberId}
             </Link>
           </li>
