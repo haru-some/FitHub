@@ -107,11 +107,25 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/find/id")
-	public ResponseEntity<String> findId(@RequestParam String memberName, @RequestParam String memberEmail) {
-	    MemberDTO member = memberService.findIdByNameAndEmail(memberName, memberEmail);
-	    if (member != null) {
-	        return ResponseEntity.ok(member.getMemberId());
+	@PostMapping(value="/find/id")
+	public ResponseEntity<String> findId(@RequestBody MemberDTO member) {
+		String name = member.getMemberName();
+		String email = member.getMemberEmail();
+	    MemberDTO m = memberService.findIdByNameAndEmail(name, email);
+	    if (m != null) {
+	        return ResponseEntity.ok(m.getMemberId());
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
+	    }
+	}
+	
+	@PostMapping("/find/pw")
+	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
+	    String memberId = member.getMemberId();
+	    String memberEmail = member.getMemberEmail();
+	    boolean result = memberService.sendTempPasswordByIdAndEmail(memberId, memberEmail);
+	    if (result) {
+	        return ResponseEntity.ok("임시 비밀번호가 전송되었습니다.");
 	    } else {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }

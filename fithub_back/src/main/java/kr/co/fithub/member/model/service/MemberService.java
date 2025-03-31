@@ -1,5 +1,9 @@
 package kr.co.fithub.member.model.service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.fithub.email.service.EmailService;
 import kr.co.fithub.member.model.dao.MemberDao;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
@@ -25,6 +30,8 @@ public class MemberService {
 	private JwtUtils jwtUtil;
 	@Autowired
 	private PageInfoUtil pageInfoUtil;
+	@Autowired
+	private EmailService emailService;
 	
 	@Transactional
 	public int joinMember(MemberDTO member) {
@@ -64,7 +71,6 @@ public class MemberService {
 		return m;
 	}
 
-	//jwtUtil 수정 필요
 	public MemberDTO refresh(String refreshToken) {
 		LoginMemberDTO loginMember = jwtUtil.checkToken(refreshToken);
 		MemberDTO m = memberDao.selectOneMember(loginMember.getMemberId());
@@ -106,7 +112,28 @@ public class MemberService {
 	}
 
 	public MemberDTO findIdByNameAndEmail(String name, String email) {
-	    return memberDao.findIdByNameAndEmail(name, email);
+		HashMap<String, String> nameEmail = new HashMap<>();
+		nameEmail.put("memberName", name);
+		nameEmail.put("memberEmail", email);
+		MemberDTO m = memberDao.findIdByNameAndEmail(nameEmail);
+	    return m;
+	}
+
+	@Transactional
+	public boolean sendTempPasswordByIdAndEmail(String memberId, String memberEmail) {
+	    Map<String, String> idEmail = new HashMap<>();
+	    idEmail.put("memberId", memberId);
+	    idEmail.put("memberEmail", memberEmail);
+	    MemberDTO member = memberDao.findPwByIdAndEmail(idEmail);
+	    if (member != null) {
+	        String tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+	        String encPw = encoder.encode(tempPw);
+	        member.setMemberPw(encPw);
+	        memberDao.changePw(member);
+	        emailService.sendTempPasswordEmail(memberEmail, tempPw);
+	        return true;
+	    }
+	    return false;
 	}
 
 }
