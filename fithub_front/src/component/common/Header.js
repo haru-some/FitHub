@@ -68,7 +68,7 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to="/chat/list">
+            <Link to="/chat">
               {chatAlarm === 1 ? (
                 <SmsIcon />
               ) : (

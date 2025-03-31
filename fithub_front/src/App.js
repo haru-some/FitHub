@@ -17,7 +17,7 @@ import MemberJoin from "./component/member/MemberJoin";
 import ShopDetail from "./component/shop/ShopDetail";
 import FindInfo from "./component/member/FindInfo";
 import ShopCart from "./component/shop/ShopCart";
-import MemberChatMain from "./component/chat/MemberChatMain";
+import MemberChat from "./component/common/MemberChat";
 
 function App() {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
@@ -64,7 +64,7 @@ function App() {
           <Route path="/shop/*" element={<ShopList />} />
           <Route path="/shop/detail" element={<ShopDetail />} />
           <Route path="/cart" element={<ShopCart />} />
-          <Route path="/chat/*" element={<MemberChatMain />} />
+          <Route path="/chat" element={<MemberChat />} />
         </Routes>
       </main>
       <TopButton />
