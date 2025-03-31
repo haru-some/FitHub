@@ -251,6 +251,8 @@ const Advertisements = () => {
 const ProductList = () => {
   const [selectedCategory, setSelectedCategory] = useState("모두");
   const [sort, setSort] = useState("최신순");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
@@ -258,6 +260,8 @@ const ProductList = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category); // 카테고리 변경 시 상태 업데이트
+    setCurrentPage(1); // 카테고리 변경 시 첫 페이지로 돌아가기
+    setClickedButton(category); // 선택된 버튼명을 상태로 저장
   };
 
   const filteredProducts = allProducts.filter((product) =>
@@ -279,11 +283,28 @@ const ProductList = () => {
     return 0; // 최신순에 대한 정렬은 기본적으로 원래 순서 유지
   });
 
+  // 페이지네이션 적용
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = sortedProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+  const [clickedButton, setClickedButton] = useState(null);
+
   return (
     <div>
       <div>
         {categories.map((category) => (
-          <button key={category} onClick={() => handleCategoryChange(category)}>
+          <button
+            key={category}
+            onClick={() => handleCategoryChange(category)}
+            style={{
+              backgroundColor:
+                clickedButton === category ? "#245329" : "#589c5f", // 클릭되었을 때의 색상
+            }}
+          >
             {category}
           </button>
         ))}
@@ -295,7 +316,7 @@ const ProductList = () => {
       </select>
 
       <div className="product-container">
-        {sortedProducts.map((product) => (
+        {currentProducts.map((product) => (
           <div className="product-card" key={product.id}>
             <img src={product.image} alt={product.name} />
             <div className="product-details">
@@ -305,12 +326,24 @@ const ProductList = () => {
           </div>
         ))}
       </div>
+      {/* 페이지네이션 */}
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => setCurrentPage(index + 1)}
+            disabled={currentPage === index + 1} // 현재 페이지는 비활성화
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
 
 const ShopList = () => {
-  const [selectedCategory, setSelectedCategory] = useState("모두");
+  const [selectedCategory, setSelectedCategory] = useState("FIT MARKET");
 
   return (
     <div className="shop-list-wrap">
@@ -320,7 +353,7 @@ const ShopList = () => {
       {/* 선택된 카테고리를 중앙에 표시 */}
       <Advertisements />
       <ProductList
-        products={allProducts} // allProducts를 전달
+        products={allProducts}
         setSelectedCategory={setSelectedCategory}
       />
     </div>
