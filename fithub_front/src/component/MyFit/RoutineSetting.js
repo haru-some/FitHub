@@ -26,7 +26,6 @@ const RoutineSetting = (props) => {
     setText(obj[weekday]);
   }, [weekday]);
   const memberNo = props.memberNo;
-  console.log(memberNo);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}`)
@@ -48,8 +47,9 @@ const RoutineSetting = (props) => {
           <button
             key={day}
             className={day === weekday ? "selected" : ""}
-            onClick={() => {
+            onClick={(e) => {
               setWeekDay(day);
+
               setObj({ ...obj, [weekday]: text });
             }}
           >
@@ -73,13 +73,13 @@ const RoutineSetting = (props) => {
       <button
         className="save-button"
         onClick={() => {
-          console.log(weekday);
+          const updatedObj = { ...obj, [weekday]: text };
           setObj({ ...obj, [weekday]: text });
-          console.log(obj);
+
           axios
             .put(
               `${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}`,
-              obj
+              updatedObj
             )
             .then((res) => {
               console.log(res.data);

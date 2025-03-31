@@ -61,5 +61,7 @@ public class MyfitController {
 		return ResponseEntity.ok(result);
 	}
 	
+	
+	
 
 }
