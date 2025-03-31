@@ -1,6 +1,6 @@
 .shop-list-wrap {
   background-color: #ffffff;
-  min-height: 1180px;
+  min-height: 900px;
 }
 
 .shop-list-wrap div {
@@ -36,7 +36,7 @@
   margin: 10px 0;
 }
 
-.shop-list-wrap div.product-card {
+.shop-list-wrap div.goods-card {
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
@@ -45,7 +45,7 @@
   align-items: center;
 }
 
-.shop-list-wrap .product-card img {
+.shop-list-wrap .goods-card img {
   width: 100px; /* 이미지 크기 조정 */
   height: auto;
   margin-right: 10px; /* 이미지와 텍스트 사이의 간격 */
@@ -83,14 +83,14 @@
 }
 
 /* 제품 카드를 위한 컨테이너 */
-.shop-list-wrap .product-container {
+.shop-list-wrap .goods-container {
   display: flex;
   flex-wrap: wrap; /* 필요한 경우 다음 행으로 넘기기 */
   gap: 20px; /* 카드 간 간격 */
   justify-content: flex-start;
 }
 
-.shop-list-wrap .product-card {
+.shop-list-wrap .goods-card {
   background-color: #f9f9f9;
   flex: 0 1 calc(25% - 20px); /* 4개씩 보이도록 설정하며 간격을 고려 */
   box-sizing: border-box; /* 패딩과 보더를 포함하여 크기 계산 */
@@ -119,7 +119,7 @@
 }
 
 /* 제품 세부사항 스타일 */
-.shop-list-wrap .product-details {
+.shop-list-wrap .Goods-details {
   display: flex;
   flex-direction: column; /* 세부정보를 수직으로 정렬 */
   align-items: center; /* 가운데 정렬 */

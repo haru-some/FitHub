@@ -1,4 +1,44 @@
 .shop-detail-wrap {
-  background-color: #ffffff;
-  min-height: 1000px;
+  width: 1200px;
+  background-color: #fff;
+  display: flex;
+  padding: 20px;
+}
+
+.shop-detail-wrap .goods-image {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.shop-detail-wrap .goods-image img {
+  width: 100%; /* 가로 길이에 맞게 조정 */
+  height: auto;
+}
+
+.shop-detail-wrap .goods-info {
+  flex: 1;
+}
+
+.shop-detail-wrap .tabs {
+  margin-top: 20px;
+}
+
+.shop-detail-wrap .tabs button {
+  background-color: #f1f1f1;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.shop-detail-wrap .tabs button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.shop-detail-wrap .tab-content {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
 }

@@ -3,7 +3,7 @@ import "./shopLIst.css";
 import ProductPage from "./ProductPage";
 import { useNavigate } from "react-router-dom";
 
-const allProducts = [
+const allGoods = [
   {
     id: 1,
     name: "비타민 A",
@@ -249,11 +249,11 @@ const Advertisements = () => {
   );
 };
 
-const ProductList = () => {
+const GoodsList = () => {
   const [selectedCategory, setSelectedCategory] = useState("모두");
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8;
+  const GoodsPerPage = 8;
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
@@ -265,11 +265,11 @@ const ProductList = () => {
     setClickedButton(category); // 선택된 버튼명을 상태로 저장
   };
 
-  const filteredProducts = allProducts.filter((product) =>
-    selectedCategory === "모두" ? true : product.category === selectedCategory
+  const filteredgoods = allGoods.filter((goods) =>
+    selectedCategory === "모두" ? true : goods.category === selectedCategory
   );
 
-  const sortedProducts = filteredProducts.sort((a, b) => {
+  const sortedGoods = filteredgoods.sort((a, b) => {
     if (sort === "가격높은순") {
       return (
         parseInt(b.price.replace(/,/g, ""), 10) -
@@ -285,13 +285,10 @@ const ProductList = () => {
   });
 
   // 페이지네이션 적용
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = sortedProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+  const indexOfLastGoods = currentPage * GoodsPerPage;
+  const indexOfFirstGoods = indexOfLastGoods - GoodsPerPage;
+  const currentGoods = sortedGoods.slice(indexOfFirstGoods, indexOfLastGoods);
+  const totalPages = Math.ceil(sortedGoods.length / GoodsPerPage);
   const [clickedButton, setClickedButton] = useState(null);
   const navigate = useNavigate();
 
@@ -317,17 +314,17 @@ const ProductList = () => {
         <option value="가격낮은순">가격낮은순</option>
       </select>
 
-      <div className="product-container">
-        {currentProducts.map((product) => (
+      <div className="goods-container">
+        {currentGoods.map((goods) => (
           <div
-            className="product-card"
-            key={product.id}
+            className="goods-card"
+            key={goods.id}
             onClick={() => [navigate(`/shop/detail/`)]}
           >
-            <img src={product.image} alt={product.name} />
-            <div className="product-details">
-              <h3>{product.name}</h3>
-              <p>{product.price}</p>
+            <img src={goods.image} alt={goods.name} />
+            <div className="goods-details">
+              <h3>{goods.name}</h3>
+              <p>{goods.price}</p>
             </div>
           </div>
         ))}
@@ -351,10 +348,7 @@ const ProductList = () => {
 const ShopItem = () => {
   const navigate = useNavigate();
   return (
-    <div
-      className="product-card"
-      onClick={() => [navigate(`/shop/view/`)]}
-    ></div>
+    <div className="goods-card" onClick={() => [navigate(`/shop/view/`)]}></div>
   );
 };
 
@@ -366,12 +360,8 @@ const ShopList = () => {
       <h2 style={{ textAlign: "center", margin: "20px 0" }}>
         {selectedCategory}
       </h2>
-      {/* 선택된 카테고리를 중앙에 표시 */}
       <Advertisements />
-      <ProductList
-        products={allProducts}
-        setSelectedCategory={setSelectedCategory}
-      />
+      <GoodsList goods={allGoods} setSelectedCategory={setSelectedCategory} />
     </div>
   );
 };
