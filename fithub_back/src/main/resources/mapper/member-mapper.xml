@@ -11,7 +11,7 @@
 	    member_seq.NEXTVAL,
 	    #{memberId}, #{memberPw}, #{memberName}, #{memberPhone},
 	    #{memberEmail}, #{memberAddr}, NULL, NULL,
-	    2, 0, 'N', 'local', NULL,
+	    2, 1, 'N', 'local', NULL,
 	    TO_CHAR(SYSDATE, 'YYYY-MM-DD')
 	  )
 	</insert>
@@ -46,9 +46,16 @@
 		where member_id = #{memberId}
 	</update>
 	
-	<select id="findIdByNameAndEmail" resultType="member" parameterType="map">
+	<select id="findIdByNameAndEmail" resultType="member">
 	  SELECT * 
 	  FROM member 
 	  WHERE member_name = #{memberName} AND member_email = #{memberEmail}
+	</select>
+	
+	<select id="findPwByIdAndEmail" resultType="member">
+	  SELECT * 
+	  FROM member 
+	  WHERE member_id = #{memberId} 
+	    AND member_email = #{memberEmail}
 	</select>
 </mapper>
