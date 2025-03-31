@@ -42,7 +42,7 @@ const MainNavi = () => {
           <Link to="/community/list">Community</Link>
         </li>
         <li>
-          <Link to="/shop">Market</Link>
+          <Link to="/shop/list">Market</Link>
         </li>
       </ul>
     </nav>
