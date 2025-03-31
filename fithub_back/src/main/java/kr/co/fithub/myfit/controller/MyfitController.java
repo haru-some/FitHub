@@ -84,6 +84,13 @@ public class MyfitController {
 		return ResponseEntity.ok(list);
 	}
 	
+	@GetMapping("/record/days/{memberNo}")
+	public ResponseEntity<List> getMethodName(@PathVariable int memberNo) {
+		List list = myfitService.selectRecordDays(memberNo);
+		return ResponseEntity.ok(list);
+	}
+	
+	
 	
 	
 	
