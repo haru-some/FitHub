@@ -14,14 +14,20 @@ import { memberState } from "../utils/RecoilData";
 
 const MyFitMain = () => {
   const [member, setMember] = useRecoilState(memberState);
-  console.log(member);
   const memberNo = member.memberNo;
   const [record, setRecord] = useState(null);
   const [routine, setRoutine] = useState(null);
   const today = dayjs();
 
-  const [date, setDate] = useState(dayjs());
-  const [pageTitle, setPageTitle] = useState("My Fit");
+  const [date, setDate] = useState(() => {
+    const savedDate = localStorage.getItem("selectedDate");
+    return savedDate ? dayjs(savedDate) : dayjs();
+  });
+  const [pageTitle, setPageTitle] = useState(() => {
+    return localStorage.getItem("pageTitle") || "My Fit";
+  });
+
+  const [isUpdate, setIsUpdate] = useState(0);
 
   const y = String(date.$y);
   const m = String(date.$M + 1).padStart(2, "0");
@@ -35,6 +41,8 @@ const MyFitMain = () => {
     date.$y + "-" + (date.$M + 1) + "-" + date.$D + "-" + weekday;
 
   useEffect(() => {
+    localStorage.setItem("selectedDate", date.format("YYYY-MM-DD"));
+    localStorage.setItem("pageTitle", pageTitle);
     if (inputDate.isBefore(today, "day")) {
       setTitle("운동기록");
       //과거이면 기록 조회
@@ -68,7 +76,7 @@ const MyFitMain = () => {
         })
         .catch((err) => {});
     }
-  }, [date]);
+  }, [date, pageTitle, isUpdate]);
 
   return (
     <div className="myfit-wrap">
@@ -102,6 +110,8 @@ const MyFitMain = () => {
                   dateFormat={dateFormat}
                   memberNo={memberNo}
                   dateData={dateData}
+                  isUpdate={isUpdate}
+                  setIsUpdate={setIsUpdate}
                 />
               }
             />
