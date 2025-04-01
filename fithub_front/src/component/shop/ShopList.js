@@ -12,10 +12,18 @@ const categories = [
   "모두",
   "보충제",
   "비타민",
-  "스포츠웨어(남)",
-  "스포츠웨어(여)",
+  "스포츠웨어남",
+  "스포츠웨어여",
   "운동기구",
 ];
+
+const cate = {
+  보충제: 1,
+  비타민: 2,
+  스포츠웨어남: 3,
+  스포츠웨어여: 4,
+  운동기구: 5,
+};
 
 const Advertisements = () => {
   const [currentAd, setCurrentAd] = useState(0);
@@ -50,6 +58,7 @@ const Advertisements = () => {
 
 const GoodsList = () => {
   const [allGoods, setAllGoods] = useState([]);
+  const [fetchedGoods, setFetchedGoods] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("모두");
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,8 +73,8 @@ const GoodsList = () => {
     axios
       .get(`${backServer}/goods?reqPage=${reqPage}`)
       .then((res) => {
-        console.log(res);
-        setAllGoods(res.data);
+        console.log(res.data); //데이터 구조 확인
+        setFetchedGoods(res.data.list ? res.data.list : []);
       })
       .catch((err) => {
         console.log(err);
@@ -76,29 +85,29 @@ const GoodsList = () => {
     setSort(event.target.value);
   };
 
+  //카테고리
   const handleCategoryChange = (category) => {
     setSelectedCategory(category); // 카테고리 변경 시 상태 업데이트
     setCurrentPage(1); // 카테고리 변경 시 첫 페이지로 돌아가기
     setClickedButton(category); // 선택된 버튼명을 상태로 저장
   };
 
-  const filteredgoods = allGoods.filter((goods) =>
-    selectedCategory === "모두" ? true : goods.category === selectedCategory
+  const filteredGoods = fetchedGoods.filter((goods) =>
+    selectedCategory === "모두"
+      ? true
+      : goods.goodsCategory === cate[selectedCategory]
   );
 
-  const sortedGoods = filteredgoods.sort((a, b) => {
+  const sortedGoods = filteredGoods.sort((a, b) => {
+    const aPrice = a.goodsPrice; // 가격은 숫자 타입
+    const bPrice = b.goodsPrice;
+
     if (sort === "가격높은순") {
-      return (
-        parseInt(b.price.replace(/,/g, ""), 10) -
-        parseInt(a.price.replace(/,/g, ""), 10)
-      );
+      return bPrice - aPrice;
     } else if (sort === "가격낮은순") {
-      return (
-        parseInt(a.price.replace(/,/g, ""), 10) -
-        parseInt(b.price.replace(/,/g, ""), 10)
-      );
+      return aPrice - bPrice;
     }
-    return 0; // 최신순에 대한 정렬은 기본적으로 원래 순서 유지
+    return 0; // 기본 정렬
   });
 
   // 페이지네이션 적용
@@ -164,6 +173,7 @@ const GoodsList = () => {
 
   return (
     <div>
+      {/* 카테고리 버튼 구현 */}
       <div>
         {categories.map((category) => (
           <button
@@ -171,36 +181,44 @@ const GoodsList = () => {
             onClick={() => handleCategoryChange(category)}
             style={{
               backgroundColor:
-                clickedButton === category ? "#245329" : "#589c5f", // 클릭되었을 때의 색상
+                clickedButton === category ? "#245329" : "#589c5f",
             }}
           >
-            {category}
+            {category.includes("스포츠웨어")
+              ? category.replace("남", "(남)").replace("여", "(여)")
+              : category}
           </button>
         ))}
       </div>
-      <select value={sort} onChange={handleSortChange}>
+      <select value={sort} onChange={(e) => setSort(e.target.value)}>
         <option value="최신순">최신순</option>
         <option value="가격높은순">가격높은순</option>
         <option value="가격낮은순">가격낮은순</option>
       </select>
 
       <div className="goods-container">
-        {currentGoods.map((goods) => (
-          <div
-            className="goods-card"
-            key={goods.goodsName}
-            onClick={() => {
-              navigate(`/shop/detail/${goods.goodsName}`);
-            }}
-          >
-            <img src={goods.goodsUrl} alt={goods.goodsName} />
-            <div className="goods-details">
-              <h3>{goods.goodsName}</h3>
-              <p>{goods.goodsPrice}</p>
+        {sortedGoods.length === 0 ? (
+          <p>상품이 없습니다.</p>
+        ) : (
+          sortedGoods.map((goods) => (
+            <div
+              className="goods-card"
+              key={goods.goodsNo} // goodsNo를 키로 사용
+              onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
+            >
+              <img
+                src={goods.goodsUrl || "defaultImage.jpg"}
+                alt={goods.goodsName}
+              />
+              <div className="goods-details">
+                <h3>{goods.goodsName}</h3>
+                <p>{goods.goodsPrice.toLocaleString()} 원</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
+
       {/* 페이지네이션 */}
       <div className="pagination">{renderPagination()}</div>
     </div>
@@ -223,7 +241,7 @@ const ShopList = () => {
         {selectedCategory}
       </h2>
       <Advertisements />
-      <GoodsList goods={allGoods} setSelectedCategory={setSelectedCategory} />
+      <GoodsList fetchedGoods setSelectedCategory={setSelectedCategory} />
     </div>
   );
 };

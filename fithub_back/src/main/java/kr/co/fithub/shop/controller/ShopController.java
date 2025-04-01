@@ -32,7 +32,7 @@ public class ShopController {
 	public ResponseEntity<Map> GoodsList(@RequestParam int reqPage){
 		Map map = shopService.selectGoodsList(reqPage);
 		
-		System.out.println("111111111111111");
+		
 		return ResponseEntity.ok(map);	
 	}
     

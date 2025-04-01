@@ -20,3 +20,6 @@ public class Goods {
 	private String goodsDate;
 	private int goodsCategory;
 }
+
+
+

@@ -17,7 +17,7 @@ public class ShopService {
 	
 
 	public Map selectGoodsList(int reqPage) {
-		System.out.println("22222222222222222222");
+		
 		List list = shopDao.selectGoodsList();
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
