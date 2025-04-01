@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 @Alias(value="actMember")
 public class ActMember {
 	private int memberNo;
+	private String memberName;
+	private String memberThumb;
+	private String memberId;
 	private int followingCount;
 	private int followerCount;
 	private int communityCount;		   //게시물 갯수

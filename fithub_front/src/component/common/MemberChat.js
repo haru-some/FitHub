@@ -17,7 +17,7 @@ const MemberChat = () => {
               <div className="chat-member-content">
                 <div>
                   킹조지가 열변을 토하는 중
-                  <span className="chat-alarm">봤는지 안봤는지 숫자</span>
+                  <span className="chat-alarm">(봤는지 안봤는지 숫자)</span>
                 </div>
               </div>
             </div>
