@@ -1,8 +1,6 @@
-import "./chat.css";
-
 const MemberChat = () => {
   return (
-    <section className="chat-section">
+    <section className="member-chat-section">
       <div className="page-title">(대충 누구님의) 문의 목록</div>
       <div className="member-chat-box">
         <div className="member-chat-list">
@@ -23,7 +21,7 @@ const MemberChat = () => {
             </div>
           </div>
         </div>
-        <div className="member-input">
+        <div className="chat-input-box">
           <input type="text" className="chat-input" />
           <button type="button">전송</button>
         </div>
