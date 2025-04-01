@@ -21,7 +21,6 @@ import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 
 function App() {
-  const [memberId, setMemberId] = useRecoilState(loginIdState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   useEffect(() => {
@@ -35,14 +34,12 @@ function App() {
       axios
         .get(`${backServer}/member/refresh`)
         .then((res) => {
-          setMemberId(res.data.memberId);
           setMemberInfo(res.data);
           axios.defaults.headers.common["Authorization"] = res.data.accessToken;
           window.localStorage.setItem("refreshToken", res.data.refreshToken);
         })
         .catch((error) => {
           console.error(error);
-          setMemberId("");
           setMemberInfo(null);
           delete axios.defaults.headers.common["Authorization"];
           window.localStorage.removeItem("refreshToken");

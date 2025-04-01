@@ -72,10 +72,10 @@ public class MemberController {
 		MemberDTO loginMember = memberService.refresh(refreshToken);
 		return ResponseEntity.ok(loginMember);
 	}
-	@PutMapping
-	public ResponseEntity<?> updateMember(
+	@PatchMapping
+	public ResponseEntity<String> updateMember(
 	        @ModelAttribute MemberDTO member,
-	        @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
+	        @RequestParam(required = false) MultipartFile thumbnail) {
 	    try {
 	        if (thumbnail != null && !thumbnail.isEmpty()) {
 	            String savepath = root + "/member/profileImage/";
@@ -104,8 +104,8 @@ public class MemberController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴에 실패했습니다.");
 	    }
 	}
-	@DeleteMapping(value="/profileImage")
-	public ResponseEntity<?> deleteProfileImage(@RequestParam String memberId) {
+	@DeleteMapping(value="/profileimg")
+	public ResponseEntity<String> deleteProfileImage(@RequestParam String memberId) {
 	    MemberDTO member = memberService.findByMemberId(memberId);
 	    if (member == null) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보 없음");
@@ -117,7 +117,7 @@ public class MemberController {
 	    	if (fileName.contains("..")) {
 	            return ResponseEntity.badRequest().body("잘못된 파일명입니다.");
 	        }
-	    	String savepath = root + "/member/profileImage/";
+	    	String savepath = root + "/member/profileimg/";
 	        File file = new File(savepath  + fileName);
 	        if (file.exists()) {
 	            file.delete();
@@ -137,7 +137,7 @@ public class MemberController {
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
 	}
-	@PostMapping(value="/find/id")
+	@PostMapping(value="/find-id")
 	public ResponseEntity<String> findId(@RequestBody MemberDTO member) {
 		String name = member.getMemberName();
 		String email = member.getMemberEmail();
@@ -148,7 +148,7 @@ public class MemberController {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }
 	}
-	@PostMapping(value="/find/pw")
+	@PostMapping(value="/find-pw")
 	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
 	    String memberId = member.getMemberId();
 	    String memberEmail = member.getMemberEmail();
