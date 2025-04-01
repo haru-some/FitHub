@@ -5,6 +5,7 @@
 	<select id="selectCommunityList" resultType="community">
 		select
 		    m.member_id,
+		    m.member_no,
 		    m.member_thumb,
 		    c.community_content,
 		    c.community_no,
@@ -22,8 +23,10 @@
 		select
 		    m.member_id,
 		    m.member_thumb,
+		    m.member_no,
 		    c.community_content,
 		    c.community_no,
+		    to_char(sysdate, 'yyyy-mm-dd') as community_date,
 		    (select count(*) from community_like where community_no = c.community_no) as like_count,
 		    (select count(*) from community_like where community_no = c.community_no and member_no = #{memberNo}) as is_like,
 		    (select count(*) from comment_tbl where community_no = c.community_no) as comment_count,

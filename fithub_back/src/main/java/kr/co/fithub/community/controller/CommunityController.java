@@ -70,4 +70,10 @@ public class CommunityController {
 		String filepath = fileUtils.upload(savepath, image);
 		return ResponseEntity.ok(filepath);
 	}
+	
+	@DeleteMapping(value="/follow/{memberNo}")
+	public ResponseEntity<Integer> deleteFollow(){
+		
+		return ResponseEntity.ok(0);
+	}
 }

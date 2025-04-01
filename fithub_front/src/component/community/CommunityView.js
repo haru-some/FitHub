@@ -1,7 +1,7 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatIcon from "@mui/icons-material/Chat";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
@@ -9,12 +9,12 @@ import { memberState } from "../utils/RecoilData";
 
 const CommunityView = () => {
   const [member, setMember] = useRecoilState(memberState);
-
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const params = useParams();
   const communityNo = params.communityNo;
   const [community, setCommunity] = useState(null);
   const [isLike, setIsLike] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -57,7 +57,12 @@ const CommunityView = () => {
 
   return (
     <div className="community-view">
-      <div className="community-view-user">
+      <div
+        className="community-view-user"
+        onClick={() => {
+          navigate(`/myfit/activity/${community.memberNo}`);
+        }}
+      >
         <div className="member-img">
           <img src="/image/default_img.png"></img>
         </div>
@@ -79,7 +84,7 @@ const CommunityView = () => {
       </div>
       {community && (
         <div
-          className="community-view-content"
+          className="community-view-texteditor"
           dangerouslySetInnerHTML={{ __html: community.communityContent }}
         ></div>
       )}

@@ -7,7 +7,7 @@
   border-radius: 10px;
 }
 .community-list-wrap {
-  width: 500px;
+  width: 550px;
   margin: 0 auto;
 }
 .community-head {
@@ -120,15 +120,11 @@
   width: 50px;
   height: 50px;
 }
-.community-view-content {
-  padding-top: 10px;
-}
-.community-view-content > img {
+
+.community-view-texteditor img {
   width: 100%;
-  border-radius: 10px;
-  margin: 10px 0;
-  height: 500px;
 }
+
 /* 댓글 입력란 */
 .post-input {
   display: flex;
