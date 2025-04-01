@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 const MemberInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [loginMember, setLoginMember] = useRecoilState(memberState);
   const navigate = useNavigate();
+  const [loginMember, setLoginMember] = useRecoilState(memberState);
   const [member, setMember] = useState({
     memberId: "",
     memberName: "",
@@ -25,6 +25,7 @@ const MemberInfo = () => {
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const fileInputRef = useRef();
   const detailRef = useRef();
+
   const formatPhoneNumber = (value) => {
     const onlyNums = value.replace(/\D/g, "");
 
@@ -67,13 +68,14 @@ const MemberInfo = () => {
   }, [loginMember]);
 
   const handleInput = (e) => {
-    const { name, value } = e.target;
+    const name = e.target.name;
+    const value = e.target.value;
     let newValue = value;
-    if (name === "memberPhone") {
-      newValue = formatPhoneNumber(value);
-    }
     if (name === "memberAddrDetail") {
       newValue = newValue.replace(/,/g, "");
+    }
+    if (name === "memberPhone") {
+      newValue = formatPhoneNumber(value);
     }
     setMember((prev) => ({ ...prev, [name]: newValue }));
   };
@@ -107,7 +109,7 @@ const MemberInfo = () => {
 
   const handleImageDelete = () => {
     axios
-      .delete(`${backServer}/member/profileImage`, {
+      .delete(`${backServer}/member/profileimg`, {
         params: { memberId: member.memberId },
       })
       .then(() => {
@@ -145,10 +147,9 @@ const MemberInfo = () => {
     }
 
     axios
-      .put(`${backServer}/member`, formData, {
+      .patch(`${backServer}/member`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          processData: false,
         },
       })
       .then((res) => {

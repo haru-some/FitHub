@@ -5,28 +5,27 @@ import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import { loginIdState, memberState } from "../utils/RecoilData";
 import "./member.css";
-
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
 const Login = () => {
-  const [memberId, setMemberId] = useRecoilState(loginIdState);
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const [showPassword, setShowPassword] = useState(false);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const navigate = useNavigate();
-  const backServer = process.env.REACT_APP_BACK_SERVER;
 
   const changeMember = (e) => {
-    const { name, value } = e.target;
+    const name = e.target.name;
+    const value = e.target.value;
     setMember({ ...member, [name]: value });
   };
 
@@ -44,7 +43,6 @@ const Login = () => {
     axios
       .post(`${backServer}/member/login`, member)
       .then((res) => {
-        setMemberId(res.data.memberId);
         setMemberInfo(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         window.localStorage.setItem("refreshToken", res.data.refreshToken);

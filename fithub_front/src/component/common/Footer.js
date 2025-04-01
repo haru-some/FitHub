@@ -2,9 +2,20 @@ import React from "react";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import "./default.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLoginState } from "../utils/RecoilData";
 
 const Footer = () => {
+  const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
+
+  const handleExploreClick = () => {
+    if (isLogin) {
+      navigate("/myfit");
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <footer className="footer">
       <div className="footer-wrap">
@@ -36,7 +47,7 @@ const Footer = () => {
           <p className="copyright">© 2025 — FitHub Copyright</p>
         </div>
         <div className="footer-bottom">
-          <div className="footer-explore" onClick={() => navigate("/myfit")}>
+          <div className="footer-explore" onClick={handleExploreClick}>
             <div className="explore-text">
               <p>Explore</p>
               <p>Your Fitness</p>
