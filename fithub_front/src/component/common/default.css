@@ -84,6 +84,7 @@
   font-family: pd-r;
   list-style-type: none;
 }
+
 a {
   text-decoration: none;
 }
@@ -94,6 +95,9 @@ body {
   min-width: 800px;
   position: relative;
   background-color: var(--gray1);
+}
+html {
+  scrollbar-gutter: stable;
 }
 .wrap {
   display: flex;
@@ -179,13 +183,6 @@ body {
   max-width: 1400px;
   margin: 30px auto;
   flex: 1;
-}
-.logout-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  color: white;
 }
 /* 푸터 */
 .footer {

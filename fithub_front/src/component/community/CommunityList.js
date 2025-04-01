@@ -15,17 +15,20 @@ const CommunityList = () => {
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [communityList, setCommunityList] = useState([]);
+  const [followState, setFollowState] = useState(0);
 
   useEffect(() => {
+    console.log(1);
     axios
       .get(
         `${backServer}/community/list?memberNo=${member ? member.memberNo : 0}`
       )
       .then((res) => {
+        console.log(res);
         setCommunityList(res.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [followState]);
   return (
     <div className="community-list">
       <div className="community-list-wrap">
@@ -78,6 +81,8 @@ const CommunityList = () => {
                   communityList={communityList}
                   setCommunityList={setCommunityList}
                   member={member}
+                  followState={followState}
+                  setFollowState={setFollowState}
                 />
               );
             })}

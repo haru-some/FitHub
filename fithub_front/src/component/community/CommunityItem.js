@@ -11,10 +11,10 @@ const CommunityItem = (props) => {
   const member = props.member;
   const community = props.community;
   const [isLike, setIsLike] = useState(community.isLike === 1);
-  const [isFollow, setIsFollow] = useState(community.isFollow === 1);
-  console.log(communityList);
 
   const navigate = useNavigate();
+  const followState = props.followState;
+  const setFollowState = props.setFollowState;
 
   const changeLike = (e) => {
     if (member) {
@@ -64,8 +64,8 @@ const CommunityItem = (props) => {
     e.stopPropagation();
   };
 
-  const followPush = (e) => {
-    if (isFollow) {
+  const changeFollow = (e) => {
+    if (community.isFollow === 1) {
       Swal.fire({
         title: "팔로우 취소",
         text: "정말 팔로우를 취소하시겠습니까?",
@@ -79,20 +79,20 @@ const CommunityItem = (props) => {
         if (result.isConfirmed) {
           axios
             .delete(
-              `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}`
+              `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
             )
-            .then(() => {
-              setIsFollow(false);
+            .then((res) => {
+              setFollowState(followState + 1);
             });
         }
       });
     } else {
       axios
         .post(
-          `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}`
+          `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
         )
         .then((res) => {
-          setIsFollow(true);
+          setFollowState(followState + 1);
         });
     }
     e.stopPropagation();
@@ -117,8 +117,14 @@ const CommunityItem = (props) => {
         <div className="community-member">
           <p>{community.memberId}</p>
           {member && member.memberId !== community.memberId && (
-            <button type="button" className="follow-btn" onClick={followPush}>
-              {isFollow ? "팔로잉" : "팔로우"}
+            <button
+              type="button"
+              className={`follow-btn ${
+                community.isFollow === 1 ? "following" : ""
+              }`}
+              onClick={changeFollow}
+            >
+              {community.isFollow === 1 ? "팔로잉" : "팔로우"}
             </button>
           )}
         </div>

@@ -6,10 +6,10 @@ import "./member.css";
 import { Link } from "react-router-dom";
 
 const FindInfo = () => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const [tab, setTab] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const backServer = process.env.REACT_APP_BACK_SERVER;
 
   const handleFindId = () => {
     if (!name.trim() || !email.trim()) {
@@ -24,7 +24,7 @@ const FindInfo = () => {
     }
 
     axios
-      .post(`${backServer}/member/find/id`, {
+      .post(`${backServer}/member/find-id`, {
         memberName: name,
         memberEmail: email,
       })
@@ -74,7 +74,7 @@ const FindInfo = () => {
     }
 
     axios
-      .post(`${backServer}/member/find/pw`, {
+      .post(`${backServer}/member/find-pw`, {
         memberId: pwId,
         memberEmail: pwEmail,
       })

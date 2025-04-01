@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
-import { useRecoilState } from "recoil";
-import { isLoginState, loginIdState, memberState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -53,18 +53,15 @@ const MainNavi = () => {
 };
 
 const HeaderLink = () => {
-  const [memberId, setMemberId] = useRecoilState(loginIdState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-  const [chatAlarm, setChatAlarm] = useState(1);
+  const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
+  const [chatAlarm, setChatAlarm] = useState(1);
 
   const logOut = () => {
-    setMemberId("");
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("recoil-persist");
+    window.localStorage.removeItem("refreshToken");
     navigate("/");
   };
 
@@ -83,7 +80,7 @@ const HeaderLink = () => {
           </li>
           <li>
             <Link to="/member" className="member-name">
-              {memberId}
+              {memberInfo?.memberId}
             </Link>
           </li>
           <li>
@@ -98,9 +95,9 @@ const HeaderLink = () => {
             )}
           </li>
           <li>
-            <button onClick={logOut} className="logout-btn">
-              <LogoutIcon />
-            </button>
+            <Link to="/">
+              <LogoutIcon onClick={logOut} />
+            </Link>
           </li>
         </>
       ) : (

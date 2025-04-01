@@ -61,4 +61,21 @@ public class CommunityService {
 		int result = communityDao.insertCommunity(community);
 		return result;
 	}
+
+	@Transactional
+	public int deleteFollow(int memberNo, int followMemberNo) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("memberNo", memberNo);
+		map.put("followMemberNo", followMemberNo);
+		int result = communityDao.deleteFollow(map);
+		return result;
+	}
+
+	public int insertFollow(int memberNo, int followMemberNo) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("memberNo", memberNo);
+		map.put("followMemberNo", followMemberNo);
+		int result = communityDao.insertFollow(map);
+		return result;
+	}
 }

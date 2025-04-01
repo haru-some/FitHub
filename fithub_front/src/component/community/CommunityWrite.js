@@ -15,21 +15,36 @@ const CommunityWrite = () => {
 
   const navigate = useNavigate();
 
-  const write = () => {
-    const form = new FormData();
-    form.append("communityContent", communityContent);
-    form.append("memberNo", memberNo);
-    axios
-      .post(`${process.env.REACT_APP_BACK_SERVER}/community`, form, {
-        headers: {
-          contentType: "multipart/form-data",
-          processData: false,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        navigate("/community/list");
-      });
+  function isBlank(str) {
+    return !str || /^\s*$/.test(str);
+  }
+
+  const write = (e) => {
+    if (
+      !isBlank(
+        communityContent
+          .replace("<p>", "")
+          .replace("</p>", "")
+          .replace("<br>", "")
+      )
+    ) {
+      console.log(communityContent);
+      const form = new FormData();
+      form.append("communityContent", communityContent);
+      form.append("memberNo", memberNo);
+
+      axios
+        .post(`${process.env.REACT_APP_BACK_SERVER}/community`, form, {
+          headers: {
+            contentType: "multipart/form-data",
+            processData: false,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          navigate("/community/list");
+        });
+    }
   };
   return (
     <div className="community-write">
