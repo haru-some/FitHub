@@ -57,4 +57,12 @@
 	<insert id="insertCommunity">
 		insert into community values(community_seq.nextval, #{communityContent}, #{memberNo}, sysdate, 1)
 	</insert>
+	
+	<delete id="deleteFollow">
+		delete from follow where follow_member_no = #{followMemberNo} and member_no = #{memberNo}
+	</delete>
+	
+	<insert id="insertFollow">
+		insert into follow values(#{followMemberNo}, #{memberNo})
+	</insert>
 </mapper>

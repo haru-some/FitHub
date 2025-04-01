@@ -33,6 +33,11 @@
   width: 180px;
 }
 
+.myfit-wrap .sidebar.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .myfit-wrap .sidebar-box {
   display: flex;
   flex-direction: column;
