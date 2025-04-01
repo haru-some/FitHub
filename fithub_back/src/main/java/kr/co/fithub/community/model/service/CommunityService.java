@@ -32,7 +32,8 @@ public class CommunityService {
 		map.put("communityNo", communityNo);
 		map.put("memberNo", memberNo);
 		CommunityDTO c = communityDao.selectOneCommunity(map);
-		CommentDTO com = communityDao.selectCommentList(communityNo);
+		List<CommentDTO> commentList = communityDao.selectCommentList(communityNo);
+		c.setCommentList(commentList);
 		return c;
 	}	
 	
@@ -71,6 +72,7 @@ public class CommunityService {
 		return result;
 	}
 
+	@Transactional
 	public int insertFollow(int memberNo, int followMemberNo) {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("memberNo", memberNo);
@@ -78,4 +80,12 @@ public class CommunityService {
 		int result = communityDao.insertFollow(map);
 		return result;
 	}
+
+	@Transactional
+	public int insertComment(CommentDTO comment) {
+		int result = communityDao.insertComment(comment);
+		return result;
+	}
+
+	
 }
