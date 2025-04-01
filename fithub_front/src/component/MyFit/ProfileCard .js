@@ -43,7 +43,7 @@ const ProfileCard = (props) => {
               <img
                 src={
                   actMember.memberThumb
-                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileImage/${actMember.memberThumb}`
+                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
                     : "/image/default_img.png"
                 }
               />
@@ -59,16 +59,18 @@ const ProfileCard = (props) => {
                     <p>게시물</p>
                   </div>
                   <div
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
-                      navigate(`myfit/follower/${actMember.memberNo}`);
+                      navigate(`/myfit/follow/${actMember.memberNo}/1`);
                     }}
                   >
                     <p>{actMember.followerCount}</p>
                     <p>팔로워</p>
                   </div>
                   <div
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
-                      navigate(`myfit/following/${actMember.memberNo}`);
+                      navigate(`/myfit/follow/${actMember.memberNo}/2`);
                     }}
                   >
                     <p>{actMember.followingCount}</p>

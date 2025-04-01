@@ -90,6 +90,12 @@ public class MyfitController {
 		return ResponseEntity.ok(list);
 	}
 	
+	@GetMapping("/follow/{memberNo}")
+	public ResponseEntity<List<MemberDTO>> selectFollowList(@PathVariable int memberNo,@RequestParam int type) {
+		List<MemberDTO> list = myfitService.selectFollowList(memberNo,type);
+		return ResponseEntity.ok(list);
+	}
+	
 	
 	
 	
