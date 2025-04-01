@@ -6,7 +6,6 @@ import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
 dayjs.locale("ko");
 const MyFit = (props) => {
-  const setPageTitle = props.setPageTitle;
   const date = props.date;
   const setDate = props.setDate;
   const memberNo = props.memberNo;
@@ -55,63 +54,28 @@ const MyFit = (props) => {
             if (inputDate.isBefore(today, "day")) {
               return record ? (
                 <Link to="/myfit/record">
-                  <button
-                    className="edit-button"
-                    onClick={() => {
-                      setPageTitle("운동 기록");
-                    }}
-                  >
-                    기록 수정
-                  </button>
+                  <button className="edit-button">기록 수정</button>
                 </Link>
               ) : (
                 <Link to="/myfit/record">
-                  <button
-                    className="edit-button"
-                    onClick={() => {
-                      setPageTitle("운동 기록");
-                    }}
-                  >
-                    기록하기
-                  </button>
+                  <button className="edit-button">기록하기</button>
                 </Link>
               );
             } else if (inputDate.isSame(today, "day")) {
               return record ? (
                 <Link to="/myfit/record">
-                  <button
-                    className="edit-button"
-                    onClick={() => {
-                      setPageTitle("운동 기록");
-                    }}
-                  >
-                    기록 수정
-                  </button>
+                  <button className="edit-button">기록 수정</button>
                 </Link>
               ) : (
                 <Link to="/myfit/record">
-                  <button
-                    className="edit-button"
-                    onClick={() => {
-                      setPageTitle("운동 기록");
-                    }}
-                  >
-                    기록하기
-                  </button>
+                  <button className="edit-button">기록하기</button>
                 </Link>
               );
             } else {
               // 미래
               return routine ? null : (
                 <Link to="/myfit/routine">
-                  <button
-                    className="edit-button"
-                    onClick={() => {
-                      setPageTitle("나의 루틴");
-                    }}
-                  >
-                    루틴 설정하기
-                  </button>
+                  <button className="edit-button">루틴 설정하기</button>
                 </Link>
               );
             }

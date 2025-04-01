@@ -1,35 +1,34 @@
 import React, { useEffect, useState } from "react";
 import "./community.css"; // CSS 파일 불러오기
-
 import { Link, useNavigate } from "react-router-dom";
-
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
-
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginIdState, memberState } from "../utils/RecoilData";
+import { memberState } from "../utils/RecoilData";
 import CommunityItem from "./CommunityItem";
 
 const CommunityList = () => {
-  const [memberId, setMemberId] = useRecoilState(loginIdState);
   const [member, setMember] = useRecoilState(memberState);
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [communityList, setCommunityList] = useState([]);
+  const [followState, setFollowState] = useState(0);
 
   useEffect(() => {
+    console.log(1);
     axios
       .get(
         `${backServer}/community/list?memberNo=${member ? member.memberNo : 0}`
       )
       .then((res) => {
+        console.log(res);
         setCommunityList(res.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [followState]);
   return (
     <div className="community-list">
       <div className="community-list-wrap">
@@ -82,6 +81,8 @@ const CommunityList = () => {
                   communityList={communityList}
                   setCommunityList={setCommunityList}
                   member={member}
+                  followState={followState}
+                  setFollowState={setFollowState}
                 />
               );
             })}

@@ -26,5 +26,9 @@ public interface CommunityDao {
 	CommentDTO selectCommentList(int communityNo);
 
 	int insertCommunity(CommunityDTO community);
+
+	int deleteFollow(HashMap<String, Integer> map);
+
+	int insertFollow(HashMap<String, Integer> map);
 	
 }

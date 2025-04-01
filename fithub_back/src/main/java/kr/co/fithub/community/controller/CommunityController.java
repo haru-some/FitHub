@@ -70,4 +70,17 @@ public class CommunityController {
 		String filepath = fileUtils.upload(savepath, image);
 		return ResponseEntity.ok(filepath);
 	}
+	
+	@DeleteMapping(value="/follow/{memberNo}")
+	public ResponseEntity<Integer> deleteFollow(@PathVariable int memberNo, @RequestParam int followMemberNo){
+		int result = communityService.deleteFollow(memberNo, followMemberNo);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value="/follow/{memberNo}")
+	public ResponseEntity<Integer> insertFollow(@PathVariable int memberNo, @RequestParam int followMemberNo){
+		int result = communityService.insertFollow(memberNo, followMemberNo);
+		return ResponseEntity.ok(result);
+		
+	}
 }

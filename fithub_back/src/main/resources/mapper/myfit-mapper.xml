@@ -56,6 +56,9 @@
 	<select id="selectFollow" resultType="actMember">
 		SELECT
 		m.member_no,
+		m.member_name,
+		m.member_thumb,
+		m.member_id,
 		NVL(f1.following_count, 0) AS following_count,
 		NVL(f2.follower_count,
 		0) AS follower_count,

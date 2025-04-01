@@ -1,4 +1,4 @@
-import { Link, NavLink, Route, Routes } from "react-router-dom";
+import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
 import "./myfit.css";
 import MyFit from "./MyFit";
 import ExerciseLog from "./ExerciseLog";
@@ -13,18 +13,33 @@ import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 
 const MyFitMain = () => {
+  const params = useParams();
+  console.log(params);
+  const [pageTitle, setPageTitle] = useState(
+    params["*"].includes("fit")
+      ? "My Fit"
+      : params["*"].includes("routine")
+      ? "나의 루틴"
+      : params["*"].includes("activity")
+      ? "내 활동"
+      : "운동기록"
+  );
   const [member, setMember] = useRecoilState(memberState);
   const memberNo = member.memberNo;
   const [record, setRecord] = useState(null);
   const [routine, setRoutine] = useState(null);
   const today = dayjs();
+  console.log(Number(params["*"].split("/")[1]), member.memberNo);
+
+  const flag =
+    !params["*"].includes("activity") ||
+    (params["*"].includes("activity") &&
+      Number(params["*"].split("/")[1]) === member.memberNo);
+  console.log("flag", flag);
 
   const [date, setDate] = useState(() => {
     const savedDate = localStorage.getItem("selectedDate");
     return savedDate ? dayjs(savedDate) : dayjs();
-  });
-  const [pageTitle, setPageTitle] = useState(() => {
-    return localStorage.getItem("pageTitle") || "My Fit";
   });
 
   const [isUpdate, setIsUpdate] = useState(0);
@@ -41,8 +56,6 @@ const MyFitMain = () => {
     date.$y + "-" + (date.$M + 1) + "-" + date.$D + "-" + weekday;
 
   useEffect(() => {
-    localStorage.setItem("selectedDate", date.format("YYYY-MM-DD"));
-    localStorage.setItem("pageTitle", pageTitle);
     if (inputDate.isBefore(today, "day")) {
       setTitle("운동기록");
       //과거이면 기록 조회
@@ -76,13 +89,25 @@ const MyFitMain = () => {
         })
         .catch((err) => {});
     }
-  }, [date, pageTitle, isUpdate]);
+  }, [date, isUpdate]);
+
+  useEffect(() => {
+    setPageTitle(
+      params["*"].includes("fit")
+        ? "My Fit"
+        : params["*"].includes("routine")
+        ? "나의 루틴"
+        : params["*"].includes("activity")
+        ? "활동 로그"
+        : "운동기록"
+    );
+  }, [params]);
 
   return (
     <div className="myfit-wrap">
       <h1>{pageTitle}</h1>
       <div className="myfit-content">
-        <Sidebar setPageTitle={setPageTitle} />
+        <Sidebar memberNo={memberNo} flag={flag} />
         <div className="myfit-content-box">
           <Routes>
             <Route
@@ -91,7 +116,6 @@ const MyFitMain = () => {
                 <MyFit
                   date={date}
                   setDate={setDate}
-                  setPageTitle={setPageTitle}
                   memberNo={memberNo}
                   record={record}
                   setRecord={setRecord}
@@ -126,7 +150,7 @@ const MyFitMain = () => {
                 />
               }
             />
-            <Route path="activity/*" element={<ProfileCard />} />
+            <Route path="activity/:memberNo" element={<ProfileCard />} />
           </Routes>
         </div>
       </div>
@@ -135,31 +159,28 @@ const MyFitMain = () => {
 };
 
 const Sidebar = (props) => {
-  const setPageTitle = props.setPageTitle;
-  const changeTitle = (e) => {
-    setPageTitle(e.target.innerText);
-  };
+  const memberNo = props.memberNo;
+  const pageTitleState = props.pageTitleState;
+  const setPageTitleState = props.setPageTitleState;
+  const flag = props.flag;
   return (
-    <div className="sidebar">
+    <div className={flag ? "sidebar" : "sidebar hidden"}>
       <div className="sidebar-box">
         <NavLink
           to="/myfit/fit"
           className={({ isActive }) => (isActive ? "active" : "")}
-          onClick={changeTitle}
         >
           My Fit
         </NavLink>
         <NavLink
           to="/myfit/routine"
           className={({ isActive }) => (isActive ? "active" : "")}
-          onClick={changeTitle}
         >
           나의 루틴
         </NavLink>
         <NavLink
-          to="/myfit/activity"
+          to={`/myfit/activity/${memberNo}`}
           className={({ isActive }) => (isActive ? "active" : "")}
-          onClick={changeTitle}
         >
           내 활동
         </NavLink>
