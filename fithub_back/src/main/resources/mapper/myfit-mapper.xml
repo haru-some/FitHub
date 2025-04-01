@@ -153,6 +153,10 @@
 		ORDER BY
 		d.record_day
 	</select>
+	
+	<select id="selectRecordDays" resultType="string">
+		select record_date from record where member_no=#{memberNo}
+	</select>
 
 
 </mapper>

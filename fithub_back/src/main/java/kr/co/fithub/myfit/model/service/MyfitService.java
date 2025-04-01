@@ -97,4 +97,9 @@ public class MyfitService {
 		return list;
 	}
 
+	public List selectRecordDays(int memberNo) {
+		List list = myfitDao.selectRecordDays(memberNo);
+		return list;
+	}
+
 }

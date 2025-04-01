@@ -6,11 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
+public class WebConfig implements WebMvcConfigurer{
 	@Value("${file.root}")
 	private String root;
 	
@@ -22,17 +20,11 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry
-		.addResourceHandler("/member/thumb/**")
-		.addResourceLocations("file:///"+root+"/member/thumb/");
+		.addResourceHandler("/member/profileImage/**")
+		.addResourceLocations("file:///"+root+"/member/profileImage/");
 		registry
 		.addResourceHandler("/editor/**")
 		.addResourceLocations("file:///"+root+"/editor/");
 	}
 	
-	@Override
-	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry
-			.addHandler(adminChat, "/allChat")
-			.setAllowedOrigins("*");
-	}
 }

@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 700px;
 }
 
 .myfit-profile-header {
@@ -92,17 +93,31 @@
 }
 
 .myfit-profile-summary ul {
-  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #363636;
+  width: 450px;
   text-align: left;
   list-style: none;
-  padding: 0;
+  padding: 20px;
+  height: 310px;
 }
 
 .myfit-profile-summary li {
+  height: 30px;
+  border-radius: 10px;
+  background-color: #444;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
   font-size: 14px;
+  padding: 14px;
+}
+.myfit-profile-summary li:last-child {
+  margin-bottom: 0px;
 }
 
 .myfit-profile-summary li span {
@@ -110,8 +125,14 @@
 }
 
 .myfit-profile-summary .summary-wrap {
-  padding-top: 50px;
-  height: 230px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 550px;
+  background-color: #292929;
+  padding-top: 20px;
+  height: 435px;
 }
 
 .myfit-profile-card g text {

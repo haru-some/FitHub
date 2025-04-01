@@ -1,5 +1,6 @@
 package kr.co.fithub.member.controller;
 
+import java.io.File;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,19 +43,16 @@ public class MemberController {
 		int result = memberService.joinMember(member);
 		return ResponseEntity.ok(result);
 	}
-	
 	@GetMapping(value="/exists")
 	public ResponseEntity<Integer> exists(@RequestParam String memberId){
 		int result = memberService.exists(memberId);
 		return ResponseEntity.ok(result);
 	}
-	
 	@GetMapping("/exists/email")
 	public ResponseEntity<Integer> existsEmail(@RequestParam String memberEmail) {
 	    int result = memberService.existsEmail(memberEmail);
 	    return ResponseEntity.ok(result);
 	}
-	
 	@PostMapping(value="/login")
 	public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO member){
 		MemberDTO memberInfo = memberService.login(member);
@@ -63,50 +62,81 @@ public class MemberController {
 			return ResponseEntity.status(404).build();
 		}
 	}
-	
 	@GetMapping(value="/{memberId}")
 	public ResponseEntity<MemberDTO> selectOneMember(@PathVariable String memberId, @RequestHeader("Authorization") String accessToken){
 		MemberDTO m = memberService.selectOneMember(memberId, accessToken);
 		return ResponseEntity.ok(m);
 	}
-	
 	@GetMapping(value="/refresh")
 	public ResponseEntity<MemberDTO> refresh(@RequestHeader("Authorization") String refreshToken){
 		MemberDTO loginMember = memberService.refresh(refreshToken);
 		return ResponseEntity.ok(loginMember);
 	}
-	
-	@PatchMapping(value="/{memberId}")
-	public ResponseEntity<Integer> updateMember(@PathVariable String memberId, 
-												@ModelAttribute MultipartFile thumbnail,
-												@ModelAttribute MemberDTO member){
-		if(thumbnail != null) {
-			String savepath = root + "/member/thumb/";
-			String filepath = fileUtils.upload(savepath, thumbnail);
-			member.setMemberThumb(filepath);
-		}
-		int result = memberService.updateMember(member);
-		return ResponseEntity.ok(result);
+	@PutMapping
+	public ResponseEntity<?> updateMember(
+	        @ModelAttribute MemberDTO member,
+	        @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail) {
+	    try {
+	        if (thumbnail != null && !thumbnail.isEmpty()) {
+	            String savepath = root + "/member/profileImage/";
+				String filepath = fileUtils.upload(savepath, thumbnail);
+				member.setMemberThumb(filepath);
+	        }
+	        int result = memberService.updateMember(member);
+	        if (result > 0) {
+	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                                 .body("회원 정보 수정 실패");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("서버 오류 발생");
+	    }
 	}
-	
 	@DeleteMapping(value="/{memberId}")
-	public ResponseEntity<Integer> deleteMember(@PathVariable String memberId){
-		int result = memberService.deleteMember(memberId);
-		return ResponseEntity.ok(result);
+	public ResponseEntity<String> deleteMember(@PathVariable String memberId) {
+	    int result = memberService.deleteMember(memberId);
+	    if (result > 0) {
+	        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+	    } else {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴에 실패했습니다.");
+	    }
 	}
-	
+	@DeleteMapping(value="/profileImage")
+	public ResponseEntity<?> deleteProfileImage(@RequestParam String memberId) {
+	    MemberDTO member = memberService.findByMemberId(memberId);
+	    if (member == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보 없음");
+	    }
+	    String fileName = member.getMemberThumb();
+	    member.setMemberThumb(null);
+	    memberService.updateMember(member);
+	    if (fileName != null && !fileName.isEmpty()) {
+	    	if (fileName.contains("..")) {
+	            return ResponseEntity.badRequest().body("잘못된 파일명입니다.");
+	        }
+	    	String savepath = root + "/member/profileImage/";
+	        File file = new File(savepath  + fileName);
+	        if (file.exists()) {
+	            file.delete();
+	        }else {
+	            System.out.println("파일이 존재하지 않음: " + file.getPath());
+	        }
+	    }
+	    return ResponseEntity.ok("프로필 이미지 삭제 완료");
+	}
 	@PostMapping(value="/pw-check")
 	public ResponseEntity<Integer> checkPw(@RequestBody MemberDTO member){
 		int result = memberService.checkPw(member);
 		return ResponseEntity.ok(result);
 	}
-	
 	@PatchMapping(value="/memberPw")
 	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
 	}
-	
 	@PostMapping(value="/find/id")
 	public ResponseEntity<String> findId(@RequestBody MemberDTO member) {
 		String name = member.getMemberName();
@@ -118,8 +148,7 @@ public class MemberController {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }
 	}
-	
-	@PostMapping("/find/pw")
+	@PostMapping(value="/find/pw")
 	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
 	    String memberId = member.getMemberId();
 	    String memberEmail = member.getMemberEmail();

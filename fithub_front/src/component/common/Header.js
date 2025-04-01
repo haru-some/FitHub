@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { isLoginState, loginIdState, memberState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { useState } from "react";
+import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
+import SmsIcon from "@mui/icons-material/Sms";
 
 const Header = () => {
   return (
@@ -52,17 +55,32 @@ const MainNavi = () => {
 const HeaderLink = () => {
   const [memberId, setMemberId] = useRecoilState(loginIdState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
-  const isLogin = useRecoilValue(isLoginState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  const [chatAlarm, setChatAlarm] = useState(1);
+  const navigate = useNavigate();
+
   const logOut = () => {
     setMemberId("");
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
-    window.localStorage.removeItem("refreshToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("recoil-persist");
+    navigate("/");
   };
+
   return (
     <ul className="member-menu">
       {isLogin ? (
         <>
+          <li>
+            <Link to="/chat">
+              {chatAlarm === 1 ? (
+                <SmsIcon />
+              ) : (
+                <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
+              )}
+            </Link>
+          </li>
           <li>
             <Link to="/member" className="member-name">
               {memberId}
@@ -80,9 +98,9 @@ const HeaderLink = () => {
             )}
           </li>
           <li>
-            <Link to="/" onClick={logOut}>
+            <button onClick={logOut} className="logout-btn">
               <LogoutIcon />
-            </Link>
+            </button>
           </li>
         </>
       ) : (
