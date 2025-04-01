@@ -2,6 +2,7 @@ import { useState } from "react";
 import MemberInfo from "./MemberInfo";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import "./member.css";
+import ChangePw from "./ChangePw";
 
 const MemberMain = () => {
   const [activeMenu, setActiveMenu] = useState("info");
@@ -17,11 +18,7 @@ const MemberMain = () => {
       case "info":
         return <MemberInfo />;
       case "password":
-        return (
-          <div className="mypage-content">
-            <h2>비밀번호 변경</h2>
-          </div>
-        );
+        return <ChangePw />;
       case "reviews":
         return (
           <div className="mypage-content">

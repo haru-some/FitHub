@@ -54,6 +54,7 @@ const MemberInfo = () => {
             ...res.data,
             memberAddr: addr,
             memberAddrDetail: detail,
+            memberProfile: res.data.memberProfile || "",
           });
         })
         .catch(() => {
@@ -96,6 +97,36 @@ const MemberInfo = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.svg)$/i;
+      if (!allowedExtensions.exec(file.name)) {
+        Swal.fire({
+          title: "파일 형식 오류",
+          text: "jpg, jpeg, png, gif, svg 형식의 이미지 파일만 등록할 수 있습니다.",
+          icon: "warning",
+          confirmButtonColor: "#2f3e2f",
+        });
+        e.target.value = "";
+        return;
+      }
+
+      if (member.memberThumb) {
+        axios
+          .delete(`${backServer}/member/profileimg`, {
+            params: { memberId: member.memberId },
+          })
+          .then(() => {
+            setMember((prev) => ({ ...prev, memberThumb: null }));
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "이미지 삭제 실패",
+              text: "기존 이미지 삭제 중 문제가 발생했습니다.",
+              icon: "error",
+              confirmButtonColor: "#2f3e2f",
+            });
+          });
+      }
+
       setThumbnailFile(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
@@ -108,12 +139,22 @@ const MemberInfo = () => {
   }, [previewUrl]);
 
   const handleImageDelete = () => {
+    if (!member.memberThumb) {
+      Swal.fire({
+        title: "프로필 이미지 없음",
+        text: "현재 프로필 이미지가 없습니다.",
+        icon: "info",
+        confirmButtonColor: "#2f3e2f",
+      });
+      return;
+    }
     axios
       .delete(`${backServer}/member/profileimg`, {
         params: { memberId: member.memberId },
       })
       .then(() => {
         setMember((prev) => ({ ...prev, memberThumb: null }));
+        setThumbnailFile(null);
         setPreviewUrl(null);
         Swal.fire({
           title: "삭제 완료",
@@ -133,19 +174,62 @@ const MemberInfo = () => {
   };
 
   const handleUpdate = () => {
+    const fullAddr =
+      member.memberAddr +
+      (member.memberAddrDetail ? `, ${member.memberAddrDetail}` : "");
+
+    if (!member.memberName.trim()) {
+      Swal.fire({
+        title: "이름 입력 오류",
+        text: "이름을 입력해주세요.",
+        icon: "warning",
+        confirmButtonColor: "#2f3e2f",
+      });
+      return;
+    }
+    if (!member.memberAddr.trim()) {
+      Swal.fire({
+        title: "주소 입력 오류",
+        text: "주소를 입력해주세요.",
+        icon: "warning",
+        confirmButtonColor: "#2f3e2f",
+      });
+      return;
+    }
+    if (member.memberProfile && member.memberProfile.length > 100) {
+      Swal.fire({
+        title: "자기소개 입력 오류",
+        text: "자기소개는 최대 100자까지 입력 가능합니다.",
+        icon: "warning",
+        confirmButtonColor: "#2f3e2f",
+      });
+      return;
+    }
+    const onlyNums = member.memberPhone.replace(/\D/g, "");
+    if (onlyNums.length < 10 || onlyNums.length > 11) {
+      Swal.fire({
+        title: "전화번호 입력 오류",
+        text: "전화번호는 10~11자리로 입력해주세요.",
+        icon: "warning",
+        confirmButtonColor: "#2f3e2f",
+      });
+      return;
+    }
+
     const formData = new FormData();
-    const fullAddr = `${member.memberAddr}, ${member.memberAddrDetail}`;
 
     formData.append("memberId", member.memberId);
     formData.append("memberName", member.memberName);
     formData.append("memberPhone", member.memberPhone);
-    formData.append("memberProfile", member.memberProfile);
+    formData.append("memberProfile", member.memberProfile || "");
     formData.append("memberAddr", fullAddr);
 
     if (thumbnailFile) {
       formData.append("thumbnail", thumbnailFile);
     }
-
+    if (!thumbnailFile && !member.memberThumb) {
+      formData.append("memberThumb", "null");
+    }
     axios
       .patch(`${backServer}/member`, formData, {
         headers: {
@@ -157,7 +241,7 @@ const MemberInfo = () => {
           ...loginMember,
           ...member,
           memberAddr: fullAddr,
-          memberThumb: res.data.memberThumb,
+          memberThumb: res.data.memberThumb ?? null,
           accessToken: loginMember.accessToken,
         });
         Swal.fire({
@@ -224,7 +308,7 @@ const MemberInfo = () => {
           src={
             previewUrl ||
             (member.memberThumb
-              ? `${backServer}/member/profileImage/${encodeURIComponent(
+              ? `${backServer}/member/profileimg/${encodeURIComponent(
                   member.memberThumb
                 )}`
               : "/image/profile.png")
@@ -234,7 +318,7 @@ const MemberInfo = () => {
         />
         <input
           type="file"
-          accept="image/*"
+          accept=".jpg,.jpeg,.png,.gif,.svg"
           style={{ display: "none" }}
           ref={fileInputRef}
           onChange={handleImageChange}
@@ -275,11 +359,16 @@ const MemberInfo = () => {
         </div>
         <div className="info-form-field">
           <TextField
-            label="휴대폰"
+            label="전화번호"
             name="memberPhone"
             value={member.memberPhone}
             onChange={handleInput}
             fullWidth
+            inputProps={{
+              maxLength: 13,
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
           />
         </div>
         <div className="info-form-field">

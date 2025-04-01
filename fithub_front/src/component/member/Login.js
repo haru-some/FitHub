@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
-import { loginIdState, memberState } from "../utils/RecoilData";
+import { memberState } from "../utils/RecoilData";
 import "./member.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
