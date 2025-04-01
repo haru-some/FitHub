@@ -1,313 +1,12 @@
 import { useEffect, useState } from "react";
-import "./shopLIst.css";
+import "./shopList.css";
 import ProductPage from "./ProductPage";
 import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import axios from "axios";
 
-const allGoods = [
-  {
-    id: 1,
-    name: "비타민 A",
-    price: "10,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 2,
-    name: "비타민 B",
-    price: "12,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 3,
-    name: "단백질 보충제A",
-    price: "17,000원",
-    category: "보충제",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 4,
-    name: "아미노산",
-    price: "25,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 5,
-    name: "비타민 C",
-    price: "8,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 6,
-    name: "비타민 D",
-    price: "20,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 7,
-    name: "크레아틴B",
-    price: "25,000원",
-    category: "보충제",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 8,
-    name: "크레아틴C",
-    price: "30,000원",
-    category: "보충제",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 9,
-    name: "수트A",
-    price: "20,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 10,
-    name: "수트B",
-    price: "22,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 11,
-    name: "수트C",
-    price: "30,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 12,
-    name: "수트D",
-    price: "27,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 13,
-    name: "수트E",
-    price: "21,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 14,
-    name: "수트F",
-    price: "23,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 15,
-    name: "레깅스A",
-    price: "17,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 16,
-    name: "레깅스B",
-    price: "9,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 17,
-    name: "레깅스C",
-    price: "10,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 18,
-    name: "레깅스D",
-    price: "14,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 19,
-    name: "레깅스E",
-    price: "26,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 20,
-    name: "레깅스F",
-    price: "25,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 21,
-    name: "레깅스G",
-    price: "24,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 22,
-    name: "레깅스H",
-    price: "22,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 23,
-    name: "레깅스I",
-    price: "29,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 24,
-    name: "레깅스J",
-    price: "30,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 25,
-    name: "레깅스K",
-    price: "16,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 26,
-    name: "레깅스L",
-    price: "17,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 27,
-    name: "레깅스M",
-    price: "18,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 28,
-    name: "레깅스N",
-    price: "19,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 29,
-    name: "레깅스O",
-    price: "25,500원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 30,
-    name: "레깅스P",
-    price: "20,900원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 31,
-    name: "레깅스Q",
-    price: "20,300원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 32,
-    name: "레깅스R",
-    price: "20,100원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 33,
-    name: "레깅스S",
-    price: "22,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 34,
-    name: "레깅스T",
-    price: "21,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 35,
-    name: "레깅스U",
-    price: "19,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 36,
-    name: "레깅스V",
-    price: "9,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 37,
-    name: "레깅스VV",
-    price: "11,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 38,
-    name: "레깅스W",
-    price: "17,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 39,
-    name: "레깅스X",
-    price: "16,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 40,
-    name: "레깅스XX",
-    price: "15,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 41,
-    name: "레깅스XXX",
-    price: "30,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 42,
-    name: "레깅스Y",
-    price: "10,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 43,
-    name: "레깅스Z",
-    price: "50,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-];
+const allGoods = [];
 
 const categories = [
   "모두",
@@ -350,12 +49,28 @@ const Advertisements = () => {
 };
 
 const GoodsList = () => {
+  const [allGoods, setAllGoods] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("모두");
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
   const GoodsPerPage = 8;
   const [clickedButton, setClickedButton] = useState(null);
+  const [reqPage, setReqPage] = useState(1);
+
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods?reqPage=${reqPage}`)
+      .then((res) => {
+        console.log(res);
+        setAllGoods(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [reqPage]);
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
@@ -473,15 +188,15 @@ const GoodsList = () => {
         {currentGoods.map((goods) => (
           <div
             className="goods-card"
-            key={goods.id}
+            key={goods.goodsName}
             onClick={() => {
-              navigate(`/shop/detail/`);
+              navigate(`/shop/detail/${goods.goodsName}`);
             }}
           >
-            <img src={goods.image} alt={goods.name} />
+            <img src={goods.goodsUrl} alt={goods.goodsName} />
             <div className="goods-details">
-              <h3>{goods.name}</h3>
-              <p>{goods.price}</p>
+              <h3>{goods.goodsName}</h3>
+              <p>{goods.goodsPrice}</p>
             </div>
           </div>
         ))}
