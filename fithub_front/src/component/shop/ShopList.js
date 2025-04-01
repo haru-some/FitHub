@@ -1,322 +1,29 @@
 import { useEffect, useState } from "react";
-import "./shopLIst.css";
+import "./shopList.css";
 import ProductPage from "./ProductPage";
 import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import axios from "axios";
 
-const allGoods = [
-  {
-    id: 1,
-    name: "비타민 A",
-    price: "10,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 2,
-    name: "비타민 B",
-    price: "12,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 3,
-    name: "단백질 보충제A",
-    price: "17,000원",
-    category: "보충제",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 4,
-    name: "아미노산",
-    price: "25,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 5,
-    name: "비타민 C",
-    price: "8,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 6,
-    name: "비타민 D",
-    price: "20,000원",
-    category: "비타민",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 7,
-    name: "크레아틴B",
-    price: "25,000원",
-    category: "보충제",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 8,
-    name: "크레아틴C",
-    price: "30,000원",
-    category: "보충제",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 9,
-    name: "수트A",
-    price: "20,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 10,
-    name: "수트B",
-    price: "22,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 11,
-    name: "수트C",
-    price: "30,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 12,
-    name: "수트D",
-    price: "27,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 13,
-    name: "수트E",
-    price: "21,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 14,
-    name: "수트F",
-    price: "23,000원",
-    category: "스포츠웨어(남)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 15,
-    name: "레깅스A",
-    price: "17,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 16,
-    name: "레깅스B",
-    price: "9,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 17,
-    name: "레깅스C",
-    price: "10,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 18,
-    name: "레깅스D",
-    price: "14,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 19,
-    name: "레깅스E",
-    price: "26,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 20,
-    name: "레깅스F",
-    price: "25,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 21,
-    name: "레깅스G",
-    price: "24,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 22,
-    name: "레깅스H",
-    price: "22,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 23,
-    name: "레깅스I",
-    price: "29,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 24,
-    name: "레깅스J",
-    price: "30,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 25,
-    name: "레깅스K",
-    price: "16,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 26,
-    name: "레깅스L",
-    price: "17,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 27,
-    name: "레깅스M",
-    price: "18,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 28,
-    name: "레깅스N",
-    price: "19,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 29,
-    name: "레깅스O",
-    price: "25,500원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 30,
-    name: "레깅스P",
-    price: "20,900원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 31,
-    name: "레깅스Q",
-    price: "20,300원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 32,
-    name: "레깅스R",
-    price: "20,100원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 33,
-    name: "레깅스S",
-    price: "22,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 34,
-    name: "레깅스T",
-    price: "21,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 35,
-    name: "레깅스U",
-    price: "19,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 36,
-    name: "레깅스V",
-    price: "9,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 37,
-    name: "레깅스VV",
-    price: "11,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 38,
-    name: "레깅스W",
-    price: "17,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 39,
-    name: "레깅스X",
-    price: "16,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 40,
-    name: "레깅스XX",
-    price: "15,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 41,
-    name: "레깅스XXX",
-    price: "30,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 42,
-    name: "레깅스Y",
-    price: "10,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-  {
-    id: 43,
-    name: "레깅스Z",
-    price: "50,000원",
-    category: "스포츠웨어(여)",
-    image: "/image/default_img.png",
-  },
-];
+const allGoods = [];
 
 const categories = [
   "모두",
   "보충제",
   "비타민",
-  "스포츠웨어(남)",
-  "스포츠웨어(여)",
+  "스포츠웨어남",
+  "스포츠웨어여",
   "운동기구",
 ];
+
+const cate = {
+  보충제: 1,
+  비타민: 2,
+  스포츠웨어남: 3,
+  스포츠웨어여: 4,
+  운동기구: 5,
+};
 
 const Advertisements = () => {
   const [currentAd, setCurrentAd] = useState(0);
@@ -350,40 +57,57 @@ const Advertisements = () => {
 };
 
 const GoodsList = () => {
+  const [allGoods, setAllGoods] = useState([]);
+  const [fetchedGoods, setFetchedGoods] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("모두");
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
   const GoodsPerPage = 8;
   const [clickedButton, setClickedButton] = useState(null);
+  const [reqPage, setReqPage] = useState(1);
+
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods?reqPage=${reqPage}`)
+      .then((res) => {
+        console.log(res.data); //데이터 구조 확인
+        setFetchedGoods(res.data.list ? res.data.list : []);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [reqPage]);
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
   };
 
+  //카테고리
   const handleCategoryChange = (category) => {
     setSelectedCategory(category); // 카테고리 변경 시 상태 업데이트
     setCurrentPage(1); // 카테고리 변경 시 첫 페이지로 돌아가기
     setClickedButton(category); // 선택된 버튼명을 상태로 저장
   };
 
-  const filteredgoods = allGoods.filter((goods) =>
-    selectedCategory === "모두" ? true : goods.category === selectedCategory
+  const filteredGoods = fetchedGoods.filter((goods) =>
+    selectedCategory === "모두"
+      ? true
+      : goods.goodsCategory === cate[selectedCategory]
   );
 
-  const sortedGoods = filteredgoods.sort((a, b) => {
+  const sortedGoods = filteredGoods.sort((a, b) => {
+    const aPrice = a.goodsPrice; // 가격은 숫자 타입
+    const bPrice = b.goodsPrice;
+
     if (sort === "가격높은순") {
-      return (
-        parseInt(b.price.replace(/,/g, ""), 10) -
-        parseInt(a.price.replace(/,/g, ""), 10)
-      );
+      return bPrice - aPrice;
     } else if (sort === "가격낮은순") {
-      return (
-        parseInt(a.price.replace(/,/g, ""), 10) -
-        parseInt(b.price.replace(/,/g, ""), 10)
-      );
+      return aPrice - bPrice;
     }
-    return 0; // 최신순에 대한 정렬은 기본적으로 원래 순서 유지
+    return 0; // 기본 정렬
   });
 
   // 페이지네이션 적용
@@ -449,6 +173,7 @@ const GoodsList = () => {
 
   return (
     <div>
+      {/* 카테고리 버튼 구현 */}
       <div>
         {categories.map((category) => (
           <button
@@ -456,36 +181,44 @@ const GoodsList = () => {
             onClick={() => handleCategoryChange(category)}
             style={{
               backgroundColor:
-                clickedButton === category ? "#245329" : "#589c5f", // 클릭되었을 때의 색상
+                clickedButton === category ? "#245329" : "#589c5f",
             }}
           >
-            {category}
+            {category.includes("스포츠웨어")
+              ? category.replace("남", "(남)").replace("여", "(여)")
+              : category}
           </button>
         ))}
       </div>
-      <select value={sort} onChange={handleSortChange}>
+      <select value={sort} onChange={(e) => setSort(e.target.value)}>
         <option value="최신순">최신순</option>
         <option value="가격높은순">가격높은순</option>
         <option value="가격낮은순">가격낮은순</option>
       </select>
 
       <div className="goods-container">
-        {currentGoods.map((goods) => (
-          <div
-            className="goods-card"
-            key={goods.id}
-            onClick={() => {
-              navigate(`/shop/detail/`);
-            }}
-          >
-            <img src={goods.image} alt={goods.name} />
-            <div className="goods-details">
-              <h3>{goods.name}</h3>
-              <p>{goods.price}</p>
+        {sortedGoods.length === 0 ? (
+          <p>상품이 없습니다.</p>
+        ) : (
+          sortedGoods.map((goods) => (
+            <div
+              className="goods-card"
+              key={goods.goodsNo} // goodsNo를 키로 사용
+              onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
+            >
+              <img
+                src={goods.goodsUrl || "defaultImage.jpg"}
+                alt={goods.goodsName}
+              />
+              <div className="goods-details">
+                <h3>{goods.goodsName}</h3>
+                <p>{goods.goodsPrice.toLocaleString()} 원</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
+
       {/* 페이지네이션 */}
       <div className="pagination">{renderPagination()}</div>
     </div>
@@ -508,7 +241,7 @@ const ShopList = () => {
         {selectedCategory}
       </h2>
       <Advertisements />
-      <GoodsList goods={allGoods} setSelectedCategory={setSelectedCategory} />
+      <GoodsList fetchedGoods setSelectedCategory={setSelectedCategory} />
     </div>
   );
 };
