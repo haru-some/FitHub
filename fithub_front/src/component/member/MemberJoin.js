@@ -16,9 +16,8 @@ import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import SecurityIcon from "@mui/icons-material/Security";
 
 const MemberJoin = () => {
-  const navigate = useNavigate();
   const backServer = process.env.REACT_APP_BACK_SERVER;
-
+  const navigate = useNavigate();
   const [member, setMember] = useState({
     memberId: "",
     memberPw: "",
@@ -33,29 +32,32 @@ const MemberJoin = () => {
   const [memberPwRe, setMemberPwRe] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordRe, setShowPasswordRe] = useState(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleShowPasswordRe = () => {
+    setShowPasswordRe(!showPasswordRe);
+  };
   const [selectedDomain, setSelectedDomain] = useState("gmail.com");
   const [showAuthInput, setShowAuthInput] = useState(false);
   const [authTimer, setAuthTimer] = useState(180);
 
-  const toggleShowPassword = () => setShowPassword(!showPassword);
-  const toggleShowPasswordRe = () => setShowPasswordRe(!showPasswordRe);
-
   const inputMemberData = (e) => {
-    const { name, value } = e.target;
-
+    const name = e.target.name;
+    const value = e.target.value;
     let newValue = value;
-
+    if (name === "memberPw") {
+      evaluatePasswordStrength(value);
+    }
     if (name === "memberPhone") {
       newValue = formatPhoneNumber(value);
       checkPhone(newValue);
     }
-    if (name === "memberPw") {
-      evaluatePasswordStrength(value);
-    }
-
     setMember({ ...member, [name]: newValue });
   };
-  const inputMemberPwRe = (e) => setMemberPwRe(e.target.value);
+  const inputMemberPwRe = (e) => {
+    setMemberPwRe(e.target.value);
+  };
 
   const [idCheckValid, setIdCheckValid] = useState(null);
   const [idCheckMsg, setIdCheckMsg] = useState("");
@@ -103,12 +105,10 @@ const MemberJoin = () => {
 
   const evaluatePasswordStrength = (pw) => {
     let score = 0;
-
     if (pw.length >= 8) score++;
     if (/[A-Z]/.test(pw)) score++;
     if (/[0-9]/.test(pw)) score++;
     if (/[^A-Za-z0-9]/.test(pw)) score++;
-
     if (score >= 4) {
       setPwStrength("strong");
       setPwStrengthMsg("보안 수준: 강함");

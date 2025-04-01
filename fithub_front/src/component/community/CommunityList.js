@@ -10,10 +10,9 @@ import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { loginIdState, memberState } from "../utils/RecoilData";
+import { memberState } from "../utils/RecoilData";
 
 const CommunityList = () => {
-  const [memberId, setMemberId] = useRecoilState(loginIdState);
   const [member, setMember] = useRecoilState(memberState);
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
