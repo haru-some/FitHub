@@ -77,11 +77,14 @@ public class MemberController {
 	        @ModelAttribute MemberDTO member,
 	        @RequestParam(required = false) MultipartFile thumbnail) {
 	    try {
+	    	if ("null".equals(member.getMemberThumb())) {
+	    	    member.setMemberThumb(null);
+	    	}
 	        if (thumbnail != null && !thumbnail.isEmpty()) {
-	            String savepath = root + "/member/profileImage/";
+	            String savepath = root + "/member/profileimg/";
 				String filepath = fileUtils.upload(savepath, thumbnail);
 				member.setMemberThumb(filepath);
-	        }
+	        } 
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
@@ -95,6 +98,29 @@ public class MemberController {
 	                             .body("서버 오류 발생");
 	    }
 	}
+	@DeleteMapping(value="/profileimg")
+	public ResponseEntity<String> deleteProfileImage(@RequestParam String memberId) {
+		MemberDTO member = memberService.findByMemberId(memberId);
+		if (member == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보 없음");
+		}
+		String fileName = member.getMemberThumb();
+		member.setMemberThumb(null);
+		memberService.updateMember(member);
+		if (fileName != null && !fileName.isEmpty()) {
+			if (fileName.contains("..")) {
+				return ResponseEntity.badRequest().body("잘못된 파일명입니다.");
+			}
+			String savepath = root + "/member/profileimg/";
+			File file = new File(savepath  + fileName);
+			if (file.exists()) {
+				file.delete();
+			}else {
+				System.out.println("파일이 존재하지 않음: " + file.getPath());
+			}
+		}
+		return ResponseEntity.ok("프로필 이미지 삭제 완료");
+	}
 	@DeleteMapping(value="/{memberId}")
 	public ResponseEntity<String> deleteMember(@PathVariable String memberId) {
 	    int result = memberService.deleteMember(memberId);
@@ -103,29 +129,6 @@ public class MemberController {
 	    } else {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴에 실패했습니다.");
 	    }
-	}
-	@DeleteMapping(value="/profileimg")
-	public ResponseEntity<String> deleteProfileImage(@RequestParam String memberId) {
-	    MemberDTO member = memberService.findByMemberId(memberId);
-	    if (member == null) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보 없음");
-	    }
-	    String fileName = member.getMemberThumb();
-	    member.setMemberThumb(null);
-	    memberService.updateMember(member);
-	    if (fileName != null && !fileName.isEmpty()) {
-	    	if (fileName.contains("..")) {
-	            return ResponseEntity.badRequest().body("잘못된 파일명입니다.");
-	        }
-	    	String savepath = root + "/member/profileimg/";
-	        File file = new File(savepath  + fileName);
-	        if (file.exists()) {
-	            file.delete();
-	        }else {
-	            System.out.println("파일이 존재하지 않음: " + file.getPath());
-	        }
-	    }
-	    return ResponseEntity.ok("프로필 이미지 삭제 완료");
 	}
 	@PostMapping(value="/pw-check")
 	public ResponseEntity<Integer> checkPw(@RequestBody MemberDTO member){
