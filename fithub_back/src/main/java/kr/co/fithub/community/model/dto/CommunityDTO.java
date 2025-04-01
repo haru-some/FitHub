@@ -1,5 +1,7 @@
 package kr.co.fithub.community.model.dto;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
@@ -22,4 +24,5 @@ public class CommunityDTO {
 	private String memberId;
 	private int commentCount;
 	private int isFollow;
+	private List<CommentDTO> commentList;
 }

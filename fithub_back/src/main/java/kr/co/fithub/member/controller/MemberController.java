@@ -130,7 +130,7 @@ public class MemberController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴에 실패했습니다.");
 	    }
 	}
-	@PostMapping(value="/pw-check")
+	@PostMapping(value="/check-pw")
 	public ResponseEntity<Integer> checkPw(@RequestBody MemberDTO member){
 		int result = memberService.checkPw(member);
 		return ResponseEntity.ok(result);

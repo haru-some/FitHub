@@ -19,6 +19,7 @@ import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
 import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
+import ChangePw from "./component/member/ChangePw";
 
 function App() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -56,7 +57,7 @@ function App() {
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
           <Route path="/find" element={<FindInfo />} />
-          <Route path="/member" element={<MemberMain />} />
+          <Route path="/mypage" element={<MemberMain />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />

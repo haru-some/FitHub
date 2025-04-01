@@ -16,19 +16,20 @@ public interface CommunityDao {
 
 	CommunityDTO selectOneCommunity(HashMap<String, Integer> map);
 
-
 	int deleteLike(HashMap<String, Integer> map);
 
 	int selectLikeCount(int communityNo);
 
 	int insertLike(HashMap<String, Integer> map);
 
-	CommentDTO selectCommentList(int communityNo);
-
 	int insertCommunity(CommunityDTO community);
 
 	int deleteFollow(HashMap<String, Integer> map);
 
 	int insertFollow(HashMap<String, Integer> map);
+
+	List<CommentDTO> selectCommentList(int communityNo);
+
+	int insertComment(CommentDTO comment);
 	
 }

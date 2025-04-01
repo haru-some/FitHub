@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.fithub.community.model.dto.CommentDTO;
 import kr.co.fithub.community.model.dto.CommunityDTO;
 import kr.co.fithub.community.model.service.CommunityService;
 import kr.co.fithub.util.FileUtils;
@@ -83,4 +85,13 @@ public class CommunityController {
 		return ResponseEntity.ok(result);
 		
 	}
+	
+	@PostMapping(value="/comment/{communityNo}")
+	public ResponseEntity<Integer> insertComment(@PathVariable int communityNo, @RequestBody CommentDTO comment){
+		comment.setCommunityNo(communityNo);
+		int result = communityService.insertComment(comment);
+		return ResponseEntity.ok(result);
+	}
+	
+	
 }

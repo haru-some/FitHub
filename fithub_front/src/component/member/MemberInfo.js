@@ -54,6 +54,7 @@ const MemberInfo = () => {
             ...res.data,
             memberAddr: addr,
             memberAddrDetail: detail,
+            memberProfile: res.data.memberProfile || "",
           });
         })
         .catch(() => {
@@ -220,7 +221,7 @@ const MemberInfo = () => {
     formData.append("memberId", member.memberId);
     formData.append("memberName", member.memberName);
     formData.append("memberPhone", member.memberPhone);
-    formData.append("memberProfile", member.memberProfile);
+    formData.append("memberProfile", member.memberProfile || "");
     formData.append("memberAddr", fullAddr);
 
     if (thumbnailFile) {
