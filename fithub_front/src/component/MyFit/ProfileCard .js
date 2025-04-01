@@ -174,6 +174,7 @@ const MyLineChart = (props) => {
     <div style={{ height: 400, width: 700 }}>
       <ResponsiveLine
         data={data}
+        colors={["rgb(113, 221, 158)"]}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         xScale={{ type: "point" }}
         yScale={{
@@ -238,6 +239,19 @@ const MyLineChart = (props) => {
             ],
           },
         ]}
+        tooltip={({ point }) => (
+          <div
+            style={{
+              background: "white",
+              padding: "6px 9px",
+              border: "1px solid #ccc",
+              color: "black",
+            }}
+          >
+            <strong>{point.data.x}</strong>일<br />
+            운동시간: {point.data.y}분
+          </div>
+        )}
       />
     </div>
   );

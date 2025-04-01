@@ -33,4 +33,6 @@ public interface MyfitDao {
 
 	List<Graph> graph(int memberNo);
 
+	List selectRecordDays(int memberNo);
+
 }

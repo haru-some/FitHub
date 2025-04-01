@@ -5,10 +5,12 @@ import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import axios from "axios";
 import "./member.css";
+import { useNavigate } from "react-router-dom";
 
 const MemberInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [loginMember, setLoginMember] = useRecoilState(memberState);
+  const navigate = useNavigate();
   const [member, setMember] = useState({
     memberId: "",
     memberName: "",
@@ -105,8 +107,8 @@ const MemberInfo = () => {
 
   const handleImageDelete = () => {
     axios
-      .delete(`${backServer}/member/image`, {
-        data: { memberId: member.memberId },
+      .delete(`${backServer}/member/profileImage`, {
+        params: { memberId: member.memberId },
       })
       .then(() => {
         setMember((prev) => ({ ...prev, memberThumb: null }));
@@ -149,11 +151,12 @@ const MemberInfo = () => {
           processData: false,
         },
       })
-      .then(() => {
+      .then((res) => {
         setLoginMember({
           ...loginMember,
           ...member,
           memberAddr: fullAddr,
+          memberThumb: res.data.memberThumb,
           accessToken: loginMember.accessToken,
         });
         Swal.fire({
@@ -183,12 +186,31 @@ const MemberInfo = () => {
       confirmButtonColor: "#2f3e2f",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "탈퇴 완료",
-          text: "회원 탈퇴가 완료되었습니다.",
-          icon: "success",
-          confirmButtonColor: "#2f3e2f",
-        });
+        axios
+          .delete(`${backServer}/member/${member.memberId}`)
+          .then(() => {
+            Swal.fire({
+              title: "탈퇴 완료",
+              text: "회원 탈퇴가 완료되었습니다.",
+              icon: "success",
+              confirmButtonColor: "#2f3e2f",
+              confirmButtonText: "확인",
+            }).then(() => {
+              setLoginMember(null);
+              localStorage.removeItem("recoil-persist");
+              setTimeout(() => {
+                navigate("/");
+              }, 100);
+            });
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "탈퇴 실패",
+              text: "회원 탈퇴 중 오류가 발생했습니다.",
+              icon: "error",
+              confirmButtonColor: "#2f3e2f",
+            });
+          });
       }
     });
   };
@@ -201,7 +223,9 @@ const MemberInfo = () => {
           src={
             previewUrl ||
             (member.memberThumb
-              ? `${backServer}/member/profileImage/${member.memberThumb}`
+              ? `${backServer}/member/profileImage/${encodeURIComponent(
+                  member.memberThumb
+                )}`
               : "/image/profile.png")
           }
           alt="프로필"
