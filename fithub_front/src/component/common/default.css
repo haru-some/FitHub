@@ -88,6 +88,9 @@
 a {
   text-decoration: none;
 }
+html {
+  scrollbar-gutter: stable;
+}
 body {
   min-height: 100vh;
   display: flex;
@@ -302,7 +305,6 @@ html {
 ::-webkit-scrollbar {
   width: 7px;
 }
-
 ::-webkit-scrollbar-thumb {
   background-color: #545454;
   border-radius: 30px;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.fithub.shop.model.dao.ShopDao">
+  
+  	<select id="selectGoodsList" resultType="goods">  			
+ 			select goods_no, goods_name, goods_price, goods_category, goods_url  from  goods  order by goods_no desc
+ 	</select>
+  
+</mapper>

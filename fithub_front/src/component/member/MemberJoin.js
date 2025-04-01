@@ -150,53 +150,28 @@ const MemberJoin = () => {
     setEmailSending(true);
 
     axios
-      .get(`${backServer}/member/exists/email?memberEmail=${email}`)
-      .then((res) => {
-        if (res.data > 0) {
-          Swal.fire({
-            title: "이미 가입된 이메일",
-            text: "다른 이메일을 입력해주세요.",
-            icon: "warning",
-            confirmButtonColor: "#2f3e2f",
-            confirmButtonText: "확인",
-          });
-          setEmailSending(false);
-        } else {
-          axios
-            .get(`${backServer}/email/send?to=${email}`)
-            .then(() => {
-              setShowAuthInput(true);
-              setAuthTimer(180);
-              Swal.fire({
-                title: "인증번호 전송 완료",
-                text: "입력한 이메일을 확인하세요.",
-                icon: "success",
-                confirmButtonColor: "#2f3e2f",
-                confirmButtonText: "확인",
-              });
-            })
-            .catch(() => {
-              Swal.fire({
-                title: "전송 실패",
-                text: "인증번호를 보낼 수 없습니다.",
-                icon: "error",
-                confirmButtonColor: "#2f3e2f",
-                confirmButtonText: "확인",
-              });
-            })
-            .finally(() => {
-              setEmailSending(false);
-            });
-        }
+      .get(`${backServer}/email/send?to=${email}`)
+      .then(() => {
+        setShowAuthInput(true);
+        setAuthTimer(180);
+        Swal.fire({
+          title: "인증번호 전송 완료",
+          text: "입력한 이메일을 확인하세요.",
+          icon: "success",
+          confirmButtonColor: "#2f3e2f",
+          confirmButtonText: "확인",
+        });
       })
       .catch(() => {
         Swal.fire({
-          title: "중복 확인 실패",
-          text: "이메일 중복 여부를 확인할 수 없습니다.",
+          title: "전송 실패",
+          text: "인증번호를 보낼 수 없습니다.",
           icon: "error",
           confirmButtonColor: "#2f3e2f",
           confirmButtonText: "확인",
         });
+      })
+      .finally(() => {
         setEmailSending(false);
       });
   };
@@ -649,6 +624,11 @@ const MemberJoin = () => {
               label="전화번호"
               value={member.memberPhone}
               onChange={inputMemberData}
+              inputProps={{
+                maxLength: 13,
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              }}
             />
           </Box>
           <p

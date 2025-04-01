@@ -79,7 +79,7 @@ const HeaderLink = () => {
             </Link>
           </li>
           <li>
-            <Link to="/member" className="member-name">
+            <Link to="/mypage" className="member-name">
               {memberInfo?.memberId}
             </Link>
           </li>
