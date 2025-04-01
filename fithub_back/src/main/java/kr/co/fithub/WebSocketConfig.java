@@ -12,15 +12,21 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	
 	@Override
+	
+	
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic"); // 메시지를 구독하는 경로
-        config.setApplicationDestinationPrefixes("/app"); // 클라이언트가 메시지를 보낼 때 사용
+        // 클라이언트에서 "/topic"으로 구독하면 메시지를 받을 수 있음
+        config.enableSimpleBroker("/topic"); 
+        
+        // 메시지를 보낼 때 "/app" 경로 사용
+        config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws") // WebSocket 연결 주소
-                .setAllowedOrigins("*") // 모든 도메인에서 접속 가능하도록 설정 (CORS 문제 해결)
-                .withSockJS(); // SockJS 사용 (WebSocket 미지원 브라우저 호환)
+        // WebSocket 연결 주소 설정
+        registry.addEndpoint("/chat")
+        .setAllowedOriginPatterns("*")
+        .withSockJS();
     }
 }

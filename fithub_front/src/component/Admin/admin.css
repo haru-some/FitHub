@@ -210,8 +210,7 @@ td {
   width: 100%;
   height: 100%;
 }
-.member-chat-main {
-}
+
 .member-chat-main .member-chat-id {
   text-align: start;
   margin-bottom: 10px;
@@ -252,8 +251,7 @@ td {
   width: 100%;
   height: 100%;
 }
-.admin-chat-main {
-}
+
 .admin-chat-main .admin-chat-id {
   text-align: end;
   margin-bottom: 10px;
