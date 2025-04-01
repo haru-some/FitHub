@@ -6,9 +6,10 @@ import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import axios from "axios";
 
-const ProfileCard = () => {
+const ProfileCard = (props) => {
   const params = useParams();
   const memberNo = params.memberNo;
+  const [loginMember, setLoginMember] = useRecoilState(memberState);
   const [act, setAct] = useState(1);
   const [actMember, setActMember] = useState(null);
 
