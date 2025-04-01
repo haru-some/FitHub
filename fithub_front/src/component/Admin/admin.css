@@ -106,7 +106,7 @@ td {
 }
 
 /*---------- AdminChat / 관리자 문의 게시판 ----------*/
-.admin-section .chat-section {
+.admin-section .admin-chat-section {
   border-radius: 30px;
   padding: 20px;
 }
@@ -120,91 +120,166 @@ td {
   display: flex;
   justify-content: space-between;
 }
-.admin-section .chat-member-list {
+.admin-section .chat-list-box {
   width: 32%;
 }
-.admin-section .admin-chat-list {
+
+.chat-box-view {
+  width: 67%;
+}
+/*admin chat list*/
+.admin-section .chat-list {
   margin: 0 auto;
   background-color: var(--main1);
   height: 600px;
   overflow-y: overlay;
   border-radius: 20px;
 }
-
-::-webkit-scrollbar {
-  width: 7px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #545454;
-  border-radius: 30px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--gray1);
-}
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.chat-box-view {
-  width: 67%;
-}
-.admin-section .admin-chat-room {
+.admin-section .chat-room {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid var(--gray2);
   padding: 10px;
+  gap: 10px;
 }
-
-.admin-section .admin-chat-room .chat-member-profile {
+.chat-list .member-chat-profile {
   width: 60px;
   height: 60px;
   overflow: hidden;
   border-radius: 10px;
   background-color: white;
 }
-
-.admin-section .chat-member-profile > img {
+.chat-list .member-chat-profile > img {
   width: 100%;
   height: 100%;
 }
-
-.chat-member-main {
-  width: 80%;
+.chat-room-main {
+  flex-grow: 1;
 }
-.chat-member-main .chat-member-type {
-  border-radius: 30px;
-  width: 100px;
-  padding: 5px;
-  background-color: var(--main3);
+.chat-room-main .member-chat-id {
+  text-align: start;
   margin-bottom: 10px;
-}
-.chat-member-type > div {
-  text-align: center;
-}
-.admin-section .chat-member-main .chat-member-content {
-  color: var(--main1);
-  font-size: 20px;
+  font-weight: 900;
 }
 
-.chat-member-alarm {
-  width: 60px;
-  height: 60px;
+.chat-room-main .member-chat-content {
+  color: var(--main1);
   overflow: hidden;
-  background-color: transparent;
+  white-space: nowrap;
+  width: 150px;
+}
+.member-chat-alarm {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 30px;
+  height: 30px;
 }
-.chat-member-alarm > svg {
-  width: 50%;
-  height: 50%;
+.member-chat-alarm > svg {
+  width: 100%;
+  height: 100%;
 }
-.chat-member-alarm > svg > path {
+.member-chat-alarm > svg > path {
+  color: red;
+}
+.member-chat-alarm > span {
+  text-indent: -21px;
+}
+/*chat*/
+.chat-box {
+  background-color: var(--main1);
+  border-radius: 20px;
+  height: 540px;
+}
+/*member chat*/
+.chat-box .member-chat-line {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.member-chat-line .member-chat-profile {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: white;
+}
+.member-chat-profile > img {
+  width: 100%;
+  height: 100%;
+}
+.member-chat-main {
+}
+.member-chat-main .member-chat-id {
+  text-align: start;
+  margin-bottom: 10px;
+  color: var(--main3);
+  font-weight: 900;
+  display: flex;
+  gap: 10px;
+}
+.member-chat-id > div {
   color: var(--main3);
 }
+.member-chat-content {
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+}
+.member-chat-content .member-chat-text {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--gray2);
+}
+/*admin chat*/
+.chat-box .admin-chat-line {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.admin-chat-line .admin-chat-profile {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: white;
+}
+.admin-chat-profile > img {
+  width: 100%;
+  height: 100%;
+}
+.admin-chat-main {
+}
+.admin-chat-main .admin-chat-id {
+  text-align: end;
+  margin-bottom: 10px;
+  color: var(--main3);
+  font-weight: 900;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.admin-chat-id > div {
+  color: var(--main3);
+}
+.admin-chat-content {
+  width: 400px;
+  display: flex;
+  justify-content: flex-end;
+}
+.admin-chat-content .admin-chat-text {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--gray2);
+  text-align: end;
+}
 
-.admin-stat-button {
+/*input box*/
+.chat-input-box {
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -212,16 +287,23 @@ td {
   background-color: var(--gray2);
   padding: 10px;
 }
-.admin-stat-button > button {
-  width: 200px;
+.chat-input-box > input {
+  border-radius: 10px;
+  width: 90%;
+  padding: 5px;
+  text-indent: 5px;
+  color: black !important;
+}
+.chat-input-box > button {
+  width: 100px;
   padding: 5px 10px;
-  border-radius: 30px;
+  border-radius: 10px;
   color: #fff;
   background-color: var(--main1);
   font-weight: 900;
   font-size: 20px;
 }
-.admin-stat-button > button:hover {
+.chat-input-box > button:hover {
   cursor: pointer;
   color: var(--main3);
 }
