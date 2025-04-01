@@ -40,6 +40,7 @@
 }
 
 .myfit-wrap .sidebar a {
+  transition-duration: 0.24s;
   height: 24px;
   font-size: 18px;
   background: #888;

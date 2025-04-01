@@ -82,7 +82,7 @@ const MyFitMain = () => {
     <div className="myfit-wrap">
       <h1>{pageTitle}</h1>
       <div className="myfit-content">
-        <Sidebar setPageTitle={setPageTitle} />
+        <Sidebar setPageTitle={setPageTitle} memberNo={memberNo} />
         <div className="myfit-content-box">
           <Routes>
             <Route
@@ -126,7 +126,7 @@ const MyFitMain = () => {
                 />
               }
             />
-            <Route path="activity/*" element={<ProfileCard />} />
+            <Route path="activity/:memberNo" element={<ProfileCard />} />
           </Routes>
         </div>
       </div>
@@ -135,6 +135,7 @@ const MyFitMain = () => {
 };
 
 const Sidebar = (props) => {
+  const memberNo = props.memberNo;
   const setPageTitle = props.setPageTitle;
   const changeTitle = (e) => {
     setPageTitle(e.target.innerText);
@@ -157,7 +158,7 @@ const Sidebar = (props) => {
           나의 루틴
         </NavLink>
         <NavLink
-          to="/myfit/activity"
+          to={`/myfit/activity/${memberNo}`}
           className={({ isActive }) => (isActive ? "active" : "")}
           onClick={changeTitle}
         >

@@ -1,115 +1,139 @@
 import React, { useEffect, useState } from "react";
 import "./profileCard.css";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useParams } from "react-router-dom";
 import { ResponsiveLine } from "@nivo/line";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import axios from "axios";
 
 const ProfileCard = () => {
+  const params = useParams();
+  const memberNo = params.memberNo;
   const [act, setAct] = useState(1);
-  const [member, setMember] = useRecoilState(memberState);
   const [actMember, setActMember] = useState(null);
+
+  const [showSummary, setShowSummary] = useState(false);
+
   useEffect(() => {
     axios
-      .get(
-        `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${member.memberNo}`
-      )
+      .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${memberNo}`)
       .then((res) => {
-        console.log(res);
-
         setActMember(res.data);
       })
       .catch((err) => {});
   }, []);
 
+  useEffect(() => {
+    if (act === 1) {
+      // 한 프레임 뒤에 test 클래스 붙이기
+      requestAnimationFrame(() => setShowSummary(true));
+    } else {
+      setShowSummary(false);
+    }
+  }, [act]);
   return (
     <div className="myfit-profile-card">
-      <div className="myfit-profile-header">
-        <div className="myfit-profile-icon">
-          <img
-            src={
-              member.memberProfile
-                ? `${process.env.REACT_APP_BACK_SERVER}/profile/${member.memberProfile}`
-                : "/image/default_img.png"
-            }
-          />
-        </div>
-        <div className="myfit-profile-info">
-          <div className="name-wrap">
-            <h2>{member.memberName}</h2>
-          </div>
-          {actMember && (
-            <div className="myfit-profile-stats">
-              <div>
-                <p>{actMember.communityCount}</p>
-                <p>게시물</p>
-              </div>
-              <div>
-                <p>{actMember.followerCount}</p>
-                <p>팔로워</p>
-              </div>
-              <div>
-                <p>{actMember.followingCount}</p>
-                <p>팔로잉</p>
-              </div>
+      {actMember && (
+        <>
+          <div className="myfit-profile-header">
+            <div className="myfit-profile-icon">
+              <img
+                src={
+                  actMember.memberThumb
+                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileImage/${actMember.memberThumb}`
+                    : "/image/default_img.png"
+                }
+              />
             </div>
-          )}
-        </div>
-      </div>
-      <div className="myfit-profile-actions">
-        <Link to="/member/info">
-          <button className="myfit-profile-button">프로필 편집</button>
-        </Link>
-        <button
-          className="myfit-profile-button"
-          onClick={() => {
-            setAct(act === 1 ? 2 : 1);
-          }}
-        >
-          {act === 1 ? "My Fit 통계" : "My Fit 요약"}
-        </button>
-      </div>
-      <div className="myfit-profile-summary">
-        {act === 1 ? (
-          <div className="summary-wrap">
-            <h3>요약</h3>
-            {actMember && (
-              <ul>
-                <li>
-                  <span>총 운동 일수 : </span>
-                  <span>{actMember.totalRecordDays}일</span>
-                </li>
-                <li>
-                  <span>총 운동 시간 : </span>
-                  <span>{`${Math.floor(actMember.totalRecordTime / 60)}시간 ${
-                    actMember.totalRecordTime % 60
-                  }분`}</span>
-                </li>
-                <li>
-                  <span>지난 1주 운동 일수 : </span>
-                  <span>{actMember.weekRecordDays}일</span>
-                </li>
-                <li>
-                  <span>지난 1주 운동 시간 : </span>
-                  <span>
-                    {`${Math.floor(actMember.weekRecordTime / 60)}시간 ${
-                      actMember.weekRecordTime % 60
-                    }분`}
-                  </span>
-                </li>
-              </ul>
+            <div className="myfit-profile-info">
+              <div className="name-wrap">
+                <h2>{actMember.memberName}</h2>
+              </div>
+              {actMember && (
+                <div className="myfit-profile-stats">
+                  <div>
+                    <p>{actMember.communityCount}</p>
+                    <p>게시물</p>
+                  </div>
+                  <div>
+                    <p>{actMember.followerCount}</p>
+                    <p>팔로워</p>
+                  </div>
+                  <div>
+                    <p>{actMember.followingCount}</p>
+                    <p>팔로잉</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="myfit-profile-actions">
+            <Link to="/member/info">
+              <button className="myfit-profile-button">프로필 편집</button>
+            </Link>
+            <button
+              className="myfit-profile-button"
+              onClick={() => {
+                setAct(act === 1 ? 2 : 1);
+              }}
+            >
+              {act === 1 ? "My Fit 통계" : "My Fit 요약"}
+            </button>
+          </div>
+          <div className="myfit-profile-summary">
+            {act === 1 ? <h3>요약</h3> : <h3>주간 운동 통계</h3>}
+
+            {act === 1 ? (
+              <div className={`summary-wrap ${showSummary ? "test" : ""}`}>
+                {actMember && (
+                  <ul>
+                    <li>
+                      <span>
+                        <span className="material-icons">edit_calendar</span>{" "}
+                        <span>총 운동 일수</span>
+                      </span>
+                      <span>{actMember.totalRecordDays}일</span>
+                    </li>
+                    <li>
+                      <span>
+                        <span class="material-icons">av_timer</span>{" "}
+                        <span>총 운동 시간</span>
+                      </span>
+                      <span>{`${Math.floor(
+                        actMember.totalRecordTime / 60
+                      )}시간 ${actMember.totalRecordTime % 60}분`}</span>
+                    </li>
+                    <li>
+                      <span>
+                        <span class="material-icons">edit_calendar</span>
+                        <span>지난 1주 운동 일수</span>
+                      </span>
+                      <span>{actMember.weekRecordDays}일</span>
+                    </li>
+                    <li>
+                      <span>
+                        <span class="material-icons">av_timer</span>{" "}
+                        <span>지난 1주 운동 시간</span>
+                      </span>
+                      <span>
+                        {`${Math.floor(actMember.weekRecordTime / 60)}시간 ${
+                          actMember.weekRecordTime % 60
+                        }분`}
+                      </span>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            ) : (
+              <div>
+                <div className="chart-wrap">
+                  <MyLineChart member={actMember} />
+                </div>
+              </div>
             )}
           </div>
-        ) : (
-          <div>
-            <h3>주간 운동 통계</h3>
-            <div className="chart-wrap">
-              <MyLineChart member={member} />
-            </div>
-          </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 };
@@ -169,7 +193,6 @@ const MyLineChart = (props) => {
       setData(newArr);
     }
   }, [arr]);
-
   return (
     <div style={{ height: 400, width: 700 }}>
       <ResponsiveLine
@@ -191,7 +214,7 @@ const MyLineChart = (props) => {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "주간 운동 통계",
+          legend: "최근 7일 날짜",
           legendOffset: 36,
           legendPosition: "middle",
           truncateTickAt: 0,
