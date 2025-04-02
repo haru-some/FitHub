@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import "./shopLIst.css";
-import ProductPage from "./ProductPage";
+import "./shopList.css";
 import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import axios from "axios";
-
-const allGoods = [];
 
 const categories = [
   "모두",
@@ -57,8 +54,7 @@ const Advertisements = () => {
 };
 
 const GoodsList = () => {
-  const [allGoods, setAllGoods] = useState([]);
-  const [fetchedGoods, setFetchedGoods] = useState([]);
+  const [Goods, setGoods] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("모두");
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,17 +69,14 @@ const GoodsList = () => {
     axios
       .get(`${backServer}/goods?reqPage=${reqPage}`)
       .then((res) => {
-        console.log(res.data); //데이터 구조 확인
-        setFetchedGoods(res.data.list ? res.data.list : []);
+        console.log(res.data);
+        setGoods(res.data.list ? res.data.list : []);
+        setCurrentPage(1); // 데이터가 바뀌면 현재 페이지를 초기화
       })
       .catch((err) => {
         console.log(err);
       });
   }, [reqPage]);
-
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
-  };
 
   //카테고리
   const handleCategoryChange = (category) => {
@@ -92,7 +85,7 @@ const GoodsList = () => {
     setClickedButton(category); // 선택된 버튼명을 상태로 저장
   };
 
-  const filteredGoods = fetchedGoods.filter((goods) =>
+  const filteredGoods = Goods.filter((goods) =>
     selectedCategory === "모두"
       ? true
       : goods.goodsCategory === cate[selectedCategory]
@@ -113,7 +106,9 @@ const GoodsList = () => {
   // 페이지네이션 적용
   const indexOfLastGoods = currentPage * GoodsPerPage;
   const indexOfFirstGoods = indexOfLastGoods - GoodsPerPage;
+  // currentGoods는 항상 sortedGoods에서 슬라이스해서 얻음
   const currentGoods = sortedGoods.slice(indexOfFirstGoods, indexOfLastGoods);
+
   const totalPages = Math.ceil(sortedGoods.length / GoodsPerPage);
 
   const renderPagination = () => {
@@ -123,7 +118,11 @@ const GoodsList = () => {
     buttons.push(
       <button
         key="prev"
-        onClick={() => setCurrentPage(currentPage - 1)}
+        onClick={() => {
+          if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+          }
+        }}
         disabled={currentPage === 1}
       >
         <NavigateBeforeIcon />
@@ -161,8 +160,12 @@ const GoodsList = () => {
     buttons.push(
       <button
         key="next"
-        onClick={() => setCurrentPage(currentPage + 1)}
-        disabled={currentPage === totalPages} // 마지막 페이지에서는 비활성화
+        onClick={() => {
+          if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+          }
+        }}
+        disabled={currentPage === totalPages}
       >
         <NavigateNextIcon />
       </button>
@@ -197,17 +200,17 @@ const GoodsList = () => {
       </select>
 
       <div className="goods-container">
-        {sortedGoods.length === 0 ? (
+        {currentGoods.length === 0 ? (
           <p>상품이 없습니다.</p>
         ) : (
-          sortedGoods.map((goods) => (
+          currentGoods.map((goods) => (
             <div
               className="goods-card"
               key={goods.goodsNo} // goodsNo를 키로 사용
               onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
             >
               <img
-                src={goods.goodsUrl || "defaultImage.jpg"}
+                src={goods.goodsUrl || "/image/default_img.png"}
                 alt={goods.goodsName}
               />
               <div className="goods-details">
@@ -241,7 +244,7 @@ const ShopList = () => {
         {selectedCategory}
       </h2>
       <Advertisements />
-      <GoodsList fetchedGoods setSelectedCategory={setSelectedCategory} />
+      <GoodsList Goods setSelectedCategory={setSelectedCategory} />
     </div>
   );
 };

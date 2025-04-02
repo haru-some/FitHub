@@ -37,8 +37,8 @@ public class CommunityController {
 	private String root;
 	
 	@GetMapping(value="/list")
-	public ResponseEntity<List> communityList(@RequestParam int memberNo){
-		List list = communityService.selectCommunityList(memberNo);
+	public ResponseEntity<List> communityList(@RequestParam int memberNo, @RequestParam int page, @RequestParam int size){
+		List list = communityService.selectCommunityList(memberNo, page, size);
 		return ResponseEntity.ok(list);
 	}
 	

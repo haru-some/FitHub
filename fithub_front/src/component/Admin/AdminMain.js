@@ -7,6 +7,7 @@ import AdminChat from "./AdminChat";
 import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, memberState } from "../utils/RecoilData";
+import AdminGoods from "./AdminGoods";
 
 const AdminMain = () => {
   const isLogin = useRecoilValue(isLoginState);
@@ -31,6 +32,7 @@ const AdminMain = () => {
           <Route path="stat" element={<AdminStat />} />
           <Route path="chat" element={<AdminChat />} />
           <Route path="Ads" element={<AdminAds />} />
+          <Route path="goods" element={<AdminGoods />} />
         </Routes>
       </div>
     </section>
@@ -64,6 +66,12 @@ const Sidebar = () => {
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
         광고 관리
+      </NavLink>
+      <NavLink
+        to="/admin/goods"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        상품 관리
       </NavLink>
     </div>
   );
