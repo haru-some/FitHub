@@ -3,7 +3,6 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import CircleIcon from "@mui/icons-material/Circle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import WebSocketService from "../utils/WebSocketService";
 
 const AdminChat = () => {
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
@@ -69,14 +68,14 @@ const AdminChatView = ({ chatRoomId }) => {
   const [chatInput, setChatInput] = useState("");
 
   useEffect(() => {
-    WebSocketService.connect(chatRoomId);
+    //WebSocketService.connect(chatRoomId);
 
-    WebSocketService.on("message", (message) => {
-      setMessages((prev) => [...prev, message]);
-    });
+    //WebSocketService.on("message", (message) => {
+    //setMessages((prev) => [...prev, message]);
+    // });
 
     return () => {
-      WebSocketService.disconnect();
+      //WebSocketService.disconnect();
     };
   }, [chatRoomId]);
 
@@ -88,7 +87,7 @@ const AdminChatView = ({ chatRoomId }) => {
         content: chatInput,
         messageType: "CHAT",
       };
-      WebSocketService.sendMessage(message);
+      //WebSocketService.sendMessage(message);
       setChatInput("");
     }
   };
