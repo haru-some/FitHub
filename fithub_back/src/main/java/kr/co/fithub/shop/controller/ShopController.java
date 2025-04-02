@@ -1,4 +1,7 @@
 package kr.co.fithub.shop.controller;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +23,7 @@ import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
 import kr.co.fithub.shop.model.service.ShopService;
 import kr.co.fithub.util.FileUtils;
+
 
 
 
@@ -68,7 +77,7 @@ public class ShopController {
 	public ResponseEntity<Integer>  insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsUrl, @ModelAttribute MultipartFile[] goodsFiles){
 		//썸네일을 첨부한 경우에만 
 		if(goodsUrl != null) {
-			String savepath = root +"/goods/url/";
+			String savepath = root +"/goods/url";
 			String filepath = fileUtils.upload(savepath, goodsUrl);
 			goods.setGoodsUrl(filepath);
 		}
@@ -87,5 +96,59 @@ public class ShopController {
 		int result = shopService.insertgoods(goods, goodsFileList);
 		return ResponseEntity.ok(result);
 	}
+    
+    @GetMapping(value="/file/{filePath}")
+	public ResponseEntity<Resource> filedown(@PathVariable String filePath) throws FileNotFoundException{
+		String savepath = root + "/goods/";
+		File file = new File(savepath +filePath);
+		
+		Resource resource = new InputStreamResource(new FileInputStream(file));
+		HttpHeaders header = new HttpHeaders()	; 
+		header.add("Cache-Control","no-cache, no-store, must-revalidate");
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.headers(header)
+				.contentLength(file.length())
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(resource);
+		
+		
+	}
+	@PatchMapping
+	public ResponseEntity<Integer> updateBoard(@ModelAttribute Goods goods, 
+											   @ModelAttribute MultipartFile thumbnail, 
+											   @ModelAttribute MultipartFile[] goodsFile){
+		if(thumbnail != null) {
+			String savepath = root + "/goods/thumb/";
+			String filepath = fileUtils.upload(savepath, thumbnail);
+			goods.setGoodsUrl(filepath);
+			
+			
+		}
+		List<GoodsFile> goodsFileList = new ArrayList<>();
+		if(goodsFile != null) {
+			String savepath = root + "/goods/";
+			for(MultipartFile file : goodsFile) {
+				GoodsFile fileDto = new GoodsFile();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtils.upload(savepath, file);
+				fileDto.setFileName(filename);
+				fileDto.setFilePath(filepath);				
+				fileDto.setGoodsNo(goods.getGoodsNo());
+				goodsFileList.add(fileDto);						
+			}
+		}
+		List<GoodsFile> delFileList = shopService.updateGoods(goods, goodsFileList);
+		if(delFileList != null) {
+			String savepath = root +"/goods/";
+			for(GoodsFile deleteFile : delFileList ) {
+				File delFile = new File(savepath+deleteFile.getFilePath());
+				delFile.delete();
+			}
+		}
+		
+		return ResponseEntity.ok(1);
+	}
+    
     
 }

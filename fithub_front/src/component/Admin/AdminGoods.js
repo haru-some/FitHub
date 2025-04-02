@@ -29,7 +29,7 @@ const AdminGoods = () => {
     form.append("goodsName", goodsName);
     form.append("goodsPrice", goodsPrice);
     form.append("goodsExpl", goodsExpl);
-    form.append("goodsUrl", goodsUrl);
+    form.append("setThumbnail", goodsUrl);
     //form.append("goodsFile", goods.goodsFile);
 
     const backServer = process.env.REACT_APP_BACK_SERVER;

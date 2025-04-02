@@ -13,6 +13,8 @@ const AdminGoodsFrm = (props) => {
   const setGoodsFile = props.setGoodsFile;
   const delFileNo = props.delFileNo;
   const setDelFileNo = props.setDelFileNo;
+  const goodsUrl = props.goodsUrl;
+  const setGoodsUrl = props.setGoodsUrl;
 
   //write에서는 필요없고, update시 기존 셈넬, 기존첨부파일을 저장하기위한 state
   //write 에서는 아래 4개 모두 undefined
@@ -30,7 +32,7 @@ const AdminGoodsFrm = (props) => {
   const changeThumbnail = (e) => {
     const files = e.target.files;
     if (files.length !== 0) {
-      //1. 글작성을 하는경우 파일을 정송하기위한 설정
+      //1. 글작성을 하는경우 파일을 전송하기위한 설정
       setThumbnail(files[0]);
       //2. 화면을 미리보기 설정
       const reader = new FileReader();
@@ -46,7 +48,8 @@ const AdminGoodsFrm = (props) => {
       setShowThumb(null);
     }
   };
-
+  console.log("파일리스트");
+  console.log(fileList);
   return (
     <div>
       <div
@@ -57,7 +60,7 @@ const AdminGoodsFrm = (props) => {
       >
         {goodsImg ? (
           <img
-            src={`${process.env.REACT_APP_BACK_SERVER}/goods/image/${goodsImg}`}
+            src={`${process.env.REACT_APP_BACK_SERVER}/goods/thumb/${goodsImg}`}
           ></img>
         ) : showThumb ? (
           <img src={showThumb}></img>

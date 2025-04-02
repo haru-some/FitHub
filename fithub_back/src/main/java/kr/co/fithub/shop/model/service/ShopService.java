@@ -40,11 +40,16 @@ public class ShopService {
 		int result = shopDao.insertGoods(goods);
 		System.out.println(goods);
 		for(GoodsFile goodsFile : goodsFileList) {
-			goodsFile.setBoardNo(goods.getGoodsNo());
+			goodsFile.setGoodsNo(goods.getGoodsNo());
 			result += shopDao.insertGoodsFile(goodsFile);
 		}
 		
 		return result;
+	}
+
+	public List<GoodsFile> updateGoods(Goods goods, List<GoodsFile> goodsFileList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 		
