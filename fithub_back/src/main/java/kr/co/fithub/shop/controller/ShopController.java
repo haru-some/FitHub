@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.service.ShopService;
+
 
 @SpringBootApplication
 @CrossOrigin("*")
@@ -31,9 +33,13 @@ public class ShopController {
     @GetMapping
 	public ResponseEntity<Map> GoodsList(@RequestParam int reqPage){
 		Map map = shopService.selectGoodsList(reqPage);
-		
-		
+				
 		return ResponseEntity.ok(map);	
+    }
+    @GetMapping(value="/{goodsNo}")
+	public ResponseEntity<Goods> selectOneGoods(@PathVariable int goodsNo){
+		Goods goods =shopService.selectOneGoods(goodsNo);
+		return ResponseEntity.ok(goods);
 	}
     
 }

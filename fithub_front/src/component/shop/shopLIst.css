@@ -1,6 +1,6 @@
 .shop-list-wrap {
   background-color: #ffffff;
-  min-height: 900px;
+  min-height: 1050px;
 }
 
 .shop-list-wrap div {
@@ -46,7 +46,7 @@
 }
 
 .shop-list-wrap .goods-card img {
-  width: 100px; /* 이미지 크기 조정 */
+  width: 150px; /* 이미지 크기 조정 */
   height: auto;
   margin-right: 10px; /* 이미지와 텍스트 사이의 간격 */
 }

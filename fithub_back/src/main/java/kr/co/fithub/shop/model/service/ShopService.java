@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.fithub.shop.model.dao.ShopDao;
+import kr.co.fithub.shop.model.dto.Goods;
+
 
 @Service
 public class ShopService {
@@ -22,9 +24,12 @@ public class ShopService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
 		
-		return map;
-				
-		
+		return map;		
+	}
+
+	public Goods selectOneGoods(int goodsNo) {
+		Goods goods =shopDao.selectOneGoods(goodsNo);
+		return goods;
 	}
 
 }

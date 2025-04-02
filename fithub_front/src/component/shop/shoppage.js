@@ -1,61 +1,136 @@
+import React, { useEffect, useState } from "react";
+import "./shopDetail.css";
+import Swal from "sweetalert2";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
+const ShopDetail = () => {
+  const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
+  const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
+  const [activeTab, setActiveTab] = useState("상품정보");
+  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+
+  // 상품 데이터 가져오기
   useEffect(() => {
-      axios
-          .get(`${backServer}/goods?reqPage=1`)
-          .then((res) => {
-              console.log(res.data);
-              setFetchedGoods(res.data.list || []);
-          })
-          .catch((err) => {
-              console.error(err);
-          });
-  }, []);
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/goods/${goodsNo}`)
+      .then((res) => {
+        console.log(res);
+        setGoods(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [goodsNo]);
 
-  const handleSortChange = (event) => {
-      setSort(event.target.value);
+  const handleIncrease = () => {
+    setQuantity(quantity + 1);
   };
 
-  const handleCategoryChange = (category) => {
-      setSelectedCategory(category);
-      // 카테고리 하드코딩된 숫자로 변환한 것
+  const handleDecrease = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
   };
 
-  const filteredGoods = fetchedGoods.filter((goods) =>
-      selectedCategory === "모두"
-          ? true
-          : goods.goodsCategory === categoryMapping[selectedCategory] // 숫자로 비교
-  );
+  const renderContent = () => {
+    switch (activeTab) {
+      case "상품정보":
+        return <div>상품 정보</div>;
+      case "리뷰":
+        return <div>리뷰 정보</div>;
+      case "배송/결제":
+        return <div>배송 정보</div>;
+      case "반품/교환":
+        return <div>반품 정보</div>;
+      default:
+        return null;
+    }
+  };
 
-  const sortedGoods = filteredGoods.sort((a, b) => {
-      // Sorting logic remains unchanged
-  });
+  const plusCart = () => {
+    Swal.fire({
+      icon: "success",
+      title: "장바구니에 보관하였습니다.",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
 
-  // Rendering logic remains unchanged.
+  const doBuy = () => {
+    Swal.fire({
+      title: "구매할까요?",
+      showCancelButton: true,
+      confirmButtonText: "예",
+      cancelButtonText: "아니오",
+      confirmButtonColor: "#4caf50",
+      cancelButtonColor: "#8CCC8F",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/purchase"); // 구매 페이지로 이동
+      } else {
+        Swal.fire({
+          icon: "info",
+          title: "구매가 취소되었습니다.",
+          showConfirmButton: false,
+          cancelButtonColor: "#8CCC8F",
+          timer: 2000,
+        });
+      }
+    });
+  };
 
-  
-  
+  // 로딩 중 또는 데이터가 없는 경우 처리
+  if (!goods) {
+    return <div>로딩 중...</div>; // 상품 데이터가 로드되지 않았을 경우
+  }
+
   return (
-      <div>
-          {/* 카테고리 버튼 구현 */}
-          <div>
-              {Object.keys(categoryMapping).map((category) => (
-                  <button
-                      key={category}
-                      onClick={() => handleCategoryChange(category)}
-                  >
-                      {category}
-                  </button>
-              ))}
+    <div className="shop-detail-wrap">
+      <div className="main-detail">
+        <div className="goods-image">
+          <img
+            src={goods.goodsUrl || "/image/default_img.png"} // 기본 이미지 처리
+            alt={goods.goodsName || "상품명 없음"} // 기본 상품명 처리
+          />
+        </div>
+        <div className="goods-info">
+          <h1>{goods.goodsName || "상품명 없음"}</h1>
+          <p>{goods.goodsExpl || "설명 없음"}</p>
+          <p>제조일정: {goods.manufacturingDate || "정보 없음"}</p>{" "}
+          {/* 제조일정 */}
+          <p>상품 크기: {goods.size || "정보 없음"}</p> {/* 상품 크기 */}
+          <p>품질보증기한: {goods.qualityGuarantee || "정보 없음"}</p>{" "}
+          {/* 품질 보증 기한 */}
+          <h3>{goods.goodsPrice.toLocaleString()}원</h3>
+          <div className="price-box">
+            <div className="quantity-controls">
+              <button onClick={handleDecrease}>-</button>
+              <span>{quantity}</span>
+              <button onClick={handleIncrease}>+</button>
+            </div>
+            <h2>총 가격: {(goods.goodsPrice * quantity).toLocaleString()}원</h2>
           </div>
-          
-
-          <div className="goods-container">
-              {sortedGoods.length === 0 ? (
-                  <p>상품이 없습니다.</p>
-              ) : (
-                  // Render goods
-              )}
+          <div className="goods-buy">
+            <button onClick={plusCart}>장바구니</button>
+            <button onClick={doBuy}>구매하기</button>
           </div>
+        </div>
       </div>
+
+      <div className="tabs">
+        {["상품정보", "리뷰", "배송/결제", "반품/교환"].map((tab) => (
+          <button
+            key={tab}
+            className={activeTab === tab ? "active" : ""}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      <div className="tab-content">{renderContent()}</div>
+    </div>
   );
 };
+
+export default ShopDetail;
