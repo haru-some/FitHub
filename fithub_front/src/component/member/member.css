@@ -454,7 +454,7 @@
 }
 .mypage-sidebar h2 {
   font-size: 24px;
-  font-family: bg-b;
+  font-family: pd-b;
   color: white;
   margin-bottom: 30px;
   text-align: center;
@@ -493,7 +493,7 @@
 }
 .info-title {
   font-size: 28px;
-  font-family: bg-b;
+  font-family: pd-b;
   margin-bottom: 30px;
   text-align: center;
 }
@@ -544,7 +544,7 @@
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 14px;
-  font-family: ns-b;
+  font-family: pd-b;
   cursor: pointer;
   margin: 8px;
   min-width: 120px;
