@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import "./community.css"; // CSS 파일 불러오기
+import "./community.css";
 import { Link, useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
@@ -10,34 +10,18 @@ import { memberState } from "../utils/RecoilData";
 import CommunityItem from "./CommunityItem";
 
 const CommunityList = () => {
-  const [member, setMember] = useRecoilState(memberState);
+  const [member] = useRecoilState(memberState);
   const navigate = useNavigate();
   const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [communityList, setCommunityList] = useState([]);
   const [followState, setFollowState] = useState(0);
-  const [page, setPage] = useState(0); //시작하는 페이지
-  const [hasMore, setHasMore] = useState(true); //데이터가 없으면 실행방지
+  const [page, setPage] = useState(1); // 1페이지부터 시작
+  const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
 
+  // ✅ useEffect에서 page 변화를 감지하여 자동 호출
   useEffect(() => {
-    axios
-      .get(
-        `${backServer}/community/list?memberNo=${
-          member ? member.memberNo : 0
-        }&page=1&size=10`
-      )
-      .then((res) => {
-        setCommunityList(res.data);
-        setHasMore(res.data.length > 0);
-      })
-      .catch((err) => {
-        console.error("Error fetching communities", err);
-      });
-  }, [followState]);
-
-  const loadMoreCommunities = () => {
-    if (!hasMore) return;
     axios
       .get(
         `${backServer}/community/list?memberNo=${
@@ -45,30 +29,37 @@ const CommunityList = () => {
         }&page=${page}&size=10`
       )
       .then((res) => {
+        console.log("✅ 새 데이터:", res.data);
         setCommunityList((prev) => [...prev, ...res.data]);
-        setPage((prev) => prev + 1);
         setHasMore(res.data.length > 0);
-        console.log(res.data);
       })
-      .catch((err) => {
-        console.error("Error fetching more communities", err);
-      });
-  };
+      .catch((err) => console.error("Error fetching communities", err));
+  }, [page, followState]); // page가 변경될 때마다 API 요청
 
+  // ✅ loadMoreCommunities는 page만 증가시키도록 변경
+  const loadMoreCommunities = useCallback(() => {
+    if (hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, [hasMore]);
+
+  // ✅ 마지막 요소 감지
   const lastElementRef = useCallback(
     (node) => {
+      if (!node) return;
       if (observer.current) observer.current.disconnect();
+
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
           loadMoreCommunities();
         }
       });
-      if (node) observer.current.observe(node);
+
+      observer.current.observe(node);
     },
-    [hasMore]
+    [hasMore, loadMoreCommunities]
   );
 
-  const myCommunityList = () => {};
   return (
     <div className="community-list">
       <div className="community-list-wrap">
@@ -78,27 +69,11 @@ const CommunityList = () => {
               <Link to="/community/list">커뮤니티</Link>
             </h2>
             <div className="community-menu">
-              <SearchIcon
-                onClick={() => {
-                  setShowInput(!showInput);
-                }}
-              />
+              <SearchIcon onClick={() => setShowInput(!showInput)} />
               {member && (
-                <CreateIcon
-                  onClick={() => {
-                    navigate("/community/write");
-                  }}
-                />
+                <CreateIcon onClick={() => navigate("/community/write")} />
               )}
-              {member && (
-                <PersonIcon
-                  onClick={
-                    myCommunityList
-                    //1.내 memberNo 를 axios로 보내서 해당되는 리스트 불러옴
-                    //2. 커뮤니티리스트 스테이트에 셋
-                  }
-                />
-              )}
+              {member && <PersonIcon />}
             </div>
           </div>
           {showInput && (
@@ -116,30 +91,22 @@ const CommunityList = () => {
         <div className="community-content">
           <ul className="community-item-wrap">
             {communityList.map((community, index) => {
-              if (index === communityList.length - 1) {
-                return (
-                  <div ref={lastElementRef} key={"community-" + index}>
-                    <CommunityItem
-                      community={community}
-                      communityList={communityList}
-                      setCommunityList={setCommunityList}
-                      member={member}
-                      followState={followState}
-                      setFollowState={setFollowState}
-                    />
-                  </div>
-                );
-              }
+              const isLast = index === communityList.length - 1;
+
               return (
-                <CommunityItem
-                  key={"community-" + index}
-                  community={community}
-                  communityList={communityList}
-                  setCommunityList={setCommunityList}
-                  member={member}
-                  followState={followState}
-                  setFollowState={setFollowState}
-                />
+                <div
+                  ref={isLast ? lastElementRef : null}
+                  key={`community-${index}`}
+                >
+                  <CommunityItem
+                    community={community}
+                    communityList={communityList}
+                    setCommunityList={setCommunityList}
+                    member={member}
+                    followState={followState}
+                    setFollowState={setFollowState}
+                  />
+                </div>
               );
             })}
           </ul>
