@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import "./shopLIst.css";
+import "./shopList.css";
 import ProductPage from "./ProductPage";
 import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import axios from "axios";
-
-const allGoods = [];
 
 const categories = [
   "모두",
@@ -80,10 +78,6 @@ const GoodsList = () => {
         console.log(err);
       });
   }, [reqPage]);
-
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
-  };
 
   //카테고리
   const handleCategoryChange = (category) => {
