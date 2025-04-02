@@ -4,65 +4,94 @@
 
 	<select id="selectCommunityList" resultType="community">
 		select
-		    m.member_id,
-		    m.member_no,
-		    m.member_thumb,
-		    c.community_content,
-		    c.community_no,
-		    (select count(*) from community_like where community_no = c.community_no) as like_count,
-		    (select count(*) from community_like where community_no = c.community_no and member_no = #{memberNo}) as is_like,
-		    (select count(*) from comment_tbl where community_no = c.community_no) as comment_count,
-		    (select count(*) from follow where follow_member_no = c.member_no and member_no = #{memberNo}) as is_follow
-		    FROM
-		    community c
-		 join
-		    member m ON c.member_no = m.member_no order by community_no desc
+		m.member_id,
+		m.member_no,
+		m.member_thumb,
+		c.community_content,
+		c.community_no,
+		(select count(*) from community_like where community_no = c.community_no) as
+		like_count,
+		(select count(*) from community_like where community_no = c.community_no and
+		member_no = #{memberNo}) as is_like,
+		(select count(*) from comment_tbl where community_no = c.community_no) as
+		comment_count,
+		(select count(*) from follow where follow_member_no = c.member_no and
+		member_no = #{memberNo}) as is_follow
+		FROM
+		community c
+		join
+		member m ON c.member_no = m.member_no order by community_no desc
 	</select>
-	
+
 	<select id="selectOneCommunity" resultType="community">
 		select
-		    m.member_id,
-		    m.member_thumb,
-		    m.member_no,
-		    c.community_content,
-		    c.community_no,
-		    to_char(sysdate, 'yyyy-mm-dd') as community_date,
-		    (select count(*) from community_like where community_no = c.community_no) as like_count,
-		    (select count(*) from community_like where community_no = c.community_no and member_no = #{memberNo}) as is_like,
-		    (select count(*) from comment_tbl where community_no = c.community_no) as comment_count,
-		    (select count(*) from follow where follow_member_no = c.member_no and member_no = #{memberNo}) as is_follow
-		    FROM
-		    community c
+		m.member_id,
+		m.member_thumb,
+		m.member_no,
+		c.community_content,
+		c.community_no,
+		to_char(sysdate, 'yyyy-mm-dd') as community_date,
+		(select count(*) from community_like where community_no = c.community_no) as
+		like_count,
+		(select count(*) from community_like where community_no = c.community_no and
+		member_no = #{memberNo}) as is_like,
+		(select count(*) from comment_tbl where community_no = c.community_no) as
+		comment_count,
+		(select count(*) from follow where follow_member_no = c.member_no and
+		member_no = #{memberNo}) as is_follow
+		FROM
+		community c
 		join
-		    member m ON c.member_no = m.member_no
-            where c.community_no = #{communityNo}
+		member m on c.member_no = m.member_no
+		where c.community_no = #{communityNo}
 	</select>
-	
+
 	<insert id="insertLike">
-		insert into community_like values(#{communityNo}, #{memberNo})
+		insert into community_like values(#{communityNo},
+		#{memberNo})
 	</insert>
-	
+
 	<delete id="deleteLike">
-		delete from community_like where member_no = #{memberNo} and community_no = #{communityNo}
+		delete from community_like where member_no =
+		#{memberNo} and community_no = #{communityNo}
 	</delete>
-	
+
 	<select id="selectLikeCount" resultType="int">
-		select count(*) from community_like where community_no = #{communityNo}
+		select count(*) from
+		community_like where community_no = #{communityNo}
 	</select>
-	
+
 	<select id="selectCommentList" resultType="comment">
-		select * from comment_tbl
+		SELECT
+		comment_no,
+		comment_content,
+		comment_date,
+		community_no,
+		member_no,
+		member_thumb,
+		member_id
+		FROM comment_tbl
+		JOIN member USING (member_no)
+		where community_no=#{communityNo}
+		order by comment_date desc
 	</select>
-	
+
 	<insert id="insertCommunity">
-		insert into community values(community_seq.nextval, #{communityContent}, #{memberNo}, sysdate, 1)
+		insert into community values(community_seq.nextval,
+		#{communityContent}, #{memberNo}, sysdate, 1)
+	</insert>
+
+	<delete id="deleteFollow">
+		delete from follow where follow_member_no =
+		#{followMemberNo} and member_no = #{memberNo}
+	</delete>
+
+	<insert id="insertFollow">
+		insert into follow values(#{followMemberNo},
+		#{memberNo})
 	</insert>
 	
-	<delete id="deleteFollow">
-		delete from follow where follow_member_no = #{followMemberNo} and member_no = #{memberNo}
-	</delete>
-	
-	<insert id="insertFollow">
-		insert into follow values(#{followMemberNo}, #{memberNo})
+	<insert id="insertComment">
+		insert into comment_tbl values(comment_tbl_seq.nextval, #{communityNo}, #{memberNo}, #{commentContent}, to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'))
 	</insert>
 </mapper>

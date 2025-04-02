@@ -16,4 +16,6 @@ public class CommentDTO {
 	private int memberNo;
 	private String commentContent;
 	private String commentDate;
+	private String memberId;
+	private String memberThumb;
 }

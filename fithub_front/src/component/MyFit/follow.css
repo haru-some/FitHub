@@ -1,0 +1,139 @@
+.myfit-follow-wrap {
+  width: 780px;
+  background-color: #222;
+  padding: 40px 25px;
+  border-radius: 10px;
+  font-family: "Arial", sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.myfit-follow-wrap .input-wrap {
+  width: 700px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  background-color: #333333;
+  border-radius: 8px;
+}
+
+.myfit-follow-wrap .search-input {
+  box-sizing: border-box;
+  width: 700px;
+  padding: 10px 14px;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+}
+
+.myfit-follow-wrap .input-wrap .search-btn {
+  color: #cfcfcf;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.myfit-follow-wrap .input-wrap .search-btn:hover {
+  color: #e7e7e7;
+  font-weight: 900;
+}
+
+/*ul*/
+.myfit-follow-wrap .user-list {
+  height: 400px;
+  width: 740px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*li*/
+.myfit-follow-wrap .user-item-wrap {
+  width: 700px;
+  margin-bottom: 20px;
+  padding: 0px 10px;
+}
+
+.myfit-follow-wrap .empty-message {
+  margin-top: 200px;
+}
+
+.myfit-follow-wrap .user-item-wrap:last-child {
+  margin-bottom: 0;
+}
+
+.myfit-follow-wrap .user-item {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  background-color: #3b3b3b;
+  border-radius: 8px;
+  padding: 0px 20px;
+}
+
+.myfit-follow-wrap .avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.myfit-follow-wrap .user-info {
+  flex: 1;
+}
+
+.myfit-follow-wrap .name {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.myfit-follow-wrap .username {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.myfit-follow-wrap .follow-button {
+  background-color: #447fd8;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  height: 34px;
+}
+
+.myfit-follow-wrap .follow-button:hover {
+  background-color: #2b60af;
+}
+
+.myfit-follow-wrap .back-btn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  height: 60px;
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.myfit-follow-wrap .back-btn:hover {
+  background-color: #333333;
+}
+
+.myfit-follow-wrap .back-btn span {
+  font-size: 40px;
+}

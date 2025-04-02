@@ -15,6 +15,8 @@ const CommunityView = () => {
   const [community, setCommunity] = useState(null);
   const [isLike, setIsLike] = useState(false);
   const navigate = useNavigate();
+  const [newComment, setNewComment] = useState("");
+  const [commentState, setCommentState] = useState(0);
 
   useEffect(() => {
     axios
@@ -24,15 +26,18 @@ const CommunityView = () => {
         }`
       )
       .then((res) => {
+        console.log(res.data);
         setCommunity(res.data);
       })
       .catch((err) => {});
-  }, [isLike]);
+  }, [isLike, commentState]);
+
   useEffect(() => {
     if (community) {
       setIsLike(community.isLike === 1);
     }
   }, [community]);
+
   const changeLike = (e) => {
     if (member) {
       if (isLike) {
@@ -55,6 +60,28 @@ const CommunityView = () => {
     }
   };
 
+  const inputComment = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const submitComment = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_BACK_SERVER}/community/comment/${communityNo}`,
+        {
+          memberNo: member.memberNo,
+          commentContent: newComment,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data > 0) {
+          setCommentState(commentState + 1);
+        }
+
+        setNewComment("");
+      });
+  };
   return (
     <div className="community-view">
       <div className="community-view-content">
@@ -103,22 +130,32 @@ const CommunityView = () => {
         )}
       </div>
       <div className="community-comment-list">
-        <CommentList />
+        {community &&
+          community.commentList.map((comment, index) => {
+            return <Comment key={"comment-" + index} comment={comment} />;
+          })}
       </div>
       <div className="post-input">
         <div className="member-img">
           <img src="/image/default_img.png"></img>
         </div>
         <div className="comment-text-box">
-          <input type="text"></input>
-          <button>send</button>
+          <input
+            type="text"
+            value={newComment}
+            onChange={inputComment}
+            placeholder="댓글을 입력하세요..."
+          ></input>
+          <button onClick={submitComment}>send</button>
         </div>
       </div>
     </div>
   );
 };
 
-const CommentList = () => {
+const Comment = (props) => {
+  const comment = props.comment;
+
   return (
     <ul>
       <li className="comment-list">
@@ -126,8 +163,8 @@ const CommentList = () => {
           <img src="/image/default_img.png"></img>
         </div>
         <div className="comment-user-info">
-          <div className="member-id">user01</div>
-          <div className="comment-user-content">아브라카다브라</div>
+          <div className="member-id">{comment.memberId}</div>
+          <div className="comment-user-content">{comment.commentContent}</div>
         </div>
       </li>
     </ul>
