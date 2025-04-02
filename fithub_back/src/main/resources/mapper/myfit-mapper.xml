@@ -184,11 +184,19 @@
 		m.member_no,
 		m.member_id,
 		m.member_name,
-		m.member_thumb
+		m.member_thumb,
+		CASE
+		WHEN EXISTS (
+		SELECT 1
+		FROM follow f2
+		WHERE f2.member_no = #{memberNo}
+		AND f2.follow_member_no = m.member_no
+		) THEN 1
+		ELSE 0
+		END AS is_follow
 		FROM follow f
-		JOIN member m ON
-		f.member_no = m.member_no
-		WHERE f.follow_member_no = #{memebrNo}
+		JOIN member m ON f.member_no = m.member_no
+		WHERE f.follow_member_no = #{memberNo}
 	</select>
 
 	<select id="selectFollowingList" resultType="member">
@@ -196,7 +204,16 @@
 		m.member_no,
 		m.member_id,
 		m.member_name,
-		m.member_thumb
+		m.member_thumb,
+		CASE
+		WHEN EXISTS (
+		SELECT 1
+		FROM follow f2
+		WHERE f2.member_no = #{memberNo}
+		AND f2.follow_member_no = m.member_no
+		) THEN 1
+		ELSE 0
+		END AS is_follow
 		FROM follow f
 		JOIN member m ON f.follow_member_no = m.member_no
 		WHERE f.member_no = #{memberNo}

@@ -81,7 +81,7 @@ const ProfileCard = (props) => {
             </div>
           </div>
           <div className="myfit-profile-actions">
-            <Link to="/member">
+            <Link to="/mypage">
               <button className="myfit-profile-button">프로필 편집</button>
             </Link>
             <button
