@@ -3,13 +3,14 @@ import { Box, TextField, Tabs, Tab } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./member.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const FindInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [tab, setTab] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleFindId = () => {
     if (!name.trim() || !email.trim()) {
@@ -86,6 +87,7 @@ const FindInfo = () => {
           confirmButtonColor: "#2f3e2f",
           confirmButtonText: "확인",
         });
+        navigate("/login");
       })
       .catch((err) => {
         Swal.fire({

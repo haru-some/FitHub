@@ -15,7 +15,6 @@ import { useRecoilValue } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
-import Check from "@mui/icons-material/Check";
 import clsx from "clsx";
 import {
   Visibility as VisibilityIcon,
@@ -24,44 +23,60 @@ import {
   VerifiedUser as VerifiedUserIcon,
   Security as SecurityIcon,
   PrivacyTip as PrivacyTipIcon,
+  LockPerson as LockPersonIcon,
+  LockReset as LockResetIcon,
+  CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import "./member.css";
 
+// 아이콘 매핑
+const iconMap = {
+  1: <LockPersonIcon />,
+  2: <LockResetIcon />,
+  3: <CheckCircleIcon />,
+};
+
+// Connector 스타일
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
-    top: 18,
+    top: 19,
   },
   [`& .${stepConnectorClasses.line}`]: {
-    height: 2,
+    height: 3,
     border: 0,
-    backgroundColor: "#bbb",
+    backgroundColor: "#555", // 기본 회색 선
     borderRadius: 1,
   },
   [`&.${stepConnectorClasses.active} .${stepConnectorClasses.line}`]: {
-    backgroundColor: "#293a2c",
+    backgroundImage: "linear-gradient(to right, #293a2c, #536976, #BBD2C5)",
   },
   [`&.${stepConnectorClasses.completed} .${stepConnectorClasses.line}`]: {
-    backgroundColor: "#293a2c",
+    backgroundImage: "linear-gradient(to right, #293a2c, #536976, #BBD2C5)",
   },
 }));
 
-const CustomStepIconRoot = styled("div")(({ ownerState }) => ({
-  backgroundColor:
-    ownerState.active || ownerState.completed ? "#191c19" : "#ccc",
-  color: "#fff",
-  width: 30,
-  height: 30,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  borderRadius: "50%",
-  fontWeight: "bold",
-  fontSize: "0.875rem",
-  lineHeight: 1,
-  marginTop: "4px",
-}));
+// Step 아이콘 스타일
+const CustomStepIconRoot = styled("div")(({ ownerState }) => {
+  const isActiveOrCompleted = ownerState.active || ownerState.completed;
 
+  return {
+    backgroundImage: isActiveOrCompleted
+      ? "linear-gradient(to right, #293a2c, #536976, #BBD2C5)"
+      : "none",
+    backgroundColor: isActiveOrCompleted ? "transparent" : "#555",
+    color: "#fff",
+    width: 40,
+    height: 40,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "50%",
+    zIndex: 1,
+  };
+});
+
+// 아이콘 컴포넌트
 function CustomStepIcon(props) {
   const { active, completed, className, icon } = props;
   return (
@@ -69,7 +84,7 @@ function CustomStepIcon(props) {
       ownerState={{ active, completed }}
       className={clsx(className)}
     >
-      {completed ? <Check fontSize="small" /> : icon}
+      {iconMap[icon]}
     </CustomStepIconRoot>
   );
 }
@@ -153,19 +168,28 @@ const ChangePw = () => {
         memberId: loginMember.memberId,
         memberPw: currentPw,
       })
-      .then(() => {
-        Swal.fire({
-          title: "확인 완료",
-          text: "현재 비밀번호가 확인되었습니다.",
-          icon: "success",
-          confirmButtonColor: "#2f3e2f",
-        });
-        setStep(2);
+      .then((res) => {
+        if (res.data === 1) {
+          Swal.fire({
+            title: "확인 완료",
+            text: "현재 비밀번호가 확인되었습니다.",
+            icon: "success",
+            confirmButtonColor: "#2f3e2f",
+          });
+          setStep(2);
+        } else {
+          Swal.fire({
+            title: "확인 실패",
+            text: "현재 비밀번호가 일치하지 않습니다.",
+            icon: "error",
+            confirmButtonColor: "#2f3e2f",
+          });
+        }
       })
       .catch(() => {
         Swal.fire({
-          title: "확인 실패",
-          text: "현재 비밀번호가 일치하지 않습니다.",
+          title: "오류",
+          text: "서버 요청 중 문제가 발생했습니다.",
           icon: "error",
           confirmButtonColor: "#2f3e2f",
         });
@@ -173,6 +197,7 @@ const ChangePw = () => {
   };
 
   const handleChangePassword = () => {
+    checkPw();
     if (!pwCheckValid) {
       Swal.fire({
         title: "비밀번호 오류",
@@ -182,23 +207,40 @@ const ChangePw = () => {
       });
       return;
     }
+    if (currentPw === memberPw) {
+      Swal.fire({
+        title: "비밀번호 오류",
+        text: "현재 비밀번호와 동일한 비밀번호로 변경할 수 없습니다.",
+        icon: "warning",
+        confirmButtonColor: "#2f3e2f",
+      });
+      return;
+    }
     axios
-      .patch(`${backServer}/member/password`, {
+      .patch(`${backServer}/member/memberPw`, {
         memberId: loginMember.memberId,
-        oldPw: currentPw,
-        newPw: memberPw,
+        memberPw: memberPw,
       })
-      .then(() => {
-        Swal.fire({
-          title: "변경 완료",
-          text: "비밀번호가 성공적으로 변경되었습니다.",
-          icon: "success",
-          confirmButtonColor: "#2f3e2f",
-        }).then(() => navigate("/mypage"));
-        setCurrentPw("");
-        setMemberPw("");
-        setMemberPwRe("");
-        setStep(3);
+      .then((res) => {
+        if (res.data === 1) {
+          Swal.fire({
+            title: "변경 완료",
+            text: "비밀번호가 성공적으로 변경되었습니다.",
+            icon: "success",
+            confirmButtonColor: "#2f3e2f",
+          }).then(() => navigate("/mypage"));
+          setCurrentPw("");
+          setMemberPw("");
+          setMemberPwRe("");
+          setStep(3);
+        } else {
+          Swal.fire({
+            title: "변경 실패",
+            text: "비밀번호 변경이 정상적으로 처리되지 않았습니다.",
+            icon: "error",
+            confirmButtonColor: "#2f3e2f",
+          });
+        }
       })
       .catch(() => {
         Swal.fire({
@@ -213,17 +255,31 @@ const ChangePw = () => {
   return (
     <section className="info-wrap">
       <h2 className="info-title">비밀번호 변경</h2>
-
       <Stepper
         alternativeLabel
         activeStep={step - 1}
         connector={<CustomConnector />}
-        sx={{ marginBottom: 10, marginTop: 10, alignItems: "center" }}
+        sx={{ marginBottom: 5, marginTop: 5, alignItems: "center" }}
       >
         {["현재 비밀번호 확인", "새 비밀번호 설정", "변경 완료"].map(
           (label) => (
             <Step key={label}>
-              <StepLabel StepIconComponent={CustomStepIcon}>{label}</StepLabel>
+              <StepLabel
+                StepIconComponent={CustomStepIcon}
+                sx={{
+                  "& .MuiStepLabel-label": {
+                    color: "#aaa", // 기본 회색
+                  },
+                  "& .MuiStepLabel-label.Mui-active": {
+                    color: "black", // 현재 단계
+                  },
+                  "& .MuiStepLabel-label.Mui-completed": {
+                    color: "black", // 완료된 단계
+                  },
+                }}
+              >
+                {label}
+              </StepLabel>
             </Step>
           )
         )}
@@ -231,24 +287,27 @@ const ChangePw = () => {
 
       <Box className="info-form">
         {step === 1 && (
-          <div className="info-form-field">
+          <form
+            className="info-form-field"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleCheckCurrentPw();
+            }}
+          >
             <TextField
               label="현재 비밀번호"
               type="password"
               value={currentPw}
               onChange={(e) => setCurrentPw(e.target.value)}
               fullWidth
+              sx={{ marginBottom: "1rem", marginTop: "1rem" }}
             />
             <div className="info-action-box" style={{ marginTop: "1rem" }}>
-              <button
-                className="info-action-btn info-update-btn"
-                onClick={handleCheckCurrentPw}
-                style={{ marginTop: "1rem" }}
-              >
+              <button type="submit" className="info-action-btn info-update-btn">
                 비밀번호 확인
               </button>
             </div>
-          </div>
+          </form>
         )}
 
         {step === 2 && (
@@ -372,8 +431,19 @@ const ChangePw = () => {
 
         {step === 3 && (
           <div className="info-form-field" style={{ textAlign: "center" }}>
-            <p style={{ fontSize: "1.2rem", marginTop: "2rem" }}>
-              ✅ 비밀번호가 성공적으로 변경되었습니다.
+            <img
+              src="/image/pwc_success.jpg"
+              alt="비밀번호 변경 완료"
+              style={{ width: "400px", marginBottom: "1rem" }}
+            />
+            <p
+              style={{
+                fontSize: "1.5rem",
+                marginBottom: "2rem",
+                fontFamily: "ns-r",
+              }}
+            >
+              비밀번호가 성공적으로 변경되었습니다.
             </p>
           </div>
         )}
