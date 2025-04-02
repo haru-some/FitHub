@@ -61,7 +61,7 @@ function App() {
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />
           <Route path="/shop/*" element={<ShopList />} />
-          <Route path="/shop/detail" element={<ShopDetail />} />
+          <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
           <Route path="/cart" element={<ShopCart />} />
           <Route path="/chat" element={<MemberChat />} />
         </Routes>

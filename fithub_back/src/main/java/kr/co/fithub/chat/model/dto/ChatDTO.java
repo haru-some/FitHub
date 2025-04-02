@@ -8,13 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ChatDTO {
-	private Long chatRoomNo;   // 채팅방 번호
-    private String memberId;     // 보낸 사람 ID (관리자 or 유저)
-    private String messageContent;    // 메시지 내용
-    private String messageType; // "CHAT" (일반 메시지) | "JOIN" (입장) | "LEAVE" (퇴장)
-    private String messageDate;  
-
-    public enum MessageType {
-        CHAT, JOIN, LEAVE
-    }
+    private String type; // enter, message, out
+    private String memberId;
+    private String message;
+    private String chatRoomNo; // 채팅방 번호
+    private String sentAt; // 메시지 전송 시간
+    private String isRead; // 'Y' 또는 'N'
 }

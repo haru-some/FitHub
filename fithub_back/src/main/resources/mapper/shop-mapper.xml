@@ -6,4 +6,7 @@
  			select goods_no, goods_name, goods_price, goods_category, goods_url  from  goods  order by goods_no desc
  	</select>
   
+  	<select id="selectOneGoods">
+  		select * from goods where goods_no= #{boardNo}
+  	</select>
 </mapper>

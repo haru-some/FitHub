@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.fithub.chat.model.dao.ChatDao">
+
+	<!-- 채팅 메시지 저장 -->
+    <insert id="insertChatMessage">
+        INSERT INTO chat_message (chat_room_no, member_id, message, sent_at, is_read)
+        VALUES (#{chatRoomNo}, #{memberId}, #{message}, SYSTIMESTAMP, 'N')
+    </insert>
+
+    <!-- 읽지 않은 메시지들을 읽음 처리 -->
+    <update id="markMessagesAsRead">
+        UPDATE chat_message
+        SET is_read = 'Y'
+        WHERE chat_room_no = #{chatRoomNo} AND is_read = 'N'
+    </update>
+
+    <!-- 안 읽은 메시지가 있는지 확인 -->
+    <select id="checkUnreadMessages" resultType="string">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END
+        FROM chat_message
+        WHERE chat_room_no = #{chatRoomNo} AND is_read = 'N'
+    </select>
+
+    <!-- 채팅방의 message_alarm 상태 업데이트 -->
+    <update id="updateMessageAlarm">
+        UPDATE chat_room
+        SET message_alarm = #{messageAlarm}
+        WHERE chat_room_no = #{chatRoomNo}
+    </update>
+    
+</mapper>
