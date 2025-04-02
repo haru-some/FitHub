@@ -2,6 +2,7 @@ package kr.co.fithub.community.model.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,7 +13,7 @@ import kr.co.fithub.community.model.dto.CommunityDTO;
 @Mapper
 public interface CommunityDao {
 
-	List selectCommunityList(int memberNo);
+	List selectCommunityList(Map<String, Object> map);
 
 	CommunityDTO selectOneCommunity(HashMap<String, Integer> map);
 
@@ -31,5 +32,7 @@ public interface CommunityDao {
 	List<CommentDTO> selectCommentList(int communityNo);
 
 	int insertComment(CommentDTO comment);
+
+	int totalCount();
 	
 }

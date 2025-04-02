@@ -12,11 +12,11 @@ const AdminChat = () => {
       <div className="page-title">문의 관리</div>
       <div className="admin-chat-box">
         <div className="chat-list-box">
-          <AdminChatList onSelectChatRoom={setSelectedChatRoom} />
+          <AdminChatList />
         </div>
         <div className="chat-box-view">
           {selectedChatRoom ? (
-            <AdminChatView chatRoomId={selectedChatRoom} />
+            <AdminChatView />
           ) : (
             <div className="empty-chat-view">채팅방을 선택하세요</div>
           )}
@@ -67,31 +67,6 @@ const AdminChatView = ({ chatRoomId }) => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
 
-  useEffect(() => {
-    //WebSocketService.connect(chatRoomId);
-
-    //WebSocketService.on("message", (message) => {
-    //setMessages((prev) => [...prev, message]);
-    // });
-
-    return () => {
-      //WebSocketService.disconnect();
-    };
-  }, [chatRoomId]);
-
-  const messageSend = () => {
-    if (chatInput.trim() !== "") {
-      const message = {
-        chatRoomNo: chatRoomId,
-        memberId: "kingjoji", // 관리자 ID (예제)
-        content: chatInput,
-        messageType: "CHAT",
-      };
-      //WebSocketService.sendMessage(message);
-      setChatInput("");
-    }
-  };
-
   return (
     <>
       <div className="chat-box">
@@ -132,9 +107,7 @@ const AdminChatView = ({ chatRoomId }) => {
           onChange={(e) => setChatInput(e.target.value)}
           placeholder="메시지를 입력하세요."
         />
-        <button type="button" onClick={messageSend}>
-          전송
-        </button>
+        <button type="button">전송</button>
       </div>
     </>
   );
