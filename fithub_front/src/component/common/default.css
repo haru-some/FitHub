@@ -312,3 +312,7 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--gray1);
 }
+
+.swal2-shown::-webkit-scrollbar {
+  display: none;
+}

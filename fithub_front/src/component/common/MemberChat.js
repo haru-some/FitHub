@@ -1,30 +1,80 @@
+import { useState, useEffect, useRef } from "react";
+import CircleIcon from "@mui/icons-material/Circle";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isLoginState, memberState } from "../utils/RecoilData";
+
 const MemberChat = () => {
+  const [messages, setMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const ws = useRef(null);
+  const member = useRecoilValue(memberState);
+
+  useEffect(() => {
+    ws.current = new WebSocket(
+      `ws://localhost:8080/allChat?chatRoomNo=${member.chatRoomNo}`
+    );
+    ws.current.onmessage = (event) => {
+      const newMessage = JSON.parse(event.data);
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
+    return () => ws.current.close();
+  }, [member.chatRoomNo]);
+
+  const sendMessage = () => {
+    if (chatInput.trim() === "") return;
+    const message = {
+      type: "message",
+      chatRoomNo: member.chatRoomNo,
+      memberId: member.memberId,
+      content: chatInput,
+    };
+    ws.current.send(JSON.stringify(message));
+    setChatInput("");
+  };
+
   return (
     <section className="member-chat-section">
-      <div className="page-title">(대충 누구님의) 문의 목록</div>
-      <div className="member-chat-box">
-        <div className="member-chat-list">
-          <div className="member-chat-room">
-            <div className="chat-member-profile">
-              <img src="/image/default_img.png" />
-            </div>
-            <div className="chat-member-main">
-              <div className="chat-member-id">
-                <div>대충 킹조지</div>
+      <div className="page-title">고객센터 문의</div>
+      <div className="chat-box">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={
+              msg.memberId === member.memberId
+                ? "member-chat-line"
+                : "admin-chat-line"
+            }
+          >
+            {msg.memberId !== member.memberId && (
+              <div className="admin-chat-profile">
+                <img src="/image/default_img.png" alt="관리자" />
               </div>
-              <div className="chat-member-content">
-                <div>
-                  킹조지가 열변을 토하는 중
-                  <span className="chat-alarm">(봤는지 안봤는지 숫자)</span>
-                </div>
+            )}
+            <div className="chat-content">
+              <div className="chat-id">
+                {msg.memberId} - {msg.sentAt}
               </div>
+              <div className="chat-text">{msg.content}</div>
             </div>
+            {msg.memberId === member.memberId && (
+              <div className="member-chat-profile">
+                <img src="/image/default_img.png" alt="프로필" />
+              </div>
+            )}
           </div>
-        </div>
-        <div className="chat-input-box">
-          <input type="text" className="chat-input" />
-          <button type="button">전송</button>
-        </div>
+        ))}
+      </div>
+      <div className="chat-input-box">
+        <input
+          type="text"
+          className="chat-input"
+          value={chatInput}
+          onChange={(e) => setChatInput(e.target.value)}
+          placeholder="메시지를 입력하세요."
+        />
+        <button type="button" onClick={sendMessage}>
+          전송
+        </button>
       </div>
     </section>
   );
