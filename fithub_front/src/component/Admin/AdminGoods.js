@@ -1,0 +1,109 @@
+import React, { useEffect, useState } from "react";
+import "./adminGoods.css";
+import Swal from "sweetalert2";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+const AdminGoods = () => {
+  const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
+  //const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
+  const [activeTab, setActiveTab] = useState("상품정보");
+  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+
+  const [goods, setGoods] = useState({
+    id: 1,
+    goodsName: "비타민 A",
+    goodsPrice: 10000,
+    goodsExpl: "비타민 A의 설명입니다.",
+    goodsUrl: "/image/default_img.png",
+  });
+
+  const handleIncrease = () => {
+    setQuantity(quantity + 1);
+  };
+  const handleDecrease = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "상품정보":
+        return <div>상품 정보</div>;
+      case "리뷰":
+        return <div>(예시)리뷰 정보 탭입니다.</div>;
+      case "배송/결제":
+        return <div>(예시)배송 정보 탭입니다.</div>;
+      case "반품/교환":
+        return <div>(예시)반품 정보 탭입니다.</div>;
+      default:
+        return null;
+    }
+  };
+
+  const plusCart = () => {
+    Swal.fire({
+      icon: "info",
+      title: "예시 버튼입니다..",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  };
+
+  const doBuy = () => {
+    Swal.fire({
+      icon: "info",
+      title: "예시 버튼입니다..",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  };
+
+  return (
+    <div className="shop-detail-frm-wrap">
+      <div className="main-detail">
+        <div className="goods-image">
+          <img
+            src={goods.goodsUrl || "/image/default_img.png"} // 기본 이미지 처리
+            alt={goods.goodsName || "상품명 없음"} // 기본 상품명 처리
+          />
+        </div>
+        <div className="goods-info">
+          <div className="ex-box">
+            <h1>{goods.goodsName || "상품명 없음"}</h1>
+            <p>{goods.goodsExpl || "설명 없음"}</p>
+          </div>
+          <h3>{goods.goodsPrice.toLocaleString()}원</h3>
+
+          <div className="price-box">
+            <div className="quantity-controls">
+              <button onClick={handleDecrease}>-</button>
+              <span>{quantity}</span>
+              <button onClick={handleIncrease}>+</button>
+            </div>
+            <h2>총 가격: {(goods.goodsPrice * quantity).toLocaleString()}원</h2>
+          </div>
+          <div className="goods-buy">
+            <button onClick={plusCart}>장바구니</button>
+            <button onClick={doBuy}>구매하기</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="tabs">
+        {["상품정보", "리뷰", "배송/결제", "반품/교환"].map((tab) => (
+          <button
+            key={tab}
+            className={activeTab === tab ? "active" : ""}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      <div className="tab-content">{renderContent()}</div>
+    </div>
+  );
+};
+
+export default AdminGoods;

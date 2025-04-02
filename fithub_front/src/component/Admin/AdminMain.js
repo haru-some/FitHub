@@ -4,6 +4,7 @@ import "./admin.css";
 import AdminMember from "./AdminMember";
 import AdminStat from "./AdminStat";
 import AdminChat from "./AdminChat";
+import AdminGoods from "./AdminGoods";
 
 const AdminMain = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -18,6 +19,7 @@ const AdminMain = () => {
           <Route path="stat" element={<AdminStat />} />
           <Route path="chat" element={<AdminChat />} />
           <Route path="Ads" element={<AdminAds />} />
+          <Route path="goods" element={<AdminGoods />} />
         </Routes>
       </div>
     </section>
@@ -51,6 +53,12 @@ const Sidebar = () => {
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
         광고 관리
+      </NavLink>
+      <NavLink
+        to="/admin/goods"
+        className={({ isActive }) => (isActive ? "active-tab" : "")}
+      >
+        상품 관리
       </NavLink>
     </div>
   );
