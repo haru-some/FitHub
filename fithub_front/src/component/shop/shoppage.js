@@ -1,35 +1,59 @@
 import React, { useEffect, useState } from "react";
-import "./shopDetail.css";
+import "./admin.css";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
+import TextEditor from "../utils/TextEditor";
 import axios from "axios";
 
-const ShopDetail = () => {
+const AdminGoods = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
-  const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
   const [activeTab, setActiveTab] = useState("상품정보");
-  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
-  // 상품 데이터 가져오기
-  useEffect(() => {
+  const [goods, setGoods] = useState({
+    id: 1,
+    goodsName: "상품 제목을 기입하세요",
+    goodsPrice: 10000,
+    goodsExpl: "상품 설명을 기입하세요.",
+    goodsUrl: "/image/default_img.png",
+  });
+
+  const [price, setPrice] = useState(goods.goodsPrice);
+  const [description, setDescription] = useState(goods.goodsExpl); // 설명 상태 추가
+
+  const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append("id", goods.id);
+    formData.append("goodsName", goods.goodsName);
+    formData.append("goodsPrice", price);
+    formData.append("goodsExpl", description);
+    formData.append("goodsUrl", goods.goodsUrl); // 이미지 URL 추가
+
+    const backServer = process.env.REACT_APP_BACK_SERVER; // 백엔드 서버 URL
+
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/goods/${goodsNo}`)
+      .post(`${backServer}/api/addGoods`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
-        console.log(res);
-        setGoods(res.data);
+        Swal.fire({
+          icon: "success",
+          title: "상품이 등록되었습니다!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/admin"); // 등록 후 관리 페이지로 이동
       })
       .catch((err) => {
-        console.log(err);
+        console.error("상품 등록 실패:", err);
+        Swal.fire({
+          icon: "error",
+          title: "상품 등록 실패",
+          text: err.message,
+        });
       });
-  }, [goodsNo]);
-
-  const handleIncrease = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleDecrease = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
   };
 
   const renderContent = () => {
@@ -37,11 +61,11 @@ const ShopDetail = () => {
       case "상품정보":
         return <div>상품 정보</div>;
       case "리뷰":
-        return <div>리뷰 정보</div>;
+        return <div>(예시)리뷰 정보 탭입니다.</div>;
       case "배송/결제":
-        return <div>배송 정보</div>;
+        return <div>(예시)배송 정보 탭입니다.</div>;
       case "반품/교환":
-        return <div>반품 정보</div>;
+        return <div>(예시)반품 정보 탭입니다.</div>;
       default:
         return null;
     }
@@ -49,43 +73,24 @@ const ShopDetail = () => {
 
   const plusCart = () => {
     Swal.fire({
-      icon: "success",
-      title: "장바구니에 보관하였습니다.",
+      icon: "info",
+      title: "예시 버튼입니다..",
       showConfirmButton: false,
-      timer: 2000,
+      timer: 1000,
     });
   };
 
   const doBuy = () => {
     Swal.fire({
-      title: "구매할까요?",
-      showCancelButton: true,
-      confirmButtonText: "예",
-      cancelButtonText: "아니오",
-      confirmButtonColor: "#4caf50",
-      cancelButtonColor: "#8CCC8F",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/purchase"); // 구매 페이지로 이동
-      } else {
-        Swal.fire({
-          icon: "info",
-          title: "구매가 취소되었습니다.",
-          showConfirmButton: false,
-          cancelButtonColor: "#8CCC8F",
-          timer: 2000,
-        });
-      }
+      icon: "info",
+      title: "예시 버튼입니다..",
+      showConfirmButton: false,
+      timer: 1000,
     });
   };
 
-  // 로딩 중 또는 데이터가 없는 경우 처리
-  if (!goods) {
-    return <div>로딩 중...</div>; // 상품 데이터가 로드되지 않았을 경우
-  }
-
   return (
-    <div className="shop-detail-wrap">
+    <div className="shop-detail-frm-wrap">
       <div className="main-detail">
         <div className="goods-image">
           <img
@@ -94,21 +99,38 @@ const ShopDetail = () => {
           />
         </div>
         <div className="goods-info">
-          <h1>{goods.goodsName || "상품명 없음"}</h1>
-          <p>{goods.goodsExpl || "설명 없음"}</p>
-          <p>제조일정: {goods.manufacturingDate || "정보 없음"}</p>{" "}
-          {/* 제조일정 */}
-          <p>상품 크기: {goods.size || "정보 없음"}</p> {/* 상품 크기 */}
-          <p>품질보증기한: {goods.qualityGuarantee || "정보 없음"}</p>{" "}
-          {/* 품질 보증 기한 */}
-          <h3>{goods.goodsPrice.toLocaleString()}원</h3>
-          <div className="price-box">
-            <div className="quantity-controls">
-              <button onClick={handleDecrease}>-</button>
-              <span>{quantity}</span>
-              <button onClick={handleIncrease}>+</button>
+          <div className="ex-box">
+            <input
+              type="text"
+              value={goods.goodsName}
+              onChange={(e) =>
+                setGoods({ ...goods, goodsName: e.target.value })
+              }
+              style={{
+                color: "black",
+                fontSize: "24px",
+                width: "100%",
+                marginBottom: "10px",
+              }} // 스타일 조정
+              placeholder="상품 제목을 입력하세요"
+            />
+            <div>
+              <h2>상품 설명</h2>
+              <TextEditor />
             </div>
-            <h2>총 가격: {(goods.goodsPrice * quantity).toLocaleString()}원</h2>
+          </div>
+
+          <div className="price-box">
+            <h2>
+              총 가격:
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                style={{ margin: "0 5px", width: "100px" }}
+              />
+              원
+            </h2>
           </div>
           <div className="goods-buy">
             <button onClick={plusCart}>장바구니</button>
@@ -129,8 +151,13 @@ const ShopDetail = () => {
         ))}
       </div>
       <div className="tab-content">{renderContent()}</div>
+
+      {/* 상품 등록하기 버튼 */}
+      <button type="button" className="button" onClick={handleSubmit}>
+        상품 등록하기
+      </button>
     </div>
   );
 };
 
-export default ShopDetail;
+export default AdminGoods;

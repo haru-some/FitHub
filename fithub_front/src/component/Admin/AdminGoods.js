@@ -1,29 +1,67 @@
-import React, { useEffect, useState } from "react";
-import "./adminGoods.css";
+import React, { useEffect, useRef, useState } from "react";
+import "./admin.css";
 import Swal from "sweetalert2";
-import { useNavigate, useParams } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
+import TextEditor from "../utils/TextEditor";
 import axios from "axios";
 
 const AdminGoods = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
-  //const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
   const [activeTab, setActiveTab] = useState("상품정보");
-  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
   const [goods, setGoods] = useState({
-    id: 1,
-    goodsName: "비타민 A",
+    goodsName: "상품 제목을 기입하세요",
     goodsPrice: 10000,
-    goodsExpl: "비타민 A의 설명입니다.",
+    goodsExpl: "상품 설명을 기입하세요.",
     goodsUrl: "/image/default_img.png",
   });
 
-  const handleIncrease = () => {
-    setQuantity(quantity + 1);
-  };
-  const handleDecrease = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
+  //제목, 썸네일, 내용, 첨부파일>> 글작성을 위해서 사용자에게 받아야하는 정보
+  const [goodsName, setGoodsName] = useState(""); // 사용자가 입력 할 제목
+  const [thumbnail, setThumbnail] = useState(null); // 썸네일 첨부파일 저장용 state
+  const [goodsFile, setGoodsFile] = useState([]); // 첨부파일(파일여러개일 수 있으므로 배열로..)
+  const [goodsExpl, setGoodsExpl] = useState(""); // 사용자가 입력 할 제목
+  const [price, setPrice] = useState(goods.goodsPrice);
+  const [description, setDescription] = useState(goods.goodsExpl); // 설명 상태 추가
+  const urlRef = useRef(null);
+
+  const submit = () => {
+    const form = new FormData();
+    form.append("goodsNo", goods.goodsNo);
+    form.append("goodsName", goods.goodsName);
+    form.append("goodsPrice", goods.goodsPrice);
+    form.append("goodsExpl", goods.goodsExpl);
+    form.append("goodsUrl", goods.goodsUrl);
+    form.append("goodsFile", goods.goodsFile);
+
+    const backServer = process.env.REACT_APP_BACK_SERVER;
+
+    axios
+      .post(`${backServer}/goods`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          processData: false,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        Swal.fire({
+          icon: "success",
+          title: "상품이 등록되었습니다!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/admin");
+      })
+      .catch((err) => {
+        console.error("상품 등록 실패:", err);
+        Swal.fire({
+          icon: "error",
+          title: "상품 등록 실패",
+          text: err.message,
+        });
+      });
   };
 
   const renderContent = () => {
@@ -64,24 +102,45 @@ const AdminGoods = () => {
       <div className="main-detail">
         <div className="goods-image">
           <img
-            src={goods.goodsUrl || "/image/default_img.png"} // 기본 이미지 처리
-            alt={goods.goodsName || "상품명 없음"} // 기본 상품명 처리
+            src={goods.goodsUrl || "/image/default_img.png"}
+            onClick={() => {
+              urlRef.current.click();
+            }}
           />
         </div>
         <div className="goods-info">
           <div className="ex-box">
-            <h1>{goods.goodsName || "상품명 없음"}</h1>
-            <p>{goods.goodsExpl || "설명 없음"}</p>
+            <input
+              type="text"
+              value={goods.goodsName}
+              onChange={(e) =>
+                setGoods({ ...goods, goodsName: e.target.value })
+              }
+              style={{
+                color: "black",
+                fontSize: "24px",
+                width: "100%",
+                marginBottom: "10px",
+              }}
+              placeholder="상품 제목을 입력하세요"
+            />
+            <div>
+              <h2>상품 설명</h2>
+              <TextEditor />
+            </div>
           </div>
-          <h3>{goods.goodsPrice.toLocaleString()}원</h3>
 
           <div className="price-box">
-            <div className="quantity-controls">
-              <button onClick={handleDecrease}>-</button>
-              <span>{quantity}</span>
-              <button onClick={handleIncrease}>+</button>
-            </div>
-            <h2>총 가격: {(goods.goodsPrice * quantity).toLocaleString()}원</h2>
+            <h2>
+              총 가격:
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                style={{ margin: "0 5px", width: "100px" }}
+              />
+              원
+            </h2>
           </div>
           <div className="goods-buy">
             <button onClick={plusCart}>장바구니</button>
@@ -102,6 +161,9 @@ const AdminGoods = () => {
         ))}
       </div>
       <div className="tab-content">{renderContent()}</div>
+      <button type="button" className="button" onClick={submit}>
+        상품 등록하기
+      </button>
     </div>
   );
 };

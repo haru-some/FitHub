@@ -9,4 +9,24 @@
   	<select id="selectOneGoods">
   		select * from goods where goods_no= #{boardNo}
   	</select>
+  	<insert id="insertGoods">
+  		insert into goods values 
+  		(#{goodsNo},#{goodsName},#{goodsExpl},#{goodsPrice},#{goodsStock},#{goodsUrl},sysdate,#{goodsCategory})
+ 		<selectKey order="BEFORE" resultType="int" keyProperty="goodsNo">
+ 			select goods_seq.nextval from dual
+ 		</selectKey>
+  	</insert>
+  	
+  	<insert id="inserGoodsFile">
+ 		insert into goods_file values (goods_file_seq.nextval, #{goodsNo}, #{fileName}, #{filePath})
+ 	</insert>
+  	
+  	<insert id="insertBoard">
+ 		insert into board values 
+ 		(#{boardNo}, #{boardTitle},#{boardThumb},#{boardContent},#{boardWriter}, sysdate ,1)
+ 		<selectKey order="BEFORE" resultType="int" keyProperty="boardNo">
+ 			select board_seq.nextval from dual
+ 		</selectKey>
+ 	</insert>
+  	
 </mapper>

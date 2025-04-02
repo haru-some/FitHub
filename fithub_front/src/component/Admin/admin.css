@@ -305,3 +305,154 @@ td {
   cursor: pointer;
   color: var(--main3);
 }
+
+/* shop frm  */
+
+.shop-detail-frm-wrap {
+  width: 1000px;
+  background-color: var(--gray3);
+  padding: 20px;
+}
+.shop-detail-frm-wrap .main-detail {
+  display: flex;
+}
+
+.shop-detail-frm-wrap .goods-image {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.shop-detail-frm-wrap .goods-image img {
+  width: 100%; /* 가로 길이에 맞게 조정 */
+  height: auto;
+}
+
+.shop-detail-frm-wrap .goods-info {
+  flex: 1;
+}
+.shop-detail-frm-wrap .ex-box {
+  min-height: 200px;
+}
+
+.shop-detail-frm-wrap .goods-info h1 {
+  margin-top: 60px;
+  margin-bottom: 40px;
+  margin-left: 30px;
+}
+.shop-detail-frm-wrap .goods-info h3 {
+  margin-top: 70px;
+  margin-left: 30px;
+  font-weight: 700;
+}
+.shop-detail-frm-wrap .goods-info p {
+  margin: 20px; /* 단락 간격 추가 */
+}
+
+.shop-detail-frm-wrap .price-box {
+  display: flex;
+  justify-content: space-between;
+}
+.shop-detail-frm-wrap .quantity-controls {
+  display: flex;
+  align-items: center;
+  margin: 30px;
+}
+
+.shop-detail-frm-wrap .quantity-controls button {
+  width: 25px;
+  height: 20px;
+  font-size: small;
+  background-color: #4caf50;
+  color: white;
+
+  border: none;
+  border-radius: 5px;
+}
+
+.shop-detail-frm-wrap .quantity-controls span {
+  margin: 0 10px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+.shop-detail-frm-wrap .goods-info h2 {
+  margin-right: 50px;
+  margin-top: 30px;
+}
+.shop-detail-frm-wrap .goods-buy {
+  margin-top: 20px;
+  display: flex;
+}
+.shop-detail-frm-wrap .goods-buy button {
+  background-color: #4caf50;
+  color: white;
+  font-size: 20px;
+  font-weight: 900;
+  border: none;
+  padding: 15px; /* 상하 여백 증가 */
+  flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
+  cursor: pointer;
+  margin-right: 1px;
+  border-radius: 5px;
+}
+
+.shop-detail-frm-wrap .tabs {
+  margin-top: 80px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.shop-detail-frm-wrap .tabs button {
+  background-color: #f1f1f1;
+  color: #aaa;
+  border: none;
+  padding: 15px; /* 상하 여백 증가 */
+  flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
+  cursor: pointer;
+  margin-right: 10px; /* 오른쪽 여백 추가 */
+  border-radius: 5px;
+}
+
+.shop-detail-frm-wrap .tabs button:last-child {
+  margin-right: 0; /* 마지막 버튼은 오른쪽 여백 없음 */
+}
+
+.shop-detail-frm-wrap .tabs button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.shop-detail-frm-wrap .tab-content {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+.shop-detail-frm-wrap .button {
+  background-color: #4caf50;
+  color: white;
+  font-size: 20px;
+  font-weight: 900;
+  border: none;
+  padding: 15px; /* 상하 여백 증가 */
+  flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
+  cursor: pointer;
+  margin-right: 1px;
+  border-radius: 5px;
+  width: 500px;
+}
+
+.shop-detail-frm-wrap .ql-editor {
+  background-color: var(--gray3);
+  width: 459px;
+  height: 250px;
+  resize: none;
+}
+.shop-detail-frm-wrap input[type="number"] {
+  width: 70px;
+  height: 30px;
+  border: none;
+  color: black;
+  outline: none;
+  text-align: right;
+}
