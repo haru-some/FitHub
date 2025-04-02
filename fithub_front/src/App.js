@@ -19,7 +19,6 @@ import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
 import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
-import ChangePw from "./component/member/ChangePw";
 
 function App() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);

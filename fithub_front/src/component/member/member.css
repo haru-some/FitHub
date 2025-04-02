@@ -454,7 +454,7 @@
 }
 .mypage-sidebar h2 {
   font-size: 24px;
-  font-family: bg-b;
+  font-family: pd-b;
   color: white;
   margin-bottom: 30px;
   text-align: center;
@@ -493,27 +493,29 @@
 }
 .info-title {
   font-size: 28px;
-  font-family: bg-b;
+  font-family: pd-b;
   margin-bottom: 30px;
   text-align: center;
 }
 .info-image-box {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 40px;
   margin-bottom: 30px;
 }
 .info-image-box img {
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
   object-fit: cover;
   margin-bottom: 12px;
 }
 .info-profile-img {
-  width: 120px;
-  height: 120px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
+  padding: 3px;
+  background: linear-gradient(135deg, #617c58, #2f3e2f);
+  box-sizing: border-box;
 }
 .info-form {
   display: flex;
@@ -533,14 +535,16 @@
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-top: 30px;
+  margin-top: 10px;
+  margin-bottom: 35px;
 }
 /* 이미지 선택 & 삭제 버튼 공통 스타일 */
 .info-img-btn {
+  height: 40px;
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 14px;
-  font-weight: 500;
+  font-family: pd-b;
   cursor: pointer;
   margin: 8px;
   min-width: 120px;
@@ -557,12 +561,11 @@
 }
 /* 이미지 삭제 버튼 */
 .info-btn-delete {
-  background-color: #e0e0e0;
-  color: #333;
+  background-color: var(--main1);
+  color: white;
 }
 .info-btn-delete:hover {
-  background-color: #bbb;
-  color: #111;
+  background-color: #2b2e2b;
 }
 /* 정보수정 & 탈퇴 버튼 영역 */
 .info-action-box {
@@ -584,19 +587,19 @@
 }
 /* 정보수정 버튼 */
 .info-update-btn {
-  background-color: #a6a6a6;
+  background-color: #2b3a2e;
   color: white;
 }
 .info-update-btn:hover {
-  background-color: #888;
+  background-color: #3b4a3d;
 }
 /* 회원탈퇴 버튼 */
 .info-delete-btn {
-  background-color: #2f3e2f;
+  background-color: var(--main1);
   color: white;
 }
 .info-delete-btn:hover {
-  background-color: #1f2e1f;
+  background-color: #2b2e2b;
 }
 .MuiOutlinedInput-root {
   color: #000;

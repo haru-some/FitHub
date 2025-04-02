@@ -240,6 +240,8 @@ const MemberJoin = () => {
     member.memberAddrDetail.trim() !== "";
 
   const joinMember = () => {
+    checkId();
+    checkPw();
     if (
       idCheckValid &&
       pwCheckValid &&
@@ -627,7 +629,6 @@ const MemberJoin = () => {
               inputProps={{
                 maxLength: 13,
                 inputMode: "numeric",
-                pattern: "[0-9]*",
               }}
             />
           </Box>

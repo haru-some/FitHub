@@ -6,7 +6,7 @@ import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import SmsIcon from "@mui/icons-material/Sms";
 
@@ -56,7 +56,36 @@ const HeaderLink = () => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
-  const [chatAlarm, setChatAlarm] = useState(1);
+  const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
+
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     const fetchChatAlarm = async () => {
+  //       try {
+  //         const response = await axios.get(
+  //           `/api/chat/alarm/${memberInfo.memberId}`
+  //         );
+  //         setChatAlarm(response.data.messageAlarm); // "Y" 또는 "N"
+  //       } catch (error) {
+  //         console.error("채팅 알람 정보를 불러오는데 실패했습니다.", error);
+  //       }
+  //     };
+
+  //     fetchChatAlarm();
+
+  //     // WebSocket 연결
+  //     const socket = new WebSocket("ws://localhost:8080/ws/chat");
+
+  //     socket.onmessage = (event) => {
+  //       const data = JSON.parse(event.data);
+  //       if (data.type === "message") {
+  //         setChatAlarm("Y"); // 새 메시지가 오면 'Y'로 변경
+  //       }
+  //     };
+
+  //     return () => socket.close();
+  //   }
+  // }, [isLogin, memberInfo]);
 
   const logOut = () => {
     setMemberInfo(null);
@@ -71,10 +100,10 @@ const HeaderLink = () => {
         <>
           <li>
             <Link to="/chat">
-              {chatAlarm === 1 ? (
-                <SmsIcon />
-              ) : (
+              {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
+              ) : (
+                <SmsIcon />
               )}
             </Link>
           </li>

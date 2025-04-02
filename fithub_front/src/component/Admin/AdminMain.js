@@ -1,13 +1,26 @@
-import { Link, NavLink, Route, Routes } from "react-router-dom";
+import { Link, NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import AdminAds from "./AdminAds";
 import "./admin.css";
 import AdminMember from "./AdminMember";
 import AdminStat from "./AdminStat";
 import AdminChat from "./AdminChat";
+import { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isLoginState, memberState } from "../utils/RecoilData";
 import AdminGoods from "./AdminGoods";
 
 const AdminMain = () => {
-  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const isLogin = useRecoilValue(isLoginState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const navigate = useNavigate();
+  // 관리자(member_level === 1)만 접근 가능하도록 설정
+  useEffect(() => {
+    if (!isLogin || memberInfo?.memberLevel !== 1) {
+      alert("관리자만 접근 가능합니다.");
+      navigate("/");
+    }
+  }, [isLogin, memberInfo, navigate]);
+
   return (
     <section className="section admin-section">
       <div className="navi-bar">

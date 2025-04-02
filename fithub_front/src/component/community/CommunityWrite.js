@@ -128,7 +128,7 @@ const TextEditor = (props) => {
       },
       ImageResize: {
         parchment: Quill.import("parchment"),
-        modules: ["Resize", "DisplatSize", "Toolbar"],
+        modules: ["Resize", "DisplaySize", "Toolbar"],
       },
     };
   }, []);

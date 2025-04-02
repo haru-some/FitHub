@@ -76,13 +76,21 @@
   background-color: #3b3b3b;
   border-radius: 8px;
   padding: 0px 20px;
+  cursor: pointer;
 }
 
-.myfit-follow-wrap .avatar {
+.myfit-follow-wrap .avatar-wrap {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   margin-right: 12px;
+  overflow: hidden;
+}
+
+.myfit-follow-wrap .avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .myfit-follow-wrap .user-info {
@@ -101,18 +109,23 @@
 }
 
 .myfit-follow-wrap .follow-button {
-  background-color: #447fd8;
+  height: 30px;
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 16px;
-  height: 34px;
+}
+.myfit-follow-wrap .following {
+  box-sizing: border-box;
+  border: 1px solid #007bff;
+  background-color: transparent;
 }
 
 .myfit-follow-wrap .follow-button:hover {
-  background-color: #2b60af;
+  background-color: #238eff;
 }
 
 .myfit-follow-wrap .back-btn {
@@ -129,6 +142,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: 10px;
 }
 .myfit-follow-wrap .back-btn:hover {
   background-color: #333333;
