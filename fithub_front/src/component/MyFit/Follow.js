@@ -2,11 +2,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./follow.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { memberState } from "../utils/RecoilData";
 
 const Follow = () => {
   const params = useParams();
   const memberNo = params.memberNo;
   const type = params.type; //1 : 팔로워  2 : 팔로잉
+  const loginMember = useRecoilValue(memberState);
+  const loginMemberNo = loginMember.memberNo;
 
   const [memberList, setMemberList] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -57,20 +61,42 @@ const Follow = () => {
         {filteredList.length > 0 ? (
           filteredList.map((member, index) => (
             <li key={index} className="user-item-wrap">
-              <div className="user-item">
-                <img
-                  src={
-                    member.memberThumb
-                      ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                      : "/image/default_img.png"
-                  }
-                  className="avatar"
-                />
+              <div
+                className="user-item"
+                onClick={() => {
+                  navigate(`/myfit/activity/${member.memberNo}`);
+                }}
+              >
+                <div className="avatar-wrap">
+                  <img
+                    src={
+                      member.memberThumb
+                        ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                        : "/image/default_img.png"
+                    }
+                    className="avatar"
+                  />
+                </div>
                 <div className="user-info">
                   <div className="name">{member.memberId}</div>
                   <div className="username">{member.memberName}</div>
                 </div>
-                <button className="follow-button">팔로잉</button>
+                {loginMember && loginMemberNo == memberNo && (
+                  <button
+                    className={`follow-button ${
+                      member.isFollow === 1 ? "following" : ""
+                    }`}
+                    onClick={() => {
+                      if (member.isFollow === 1) {
+                        //팔로우가 되어있는 경우
+                      } else {
+                        //팔로우가 안되어있는 경우
+                      }
+                    }}
+                  >
+                    {member.isFollow === 1 ? "팔로잉" : "팔로우"}
+                  </button>
+                )}
               </div>
             </li>
           ))

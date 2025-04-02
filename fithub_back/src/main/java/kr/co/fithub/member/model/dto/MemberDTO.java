@@ -29,4 +29,5 @@ public class MemberDTO {
     private String joinDate;		   // 가입일
 	private String accessToken;
 	private String refreshToken;
+	private int isFollow;
 }
