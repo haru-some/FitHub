@@ -13,8 +13,6 @@ const CommunityItem = (props) => {
   const [isLike, setIsLike] = useState(community.isLike === 1);
 
   const navigate = useNavigate();
-  const followState = props.followState;
-  const setFollowState = props.setFollowState;
 
   const changeLike = (e) => {
     if (member) {
@@ -82,7 +80,18 @@ const CommunityItem = (props) => {
               `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
             )
             .then((res) => {
-              setFollowState(followState + 1);
+              const obj = communityList.filter(
+                (item, i) => item.communityNo === community.communityNo
+              )[0];
+              const idx = communityList.indexOf(
+                communityList.filter(
+                  (item, i) => item.communityNo === community.communityNo
+                )[0]
+              );
+              obj["isFollow"] = 0;
+              communityList[idx] = obj;
+
+              setCommunityList([...communityList]);
             });
         }
       });
@@ -92,7 +101,18 @@ const CommunityItem = (props) => {
           `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
         )
         .then((res) => {
-          setFollowState(followState + 1);
+          const obj = communityList.filter(
+            (item, i) => item.communityNo === community.communityNo
+          )[0];
+          const idx = communityList.indexOf(
+            communityList.filter(
+              (item, i) => item.communityNo === community.communityNo
+            )[0]
+          );
+          obj["isFollow"] = 1;
+          communityList[idx] = obj;
+
+          setCommunityList([...communityList]);
         });
     }
     e.stopPropagation();
