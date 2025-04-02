@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./shopList.css";
+import "./shopLIst.css";
 import ProductPage from "./ProductPage";
 import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";

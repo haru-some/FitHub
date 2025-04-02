@@ -11,10 +11,10 @@ import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
+import Follow from "./Follow";
 
 const MyFitMain = () => {
   const params = useParams();
-  console.log(params);
   const [pageTitle, setPageTitle] = useState(
     params["*"].includes("fit")
       ? "My Fit"
@@ -29,14 +29,19 @@ const MyFitMain = () => {
   const [record, setRecord] = useState(null);
   const [routine, setRoutine] = useState(null);
   const today = dayjs();
-  console.log(Number(params["*"].split("/")[1]), member.memberNo);
 
-  const flag =
-    !params["*"].includes("activity") ||
-    (params["*"].includes("activity") &&
-      Number(params["*"].split("/")[1]) === member.memberNo);
-  console.log("flag", flag);
+  const path = params["*"]; // 예: "activity/5" 또는 "follow/3/2"
 
+  const isActivity = path.startsWith("activity");
+  const isFollow = path.startsWith("follow");
+
+  let flag = true; // 기본은 보이게
+
+  if (isActivity || isFollow) {
+    const pathMemberNo = Number(path.split("/")[1]); // 두 경우 다 두 번째가 memberNo
+    flag = pathMemberNo === member.memberNo;
+  }
+  console.log(params);
   const [date, setDate] = useState(() => {
     const savedDate = localStorage.getItem("selectedDate");
     return savedDate ? dayjs(savedDate) : dayjs();
@@ -51,7 +56,6 @@ const MyFitMain = () => {
   const inputDate = dayjs(date.$y + "-" + (date.$M + 1) + "-" + date.$D);
   const weekday = date.format("dddd").charAt(0);
   const [title, setTitle] = useState(weekday + "요일 루틴");
-
   const dateFormat =
     date.$y + "-" + (date.$M + 1) + "-" + date.$D + "-" + weekday;
 
@@ -92,15 +96,28 @@ const MyFitMain = () => {
   }, [date, isUpdate]);
 
   useEffect(() => {
-    setPageTitle(
-      params["*"].includes("fit")
-        ? "My Fit"
-        : params["*"].includes("routine")
-        ? "나의 루틴"
-        : params["*"].includes("activity")
-        ? "활동 로그"
-        : "운동기록"
-    );
+    const path = params["*"];
+
+    if (path.startsWith("fit")) {
+      setPageTitle("My Fit");
+    } else if (path.startsWith("routine")) {
+      setPageTitle("나의 루틴");
+    } else if (path.startsWith("activity")) {
+      setPageTitle("활동 로그");
+    } else if (path.startsWith("record")) {
+      setPageTitle("운동 기록");
+    } else if (path.startsWith("follow")) {
+      const type = path.split("/")[2]; // follow/:memberNo/:type
+      if (type === "1") {
+        setPageTitle("팔로워");
+      } else if (type === "2") {
+        setPageTitle("팔로잉");
+      } else {
+        setPageTitle("팔로우");
+      }
+    } else {
+      setPageTitle("페이지");
+    }
   }, [params]);
 
   return (
@@ -151,6 +168,7 @@ const MyFitMain = () => {
               }
             />
             <Route path="activity/:memberNo" element={<ProfileCard />} />
+            <Route path="follow/:memberNo/:type" element={<Follow />} />
           </Routes>
         </div>
       </div>
@@ -160,8 +178,6 @@ const MyFitMain = () => {
 
 const Sidebar = (props) => {
   const memberNo = props.memberNo;
-  const pageTitleState = props.pageTitleState;
-  const setPageTitleState = props.setPageTitleState;
   const flag = props.flag;
   return (
     <div className={flag ? "sidebar" : "sidebar hidden"}>

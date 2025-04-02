@@ -102,4 +102,16 @@ public class MyfitService {
 		return list;
 	}
 
+	public List<MemberDTO> selectFollowList(int memberNo, int type) {
+		List<MemberDTO> list = null;
+		if(type == 1) {
+			//팔로워 조회
+			list = myfitDao.selectFollowerList(memberNo);
+		}else {
+			//팔로잉 조회
+			list = myfitDao.selectFollowingList(memberNo);
+		}
+		return list;
+	}
+
 }

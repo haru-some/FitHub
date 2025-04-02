@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./profileCard.css";
-import { Link, Route, Routes, useParams } from "react-router-dom";
+import { Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { ResponsiveLine } from "@nivo/line";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
@@ -14,6 +14,8 @@ const ProfileCard = (props) => {
   const [actMember, setActMember] = useState(null);
 
   const [showSummary, setShowSummary] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -41,7 +43,7 @@ const ProfileCard = (props) => {
               <img
                 src={
                   actMember.memberThumb
-                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileImage/${actMember.memberThumb}`
+                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
                     : "/image/default_img.png"
                 }
               />
@@ -56,11 +58,21 @@ const ProfileCard = (props) => {
                     <p>{actMember.communityCount}</p>
                     <p>게시물</p>
                   </div>
-                  <div>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate(`/myfit/follow/${actMember.memberNo}/1`);
+                    }}
+                  >
                     <p>{actMember.followerCount}</p>
                     <p>팔로워</p>
                   </div>
-                  <div>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate(`/myfit/follow/${actMember.memberNo}/2`);
+                    }}
+                  >
                     <p>{actMember.followingCount}</p>
                     <p>팔로잉</p>
                   </div>
@@ -69,7 +81,7 @@ const ProfileCard = (props) => {
             </div>
           </div>
           <div className="myfit-profile-actions">
-            <Link to="/member/info">
+            <Link to="/member">
               <button className="myfit-profile-button">프로필 편집</button>
             </Link>
             <button

@@ -35,4 +35,8 @@ public interface MyfitDao {
 
 	List selectRecordDays(int memberNo);
 
+	List<MemberDTO> selectFollowerList(int memberNo);
+
+	List<MemberDTO> selectFollowingList(int memberNo);
+
 }
