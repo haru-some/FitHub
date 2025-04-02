@@ -30,7 +30,7 @@ const MyFitMain = () => {
   const [routine, setRoutine] = useState(null);
   const today = dayjs();
 
-  const path = params["*"]; // 예: "activity/5" 또는 "follow/3/2"
+  const path = params["*"]; // activity/:memberNo" or "follow/:memberNo/:type
 
   const isActivity = path.startsWith("activity");
   const isFollow = path.startsWith("follow");
@@ -41,7 +41,7 @@ const MyFitMain = () => {
     const pathMemberNo = Number(path.split("/")[1]); // 두 경우 다 두 번째가 memberNo
     flag = pathMemberNo === member.memberNo;
   }
-  console.log(params);
+
   const [date, setDate] = useState(() => {
     const savedDate = localStorage.getItem("selectedDate");
     return savedDate ? dayjs(savedDate) : dayjs();
