@@ -4,36 +4,33 @@ import Swal from "sweetalert2";
 import { Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
+import AdminGoodsFrm from "./AdminGoodsFrm";
 
 const AdminGoods = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
   const [activeTab, setActiveTab] = useState("상품정보");
   const navigate = useNavigate();
 
-  const [goods, setGoods] = useState({
-    goodsName: "상품 제목을 기입하세요",
-    goodsPrice: 10000,
-    goodsExpl: "상품 설명을 기입하세요.",
-    goodsUrl: "/image/default_img.png",
-  });
+  const [goods, setGoods] = useState({});
 
   //제목, 썸네일, 내용, 첨부파일>> 글작성을 위해서 사용자에게 받아야하는 정보
+  const [thumbnail, setThumbnail] = useState(null);
+  const [boardFile, setBoardFile] = useState([]);
   const [goodsName, setGoodsName] = useState(""); // 사용자가 입력 할 제목
-  const [thumbnail, setThumbnail] = useState(null); // 썸네일 첨부파일 저장용 state
   const [goodsFile, setGoodsFile] = useState([]); // 첨부파일(파일여러개일 수 있으므로 배열로..)
   const [goodsExpl, setGoodsExpl] = useState(""); // 사용자가 입력 할 제목
-  const [price, setPrice] = useState(goods.goodsPrice);
+  const [goodsUrl, setGoodsUrl] = useState(null);
+  const [goodsPrice, setGoodsPrice] = useState("");
   const [description, setDescription] = useState(goods.goodsExpl); // 설명 상태 추가
   const urlRef = useRef(null);
 
   const submit = () => {
     const form = new FormData();
-    form.append("goodsNo", goods.goodsNo);
-    form.append("goodsName", goods.goodsName);
-    form.append("goodsPrice", goods.goodsPrice);
-    form.append("goodsExpl", goods.goodsExpl);
-    form.append("goodsUrl", goods.goodsUrl);
-    form.append("goodsFile", goods.goodsFile);
+    form.append("goodsName", goodsName);
+    form.append("goodsPrice", goodsPrice);
+    form.append("goodsExpl", goodsExpl);
+    form.append("goodsUrl", goodsUrl);
+    //form.append("goodsFile", goods.goodsFile);
 
     const backServer = process.env.REACT_APP_BACK_SERVER;
 
@@ -101,32 +98,31 @@ const AdminGoods = () => {
     <div className="shop-detail-frm-wrap">
       <div className="main-detail">
         <div className="goods-image">
-          <img
-            src={goods.goodsUrl || "/image/default_img.png"}
-            onClick={() => {
-              urlRef.current.click();
-            }}
+          {/*<img src={goodsUrl || "/image/default_img.png"} /> */}
+          <AdminGoodsFrm
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
+            boardFile={boardFile}
+            setBoardFile={setBoardFile}
           />
         </div>
         <div className="goods-info">
           <div className="ex-box">
             <input
               type="text"
-              value={goods.goodsName}
-              onChange={(e) =>
-                setGoods({ ...goods, goodsName: e.target.value })
-              }
+              value={goodsName}
+              onChange={(e) => setGoodsName(e.target.value)}
+              placeholder="상품 제목을 입력하세요"
               style={{
                 color: "black",
                 fontSize: "24px",
                 width: "100%",
                 marginBottom: "10px",
               }}
-              placeholder="상품 제목을 입력하세요"
             />
             <div>
               <h2>상품 설명</h2>
-              <TextEditor />
+              <TextEditor data={goodsExpl} setData={setGoodsExpl} />
             </div>
           </div>
 
@@ -135,8 +131,8 @@ const AdminGoods = () => {
               총 가격:
               <input
                 type="number"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
+                value={goodsPrice}
+                onChange={(e) => setGoodsPrice(Number(e.target.value))}
                 style={{ margin: "0 5px", width: "100px" }}
               />
               원

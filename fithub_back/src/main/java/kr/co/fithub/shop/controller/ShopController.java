@@ -55,7 +55,7 @@ public class ShopController {
 	}
     
     @PostMapping
-	public ResponseEntity<Integer>  inserGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsUrl, @ModelAttribute MultipartFile[] goodsFiles){
+	public ResponseEntity<Integer>  insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsUrl, @ModelAttribute MultipartFile[] goodsFiles){
 		//썸네일을 첨부한 경우에만 
 		if(goodsUrl != null) {
 			String savepath = root +"/goods/url/";
