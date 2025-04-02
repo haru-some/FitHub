@@ -352,6 +352,14 @@ td {
   display: flex;
   justify-content: space-between;
 }
+.shop-detail-frm-wrap .price-box input {
+  color: black;
+  text-align: right;
+  width: 80px;
+  height: 25px;
+  border: none;
+}
+
 .shop-detail-frm-wrap .quantity-controls {
   display: flex;
   align-items: center;

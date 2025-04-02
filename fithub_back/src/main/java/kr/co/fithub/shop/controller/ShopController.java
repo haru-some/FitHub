@@ -54,6 +54,16 @@ public class ShopController {
 		return ResponseEntity.ok(goods);
 	}
     
+    
+    //첨부파일이 포함된 post맵핑은 데이터는  @ModelAttribute로 처리한다. 
+  	@PostMapping(value="/image")
+  	public ResponseEntity<String> image(@ModelAttribute MultipartFile image){
+  		String savepath = root + "/editor/";
+  		String filepath = fileUtils.upload(savepath, image);
+  		return ResponseEntity.ok(filepath);
+  	}
+  	
+  	
     @PostMapping
 	public ResponseEntity<Integer>  insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsUrl, @ModelAttribute MultipartFile[] goodsFiles){
 		//썸네일을 첨부한 경우에만 

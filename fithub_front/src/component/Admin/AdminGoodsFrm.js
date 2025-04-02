@@ -57,7 +57,7 @@ const AdminGoodsFrm = (props) => {
       >
         {goodsImg ? (
           <img
-            src={`${process.env.REACT_APP_BACK_SERVER}/goods/thumb/${goodsImg}`}
+            src={`${process.env.REACT_APP_BACK_SERVER}/goods/image/${goodsImg}`}
           ></img>
         ) : showThumb ? (
           <img src={showThumb}></img>

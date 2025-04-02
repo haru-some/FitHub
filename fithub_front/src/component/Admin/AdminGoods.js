@@ -130,7 +130,7 @@ const AdminGoods = () => {
             <h2>
               총 가격:
               <input
-                type="number"
+                type="text"
                 value={goodsPrice}
                 onChange={(e) => setGoodsPrice(Number(e.target.value))}
                 style={{ margin: "0 5px", width: "100px" }}
