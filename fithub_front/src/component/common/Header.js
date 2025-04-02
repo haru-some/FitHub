@@ -58,34 +58,34 @@ const HeaderLink = () => {
   const navigate = useNavigate();
   const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
 
-  useEffect(() => {
-    if (isLogin) {
-      const fetchChatAlarm = async () => {
-        try {
-          const response = await axios.get(
-            `/api/chat/alarm/${memberInfo.memberId}`
-          );
-          setChatAlarm(response.data.messageAlarm); // "Y" 또는 "N"
-        } catch (error) {
-          console.error("채팅 알람 정보를 불러오는데 실패했습니다.", error);
-        }
-      };
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     const fetchChatAlarm = async () => {
+  //       try {
+  //         const response = await axios.get(
+  //           `/api/chat/alarm/${memberInfo.memberId}`
+  //         );
+  //         setChatAlarm(response.data.messageAlarm); // "Y" 또는 "N"
+  //       } catch (error) {
+  //         console.error("채팅 알람 정보를 불러오는데 실패했습니다.", error);
+  //       }
+  //     };
 
-      fetchChatAlarm();
+  //     fetchChatAlarm();
 
-      // WebSocket 연결
-      const socket = new WebSocket("ws://localhost:8080/ws/chat");
+  //     // WebSocket 연결
+  //     const socket = new WebSocket("ws://localhost:8080/ws/chat");
 
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === "message") {
-          setChatAlarm("Y"); // 새 메시지가 오면 'Y'로 변경
-        }
-      };
+  //     socket.onmessage = (event) => {
+  //       const data = JSON.parse(event.data);
+  //       if (data.type === "message") {
+  //         setChatAlarm("Y"); // 새 메시지가 오면 'Y'로 변경
+  //       }
+  //     };
 
-      return () => socket.close();
-    }
-  }, [isLogin, memberInfo]);
+  //     return () => socket.close();
+  //   }
+  // }, [isLogin, memberInfo]);
 
   const logOut = () => {
     setMemberInfo(null);

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, memberState } from "../utils/RecoilData";
+import "./chat.css";
 
 const MemberChat = () => {
   const [messages, setMessages] = useState([]);
@@ -72,6 +73,11 @@ const MemberChat = () => {
           className="chat-input"
           value={chatInput}
           onChange={(e) => setChatInput(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === "Enter" && chatInput !== "") {
+              sendMessage();
+            }
+          }}
           placeholder="메시지를 입력하세요."
         />
         <button type="button" onClick={sendMessage}>

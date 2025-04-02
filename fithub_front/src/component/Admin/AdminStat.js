@@ -3,63 +3,106 @@ import { ResponsivePieCanvas } from "@nivo/pie";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsiveLine } from "@nivo/line";
 import { ResponsiveCalendar } from "@nivo/calendar";
+import axios from "axios";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // 메인 대시보드
 const AdminStat = () => {
   const [tabChange, setTabChange] = useState(1);
 
   const [visitData, setVisitData] = useState(null);
-  const [salesData, setSalesData] = useState([
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-    {
-      country: "",
-      마켓: 88,
-      마켓Color: "hsl(306, 70%, 50%)",
-      광고: 130,
-      광고Color: "hsl(353, 70%, 50%)",
-    },
-  ]);
+
+  const changeTab = (e) => {
+    const member = e.target.id;
+    if (member === "member") {
+      setTabChange(1);
+    } else {
+      setTabChange(2);
+    }
+  };
+  return (
+    <section className="admin-stat-section">
+      <div className="admin-member-tab">
+        <div
+          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
+          id="member"
+          onClick={changeTab}
+        >
+          회원 활동 통계
+        </div>
+        <div
+          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
+          id="board"
+          onClick={changeTab}
+        >
+          매출 통계
+        </div>
+      </div>
+      <div className="admin-stat-tab-content">
+        {tabChange === 1 ? <MemberStatChart /> : <SalesStatChart />}
+      </div>
+    </section>
+  );
+};
+
+const MemberStatChart = () => {
+  useEffect(() => {
+    // 'client_id', 'client_secret', 'refresh_token'을 사용하여 갱신된 'access_token'을 요청한다.
+    axios
+      .post("https://accounts.google.com/o/oauth2/token", {
+        client_id: `${process.env.REACT_APP_OAUTH_CLIENT_ID}`,
+        client_secret: `${process.env.REACT_APP_OAUTH_CLIENT_SECRET}`,
+        refresh_token: `${process.env.REACT_APP_OAUTH_REFRESH_TOKEN}`,
+        grant_type: "refresh_token",
+      })
+      .then((response) => {
+        // 만약 정상적으로 'access_token'을 받았다면, 기본 보고서(runReport)를 호출하는 요청을 보낸다.
+        axios
+          .post(
+            `https://analyticsdata.googleapis.com/v1beta/properties/${process.env.REACT_APP_GA4_PROPERTY_ID}:runReport`,
+            // runReport 요청에 필요한 'dimensions', 'metrics', 'dataRanges'를 data에 포함하여 전송한다.
+            {
+              dimensions: [{ name: "date" }],
+              metrics: [
+                { name: "activeUsers" },
+                { name: "screenPageViews" },
+                { name: "sessions" },
+              ],
+              dateRanges: [{ startDate: "2025-04-02", endDate: "today" }],
+              keepEmptyRows: true,
+            },
+            // 이전에 전달받은 'access_token'을 headers에 담는다(인증).
+            {
+              headers: {
+                Authorization: `Bearer ${response.data.access_token}`,
+              },
+            }
+          )
+          // 정상적으로 응답을 받았다면, 콘솔창에 runReport의 결과가 나타날 것이다.
+          .then((response) => {
+            console.log(response);
+          })
+          // runReport가 정상적으로 호출되지 않았다면, [REPORT ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
+          .catch((error) => {
+            console.log("[REPORT ERROR] ", error);
+          });
+      })
+      // 'access_token'을 호출하는 것에 실패했다면, [TOKEN ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
+      .catch((error) => {
+        console.log("[TOKEN ERROR] ", error);
+      });
+  });
+  return (
+    <div className="member-stat-chart">
+      <div className="chart-first">
+        <div>첫번째 차트</div>
+      </div>
+    </div>
+  );
+};
+
+const SalesStatChart = () => {
+  /*
   useEffect(() => {
     //방문 데이터 입력
     const today = new Date();
@@ -100,338 +143,38 @@ const AdminStat = () => {
       }))
     );
   }, []);
-  const changeTab = (e) => {
-    const member = e.target.id;
-    if (member === "member") {
-      setTabChange(1);
-    } else {
-      setTabChange(2);
-    }
-  };
+  */
   return (
-    <section className="admin-stat-section">
-      <div className="admin-member-tab">
-        <div
-          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
-          id="member"
-          onClick={changeTab}
-        >
-          회원 활동 통계
+    <div className="sales-stat-chart">
+      <div className="chart-first">
+        <div className="chart-day-member">
+          <h3>총 회원 통계</h3>
+          <div style={{ height: "300px" }}>
+            {/* <MyResponsivePieCanvas /> */}
+          </div>
         </div>
-        <div
-          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
-          id="board"
-          onClick={changeTab}
-        >
-          매출 통계
+        <div className="chart-day-visit">
+          <h3>사이트 방문 통계</h3>
+          <div style={{ height: "300px" }}>
+            {/* {visitData && <MyResponsiveCalendar visitData={visitData} />} */}
+          </div>
         </div>
       </div>
-      <div className="admin-stat-tab-content">
-        {tabChange === 1 ? (
-          <div className="member-stat-chart">
-            <div className="chart-first">
-              <div>첫번째 차트</div>
-            </div>
-          </div>
-        ) : (
-          <div className="sales-stat-chart">
-            <div className="chart-first">
-              <div className="chart-day-member">
-                <h3>총 회원 통계</h3>
-                <div style={{ height: "300px" }}>
-                  <MyResponsivePieCanvas />
-                </div>
-              </div>
-              <div className="chart-day-visit">
-                <h3>사이트 방문 통계</h3>
-                <div style={{ height: "300px" }}>
-                  {visitData && <MyResponsiveCalendar visitData={visitData} />}
-                </div>
-              </div>
-            </div>
-            <div className="chart-second">
-              <div className="chart-day-post">
-                <h3>게시글 생성 통계</h3>
-                <div style={{ height: "300px" }}></div>
-              </div>
-            </div>
-            <div className="chart-third">
-              <div className="chart-day-sales">
-                <h3>매출 통계</h3>
-                <div style={{ height: "300px" }}>
-                  {salesData && <MyResponsiveBar salesData={salesData} />}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      <div className="chart-second">
+        <div className="chart-day-post">
+          <h3>게시글 생성 통계</h3>
+          <div style={{ height: "300px" }}></div>
+        </div>
       </div>
-    </section>
-  );
-};
-
-// 회원 통계 컴포넌트
-const MyResponsivePieCanvas = () => {
-  const [memberData, setMemberData] = useState([
-    {
-      id: "남성",
-      label: "남성",
-      value: 863,
-      color: "#6495ed",
-    },
-    {
-      id: "여성",
-      label: "여성",
-      value: 242,
-      color: "#c8739a",
-    },
-    {
-      id: "비공개",
-      label: "비공개",
-      value: 341,
-      color: "#c8bf73",
-    },
-  ]);
-  const memberArr = new Array();
-  for (let i = 0; i < memberData.length; i++) {
-    memberArr.push(memberData[i].color);
-  }
-  return (
-    <ResponsivePieCanvas
-      data={memberData}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-      innerRadius={0.5}
-      padAngle={0.7}
-      cornerRadius={3}
-      activeOuterRadiusOffset={8}
-      colors={memberArr}
-      borderWidth={1}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", "0"]],
-      }}
-      arcLinkLabelsSkipAngle={10}
-      arcLinkLabelsTextColor="#fff"
-      arcLinkLabelsThickness={2}
-      arcLinkLabelsColor={{ from: "color", modifiers: [] }}
-      arcLabelsTextColor={{
-        from: "color",
-        modifiers: [["darker", 2]],
-      }}
-      defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
-      fill={[
-        {
-          match: {
-            id: "ruby",
-          },
-          id: "dots",
-        },
-      ]}
-      motionConfig={{
-        mass: 1,
-        tension: 500,
-        friction: 13,
-        clamp: false,
-        precision: 0.01,
-        velocity: 0,
-      }}
-      legends={[
-        {
-          anchor: "right",
-          direction: "column",
-          justify: false,
-          translateX: -9,
-          translateY: 83,
-          itemsSpacing: 5,
-          itemWidth: 75,
-          itemHeight: 29,
-          itemTextColor: "#fff",
-          itemDirection: "left-to-right",
-          itemOpacity: 1,
-          symbolSize: 24,
-          symbolShape: "circle",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
-            },
-          ],
-        },
-      ]}
-    />
-  );
-};
-// 사이트 방문 통계 컴포넌트
-const MyResponsiveCalendar = (props) => {
-  const visitData = props.visitData;
-  return (
-    <ResponsiveCalendar
-      data={visitData}
-      from={visitData[0].day}
-      to={visitData[visitData.length - 1].day}
-      emptyColor="#ebebeb"
-      colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
-      minValue="auto"
-      margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
-      yearSpacing={35}
-      monthSpacing={15}
-      monthBorderWidth={0}
-      monthBorderColor="#000000"
-      dayBorderWidth={2}
-      dayBorderColor="#ffffff"
-      legends={[
-        {
-          anchor: "bottom-right",
-          direction: "row",
-          translateY: 36,
-          itemCount: 4,
-          itemWidth: 42,
-          itemHeight: 36,
-          itemsSpacing: 14,
-          itemDirection: "right-to-left",
-        },
-      ]}
-    />
-  );
-};
-
-// 게시글 생성 통계 컴포넌트
-const PostChart = () => {
-  return (
-    <div className="chart-day-post">
-      <h3>게시글 생성 통계</h3>
+      <div className="chart-third">
+        <div className="chart-day-sales">
+          <h3>매출 통계</h3>
+          <div style={{ height: "300px" }}>
+            {/* {salesData && <MyResponsiveBar salesData={salesData} />} */}
+          </div>
+        </div>
+      </div>
     </div>
-  );
-};
-
-// 매출 통계 컴포넌트
-const MyResponsiveBar = (props) => {
-  const salesData = props.salesData;
-  return (
-    <ResponsiveBar
-      data={salesData}
-      keys={["마켓", "광고"]}
-      indexBy="country"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.3}
-      valueScale={{ type: "linear" }}
-      indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "nivo" }}
-      defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "#38bcb2",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "#eed312",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
-      fill={[
-        {
-          match: {
-            id: "fries",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "sandwich",
-          },
-          id: "lines",
-        },
-      ]}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 1.6]],
-      }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "요일",
-        legendPosition: "middle",
-        legendOffset: 32,
-        truncateTickAt: 0,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "매출",
-        legendPosition: "middle",
-        legendOffset: -40,
-        truncateTickAt: 0,
-      }}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
-      labelTextColor={{
-        from: "color",
-        modifiers: [["darker", 1.6]],
-      }}
-      legends={[
-        {
-          dataFrom: "key",
-          anchor: "bottom-right",
-          direction: "column",
-          justify: false,
-          translateX: 120,
-          translateY: 0,
-          itemsSpacing: 2,
-          itemWidth: 100,
-          itemHeight: 20,
-          itemDirection: "left-to-right",
-          itemOpacity: 0.85,
-          symbolSize: 20,
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemOpacity: 1,
-              },
-            },
-          ],
-        },
-      ]}
-      role="application"
-      ariaLabel="Nivo bar chart demo"
-      barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-      }
-    />
   );
 };
 
