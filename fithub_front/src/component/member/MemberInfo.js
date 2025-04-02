@@ -384,7 +384,7 @@ const MemberInfo = () => {
               type="button"
               onClick={handleAddressSearch}
               className="btn-primary sm"
-              style={{ height: 56 }}
+              style={{ height: 50, width: 140, borderRadius: 6 }}
             >
               주소 검색
             </button>
