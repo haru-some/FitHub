@@ -30,14 +30,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import "./member.css";
 
-// 아이콘 매핑
 const iconMap = {
   1: <LockPersonIcon />,
   2: <LockResetIcon />,
   3: <CheckCircleIcon />,
 };
 
-// Connector 스타일
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 19,
@@ -45,8 +43,9 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
   [`& .${stepConnectorClasses.line}`]: {
     height: 3,
     border: 0,
-    backgroundColor: "#555", // 기본 회색 선
+    backgroundColor: "#bdbdbd",
     borderRadius: 1,
+    margin: "0 12px",
   },
   [`&.${stepConnectorClasses.active} .${stepConnectorClasses.line}`]: {
     backgroundImage: "linear-gradient(to right, #293a2c, #536976, #BBD2C5)",
@@ -56,15 +55,14 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
-// Step 아이콘 스타일
 const CustomStepIconRoot = styled("div")(({ ownerState }) => {
   const isActiveOrCompleted = ownerState.active || ownerState.completed;
-
   return {
+    position: "relative",
     backgroundImage: isActiveOrCompleted
       ? "linear-gradient(to right, #293a2c, #536976, #BBD2C5)"
       : "none",
-    backgroundColor: isActiveOrCompleted ? "transparent" : "#555",
+    backgroundColor: isActiveOrCompleted ? "transparent" : "#bdbdbd",
     color: "#fff",
     width: 40,
     height: 40,
@@ -73,10 +71,16 @@ const CustomStepIconRoot = styled("div")(({ ownerState }) => {
     alignItems: "center",
     borderRadius: "50%",
     zIndex: 1,
+    transition: "all 0.3s ease-in-out",
+    cursor: "default",
+    "&:hover": {
+      boxShadow: "0 0 10px 4px rgba(187, 210, 197, 0.4)",
+      filter: "brightness(1.1)",
+      transform: "scale(1.3)",
+    },
   };
 });
 
-// 아이콘 컴포넌트
 function CustomStepIcon(props) {
   const { active, completed, className, icon } = props;
   return (
@@ -259,7 +263,7 @@ const ChangePw = () => {
         alternativeLabel
         activeStep={step - 1}
         connector={<CustomConnector />}
-        sx={{ marginBottom: 5, marginTop: 5, alignItems: "center" }}
+        sx={{ marginBottom: 7, marginTop: 7, alignItems: "center" }}
       >
         {["현재 비밀번호 확인", "새 비밀번호 설정", "변경 완료"].map(
           (label) => (
@@ -268,13 +272,13 @@ const ChangePw = () => {
                 StepIconComponent={CustomStepIcon}
                 sx={{
                   "& .MuiStepLabel-label": {
-                    color: "#aaa", // 기본 회색
+                    color: "#aaa",
                   },
                   "& .MuiStepLabel-label.Mui-active": {
-                    color: "black", // 현재 단계
+                    color: "black",
                   },
                   "& .MuiStepLabel-label.Mui-completed": {
-                    color: "black", // 완료된 단계
+                    color: "black",
                   },
                 }}
               >
@@ -300,7 +304,7 @@ const ChangePw = () => {
               value={currentPw}
               onChange={(e) => setCurrentPw(e.target.value)}
               fullWidth
-              sx={{ marginBottom: "1rem", marginTop: "1rem" }}
+              sx={{ marginBottom: "2rem", marginTop: "1rem" }}
             />
             <div className="info-action-box" style={{ marginTop: "1rem" }}>
               <button type="submit" className="info-action-btn info-update-btn">
@@ -320,6 +324,7 @@ const ChangePw = () => {
                 value={memberPw}
                 onChange={inputMemberPw}
                 onBlur={checkPw}
+                sx={{ marginBottom: "1rem" }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -343,6 +348,7 @@ const ChangePw = () => {
                 value={memberPwRe}
                 onChange={inputMemberPwRe}
                 onBlur={checkPw}
+                sx={{ marginBottom: "1rem" }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -390,6 +396,7 @@ const ChangePw = () => {
                       sx={{
                         verticalAlign: "middle",
                         marginRight: "4px",
+
                         color: "#1976d2",
                       }}
                     />
@@ -422,6 +429,7 @@ const ChangePw = () => {
               <button
                 className="info-action-btn info-update-btn"
                 onClick={handleChangePassword}
+                style={{ marginTop: "1rem" }}
               >
                 비밀번호 변경
               </button>
@@ -439,8 +447,8 @@ const ChangePw = () => {
             <p
               style={{
                 fontSize: "1.5rem",
-                marginBottom: "2rem",
-                fontFamily: "ns-r",
+                marginBottom: "2.5rem",
+                fontFamily: "pd-b",
               }}
             >
               비밀번호가 성공적으로 변경되었습니다.
