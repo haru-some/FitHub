@@ -8,10 +8,12 @@ const MemberChat = () => {
   const [chatInput, setChatInput] = useState("");
   const ws = useRef(null);
   const member = useRecoilValue(memberState);
+  const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.34:9999
+  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
 
   useEffect(() => {
     ws.current = new WebSocket(
-      `ws://localhost:8080/allChat?chatRoomNo=${member.chatRoomNo}`
+      `${socketServer}/allChat?chatRoomNo=${member.chatRoomNo}`
     );
     ws.current.onmessage = (event) => {
       const newMessage = JSON.parse(event.data);
