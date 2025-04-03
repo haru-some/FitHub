@@ -92,7 +92,13 @@ const CommunityView = () => {
           }}
         >
           <div className="member-img">
-            <img src="/image/default_img.png"></img>
+            <img
+              src={
+                community && community.memberThumb
+                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
+                  : "/image/default_img.png"
+              }
+            />
           </div>
           <div className="community-member">
             {community && (
@@ -144,6 +150,11 @@ const CommunityView = () => {
             type="text"
             value={newComment}
             onChange={inputComment}
+            onKeyUp={(e) => {
+              if (e.key === "Enter" && newComment.message !== "") {
+                submitComment();
+              }
+            }}
             placeholder="댓글을 입력하세요..."
           ></input>
           <button onClick={submitComment}>send</button>
@@ -160,7 +171,13 @@ const Comment = (props) => {
     <ul>
       <li className="comment-list">
         <div className="member-img">
-          <img src="/image/default_img.png"></img>
+          <img
+            src={
+              comment.memberThumb
+                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${comment.memberThumb}`
+                : "/image/default_img.png"
+            }
+          />
         </div>
         <div className="comment-user-info">
           <div className="member-id">{comment.memberId}</div>

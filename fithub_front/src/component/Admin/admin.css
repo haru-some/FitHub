@@ -105,6 +105,10 @@ td {
   border-radius: 30px;
 }
 
+.admin-stat-section text {
+  fill: #fff !important;
+}
+
 /*---------- AdminChat / 관리자 문의 게시판 ----------*/
 .admin-section .admin-chat-section {
   border-radius: 30px;
