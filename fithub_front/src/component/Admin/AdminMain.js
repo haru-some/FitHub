@@ -71,7 +71,7 @@ const Sidebar = () => {
         to="/admin/goods"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        상품 관리
+        상품 등록
       </NavLink>
     </div>
   );

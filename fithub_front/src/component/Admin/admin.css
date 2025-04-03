@@ -320,10 +320,14 @@ td {
 .shop-detail-frm-wrap .goods-image {
   flex: 1;
   padding-right: 20px;
+  width: 490px;
+  height: 490px;
+  overflow: hidden;
 }
 
 .shop-detail-frm-wrap .goods-image img {
   width: 100%; /* 가로 길이에 맞게 조정 */
+  object-fit: contain;
   height: auto;
 }
 
@@ -463,4 +467,37 @@ td {
   color: black;
   outline: none;
   text-align: right;
+}
+
+.shop-detail-frm-wrap .options-and-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.shop-detail-frm-wrap .options {
+  flex-grow: 1;
+}
+
+.shop-detail-frm-wrap .options-select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  background-color: var(--gray3);
+}
+
+.shop-detail-frm-wrap .price-box {
+  text-align: right;
+}
+
+.shop-detail-frm-wrap .price-input {
+  margin: 0 5px;
+  width: 100px;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

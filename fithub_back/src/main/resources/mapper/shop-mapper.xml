@@ -17,16 +17,12 @@
  		</selectKey>
   	</insert>
   	
-  	<insert id="inserGoodsFile">
+  	<insert id="insertGoodsFile">
  		insert into goods_file values (goods_file_seq.nextval, #{goodsNo}, #{fileName}, #{filePath})
  	</insert>
   	
-  	<insert id="insertBoard">
- 		insert into board values 
- 		(#{boardNo}, #{boardTitle},#{boardThumb},#{boardContent},#{boardWriter}, sysdate ,1)
- 		<selectKey order="BEFORE" resultType="int" keyProperty="boardNo">
- 			select board_seq.nextval from dual
- 		</selectKey>
- 	</insert>
+  	
+ 	
+ 	
   	
 </mapper>

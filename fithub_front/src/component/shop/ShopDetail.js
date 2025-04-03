@@ -10,6 +10,7 @@ const ShopDetail = () => {
   const [activeTab, setActiveTab] = useState("상품정보");
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const backServer = process.env.REACT_APP_BACK_SERVER;
 
   // 상품 데이터 가져오기
   useEffect(() => {
@@ -87,14 +88,18 @@ const ShopDetail = () => {
       <div className="main-detail">
         <div className="goods-image">
           <img
-            src={goods.goodsUrl || "/image/default_img.png"} // 기본 이미지 처리
-            alt={goods.goodsName || "상품명 없음"} // 기본 상품명 처리
+            src={
+              goods.goodsUrl
+                ? `${backServer}/shop/thumb/${goods.goodsUrl}`
+                : "/image/default_img.png" // 기본 이미지 처리
+            }
+            alt={goods.goodsName} // 기본 상품명 처리
           />
         </div>
         <div className="goods-info">
           <div className="ex-box">
-            <h1>{goods.goodsName || "상품명 없음"}</h1>
-            <p>{goods.goodsExpl || "설명 없음"}</p>
+            <h1>{goods.goodsName}</h1>
+            <p>{goods.goodsExpl}</p>
           </div>
           <h3>{goods.goodsPrice.toLocaleString()}원</h3>
 

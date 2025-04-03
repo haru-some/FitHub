@@ -69,7 +69,7 @@ const GoodsList = () => {
     axios
       .get(`${backServer}/goods?reqPage=${reqPage}`)
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.list);
         setGoods(res.data.list ? res.data.list : []);
         setCurrentPage(1); // 데이터가 바뀌면 현재 페이지를 초기화
       })
@@ -210,7 +210,11 @@ const GoodsList = () => {
               onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
             >
               <img
-                src={goods.goodsUrl || "/image/default_img.png"}
+                src={
+                  goods.goodsUrl
+                    ? `${backServer}/shop/thumb/${goods.goodsUrl}`
+                    : "/image/default_img.png"
+                }
                 alt={goods.goodsName}
               />
               <div className="goods-details">

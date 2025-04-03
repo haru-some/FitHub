@@ -28,12 +28,12 @@ import kr.co.fithub.util.FileUtils;
 
 
 
+
 @SpringBootApplication
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/goods")
-public class ShopController {
-	
+public class ShopController {	
 	@Autowired
 	private ShopService shopService;
 	@Autowired
@@ -41,15 +41,7 @@ public class ShopController {
 	@Value("${file.root}")
 	private String root;
 	
-    public static void main(String[] args) {
-        SpringApplication.run(ShopController.class, args);
-    }
-
-    @GetMapping("/search/blog")
-    public String searchBlog(@RequestParam String query) {
-      
-        return query; 
-    }
+   
     
     @GetMapping
 	public ResponseEntity<Map> GoodsList(@RequestParam int reqPage){
@@ -74,17 +66,19 @@ public class ShopController {
   	
   	
     @PostMapping
-	public ResponseEntity<Integer>  insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsUrl, @ModelAttribute MultipartFile[] goodsFiles){
-		//썸네일을 첨부한 경우에만 
-		if(goodsUrl != null) {
-			String savepath = root +"/goods/url";
-			String filepath = fileUtils.upload(savepath, goodsUrl);
-			goods.setGoodsUrl(filepath);
+	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile[] goodsFile) {
+    	
+    	
+    	System.out.println("보여줘");
+		if(goodsImg != null) {
+			String savepath = root +"/goods/url/";
+			String filepath = fileUtils.upload(savepath, goodsImg);
+			goods.setGoodsUrl(filepath);			
 		}
 		List<GoodsFile> goodsFileList = new ArrayList<>();
-		if(goodsFiles != null) {
+		if(goodsFile != null) {
 			String savepath = root +"/goods/";
-			for (MultipartFile file : goodsFiles) {
+			for (MultipartFile file : goodsFile) {
 				GoodsFile fileDTO = new GoodsFile();
 				String filename = file.getOriginalFilename();
 				String filepath = fileUtils.upload(savepath, file);
@@ -93,13 +87,15 @@ public class ShopController {
 				goodsFileList.add(fileDTO);
 			}
 		}
+		
+		
 		int result = shopService.insertgoods(goods, goodsFileList);
 		return ResponseEntity.ok(result);
 	}
     
     @GetMapping(value="/file/{filePath}")
 	public ResponseEntity<Resource> filedown(@PathVariable String filePath) throws FileNotFoundException{
-		String savepath = root + "/goods/";
+		String savepath = root + "/goods/url/";
 		File file = new File(savepath +filePath);
 		
 		Resource resource = new InputStreamResource(new FileInputStream(file));
@@ -114,41 +110,9 @@ public class ShopController {
 		
 		
 	}
-	@PatchMapping
-	public ResponseEntity<Integer> updateBoard(@ModelAttribute Goods goods, 
-											   @ModelAttribute MultipartFile thumbnail, 
-											   @ModelAttribute MultipartFile[] goodsFile){
-		if(thumbnail != null) {
-			String savepath = root + "/goods/thumb/";
-			String filepath = fileUtils.upload(savepath, thumbnail);
-			goods.setGoodsUrl(filepath);
-			
-			
-		}
-		List<GoodsFile> goodsFileList = new ArrayList<>();
-		if(goodsFile != null) {
-			String savepath = root + "/goods/";
-			for(MultipartFile file : goodsFile) {
-				GoodsFile fileDto = new GoodsFile();
-				String filename = file.getOriginalFilename();
-				String filepath = fileUtils.upload(savepath, file);
-				fileDto.setFileName(filename);
-				fileDto.setFilePath(filepath);				
-				fileDto.setGoodsNo(goods.getGoodsNo());
-				goodsFileList.add(fileDto);						
-			}
-		}
-		List<GoodsFile> delFileList = shopService.updateGoods(goods, goodsFileList);
-		if(delFileList != null) {
-			String savepath = root +"/goods/";
-			for(GoodsFile deleteFile : delFileList ) {
-				File delFile = new File(savepath+deleteFile.getFilePath());
-				delFile.delete();
-			}
-		}
-		
-		return ResponseEntity.ok(1);
-	}
+    
+   
+	
     
     
 }
