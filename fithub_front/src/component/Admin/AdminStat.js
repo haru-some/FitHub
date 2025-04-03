@@ -153,7 +153,7 @@ const MemberStatChart = (props) => {
     <div className="member-stat-chart">
       <div className="chart-first">
         <div>첫번째 차트</div>
-        <div style={{ height: "300px" }}>
+        <div className="chart-div" style={{ height: "300px" }}>
           {chartData && <MyResponsiveBar chartData={chartData} />}
         </div>
       </div>
@@ -241,54 +241,31 @@ const SalesStatChart = () => {
 /*---------- 방문자 통계 차트 ----------*/
 const MyResponsiveBar = (props) => {
   const chartData = props.chartData;
-  console.log(chartData.rows[0].dimensionValues[0].value);
-  console.log(chartData.metricHeaders[1].name);
+  const [data, setData] = useState([{}]);
   const [type, setType] = useState([
     chartData.metricHeaders[0].name,
     chartData.metricHeaders[1].name,
     chartData.metricHeaders[2].name,
   ]);
-  const [data, setData] = useState([
-    {
-      date: "AD",
-      "hot dog": 153,
-      "hot dogColor": "hsl(348, 70%, 50%)",
-      burger: 157,
-      burgerColor: "hsl(86, 70%, 50%)",
-      sandwich: 164,
-      sandwichColor: "hsl(283, 70%, 50%)",
-      kebab: 90,
-      kebabColor: "hsl(357, 70%, 50%)",
-      fries: 21,
-      friesColor: "hsl(300, 70%, 50%)",
-      donut: 83,
-      donutColor: "hsl(216, 70%, 50%)",
-    },
-  ]);
   useEffect(() => {
-    for (let i = 0; i < 2; i++) {
-      const dateName = chartData.rows[0].dimensionValues[0].value;
-      setData([
-        {
-          ...data,
-          date: dateName,
-          "hot dog": 153,
-          "hot dogColor": "hsl(348, 70%, 50%)",
-          burger: 157,
-          burgerColor: "hsl(86, 70%, 50%)",
-          sandwich: 164,
-          sandwichColor: "hsl(283, 70%, 50%)",
-          kebab: 90,
-          kebabColor: "hsl(357, 70%, 50%)",
-          fries: 21,
-          friesColor: "hsl(300, 70%, 50%)",
-          donut: 83,
-          donutColor: "hsl(216, 70%, 50%)",
-        },
-      ]);
-    }
-  }, []);
+    const newData = Array.from(
+      { length: chartData.rows.length },
+      (_, index) => ({
+        date:
+          chartData.rows[index]?.dimensionValues[0]?.value ||
+          `Date ${index + 1}`,
+        activeUsers: 150 + index,
+        activeUsersColor: "hsl(348, 70%, 50%)",
+        screenPageViews: 155 + index,
+        screenPageViewsColor: "hsl(86, 70%, 50%)",
+        sessions: 160 + index,
+        sessionsColor: "hsl(283, 70%, 50%)",
+      })
+    );
 
+    setData(newData);
+  }, []);
+  console.log(data);
   return (
     <ResponsiveBar
       data={data}

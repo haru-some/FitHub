@@ -109,6 +109,11 @@ td {
   fill: #fff !important;
 }
 
+.admin-stat-section .chart-div > div > div > div * {
+  fill: #000 !important;
+  color: #000 !important;
+}
+
 /*---------- AdminChat / 관리자 문의 게시판 ----------*/
 .admin-section .admin-chat-section {
   border-radius: 30px;
