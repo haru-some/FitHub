@@ -87,8 +87,11 @@ public class MyfitService {
 		return result;
 	}
 
-	public ActMember selectFollow(int memberNo) {
-		ActMember m = myfitDao.selectFollow(memberNo);
+	public ActMember selectActMember(int memberNo, int loginMemberNo) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("memberNo", memberNo);
+		map.put("loginMemberNo", loginMemberNo);
+		ActMember m = myfitDao.selectActMember(map);
 		return m;
 	}
 

@@ -1,0 +1,42 @@
+.myfit-wrap .chat-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.myfit-wrap .chat-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 400px;
+  overflow-y: scroll;
+  background: #f9f9f9;
+}
+
+.myfit-wrap .my-message {
+  text-align: right;
+  margin: 5px 0;
+  background-color: #d4f1f9;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.myfit-wrap .other-message {
+  text-align: left;
+  margin: 5px 0;
+  background-color: #ffe0b2;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.myfit-wrap .chat-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.myfit-wrap .chat-input input {
+  flex: 1;
+  padding: 10px;
+}
+
+.myfit-wrap .chat-input button {
+  padding: 10px 20px;
+}
