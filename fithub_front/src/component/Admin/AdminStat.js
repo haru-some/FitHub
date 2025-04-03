@@ -9,9 +9,50 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 // 메인 대시보드
 const AdminStat = () => {
   const [tabChange, setTabChange] = useState(1);
+  const [chartData, setChartData] = useState(null);
+  const [week, setWeek] = useState([]);
+  const [month, setMonth] = useState([]);
 
-  const [visitData, setVisitData] = useState(null);
+  useEffect(() => {
+    //이번 달 데이터
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 0(1월) ~ 11(12월)
+    const day = today.getDate(); // 오늘 날짜 (1~31)
+    const newData = [];
 
+    for (let i = 1; i <= day; i++) {
+      const dateString = new Date(year, month, i + 1)
+        .toISOString()
+        .split("T")[0]; // YYYY-MM-DD 형식
+
+      newData.push({
+        day: dateString,
+      });
+    }
+    setMonth(newData);
+
+    //이번 주 데이터
+    const weekArr = new Array();
+    for (let i = 0; i < 7; i++) {
+      const toDays = new Date();
+      toDays.setDate(toDays.getDate() - i);
+      const days = ["일", "월", "화", "수", "목", "금", "토"];
+      if (i === 0) {
+        weekArr.unshift("오늘(" + days[toDays.getDay()] + ")");
+      } else {
+        weekArr.unshift(days[toDays.getDay()]);
+      }
+    }
+    setWeek((prevData) =>
+      prevData.map((item, index) => ({
+        ...item,
+        country: weekArr[index],
+      }))
+    );
+  }, []);
+  console.log(month);
+  console.log(week);
   const changeTab = (e) => {
     const member = e.target.id;
     if (member === "member") {
@@ -39,13 +80,21 @@ const AdminStat = () => {
         </div>
       </div>
       <div className="admin-stat-tab-content">
-        {tabChange === 1 ? <MemberStatChart /> : <SalesStatChart />}
+        {tabChange === 1 ? (
+          <MemberStatChart chartData={chartData} setChartData={setChartData} />
+        ) : (
+          <SalesStatChart />
+        )}
       </div>
     </section>
   );
 };
 
-const MemberStatChart = () => {
+/*---------- 회원 통계 탭 ----------*/
+const MemberStatChart = (props) => {
+  const setChartData = props.setChartData;
+  const chartData = props.chartData;
+
   useEffect(() => {
     // 'client_id', 'client_secret', 'refresh_token'을 사용하여 갱신된 'access_token'을 요청한다.
     axios
@@ -80,7 +129,15 @@ const MemberStatChart = () => {
           )
           // 정상적으로 응답을 받았다면, 콘솔창에 runReport의 결과가 나타날 것이다.
           .then((response) => {
-            console.log(response);
+            console.log("ga4 데이터");
+            console.log(response.data);
+            console.log("ga4 목록(metricHeaders)");
+            console.log(response.data.metricHeaders);
+            console.log("ga4 날짜(rows[0].dimensionValues)");
+            console.log(response.data.rows[0].dimensionValues);
+            console.log("ga4 값(rows[0].metricValues)");
+            console.log(response.data.rows[0].metricValues);
+            setChartData(response.data);
           })
           // runReport가 정상적으로 호출되지 않았다면, [REPORT ERROR]라는 문구와 함께 콘솔창에 에러가 보일 것이다.
           .catch((error) => {
@@ -91,16 +148,20 @@ const MemberStatChart = () => {
       .catch((error) => {
         console.log("[TOKEN ERROR] ", error);
       });
-  });
+  }, []);
   return (
     <div className="member-stat-chart">
       <div className="chart-first">
         <div>첫번째 차트</div>
+        <div className="chart-div" style={{ height: "300px" }}>
+          {chartData && <MyResponsiveBar chartData={chartData} />}
+        </div>
       </div>
     </div>
   );
 };
 
+/*---------- 매출 통계 탭 ----------*/
 const SalesStatChart = () => {
   /*
   useEffect(() => {
@@ -175,6 +236,139 @@ const SalesStatChart = () => {
         </div>
       </div>
     </div>
+  );
+};
+/*---------- 방문자 통계 차트 ----------*/
+const MyResponsiveBar = (props) => {
+  const chartData = props.chartData;
+  const [data, setData] = useState([{}]);
+  const [type, setType] = useState([
+    chartData.metricHeaders[0].name,
+    chartData.metricHeaders[1].name,
+    chartData.metricHeaders[2].name,
+  ]);
+  useEffect(() => {
+    const newData = Array.from(
+      { length: chartData.rows.length },
+      (_, index) => ({
+        date:
+          chartData.rows[index]?.dimensionValues[0]?.value ||
+          `Date ${index + 1}`,
+        activeUsers: 150 + index,
+        activeUsersColor: "hsl(348, 70%, 50%)",
+        screenPageViews: 155 + index,
+        screenPageViewsColor: "hsl(86, 70%, 50%)",
+        sessions: 160 + index,
+        sessionsColor: "hsl(283, 70%, 50%)",
+      })
+    );
+
+    setData(newData);
+  }, []);
+  console.log(data);
+  return (
+    <ResponsiveBar
+      data={data}
+      keys={type}
+      indexBy="date"
+      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+      padding={0.3}
+      valueScale={{ type: "linear" }}
+      indexScale={{ type: "band", round: true }}
+      colors={{ scheme: "nivo" }}
+      defs={[
+        {
+          id: "dots",
+          type: "patternDots",
+          background: "inherit",
+          color: "#38bcb2",
+          size: 4,
+          padding: 1,
+          stagger: true,
+        },
+        {
+          id: "lines",
+          type: "patternLines",
+          background: "inherit",
+          color: "#eed312",
+          rotation: -45,
+          lineWidth: 6,
+          spacing: 10,
+        },
+      ]}
+      fill={[
+        {
+          match: {
+            id: "fries",
+          },
+          id: "dots",
+        },
+        {
+          match: {
+            id: "sandwich",
+          },
+          id: "lines",
+        },
+      ]}
+      borderColor={{
+        from: "color",
+        modifiers: [["darker", 1.6]],
+      }}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: "date",
+        legendPosition: "middle",
+        legendOffset: 32,
+        truncateTickAt: 0,
+      }}
+      axisLeft={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: "Count",
+        legendPosition: "middle",
+        legendOffset: -40,
+        truncateTickAt: 0,
+      }}
+      enableTotals={true}
+      totalsOffset={6}
+      labelSkipWidth={12}
+      labelSkipHeight={12}
+      labelTextColor="white"
+      legends={[
+        {
+          dataFrom: "keys",
+          anchor: "bottom-right",
+          direction: "column",
+          justify: false,
+          translateX: 120,
+          translateY: 0,
+          itemsSpacing: 2,
+          itemWidth: 100,
+          itemHeight: 20,
+          itemDirection: "left-to-right",
+          itemOpacity: 0.85,
+          symbolSize: 20,
+          effects: [
+            {
+              on: "hover",
+              style: {
+                itemOpacity: 1,
+              },
+            },
+          ],
+        },
+      ]}
+      role="application"
+      ariaLabel="Nivo bar chart demo"
+      barAriaLabel={(e) =>
+        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+      }
+    />
   );
 };
 
