@@ -131,11 +131,11 @@ const MemberStatChart = (props) => {
           .then((response) => {
             console.log("ga4 데이터");
             console.log(response.data);
-            console.log("ga4 목록");
+            console.log("ga4 목록(metricHeaders)");
             console.log(response.data.metricHeaders);
-            console.log("ga4 날짜");
+            console.log("ga4 날짜(rows[0].dimensionValues)");
             console.log(response.data.rows[0].dimensionValues);
-            console.log("ga4 값");
+            console.log("ga4 값(rows[0].metricValues)");
             console.log(response.data.rows[0].metricValues);
             setChartData(response.data);
           })
@@ -241,7 +241,13 @@ const SalesStatChart = () => {
 /*---------- 방문자 통계 차트 ----------*/
 const MyResponsiveBar = (props) => {
   const chartData = props.chartData;
-  console.log(chartData.metricHeaders[0].name);
+  console.log(chartData.rows[0].dimensionValues[0].value);
+  console.log(chartData.metricHeaders[1].name);
+  const [type, setType] = useState([
+    chartData.metricHeaders[0].name,
+    chartData.metricHeaders[1].name,
+    chartData.metricHeaders[2].name,
+  ]);
   const [data, setData] = useState([
     {
       date: "AD",
@@ -261,10 +267,11 @@ const MyResponsiveBar = (props) => {
   ]);
   useEffect(() => {
     for (let i = 0; i < 2; i++) {
+      const dateName = chartData.rows[0].dimensionValues[0].value;
       setData([
         {
           ...data,
-          date: "AD",
+          date: dateName,
           "hot dog": 153,
           "hot dogColor": "hsl(348, 70%, 50%)",
           burger: 157,
@@ -281,11 +288,12 @@ const MyResponsiveBar = (props) => {
       ]);
     }
   }, []);
+
   return (
     <ResponsiveBar
       data={data}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
-      indexBy="country"
+      keys={type}
+      indexBy="date"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
