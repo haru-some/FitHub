@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import kr.co.fithub.chat.model.service.ChatService;
-import kr.co.fithub.chat.model.service.DmService;
+import kr.co.fithub.dm.model.service.OneToOneDmHandler;
 
 @Configuration
 @EnableWebSocket
@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 	@Autowired
 	private ChatService chatService;
 	@Autowired
-	private DmService dmService;
+	private OneToOneDmHandler dmHandler;
 	
 	@Bean
 	public BCryptPasswordEncoder bCrypt() {
@@ -48,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 			.addHandler(chatService, "/allChat")
 			.setAllowedOrigins("*");
 		registry
-		.addHandler(dmService, "/DmChat")
+		.addHandler(dmHandler, "/dm")
 		.setAllowedOrigins("*");
 	}
 

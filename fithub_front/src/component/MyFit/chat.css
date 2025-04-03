@@ -1,42 +1,219 @@
-.myfit-wrap .chat-container {
-  max-width: 600px;
-  margin: auto;
-}
-
-.myfit-wrap .chat-box {
-  border: 1px solid #ccc;
-  padding: 10px;
-  height: 400px;
-  overflow-y: scroll;
-  background: #f9f9f9;
-}
-
-.myfit-wrap .my-message {
-  text-align: right;
-  margin: 5px 0;
-  background-color: #d4f1f9;
-  padding: 5px 10px;
+.myfit-dm-wrap {
+  width: 780px;
+  background-color: #222;
+  padding: 40px 25px;
   border-radius: 10px;
-}
-
-.myfit-wrap .other-message {
-  text-align: left;
-  margin: 5px 0;
-  background-color: #ffe0b2;
-  padding: 5px 10px;
-  border-radius: 10px;
-}
-
-.myfit-wrap .chat-input {
+  font-family: "Arial", sans-serif;
+  color: white;
   display: flex;
-  margin-top: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
 }
 
-.myfit-wrap .chat-input input {
-  flex: 1;
-  padding: 10px;
+.myfit-dm-wrap .input-wrap {
+  width: 700px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  background-color: #333333;
+  border-radius: 8px;
 }
 
-.myfit-wrap .chat-input button {
-  padding: 10px 20px;
+.myfit-dm-wrap .search-input {
+  box-sizing: border-box;
+  width: 700px;
+  padding: 10px 14px;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+}
+
+.myfit-dm-wrap .input-wrap .search-btn {
+  color: #cfcfcf;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.myfit-dm-wrap .input-wrap .search-btn:hover {
+  color: #e7e7e7;
+  font-weight: 900;
+}
+
+/*ul*/
+.myfit-dm-wrap .user-list {
+  height: 400px;
+  width: 740px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*li*/
+.myfit-dm-wrap .user-item-wrap {
+  width: 700px;
+  margin-bottom: 20px;
+  padding: 0px 10px;
+}
+
+.myfit-dm-wrap .empty-message {
+  margin-top: 200px;
+}
+
+.myfit-dm-wrap .user-item-wrap:last-child {
+  margin-bottom: 0;
+}
+
+.myfit-dm-wrap .user-item {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  background-color: #3b3b3b;
+  border-radius: 8px;
+  padding: 0px 20px;
+  cursor: pointer;
+}
+
+.myfit-dm-wrap .avatar-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 12px;
+  overflow: hidden;
+}
+
+.myfit-dm-wrap .avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.myfit-dm-wrap .user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  width: 100%;
+}
+
+.myfit-dm-wrap .info-wrap{
+  width: 100%;
+  overflow: hidden;
+}
+
+.myfit-dm-wrap .name {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.myfit-dm-wrap .username {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.myfit-dm-wrap .dm-item-content{
+  width: 100%;
+  font-size: 15px;
+  color: #cecece;
+  overflow: hidden;
+}
+
+
+
+.myfit-dm-wrap .back-btn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  height: 60px;
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.myfit-dm-wrap .back-btn:hover {
+  background-color: #333333;
+}
+
+.myfit-dm-wrap .back-btn span {
+  font-size: 40px;
+}
+
+
+
+
+.myfit-wrap .chat-wrap {
+  width: 600px;
+  margin: 0 auto;
+}
+.myfit-wrap .section.chat-wrap {
+  background-color: #f7e600;
+}
+.myfit-wrap .section.chat-wrap > * {
+  color: #3a1d1d;
+}
+.myfit-wrap .chat-message-area {
+  height: 500px;
+  box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+.myfit-wrap .chat-message-area > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.myfit-wrap .info {
+  align-self: center;
+}
+
+.myfit-wrap .user {
+  display: flex;
+  gap: 4px;
+}
+.myfit-wrap .chat {
+  align-self: flex-start;
+}
+
+.myfit-wrap .chat.left {
+  align-self: flex-start;
+  margin-top: 5px;
+}
+
+.myfit-wrap .chat.right {
+  align-self: flex-end;
+  margin-top: 5px;
+}
+.myfit-wrap .chat.right > .user {
+  flex-direction: row-reverse;
+}
+.myfit-wrap .chat-message {
+  padding: 7px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.myfit-wrap .left .chat-message {
+  margin-left: 20px;
+  border: 1px solid var(--main1);
+}
+
+.myfit-wrap .right .chat-message {
+  margin-right: 20px;
+  background-color: var(--main3);
+  color: var(--gray8);
 }

@@ -21,6 +21,7 @@ import { memberState } from "../utils/RecoilData";
 import Follow from "./Follow";
 import Swal from "sweetalert2";
 import ChatMain from "./ChatMain";
+import DmList from "./DmList";
 
 const MyFitMain = () => {
   const navigate = useNavigate();
@@ -197,6 +198,7 @@ const MyFitMain = () => {
             <Route path="activity/:memberNo" element={<ProfileCard />} />
             <Route path="follow/:memberNo/:type" element={<Follow />} />
             <Route path="chat/:senderNo/:reciverNo" element={<ChatMain />} />
+            <Route path="dm/:memberNo" element={<DmList />} />
           </Routes>
         </div>
       </div>
@@ -227,6 +229,12 @@ const Sidebar = (props) => {
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           내 활동
+        </NavLink>
+        <NavLink
+          to={`/myfit/dm/${memberNo}`}
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          DM List
         </NavLink>
       </div>
     </div>

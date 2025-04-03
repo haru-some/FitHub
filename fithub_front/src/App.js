@@ -4,7 +4,7 @@ import Header from "./component/common/Header";
 import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
 import axios from "axios";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { loginIdState, memberState } from "./component/utils/RecoilData";
 import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
@@ -21,8 +21,10 @@ import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 
 function App() {
+  const loginMember = useRecoilValue(memberState)
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
   useEffect(() => {
     refreshLogin();
     window.setInterval(refreshLogin, 60 * 50 * 1000);
@@ -46,6 +48,13 @@ function App() {
         });
     }
   };
+
+  useEffect(() => {
+    if(loginMember){
+      
+    }
+    }, []);
+
   return (
     <div className="wrap">
       <Header />
