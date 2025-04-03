@@ -20,7 +20,8 @@
                 (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{memberNo}) AS is_follow
             FROM community c
             JOIN member m ON c.member_no = m.member_no
-        ) A ORDER BY community_no DESC
+            ORDER BY community_no DESC
+        ) A 
     ) 
     WHERE rnum BETWEEN #{startRow} AND #{endRow}
 	
