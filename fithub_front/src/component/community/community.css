@@ -162,7 +162,7 @@
   margin-bottom: 30px;
 }
 .comment-list:last-child {
-  margin: none;
+  margin-bottom: 0;
 }
 
 .community-comment-list .member-id {

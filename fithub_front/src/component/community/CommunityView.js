@@ -26,7 +26,6 @@ const CommunityView = () => {
         }`
       )
       .then((res) => {
-        console.log(res.data);
         setCommunity(res.data);
       })
       .catch((err) => {});
@@ -74,7 +73,6 @@ const CommunityView = () => {
         }
       )
       .then((res) => {
-        console.log(res);
         if (res.data > 0) {
           setCommentState(commentState + 1);
         }
@@ -136,10 +134,12 @@ const CommunityView = () => {
         )}
       </div>
       <div className="community-comment-list">
-        {community &&
-          community.commentList.map((comment, index) => {
-            return <Comment key={"comment-" + index} comment={comment} />;
-          })}
+        <ul>
+          {community &&
+            community.commentList.map((comment, index) => {
+              return <Comment key={"comment-" + index} comment={comment} />;
+            })}
+        </ul>
       </div>
       <div className="post-input">
         <div className="member-img">
@@ -168,23 +168,21 @@ const Comment = (props) => {
   const comment = props.comment;
 
   return (
-    <ul>
-      <li className="comment-list">
-        <div className="member-img">
-          <img
-            src={
-              comment.memberThumb
-                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${comment.memberThumb}`
-                : "/image/default_img.png"
-            }
-          />
-        </div>
-        <div className="comment-user-info">
-          <div className="member-id">{comment.memberId}</div>
-          <div className="comment-user-content">{comment.commentContent}</div>
-        </div>
-      </li>
-    </ul>
+    <li className="comment-list">
+      <div className="member-img">
+        <img
+          src={
+            comment.memberThumb
+              ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${comment.memberThumb}`
+              : "/image/default_img.png"
+          }
+        />
+      </div>
+      <div className="comment-user-info">
+        <div className="member-id">{comment.memberId}</div>
+        <div className="comment-user-content">{comment.commentContent}</div>
+      </div>
+    </li>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { use, useCallback, useEffect, useRef, useState } from "react";
 import "./community.css";
 import { Link, useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
@@ -10,16 +10,17 @@ import { memberState } from "../utils/RecoilData";
 import CommunityItem from "./CommunityItem";
 
 const CommunityList = () => {
-  const [member] = useRecoilState(memberState);
-  const navigate = useNavigate();
-  const [showInput, setShowInput] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [member] = useRecoilState(memberState);
+  const [showInput, setShowInput] = useState(false);
   const [communityList, setCommunityList] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
   const [searchText, setSearchText] = useState("");
   const [viewList, setViewList] = useState(communityList);
+  const [myCommunityList, setMyCommunityList] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -88,6 +89,12 @@ const CommunityList = () => {
     }
   }, [searchText]);
 
+  const showMyCommunityList = () => {
+    axios.get(`${backServer}/community/${member.memberNo}`).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <div className="community-list">
       <div className="community-list-wrap">
@@ -107,7 +114,7 @@ const CommunityList = () => {
               {member && (
                 <CreateIcon onClick={() => navigate("/community/write")} />
               )}
-              {member && <PersonIcon />}
+              {member && <PersonIcon onClick={showMyCommunityList} />}
             </div>
           </div>
           {showInput && (

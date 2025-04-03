@@ -80,18 +80,26 @@ const CommunityItem = (props) => {
               `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
             )
             .then((res) => {
-              const obj = communityList.filter(
-                (item, i) => item.communityNo === community.communityNo
-              )[0];
-              const idx = communityList.indexOf(
-                communityList.filter(
-                  (item, i) => item.communityNo === community.communityNo
-                )[0]
-              );
-              obj["isFollow"] = 0;
-              communityList[idx] = obj;
+              const arr = communityList.map((item) => {
+                if (item.memberNo === community.memberNo) {
+                  item.isFollow = 0;
+                }
+                return item;
+              });
 
-              setCommunityList([...communityList]);
+              setCommunityList([...arr]);
+              // const obj = communityList.filter(
+              //   (item, i) => item.communityNo === community.communityNo
+              // )[0];
+              // const idx = communityList.indexOf(
+              //   communityList.filter(
+              //     (item, i) => item.communityNo === community.communityNo
+              //   )[0]
+              // );
+              // obj["isFollow"] = 0;
+              // communityList[idx] = obj;
+
+              // setCommunityList([...communityList]);
             });
         }
       });
@@ -101,18 +109,26 @@ const CommunityItem = (props) => {
           `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
         )
         .then((res) => {
-          const obj = communityList.filter(
-            (item, i) => item.communityNo === community.communityNo
-          )[0];
-          const idx = communityList.indexOf(
-            communityList.filter(
-              (item, i) => item.communityNo === community.communityNo
-            )[0]
-          );
-          obj["isFollow"] = 1;
-          communityList[idx] = obj;
+          const arr = communityList.map((item) => {
+            if (item.memberNo === community.memberNo) {
+              item.isFollow = 1;
+            }
+            return item;
+          });
 
-          setCommunityList([...communityList]);
+          setCommunityList([...arr]);
+          // const obj = communityList.filter(
+          //   (item, i) => item.communityNo === community.communityNo
+          // )[0];
+          // const idx = communityList.indexOf(
+          //   communityList.filter(
+          //     (item, i) => item.communityNo === community.communityNo
+          //   )[0]
+          // );
+          // obj["isFollow"] = 1;
+          // communityList[idx] = obj;
+
+          // setCommunityList([...communityList]);
         });
     }
     e.stopPropagation();
