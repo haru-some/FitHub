@@ -18,4 +18,5 @@ public class ChatMessageDTO {
     private String messageDate; // 메시지 전송 시간
     private String isRead; // 'Y' 또는 'N'
     private String messageType; // enter, message, out
+    private String memberThumb;
 }

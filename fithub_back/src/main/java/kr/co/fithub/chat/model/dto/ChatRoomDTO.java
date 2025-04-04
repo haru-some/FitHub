@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 @Alias(value="chatRoom")
 public class ChatRoomDTO {
 	private int chatRoomNo;
-	private String memberId;
+	private String chatMemberId;
 	private int chatRoomAlarm;
 	private String chatRoomMessage;
+	private String memberThumb;
+	private int unreadCount;
 }
 

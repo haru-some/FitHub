@@ -34,7 +34,14 @@
     </insert>
     
     <select id="chatRoomList" resultType="chatRoom">
-    	select * from chat_room
+    	SELECT cr.*, 
+       m.member_thumb,
+       (SELECT COUNT(*) 
+        FROM chat_message cm 
+        WHERE cm.chat_member_id = cr.chat_member_id 
+          AND cm.is_read = 2) AS unread_count
+FROM chat_room cr
+LEFT JOIN member m ON cr.chat_member_id = m.member_id
     </select>
     
     
