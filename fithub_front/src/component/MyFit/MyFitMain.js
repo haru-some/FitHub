@@ -1,4 +1,11 @@
-import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  Route,
+  Routes,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import "./myfit.css";
 import MyFit from "./MyFit";
 import ExerciseLog from "./ExerciseLog";
@@ -12,8 +19,12 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import Follow from "./Follow";
+import Swal from "sweetalert2";
+import ChatMain from "./ChatMain";
+import DmList from "./DmList";
 
 const MyFitMain = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const [pageTitle, setPageTitle] = useState(
     params["*"].includes("fit")
@@ -25,7 +36,6 @@ const MyFitMain = () => {
       : "운동기록"
   );
   const [member, setMember] = useRecoilState(memberState);
-  const memberNo = member.memberNo;
   const [record, setRecord] = useState(null);
   const [routine, setRoutine] = useState(null);
   const today = dayjs();
@@ -39,7 +49,7 @@ const MyFitMain = () => {
 
   if (isActivity || isFollow) {
     const pathMemberNo = Number(path.split("/")[1]); // 두 경우 다 두 번째가 memberNo
-    flag = pathMemberNo === member.memberNo;
+    flag = pathMemberNo === member?.memberNo;
   }
 
   const [date, setDate] = useState(() => {
@@ -60,12 +70,13 @@ const MyFitMain = () => {
     date.$y + "-" + (date.$M + 1) + "-" + date.$D + "-" + weekday;
 
   useEffect(() => {
+    if (!member) return;
     if (inputDate.isBefore(today, "day")) {
       setTitle("운동기록");
       //과거이면 기록 조회
       axios
         .get(
-          `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${memberNo}?recordDate=${dateData}`
+          `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${member.memberNo}?recordDate=${dateData}`
         )
         .then((res) => {
           setRecord(res.data);
@@ -75,7 +86,7 @@ const MyFitMain = () => {
       if (inputDate.isSame(today, "day")) {
         axios
           .get(
-            `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${memberNo}?recordDate=${dateData}`
+            `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${member.memberNo}?recordDate=${dateData}`
           )
           .then((res) => {
             setRecord(res.data);
@@ -86,7 +97,7 @@ const MyFitMain = () => {
       //오늘이나 미래이면 루틴 조회
       axios
         .get(
-          `${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${memberNo}?routineDay=${weekday}`
+          `${process.env.REACT_APP_BACK_SERVER}/myfit/routine/${member.memberNo}?routineDay=${weekday}`
         )
         .then((res) => {
           setRoutine(res.data);
@@ -120,11 +131,28 @@ const MyFitMain = () => {
     }
   }, [params]);
 
+  useEffect(() => {
+    if (!member) {
+      Swal.fire({
+        title: "로그인 필요",
+        text: "로그인 후 이용하세요",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "메인으로",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/");
+        }
+      });
+    }
+  }, [member]);
+
+  if (!member) return null;
   return (
     <div className="myfit-wrap">
       <h1>{pageTitle}</h1>
       <div className="myfit-content">
-        <Sidebar memberNo={memberNo} flag={flag} />
+        <Sidebar memberNo={member.memberNo} flag={flag} />
         <div className="myfit-content-box">
           <Routes>
             <Route
@@ -133,7 +161,7 @@ const MyFitMain = () => {
                 <MyFit
                   date={date}
                   setDate={setDate}
-                  memberNo={memberNo}
+                  memberNo={member.memberNo}
                   record={record}
                   setRecord={setRecord}
                   routine={routine}
@@ -149,7 +177,7 @@ const MyFitMain = () => {
               element={
                 <ExerciseLog
                   dateFormat={dateFormat}
-                  memberNo={memberNo}
+                  memberNo={member.memberNo}
                   dateData={dateData}
                   isUpdate={isUpdate}
                   setIsUpdate={setIsUpdate}
@@ -160,15 +188,19 @@ const MyFitMain = () => {
               path="routine"
               element={
                 <RoutineSetting
-                  memberNo={memberNo}
+                  memberNo={member.memberNo}
                   date={date}
                   routine={routine}
                   setRoutine={setRoutine}
+                  isUpdate={isUpdate}
+                  setIsUpdate={setIsUpdate}
                 />
               }
             />
             <Route path="activity/:memberNo" element={<ProfileCard />} />
             <Route path="follow/:memberNo/:type" element={<Follow />} />
+            <Route path="chat/:senderNo/:reciverNo" element={<ChatMain />} />
+            <Route path="dm/:memberNo" element={<DmList />} />
           </Routes>
         </div>
       </div>
@@ -199,6 +231,12 @@ const Sidebar = (props) => {
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           내 활동
+        </NavLink>
+        <NavLink
+          to={`/myfit/dm/${memberNo}`}
+          className={({ isActive }) => (isActive ? "active" : "")}
+        >
+          DM List
         </NavLink>
       </div>
     </div>

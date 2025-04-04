@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { memberState } from "../utils/RecoilData";
+import Swal from "sweetalert2";
 
 const Follow = () => {
   const params = useParams();
@@ -86,12 +87,63 @@ const Follow = () => {
                     className={`follow-button ${
                       member.isFollow === 1 ? "following" : ""
                     }`}
-                    onClick={() => {
+                    onClick={(e) => {
                       if (member.isFollow === 1) {
-                        //팔로우가 되어있는 경우
+                        //팔로우 취소
+                        Swal.fire({
+                          title: "팔로우 취소",
+                          text: "정말 팔로우를 취소하시겠습니까?",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#3085d6",
+                          cancelButtonColor: "#d33",
+                          confirmButtonText: "예",
+                          cancelButtonText: "아니오",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            axios
+                              .delete(
+                                `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMemberNo}?followMemberNo=${member.memberNo}`
+                              )
+                              .then((res) => {
+                                const obj = memberList.filter(
+                                  (item, i) => item.memberNo === member.memberNo
+                                )[0];
+                                const idx = memberList.indexOf(
+                                  memberList.filter(
+                                    (item, i) =>
+                                      item.memberNo === member.memberNo
+                                  )[0]
+                                );
+                                obj["isFollow"] = 0;
+                                memberList[idx] = obj;
+
+                                setMemberList([...memberList]);
+                              });
+                          }
+                        });
                       } else {
-                        //팔로우가 안되어있는 경우
+                        //팔로우
+                        axios
+                          .post(
+                            `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMemberNo}?followMemberNo=${member.memberNo}`
+                          )
+                          .then((res) => {
+                            const obj = memberList.filter(
+                              (item, i) => item.memberNo === member.memberNo
+                            )[0];
+                            const idx = memberList.indexOf(
+                              memberList.filter(
+                                (item, i) => item.memberNo === member.memberNo
+                              )[0]
+                            );
+                            obj["isFollow"] = 1;
+                            memberList[idx] = obj;
+
+                            setMemberList([...memberList]);
+                          });
                       }
+                      e.stopPropagation();
                     }}
                   >
                     {member.isFollow === 1 ? "팔로잉" : "팔로우"}

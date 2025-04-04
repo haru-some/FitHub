@@ -1,5 +1,6 @@
 package kr.co.fithub.myfit.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -25,11 +26,15 @@ public interface MyfitDao {
 
 	int insertRoutine(Routine r);
 
+	int deleteRoutine(Routine r);
+	
 	int insertRecord(Record record);
 
 	int updateRecord(Record record);
+	
+	int deleteRecord(Record record);
 
-	ActMember selectFollow(int memberNo);
+	ActMember selectActMember(HashMap<String, Integer> map);
 
 	List<Graph> graph(int memberNo);
 
@@ -38,5 +43,8 @@ public interface MyfitDao {
 	List<MemberDTO> selectFollowerList(int memberNo);
 
 	List<MemberDTO> selectFollowingList(int memberNo);
+
+
+	
 
 }

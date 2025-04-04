@@ -510,3 +510,36 @@ td {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+/* 상품 정보 테이블 */
+.shop-detail-frm-wrap .tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shop-detail-frm-wrap .tbl th {
+  text-align: center;
+  font-weight: 800;
+}
+
+.shop-detail-frm-wrap .goods-info-wrap td {
+  text-align: center;
+  color: #2f3e2f !important;
+}
+.shop-detail-frm-wrap .input-item {
+  margin: 5px 0;
+}
+
+.shop-detail-frm-wrap .input-item input {
+  width: 100%;
+  padding: 8px;
+
+  background-color: #f9f9f9;
+  color: black;
+  font-size: 14px;
+}
+
+.shop-detail-frm-wrap .input-item input:focus {
+  outline: none;
+  background-color: #e0e0e0;
+}

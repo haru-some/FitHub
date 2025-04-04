@@ -33,16 +33,32 @@ const MyFit = (props) => {
             __html: (() => {
               if (inputDate.isBefore(today, "day")) {
                 return record
-                  ? record.recordContent
-                  : "완료한 운동을 기록하세요!";
+                  ? `<div class="overflow-wrap">${record.recordContent}</div>
+                    <div class="time-wrap">
+                    <span class="material-icons">alarm</span>
+                    <span>${Math.floor(record.recordTime)}분</span>
+                    </div>`
+                  : "<div>완료한 운동을 기록하세요!</div>";
               } else if (inputDate.isSame(today, "day")) {
                 return record
-                  ? record.recordContent
+                  ? `<div class="overflow-wrap">${record.recordContent}</div>
+                    <div class="time-wrap">
+                    <span class="material-icons">alarm</span>
+                    <span>${Math.floor(record.recordTime)}분</span>
+                    </div>`
                   : `${
-                      routine ? routine.routineContent : "<h4>루틴없음</h4>"
-                    }<br><br>오늘의 운동을 완료했다면 기록해보세요!`;
+                      routine
+                        ? "<div class='overflow-wrap'>" +
+                          routine.routineContent +
+                          "</div>"
+                        : "<div>루틴없음</div>"
+                    }<div>오늘의 운동을 완료했다면 기록해보세요!</div>`;
               } else {
-                return routine ? routine.routineContent : "루틴없음";
+                return routine
+                  ? "<div class='overflow-wrap'>" +
+                      routine.routineContent +
+                      "</div>"
+                  : "<div>루틴없음</div>";
               }
             })(),
           }}

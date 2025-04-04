@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 
 const RoutineSetting = (props) => {
+  const isUpdate = props.isUpdate;
+  const setIsUpdate = props.setIsUpdate;
   const [obj, setObj] = useState({
     월: "",
     화: "",
@@ -83,6 +85,7 @@ const RoutineSetting = (props) => {
             )
             .then((res) => {
               console.log(res.data);
+              setIsUpdate(isUpdate + 1);
               navigate("/myfit/fit");
             })
             .catch((err) => {});
