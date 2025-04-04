@@ -211,8 +211,8 @@ const GoodsList = () => {
             >
               <img
                 src={
-                  goods.goodsUrl
-                    ? `${backServer}/shop/thumb/${goods.goodsUrl}`
+                  goods.goodsImage
+                    ? `${backServer}/shop/thumb/${goods.goodsImage}`
                     : "/image/default_img.png"
                 }
                 alt={goods.goodsName}
