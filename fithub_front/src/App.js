@@ -25,8 +25,6 @@ import LogoutCallback from "./component/common/LogoutCallback";
 function App() {
   const loginMember = useRecoilValue(memberState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
-  const backServer = process.env.REACT_APP_BACK_SERVER;
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
   useEffect(() => {
     refreshLogin();
     window.setInterval(refreshLogin, 60 * 50 * 1000);
