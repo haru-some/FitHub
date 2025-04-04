@@ -3,29 +3,28 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, memberState } from "../utils/RecoilData";
 import { useNavigate } from "react-router-dom"; // 관리자만 접근 제한을 위해 추가
+import axios from "axios";
 
 const AdminChat = () => {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const isLogin = useRecoilValue(isLoginState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const navigate = useNavigate();
 
   const [chatList, setChatList] = useState([]);
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
-  const [chatRooms, setChatRooms] = useState([
-    {
-      chatRoomNo: 1,
-      memberId: "user1",
-      lastMessage: "안녕하세요!",
-      unreadCount: 2,
-    },
-    {
-      chatRoomNo: 2,
-      memberId: "user2",
-      lastMessage: "문의합니다.",
-      unreadCount: 3,
-    },
-  ]);
-
+  const [chatRooms, setChatRooms] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${backServer}/chat/list`)
+      .then((res) => {
+        console.log(res);
+        setChatRooms(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const handleSelectChatRoom = (chatRoomNo) => {
     setSelectedChatRoom(chatRoomNo);
     setChatRooms((prevRooms) =>
@@ -47,7 +46,7 @@ const AdminChat = () => {
         </div>
         <div className="chat-box-view">
           {selectedChatRoom ? (
-            <AdminChatView chatRoomId={selectedChatRoom} />
+            <AdminChatView selectedChatRoom={selectedChatRoom} />
           ) : (
             <div className="empty-chat-view">채팅방을 선택하세요</div>
           )}
@@ -89,7 +88,7 @@ const AdminChatList = ({ chatRooms, onSelectChatRoom }) => {
   );
 };
 
-const AdminChatView = ({ chatRoomId }) => {
+const AdminChatView = ({ selectedChatRoom }) => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const memberInfo = useRecoilValue(memberState); // 현재 로그인한 회원 정보 가져오기

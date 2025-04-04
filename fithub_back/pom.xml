@@ -64,13 +64,21 @@
 		    <version>3.4.3</version>
 		</dependency>
 		
+		<!-- 웹소켓에 필요한 Maven-->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-websocket</artifactId>
     <version>3.4.4</version>
 </dependency>
-		
+<!-- Stomp -->
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-messaging</artifactId>
+    <version>6.2.5</version>
+</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
