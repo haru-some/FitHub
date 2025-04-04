@@ -35,7 +35,57 @@ const ShopDetail = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "상품정보":
-        return <div>상품 정보</div>;
+        return (
+          <div>
+            <div style={{ textAlign: "center" }}>상품정보</div>
+            <div className="goods-info-wrap">
+              <table className="tbl" border="1" style={{ width: "100%" }}>
+                <tbody>
+                  {goods.goodsInfo1 ? (
+                    <tr>
+                      <th style={{ width: "25%" }}>{goods.goodsInfo1}</th>
+                      <td style={{ width: "25%" }}>{goods.goodsDetail1}</td>
+                      <th style={{ width: "25%" }}>{goods.goodsInfo2}</th>
+                      <td style={{ width: "25%" }}>{goods.goodsDetail2}</td>
+                    </tr>
+                  ) : (
+                    ""
+                  )}
+                  {goods.goodsInfo3 ? (
+                    <tr>
+                      <th style={{ width: "25%" }}>{goods.goodsInfo3}</th>
+                      <td style={{ width: "25%" }}>{goods.goodsDetail3}</td>
+                      <th style={{ width: "25%" }}>{goods.goodsInfo4}</th>
+                      <td style={{ width: "25%" }}>{goods.goodsDetail4}</td>
+                    </tr>
+                  ) : (
+                    ""
+                  )}
+
+                  {goods.goodsInfo5 ? (
+                    <tr>
+                      <th style={{ width: "25%" }}>{goods.goodsInfo5}</th>
+                      <td style={{ width: "25%" }}>{goods.goodsDetail5}</td>
+                      <th style={{ width: "25%" }}>{goods.goodsInfo6}</th>
+                      <td style={{ width: "25%" }}>{goods.goodsDetail6}</td>
+                    </tr>
+                  ) : (
+                    ""
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="goods-image">
+              <img
+                src={
+                  goods.goodsDetailImg
+                    ? `${backServer}/shop/detail/${goods.goodsDetailImg}`
+                    : "" // 기본 이미지 처리
+                }
+              />
+            </div>
+          </div>
+        );
       case "리뷰":
         return <div>리뷰 정보</div>;
       case "배송/결제":
@@ -89,8 +139,8 @@ const ShopDetail = () => {
         <div className="goods-image">
           <img
             src={
-              goods.goodsUrl
-                ? `${backServer}/shop/thumb/${goods.goodsUrl}`
+              goods.goodsImage
+                ? `${backServer}/shop/thumb/${goods.goodsImage}`
                 : "/image/default_img.png" // 기본 이미지 처리
             }
             alt={goods.goodsName} // 기본 상품명 처리
@@ -99,7 +149,7 @@ const ShopDetail = () => {
         <div className="goods-info">
           <div className="ex-box">
             <h1>{goods.goodsName}</h1>
-            <p>{goods.goodsExpl}</p>
+            <p>{goods.goodsExplain}</p>
           </div>
           <h3>{goods.goodsPrice.toLocaleString()}원</h3>
 

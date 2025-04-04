@@ -9,7 +9,7 @@ import { Category } from "@mui/icons-material";
 const AdminGoods = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
 
-  const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
+  const { goodsNo } = useParams(); // Image에서 goodsNo 가져오기
   const [activeTab, setActiveTab] = useState("상품정보");
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef();
@@ -18,16 +18,33 @@ const AdminGoods = () => {
   const [goods, setGoods] = useState({});
 
   //제목, 썸네일, 내용, 첨부파일>> 글작성을 위해서 사용자에게 받아야하는 정보
-  const [showUrl, setShowUrl] = useState(null);
+  const [showImage, setShowImage] = useState(null);
+  const [showDetailImage, setShowDetailImage] = useState(null);
   const [goodsName, setGoodsName] = useState(""); // 사용자가 입력 할 제목
-  const [goodsFile, setGoodsFile] = useState([]); // 첨부파일(파일여러개일 수 있으므로 배열로..)
-  const [goodsExpl, setGoodsExpl] = useState(""); // 사용자가 입력 할 제목
-  const [goodsUrl, setGoodsUrl] = useState(null);
+  const [goodsExplain, setGoodsExplain] = useState(""); // 사용자가 입력 할 제목
   const [goodsPrice, setGoodsPrice] = useState("");
   const [goodsStock, setGoodsStock] = useState("");
 
-  const urlRef = useRef(null);
+  const [goodsImage, setGoodsImage] = useState(null); //상품이미지
+  const [goodsDetailImg, setGoodsDetailImg] = useState(null); //상품 상세이미지
+
+  const [goodsInfo1, setGoodsInfo1] = useState(""); //사용자가 입력할 필수 정보
+  const [goodsDetail1, setGoodsDetail1] = useState(""); //사용자가 입력할 필수 정보
+  const [goodsInfo2, setGoodsInfo2] = useState(""); //사용자가 입력할 필수 정보
+  const [goodsDetail2, setGoodsDetail2] = useState(""); //사용자가 입력할 필수 정보
+  const [goodsInfo3, setGoodsInfo3] = useState("");
+  const [goodsDetail3, setGoodsDetail3] = useState("");
+  const [goodsInfo4, setGoodsInfo4] = useState("");
+  const [goodsDetail4, setGoodsDetail4] = useState("");
+  const [goodsInfo5, setGoodsInfo5] = useState("");
+  const [goodsDetail5, setGoodsDetail5] = useState("");
+  const [goodsInfo6, setGoodsInfo6] = useState("");
+  const [goodsDetail6, setGoodsDetail6] = useState("");
+
+  const imageRef = useRef(null);
+  const imageDetailRef = useRef(null);
   const { goodsImg, setGoodsImg } = useState();
+  const { detailImg, setDetailImg } = useState();
   const [goodsCategory, setGoodsCategory] = useState("");
 
   const submit = () => {
@@ -35,19 +52,45 @@ const AdminGoods = () => {
     const form = new FormData();
     form.append("goodsName", goodsName);
     form.append("goodsPrice", goodsPrice);
-    form.append("goodsExpl", goodsExpl);
+    form.append("goodsExplain", goodsExplain);
     form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
 
-    if (goodsUrl) {
-      form.append("goodsImg", goodsUrl);
+    if (goodsImage) {
+      form.append("goodsImg", goodsImage);
     }
-    if (goodsFile) {
-      form.append("goodsFile", goodsFile); // 업로드한 파일 추가
+    if (goodsDetailImg) {
+      form.append("detailImg", goodsDetailImg);
+    }
+
+    if (goodsInfo1) {
+      form.append("goodsInfo1", goodsInfo1);
+      form.append("goodsDetail1", goodsDetail1);
+    }
+    if (goodsInfo2) {
+      form.append("goodsInfo2", goodsInfo2);
+      form.append("goodsDetail2", goodsDetail2);
+    }
+    if (goodsInfo3) {
+      form.append("goodsInfo3", goodsInfo3);
+      form.append("goodsDetail3", goodsDetail3);
+    }
+    if (goodsInfo4) {
+      form.append("goodsInfo4", goodsInfo4);
+      form.append("goodsDetail4", goodsDetail4);
+    }
+    if (goodsInfo5) {
+      form.append("goodsInfo5", goodsInfo5);
+      form.append("goodsDetail5", goodsDetail5);
+    }
+    if (goodsInfo6) {
+      form.append("goodsInfo6", goodsInfo6);
+      form.append("goodsDetail6", goodsDetail6);
     }
 
     console.log("ㄱㄱ");
-    console.log(goodsUrl);
+    console.log(goodsImage);
+    console.log(goodsDetailImg);
     axios
       .post(`${backServer}/goods`, form, {
         headers: {
@@ -75,32 +118,170 @@ const AdminGoods = () => {
       });
   };
 
-  const fileUp = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setGoodsFile(file);
-      console.log("파일이 선택되었습니다:", file);
-    }
-  };
-
   const renderContent = () => {
     switch (activeTab) {
       case "상품정보":
         return (
           <div>
-            <h3>상품 정보</h3>
-            <button onClick={() => fileInputRef.current.click()}>
-              파일 선택
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              style={{ display: "none" }}
-              onChange={fileUp}
-            />
-            {selectedFile && <p>선택된 파일: {selectedFile.name}</p>}
+            <div>상품정보</div>
+            <div className="goods-info-wrap">
+              <table className="tbl">
+                <tbody>
+                  <tr>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo1}
+                          onChange={(e) => setGoodsInfo1(e.target.value)}
+                          placeholder="필수 표기정보(명)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail1}
+                          onChange={(e) => setGoodsDetail1(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo2}
+                          onChange={(e) => setGoodsInfo2(e.target.value)}
+                          placeholder="필수 표기정보(명)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail2}
+                          onChange={(e) => setGoodsDetail2(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo3}
+                          onChange={(e) => setGoodsInfo3(e.target.value)}
+                          placeholder="필수 표기정보(명)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail3}
+                          onChange={(e) => setGoodsDetail3(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo4}
+                          onChange={(e) => setGoodsInfo4(e.target.value)}
+                          placeholder="필수 표기정보(명)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail4}
+                          onChange={(e) => setGoodsDetail4(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo5}
+                          onChange={(e) => setGoodsInfo5(e.target.value)}
+                          placeholder="필수 표기정보(명)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail5}
+                          onChange={(e) => setGoodsDetail5(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo6}
+                          onChange={(e) => setGoodsInfo6(e.target.value)}
+                          placeholder="필수 표기정보(명)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail6}
+                          onChange={(e) => setGoodsDetail6(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div
+              className="goods-detail-img"
+              onClick={() => imageDetailRef.current.click()}
+              style={{ cursor: "pointer" }}
+            >
+              {detailImg ? (
+                <img
+                  src={`${backServer}/goods/image/${detailImg}`}
+                  alt="썸네일"
+                />
+              ) : showDetailImage ? (
+                <img src={showDetailImage} alt="미리보기" />
+              ) : (
+                <img src="/image/befor-detail-img.png" alt="기본 썸네일" />
+              )}
+              <input
+                ref={imageDetailRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }} // 파일 입력 요소 숨김
+                onChange={changeDeImg} // 파일 선택 시 변화 처리
+              />
+            </div>
           </div>
         );
+
       case "리뷰":
         return <div>(예시)리뷰 정보 탭입니다.</div>;
       case "배송/결제":
@@ -129,20 +310,37 @@ const AdminGoods = () => {
       timer: 1000,
     });
   };
-  const changeUrl = (e) => {
+  const changeImage = (e) => {
     const files = e.target.files;
     if (files.length !== 0) {
-      setGoodsUrl(files[0]); // 썸네일 파일 상태 설정
+      setGoodsImage(files[0]); // 썸네일 파일 상태 설정
 
       // 화면 미리보기 설정
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        setShowUrl(reader.result); // 미리보기 상태 설정
+        setShowImage(reader.result); // 미리보기 상태 설정
       };
     } else {
-      setGoodsUrl(null);
-      setShowUrl(null);
+      setGoodsImage(null);
+      setShowImage(null);
+    }
+  };
+
+  const changeDeImg = (e) => {
+    const files = e.target.files;
+    if (files.length !== 0) {
+      setGoodsDetailImg(files[0]); // 썸네일 파일 상태 설정
+
+      // 화면 미리보기 설정
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = () => {
+        setShowDetailImage(reader.result); // 미리보기 상태 설정
+      };
+    } else {
+      setGoodsDetailImg(null);
+      setShowDetailImage(null);
     }
   };
 
@@ -152,22 +350,22 @@ const AdminGoods = () => {
         <div className="goods-image">
           <div
             className="goods-thumb-wrap"
-            onClick={() => urlRef.current.click()}
+            onClick={() => imageRef.current.click()}
             style={{ cursor: "pointer" }}
           >
             {goodsImg ? (
-              <img src={`${backServer}/goods/url/${goodsImg}`} alt="썸네일" />
-            ) : showUrl ? (
-              <img src={showUrl} alt="미리보기" />
+              <img src={`${backServer}/goods/image/${goodsImg}`} alt="썸네일" />
+            ) : showImage ? (
+              <img src={showImage} alt="미리보기" />
             ) : (
               <img src="/image/default_img.png" alt="기본 썸네일" />
             )}
             <input
-              ref={urlRef}
+              ref={imageRef}
               type="file"
               accept="image/*"
               style={{ display: "none" }} // 파일 입력 요소 숨김
-              onChange={changeUrl} // 파일 선택 시 변화 처리
+              onChange={changeImage} // 파일 선택 시 변화 처리
             />
           </div>
         </div>
@@ -187,7 +385,7 @@ const AdminGoods = () => {
             />
             <div>
               <h2>상품 설명</h2>
-              <TextEditor data={goodsExpl} setData={setGoodsExpl} />
+              <TextEditor data={goodsExplain} setData={setGoodsExplain} />
             </div>
           </div>
           <div className="options-and-price">
