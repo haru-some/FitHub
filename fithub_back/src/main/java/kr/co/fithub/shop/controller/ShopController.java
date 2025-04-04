@@ -66,15 +66,25 @@ public class ShopController {
   	
   	
     @PostMapping
-	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile[] goodsFile) {
+	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile) {
     	
     	
-    	System.out.println("보여줘");
+    	System.out.println("보여줘!!!");
+    	System.out.println(detailImg);
+    	System.out.println(goodsImg);
 		if(goodsImg != null) {
 			String savepath = root +"/goods/url/";
 			String filepath = fileUtils.upload(savepath, goodsImg);
-			goods.setGoodsUrl(filepath);			
+			goods.setGoodsImage(filepath);			
 		}
+		if(detailImg != null) {
+			String savepath = root +"/goods/detail/";
+			String filepath = fileUtils.upload(savepath, detailImg);
+			goods.setGoodsDetailImg(filepath);			
+		}
+		
+		
+		
 		List<GoodsFile> goodsFileList = new ArrayList<>();
 		if(goodsFile != null) {
 			String savepath = root +"/goods/";
@@ -90,6 +100,7 @@ public class ShopController {
 		
 		
 		int result = shopService.insertgoods(goods, goodsFileList);
+		
 		return ResponseEntity.ok(result);
 	}
     
