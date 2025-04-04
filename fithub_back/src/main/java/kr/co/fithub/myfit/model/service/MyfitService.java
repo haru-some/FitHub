@@ -54,18 +54,22 @@ public class MyfitService {
 		    String day = entry.getKey();
 		    String content = entry.getValue();
 		    
-		    if (content != null && !content.replace("<p>", "").replace("</p>", "").replace("<br>", "").trim().isEmpty()) {
-		    	Routine r = new Routine();
-		    	r.setMemberNo(memberNo);
-		    	r.setRoutineDay(day);
-		    	r.setRoutineContent(content);
-		        int exist = myfitDao.existRoutine(r);
-		        
+		    Routine r = new Routine();
+	    	r.setMemberNo(memberNo);
+	    	r.setRoutineDay(day);
+	    	r.setRoutineContent(content);
+	    	int exist = myfitDao.existRoutine(r);
+		    if (content != null && !content.replace("<p>", "").replace("</p>", "").replace("<br>", "").isBlank()) {
+		    	
 		        if (exist > 0) {
 		        	result += myfitDao.updateRoutine(r);
 		        } else {
 		        	result += myfitDao.insertRoutine(r);
 		        }
+		    }else {
+		    	if(exist>0) {
+		    		result += myfitDao.deleteRoutine(r);
+		    	}
 		    }
 		}
 		return result;
@@ -82,7 +86,11 @@ public class MyfitService {
 			}else {
 				result += myfitDao.updateRecord(record);
 			}
-		 }
+		 }else {
+		        if (record.getRecordNo() != 0) {
+		            result += myfitDao.deleteRecord(record);
+		        }
+		    }
 		
 		return result;
 	}

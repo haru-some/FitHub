@@ -79,3 +79,11 @@
 .record-wrap .submit-button:hover {
   background: #45944d;
 }
+
+.record-wrap label {
+  cursor: pointer;
+}
+
+.record-wrap input[type="time"] {
+  cursor: pointer;
+}

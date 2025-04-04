@@ -26,9 +26,13 @@ public interface MyfitDao {
 
 	int insertRoutine(Routine r);
 
+	int deleteRoutine(Routine r);
+	
 	int insertRecord(Record record);
 
 	int updateRecord(Record record);
+	
+	int deleteRecord(Record record);
 
 	ActMember selectActMember(HashMap<String, Integer> map);
 
@@ -39,5 +43,8 @@ public interface MyfitDao {
 	List<MemberDTO> selectFollowerList(int memberNo);
 
 	List<MemberDTO> selectFollowingList(int memberNo);
+
+
+	
 
 }

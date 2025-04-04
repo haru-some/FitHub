@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./exerciseLog.css";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 const ExerciseLog = (props) => {
   const isUpdate = props.isUpdate;
   const setIsUpdate = props.setIsUpdate;
@@ -16,6 +17,10 @@ const ExerciseLog = (props) => {
   const [endTime, setEndTime] = useState("12:00");
   const [text, setText] = useState("");
   const [recordNo, setRecordNo] = useState(0);
+
+  const startTimeRef = useRef(null);
+  const endTimeRef = useRef(null);
+
   useEffect(() => {
     axios
       .get(
@@ -37,25 +42,35 @@ const ExerciseLog = (props) => {
       <h2>{`${date[0]}년 ${date[1]}월 ${date[2]}일 (${date[3]})`}</h2>
       <div className="time-inputs">
         <div>
-          <label>시작 시각</label>
+          <label htmlFor="start-time">시작 시각</label>
 
           <input
+            ref={startTimeRef}
+            id="start-time"
             type="time"
             value={startTime}
             onChange={(e) => {
               setStartTime(e.target.value);
             }}
+            onClick={() => {
+              startTimeRef.current?.showPicker?.();
+            }}
           />
         </div>
         <span>~</span>
         <div>
-          <label>완료 시각</label>
+          <label htmlFor="end-time">완료 시각</label>
 
           <input
+            ref={endTimeRef}
+            id="end-time"
             type="time"
             value={endTime}
             onChange={(e) => {
               setEndTime(e.target.value);
+            }}
+            onClick={() => {
+              endTimeRef.current?.showPicker?.();
             }}
           />
         </div>
@@ -83,17 +98,27 @@ const ExerciseLog = (props) => {
             recordNo: recordNo,
           };
           console.log(obj);
-          axios
-            .put(
-              `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${memberNo}`,
-              obj
-            )
-            .then((res) => {
-              console.log(res.data);
-              setIsUpdate(isUpdate + 1);
-              navigate("/myfit/fit");
-            })
-            .catch((err) => {});
+          if (obj.recordStartTime < obj.recordEndTime) {
+            axios
+              .put(
+                `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${memberNo}`,
+                obj
+              )
+              .then((res) => {
+                console.log(res.data);
+                setIsUpdate(isUpdate + 1);
+                navigate("/myfit/fit");
+              })
+              .catch((err) => {});
+          } else {
+            Swal.fire({
+              title: "시간 확인",
+              text: "완료시각은 시작시각보다 이후여야 합니다.",
+              icon: "warning",
+              confirmButtonColor: "#589c5f",
+              confirmButtonText: "확인",
+            });
+          }
         }}
       >
         기록하기

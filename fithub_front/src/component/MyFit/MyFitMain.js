@@ -192,6 +192,8 @@ const MyFitMain = () => {
                   date={date}
                   routine={routine}
                   setRoutine={setRoutine}
+                  isUpdate={isUpdate}
+                  setIsUpdate={setIsUpdate}
                 />
               }
             />
