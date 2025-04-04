@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,6 +94,15 @@ public class CommunityController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@DeleteMapping(value="/list/{communityNo}")
+	public ResponseEntity<CommunityDTO> deleteCommunity(@PathVariable int communityNo, @RequestParam int page, @RequestParam int memberNo){
+		CommunityDTO community = communityService.deleteCommunity(communityNo, page, memberNo);
+		return ResponseEntity.ok(community);
+	}
 	
-	
+	@PatchMapping
+	public ResponseEntity<Integer> updateCommunity(@RequestBody CommunityDTO community){
+		int result = communityService.updateCommunity(community);
+		return ResponseEntity.ok(result);
+	}
 }

@@ -34,5 +34,11 @@ public interface CommunityDao {
 	int insertComment(CommentDTO comment);
 
 	int totalCount();
+
+	int deleteCommunity(int communityNo);
+
+	int updateCommunity(CommunityDTO community);
+
+	CommunityDTO selectCommunity(HashMap<String, Integer> map);
 	
 }
