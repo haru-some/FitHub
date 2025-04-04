@@ -19,6 +19,8 @@ import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
 import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import LogoutCallback from "./component/common/LogoutCallback";
 
 function App() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -46,6 +48,12 @@ function App() {
         });
     }
   };
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
+    }
+  }, []);
+
   return (
     <div className="wrap">
       <Header />
@@ -53,6 +61,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout/callback" element={<LogoutCallback />} />
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
           <Route path="/find" element={<FindInfo />} />

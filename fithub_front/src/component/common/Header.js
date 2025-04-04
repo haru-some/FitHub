@@ -88,10 +88,22 @@ const HeaderLink = () => {
   }, [isLogin, memberInfo]);
 
   const logOut = () => {
+    if (memberInfo?.loginType === "kakao") {
+      const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${kakaoClientId}&logout_redirect_uri=${redirectUri}`;
+      return;
+    }
+    if (memberInfo?.loginType === "google") {
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      const logoutUrl = `https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue=${redirectUri}`;
+      window.location.href = logoutUrl;
+      return;
+    }
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
