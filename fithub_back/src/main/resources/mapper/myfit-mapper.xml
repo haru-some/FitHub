@@ -30,6 +30,10 @@
 		insert into routine
 		values(routine_seq.nextval,#{memberNo},#{routineContent},#{routineDay})
 	</insert>
+	
+	<delete id="deleteRoutine">
+		delete from routine where member_no = #{memberNo} and routine_day=#{routineDay}
+	</delete>
 
 	<insert id="insertRecord">
 		insert into record
@@ -52,6 +56,10 @@
 		record_content=#{recordContent} where member_no=#{memberNo} and
 		record_date=#{recordDate}
 	</update>
+	
+	<delete id="deleteRecord">
+		delete from record where member_no=#{memberNo} and record_date = #{recordDate}
+	</delete>
 
 	<select id="selectActMember" resultType="actMember">
 		SELECT

@@ -100,7 +100,7 @@
   width: 100%;
 }
 
-.myfit-dm-wrap .info-wrap{
+.myfit-dm-wrap .info-wrap {
   width: 100%;
   overflow: hidden;
 }
@@ -116,14 +116,12 @@
   color: #aaa;
 }
 
-.myfit-dm-wrap .dm-item-content{
+.myfit-dm-wrap .dm-item-content {
   width: 100%;
   font-size: 15px;
   color: #cecece;
   overflow: hidden;
 }
-
-
 
 .myfit-dm-wrap .back-btn {
   background-color: transparent;
@@ -149,15 +147,14 @@
   font-size: 40px;
 }
 
-
-
-
 .myfit-wrap .chat-wrap {
   width: 600px;
   margin: 0 auto;
 }
 .myfit-wrap .section.chat-wrap {
-  background-color: #f7e600;
+  border-radius: 8px;
+  background-color: #868686;
+  padding: 10px;
 }
 .myfit-wrap .section.chat-wrap > * {
   color: #3a1d1d;
@@ -167,6 +164,7 @@
   box-sizing: border-box;
   padding: 5px;
   border: 1px solid #ccc;
+  border-radius: 8px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;

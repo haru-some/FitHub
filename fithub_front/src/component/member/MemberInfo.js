@@ -47,9 +47,10 @@ const MemberInfo = () => {
           },
         })
         .then((res) => {
-          const [addr, detail = ""] = res.data.memberAddr
-            .split(",")
-            .map((s) => s.trim());
+          const splitAddr = res.data.memberAddr.split(",").map((s) => s.trim());
+          const addr = splitAddr[0] || "";
+          const detail = splitAddr[1] || "";
+
           setMember({
             ...res.data,
             memberAddr: addr,
@@ -226,10 +227,10 @@ const MemberInfo = () => {
 
     if (thumbnailFile) {
       formData.append("thumbnail", thumbnailFile);
-    }
-    if (!thumbnailFile && !member.memberThumb) {
+    } else if (!thumbnailFile && !member.memberThumb) {
       formData.append("memberThumb", "null");
     }
+
     axios
       .patch(`${backServer}/member`, formData, {
         headers: {
@@ -241,7 +242,8 @@ const MemberInfo = () => {
           ...loginMember,
           ...member,
           memberAddr: fullAddr,
-          memberThumb: res.data.memberThumb ?? null,
+          memberAddrDetail: member.memberAddrDetail,
+          memberThumb: res.data.memberThumb ?? loginMember.memberThumb ?? null,
           accessToken: loginMember.accessToken,
         });
         Swal.fire({

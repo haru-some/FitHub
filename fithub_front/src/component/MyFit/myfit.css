@@ -103,15 +103,33 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  height: 320px;
 }
 
 .exercise-record-content {
   padding: 20px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+  height: 200px;
+  padding-top: 40px;
+}
+.exercise-record-content div {
+  font-size: 18px;
 }
 
-.exercise-record-content h4 {
-  text-align: center;
+.exercise-record-content .overflow-wrap {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.exercise-record-content .time-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .fit-wrap .edit-button {

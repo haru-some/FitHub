@@ -1,34 +1,39 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import "./chat.css";
-import { useRecoilValue } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, wsState } from "../utils/RecoilData";
 import CatchingPokemonIcon from "@mui/icons-material/CatchingPokemon";
 import ElderlyWomanIcon from "@mui/icons-material/ElderlyWoman";
+import axios from "axios";
 
 const ChatMain = () => {
   const { senderNo, reciverNo } = useParams();
   const loginMember = useRecoilValue(memberState); //채팅 식별자로 아이디 사용
   const [chatList, setChatList] = useState([]); //채팅메세지가 저장될 배열
-  const [ws, setWs] = useState({});
+
   const [chatMsg, setChatMsg] = useState({
     type: "enter",
     memberId: loginMember.memberId,
     message: "",
   });
+
+  const [actMember, setActMember] = useState(null);
   const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.3:8888
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
-
+  const [ws, setWs] = useRecoilState(wsState);
+  //회원 정보 불러오는 함수
   useEffect(() => {
-    const socket = new WebSocket(`${socketServer}/dm`); //ws://192.168.10.3:8888/dm
-    setWs(socket);
-    //useEffect() 함수 내부의 return 함수는 컴포넌트가 언마운트될 때 동작해야할 코드를 작성하는 영역 -> 해당 페이지를 벗어날 때 초기화해야 하는게 있으면 여기서
-    return () => {
-      console.log("채팅페이지에서 벗어나면");
-      socket.close();
-    };
-    }, []);
-  
+    axios
+      .get(
+        `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${reciverNo}?loginMemberNo=${loginMember.memberNo}`
+      )
+      .then((res) => {
+        console.log(res.data);
+        setActMember(res.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   const chatDiv = useRef(null);
   useEffect(() => {
@@ -64,7 +69,7 @@ const ChatMain = () => {
 
   return (
     <section className="section chat-wrap">
-      <div className="page-title">전체회원 채팅</div>
+      <div className="page-title">{actMember?.memberName}님과의 채팅</div>
       {loginMember ? (
         <div className="chat-content-wrap">
           <div className="chat-message-area" ref={chatDiv}>
@@ -84,7 +89,9 @@ const ChatMain = () => {
                   ) : chat.memberId === "grandmother" ? (
                     <p
                       className={
-                        chat.memberId === loginMember.memberId ? "chat right" : "chat left"
+                        chat.memberId === loginMember.memberId
+                          ? "chat right"
+                          : "chat left"
                       }
                     >
                       <div className="user">
@@ -96,7 +103,9 @@ const ChatMain = () => {
                   ) : (
                     <p
                       className={
-                        chat.memberId === loginMember.memberId ? "chat right" : "chat left"
+                        chat.memberId === loginMember.memberId
+                          ? "chat right"
+                          : "chat left"
                       }
                     >
                       <div className="user">
