@@ -147,6 +147,7 @@ const CommunityList = () => {
                     communityList={communityList}
                     setCommunityList={setCommunityList}
                     member={member}
+                    page={page}
                   />
                 </div>
               );

@@ -5,14 +5,64 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatIcon from "@mui/icons-material/Chat";
 import axios from "axios";
 import Swal from "sweetalert2";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+
 const CommunityItem = (props) => {
+  const page = props.page;
   const communityList = props.communityList;
   const setCommunityList = props.setCommunityList;
   const member = props.member;
   const community = props.community;
   const [isLike, setIsLike] = useState(community.isLike === 1);
-
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const menuOpen = Boolean(anchorEl);
+  const handleMenuClick = (e) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
+  };
+  const handleMenuClose = (e) => {
+    e.stopPropagation();
+    setAnchorEl(null);
+  };
+  // 메뉴 항목 처리 함수 예시
+  const handleReport = (e) => {
+    e.stopPropagation();
+    navigate(`/community/update/${community.communityNo}`);
+    handleMenuClose(e);
+  };
+  const handleBlock = (e) => {
+    Swal.fire({
+      title: "게시글 삭제",
+      text: "ㄹㅇ 지울거임?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .delete(
+            `${process.env.REACT_APP_BACK_SERVER}/community/list/${community.communityNo}?page=${page}&memberNo=${member.memberNo}`
+          )
+          .then((res) => {
+            const newCommunity = communityList.filter((item) => {
+              return item.communityNo !== community.communityNo;
+            });
+            console.log(newCommunity);
+            setCommunityList([...newCommunity, res.data]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+    e.stopPropagation();
+    handleMenuClose(e);
+  };
 
   const changeLike = (e) => {
     if (member) {
@@ -148,7 +198,13 @@ const CommunityItem = (props) => {
         }}
       >
         <div className="member-img">
-          <img src="/image/default_img.png"></img>
+          <img
+            src={
+              community && community.memberThumb
+                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
+                : "/image/default_img.png"
+            }
+          />
         </div>
         <div className="community-member">
           <p>{community.memberId}</p>
@@ -164,6 +220,36 @@ const CommunityItem = (props) => {
             </button>
           )}
         </div>
+        {member && member.memberId === community.memberId && (
+          <>
+            <IconButton
+              aria-controls={menuOpen ? "community-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={menuOpen ? "true" : undefined}
+              onClick={handleMenuClick}
+              style={{ marginLeft: "auto" }}
+            >
+              <MoreVertIcon style={{ color: "#fff" }} />
+            </IconButton>
+            <Menu
+              id="community-menu"
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <MenuItem onClick={handleReport}>수정하기</MenuItem>
+              <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
+            </Menu>
+          </>
+        )}
       </div>
       <div
         className="community-content-texteditor"

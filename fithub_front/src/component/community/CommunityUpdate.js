@@ -1,54 +1,59 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
-import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize-module-react";
+import axios from "axios";
+import Swal from "sweetalert2";
 Quill.register("modules/ImageResize", ImageResize);
 
-const CommunityWrite = () => {
+const CommunityUpdate = () => {
+  const params = useParams();
+  const communityNo = params.communityNo;
   const [member, setMember] = useRecoilState(memberState);
-  const memberNo = member.memberNo;
-  const [communityContent, setCommunityContent] = useState("");
-
   const navigate = useNavigate();
+  const [text, setText] = useState("");
 
-  function isBlank(str) {
-    return !str || /^\s*$/.test(str);
-  }
-
-  const write = (e) => {
-    if (
-      !isBlank(
-        communityContent
-          .replace("<p>", "")
-          .replace("</p>", "")
-          .replace("<br>", "")
+  useEffect(() => {
+    axios
+      .get(
+        `${
+          process.env.REACT_APP_BACK_SERVER
+        }/community/${communityNo}?memberNo=${member ? member.memberNo : 0}`
       )
-    ) {
-      const form = new FormData();
-      form.append("communityContent", communityContent);
-      form.append("memberNo", memberNo);
+      .then((res) => {
+        setText(res.data.communityContent);
+      })
+      .catch((err) => {});
+  }, []);
 
-      axios
-        .post(`${process.env.REACT_APP_BACK_SERVER}/community`, form, {
-          headers: {
-            contentType: "multipart/form-data",
-            processData: false,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          navigate("/community/list");
+  const update = () => {
+    console.log(text);
+    const community = {
+      communityNo: communityNo,
+      communityContent: text,
+    };
+    axios
+      .patch(`${process.env.REACT_APP_BACK_SERVER}/community`, community)
+      .then((res) => {
+        Swal.fire({
+          title: "수정완료",
+          icon: "success",
+        }).then((res) => {
+          navigate("/community/view/" + communityNo);
         });
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
   return (
     <div className="community-write">
       <div className="community-write-wrap">
-        <h2 className="community-title">커뮤니티 작성</h2>
+        <h2 className="community-title">커뮤니티 수정</h2>
         <div className="community-write-info">
           <div className="member-img">
             <img
@@ -62,11 +67,11 @@ const CommunityWrite = () => {
           <div className="write-memberId">{member.memberId}</div>
         </div>
         <div className="community-content">
-          <TextEditor data={communityContent} setData={setCommunityContent} />
+          <TextEditor data={text} setData={setText} />
         </div>
         <div className="write-btn-zone">
-          <button className="write-btn" type="button" onClick={write}>
-            작성
+          <button className="write-btn" type="button" onClick={update}>
+            수정
           </button>
         </div>
       </div>
@@ -142,11 +147,12 @@ const TextEditor = (props) => {
     <ReactQuill
       ref={editorRef}
       value={data}
-      onChange={setData}
+      onChange={(value) => {
+        setData(value);
+      }}
       theme="snow"
       modules={modules}
     />
   );
 };
-
-export default CommunityWrite;
+export default CommunityUpdate;
