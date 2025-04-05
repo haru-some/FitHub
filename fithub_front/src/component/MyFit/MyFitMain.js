@@ -138,10 +138,10 @@ const MyFitMain = () => {
         text: "로그인 후 이용하세요",
         icon: "warning",
         confirmButtonColor: "#589c5f",
-        confirmButtonText: "메인으로",
+        confirmButtonText: "로그인",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/");
+          navigate("/login");
         }
       });
     }
@@ -199,7 +199,7 @@ const MyFitMain = () => {
             />
             <Route path="activity/:memberNo" element={<ProfileCard />} />
             <Route path="follow/:memberNo/:type" element={<Follow />} />
-            <Route path="chat/:senderNo/:reciverNo" element={<ChatMain />} />
+            <Route path="chat/:senderNo/:receiverNo" element={<ChatMain />} />
             <Route path="dm/:memberNo" element={<DmList />} />
           </Routes>
         </div>

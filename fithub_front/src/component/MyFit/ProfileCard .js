@@ -56,7 +56,8 @@ const ProfileCard = (props) => {
               <div className="name-wrap">
                 <h2>{actMember.memberId}</h2>
                 <h3>{actMember.memberName}</h3>
-                <span
+                {loginMember.memberNo !== Number(memberNo) && (
+                  <span
                   class="material-icons chat-btn"
                   onClick={() => {
                     // 보낸사람/받은사람
@@ -67,6 +68,10 @@ const ProfileCard = (props) => {
                 >
                   send
                 </span>
+                )
+                
+                }
+                
               </div>
               {actMember && (
                 <div className="myfit-profile-stats">

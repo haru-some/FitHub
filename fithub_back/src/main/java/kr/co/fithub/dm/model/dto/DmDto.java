@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class DmDto {
 	private String type;
-	private String memberId;
+	private int senderNo;   // 보낸 사람 회원번호
+    private int receiverNo; // 받는 사람 회원번호
 	private String message;
 }

@@ -8,13 +8,14 @@ import ElderlyWomanIcon from "@mui/icons-material/ElderlyWoman";
 import axios from "axios";
 
 const ChatMain = () => {
-  const { senderNo, reciverNo } = useParams();
+  const { senderNo, receiverNo } = useParams();
   const loginMember = useRecoilValue(memberState); //채팅 식별자로 아이디 사용
   const [chatList, setChatList] = useState([]); //채팅메세지가 저장될 배열
 
   const [chatMsg, setChatMsg] = useState({
     type: "enter",
-    memberId: loginMember.memberId,
+    senderNo: senderNo,
+    receiverNo : receiverNo,
     message: "",
   });
 
@@ -26,7 +27,7 @@ const ChatMain = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${reciverNo}?loginMemberNo=${loginMember.memberNo}`
+        `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${receiverNo}?loginMemberNo=${loginMember.memberNo}`
       )
       .then((res) => {
         console.log(res.data);
@@ -42,6 +43,8 @@ const ChatMain = () => {
     }
   }, [chatList]);
 
+  
+  //소켓 연결시 최초 실행되는 함수
   const startChat = () => {
     console.log("웹소켓 연결이 되면 실행되는 함수");
     //데이터를 주고 받을 때는 문자열 밖에 안됨
@@ -49,18 +52,25 @@ const ChatMain = () => {
     ws.send(data); //매개변수로 전달한 문자열을 연결된 웹소켓 서버로 전송
     setChatMsg({ ...chatMsg, type: "chat" }); //최초 접속 이후에는 채팅만 보낸 예정이므로 미리 작업
   };
+  console.log(chatMsg.type)
+
+  //메세지 받는 함수
   const receiveMsg = (receiveData) => {
     console.log("서버에서 데이터를 받으면 실행되는 함수");
     const data = JSON.parse(receiveData.data); //문자열을 javascript 객체형식으로 전환
     console.log(data);
     setChatList([...chatList, data]);
   };
+
+  //챗 끝나면 돌아가는 함수
   const endChat = () => {
     console.log("웹소켓 연결이 끊어지면 실행되는 함수");
   };
   ws.onopen = startChat;
   ws.onmessage = receiveMsg;
   ws.onclose = endChat;
+
+  //메세지 보내는 함수
   const sendMessage = () => {
     const data = JSON.stringify(chatMsg);
     ws.send(data);
