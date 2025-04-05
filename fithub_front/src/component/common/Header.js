@@ -97,7 +97,7 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to="/chat">
+            <Link to={`myfit/dm/${memberInfo.memberNo}`}>
               {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (

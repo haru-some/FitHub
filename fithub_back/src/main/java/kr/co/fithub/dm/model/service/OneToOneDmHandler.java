@@ -2,6 +2,7 @@ package kr.co.fithub.dm.model.service;
 
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -12,11 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.fithub.dm.model.dto.DmDto;
 
-
 @Component
 public class OneToOneDmHandler extends TextWebSocketHandler{
 	//접속한 회원 정보를 저장할 컬렉션
-
 		private HashMap<WebSocketSession, String> members;
 		
 		public OneToOneDmHandler() {
