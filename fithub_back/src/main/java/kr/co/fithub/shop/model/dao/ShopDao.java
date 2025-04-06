@@ -18,4 +18,8 @@ public interface ShopDao {
 
 	int insertGoodsFile(GoodsFile goodsFile);
 
+	List<GoodsFile> selectGoodsFileList(int goodsNo);
+
+	int deleteBoard(int goodsNo);
+
 }

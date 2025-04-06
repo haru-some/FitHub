@@ -22,6 +22,16 @@
  		insert into goods_file values (goods_file_seq.nextval, #{goodsNo}, #{fileName}, #{filePath})
  	</insert>
   	
+  	<select id="selectGoodsFileList" resultType="goodsFile">
+  		select * from goods_file where goods_no= #{goodsNo}
+  	</select>
+  	
+  	<delete id="deleteBoard">
+  		delete from goods where goods_no = #{goodsNo}
+  	</delete>
+  	
+  	
+  
   	
  	
  	

@@ -29,6 +29,7 @@ import kr.co.fithub.util.FileUtils;
 
 
 
+
 @SpringBootApplication
 @CrossOrigin("*")
 @RestController
@@ -123,7 +124,20 @@ public class ShopController {
 	}
     
    
-	
+    @DeleteMapping(value= "/{goodsNo}")
+	public ResponseEntity<Integer> deleteGoods(@PathVariable int goodsNo){
+		List<GoodsFile> delFileList =  shopService.deleteGoods(goodsNo);
+		if(delFileList == null) {
+			return ResponseEntity.ok(0);
+			
+		}else {
+			String savepath = root +"/goods/";
+			for(GoodsFile deleteFile : delFileList ) {
+				File delFile = new File(savepath+deleteFile.getFilePath());
+				delFile.delete();
+			}
+			return ResponseEntity.ok(1);
+		}
     
-    
+    }
 }

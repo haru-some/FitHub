@@ -14,6 +14,7 @@ import kr.co.fithub.shop.model.dto.GoodsFile;
 
 
 
+
 @Service
 public class ShopService {
 	
@@ -52,6 +53,17 @@ public class ShopService {
 	public List<GoodsFile> updateGoods(Goods goods, List<GoodsFile> goodsFileList) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<GoodsFile> deleteGoods(int goodsNo) {
+		
+		List<GoodsFile> delFileList = shopDao.selectGoodsFileList(goodsNo);
+		int result = shopDao.deleteBoard(goodsNo);
+		if(result >0) {
+			return null;
+		}
+		return delFileList;
+							
 	}
 	
 		
