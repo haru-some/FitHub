@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./shopDetail.css";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { Info } from "@mui/icons-material";
+import { ShopCart } from "./ShopCart";
 
 const ShopDetail = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
@@ -16,6 +18,7 @@ const ShopDetail = () => {
   const [commentsList, setCommentsList] = useState([]);
   const [rating, setRating] = useState(0);
   const [reviews, setReviews] = useState([]);
+  const { addToCart } = useContext(ShopCart);
 
   // 상품 데이터 가져오기
   useEffect(() => {
@@ -168,10 +171,18 @@ const ShopDetail = () => {
   };
 
   const plusCart = () => {
+    if (!goods) return "상품이 없습니다.";
+    const cartItem = {
+      goodsImage: goods.goodsImage,
+      goodsName: goods.goodsName,
+      goodsPrice: goods.goodsPrice,
+      totalPrice: goods.goodsPrice * quantity,
+    };
+    addToCart(cartItem); // 장바구니에 추가
     Swal.fire({
       icon: "success",
       title: "장바구니에 보관하였습니다.",
-      showConfirmButton: false,
+      showConfirmButton: Info,
       timer: 2000,
     });
   };
