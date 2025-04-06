@@ -1,45 +1,46 @@
 package kr.co.fithub.chat.controller;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import kr.co.fithub.chat.model.dto.ChatDTO;
+import kr.co.fithub.chat.model.dto.ChatRoomDTO;
+import kr.co.fithub.chat.model.service.ChatService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@CrossOrigin("*")
+@RestController
+@RequestMapping("/chat")
+@Slf4j
 public class ChatController {
+	@Autowired
+	private ChatService chatService;
 	
-	private final SimpMessagingTemplate messagingTemplate;
-
-    public ChatController(SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
-    }
-
-    // 클라이언트가 "/app/chat.sendMessage"로 보낸 메시지를 처리
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/chat")
-    public ChatDTO sendMessage(ChatDTO message) {
-        // 메시지에 현재 시간 추가
-        message.setMessageDate(LocalDateTime.now().toString());
-        return message; // 이 메시지는 "/topic/chat"을 구독한 클라이언트에게 전달됨
-    }
-
- // 특정 방에 메시지 보내기
-    @MessageMapping("/chat/{chatRoomId}")
-    public void sendToRoom(@DestinationVariable String chatRoomId, ChatDTO message) {
-        message.setMessageDate(LocalDateTime.now().toString());
-        messagingTemplate.convertAndSend("/topic/chat/" + chatRoomId, message);
-    }
-    
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    public ResponseEntity<ChatDTO> addUser(ChatDTO chatMessage) {
-        chatMessage.setMessageContent(chatMessage.getMemberId() + "님이 입장하셨습니다.");
-        return ResponseEntity.ok(chatMessage);
+	@PostMapping("/create")
+	public ResponseEntity<Integer> createChatRoom(@RequestParam String memberId) {
+		int r = chatService.createChatRoom(memberId);
+		return ResponseEntity.ok(r);
+	}
+	
+	@GetMapping("/list")
+	public ResponseEntity<List> chatRoomList() {
+		List list = chatService.chatRoomList();
+		return ResponseEntity.ok(list);
+	}
+	
+	@MessageMapping("/sendMessage") // /app/sendMessage
+    @SendTo("/topic/messages") // 구독 중인 모든 클라이언트에게 전송
+    public String sendMessage(String message) {
+        return message;
     }
 }

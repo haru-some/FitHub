@@ -20,6 +20,9 @@
 .shop-detail-wrap .goods-info {
   flex: 1;
 }
+.shop-detail-wrap .ex-box {
+  min-height: 350px;
+}
 
 .shop-detail-wrap .goods-info h1 {
   margin-top: 60px;

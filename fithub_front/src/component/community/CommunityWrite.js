@@ -1,11 +1,11 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-import { loginIdState, memberState } from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
+import { memberState } from "../utils/RecoilData";
 import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize-module-react";
-import axios from "axios";
 Quill.register("modules/ImageResize", ImageResize);
 
 const CommunityWrite = () => {
@@ -28,7 +28,6 @@ const CommunityWrite = () => {
           .replace("<br>", "")
       )
     ) {
-      console.log(communityContent);
       const form = new FormData();
       form.append("communityContent", communityContent);
       form.append("memberNo", memberNo);
@@ -52,7 +51,13 @@ const CommunityWrite = () => {
         <h2 className="community-title">커뮤니티 작성</h2>
         <div className="community-write-info">
           <div className="member-img">
-            <img src="/image/default_img.png"></img>
+            <img
+              src={
+                member && member.memberThumb
+                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                  : "/image/default_img.png"
+              }
+            />
           </div>
           <div className="write-memberId">{member.memberId}</div>
         </div>
@@ -128,7 +133,7 @@ const TextEditor = (props) => {
       },
       ImageResize: {
         parchment: Quill.import("parchment"),
-        modules: ["Resize", "DisplatSize", "Toolbar"],
+        modules: ["Resize", "DisplaySize", "Toolbar"],
       },
     };
   }, []);

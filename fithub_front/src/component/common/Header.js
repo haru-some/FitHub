@@ -1,16 +1,28 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { memberState, isLoginState, wsState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import SmsIcon from "@mui/icons-material/Sms";
 
 const Header = () => {
+  const isLogin = useRecoilValue(isLoginState);
+  const setWs = useSetRecoilState(wsState);
+  const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.3:8888
+  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
+
+  useEffect(() => {
+    if (isLogin) {
+      let socket = new WebSocket(`${socketServer}/dm`); //ws://192.168.10.3:8888/dm
+      setWs(socket);
+    }
+  }, [isLogin]);
+
   return (
     <header className="header">
       <div className="header-inner">
@@ -53,21 +65,32 @@ const MainNavi = () => {
 };
 
 const HeaderLink = () => {
+  const [ws, setWs] = useRecoilState(wsState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
-  const [chatAlarm, setChatAlarm] = useState(1);
+  const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
 
   const logOut = () => {
+    if (ws) ws.close();
+
+    if (memberInfo?.loginType === "kakao") {
+      const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${kakaoClientId}&logout_redirect_uri=${redirectUri}`;
+      return;
+    }
+    if (memberInfo?.loginType === "google") {
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      const logoutUrl = `https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue=${redirectUri}`;
+      window.location.href = logoutUrl;
+      return;
+    }
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
-<<<<<<< Updated upstream
-    navigate("/");
-=======
     localStorage.removeItem("recoil-persist");
-    navigate("/login");
->>>>>>> Stashed changes
+    navigate("/");
   };
 
   return (
@@ -75,11 +98,11 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to="/chat">
-              {chatAlarm === 1 ? (
-                <SmsIcon />
-              ) : (
+            <Link to={`myfit/dm/${memberInfo.memberNo}`}>
+              {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
+              ) : (
+                <SmsIcon />
               )}
             </Link>
           </li>

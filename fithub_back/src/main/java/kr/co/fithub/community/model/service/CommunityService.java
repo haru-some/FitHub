@@ -2,6 +2,7 @@ package kr.co.fithub.community.model.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import kr.co.fithub.community.model.dto.CommentDTO;
 import kr.co.fithub.community.model.dto.CommunityDTO;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.util.JwtUtils;
+import kr.co.fithub.util.PageInfoUtil;
 
 @Service
 public class CommunityService {
@@ -19,11 +21,18 @@ public class CommunityService {
 	private CommunityDao communityDao;
 	@Autowired
 	private JwtUtils jwtUtil;
+	@Autowired
+	private PageInfoUtil pageInfoUtil;
 
-	public List selectCommunityList(int memberNo) {
-		List list = communityDao.selectCommunityList(memberNo);
-		
-		
+	public List selectCommunityList(int memberNo, int page, int size) {		
+		int startRow = (page - 1) * size + 1;
+		int endRow = page * size;
+ 		Map<String, Object> map = new HashMap<>();
+        map.put("memberNo", memberNo);
+        map.put("startRow", startRow);
+        map.put("endRow", endRow);
+
+		List list = communityDao.selectCommunityList(map);
 		return list;
 	}
 
@@ -84,6 +93,25 @@ public class CommunityService {
 	@Transactional
 	public int insertComment(CommentDTO comment) {
 		int result = communityDao.insertComment(comment);
+		return result;
+	}
+	
+	@Transactional
+	public CommunityDTO deleteCommunity(int communityNo, int page, int memberNo) {
+		
+		int result = communityDao.deleteCommunity(communityNo);
+		int endRow = page * 10;
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("endRow", endRow);
+		map.put("memberNo", memberNo);
+		
+		CommunityDTO community = communityDao.selectCommunity(map);
+		return community;
+	}
+	
+	@Transactional
+	public int updateCommunity(CommunityDTO community) {
+		int result = communityDao.updateCommunity(community);
 		return result;
 	}
 

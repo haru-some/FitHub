@@ -3,24 +3,32 @@
 <mapper namespace="kr.co.fithub.community.model.dao.CommunityDao">
 
 	<select id="selectCommunityList" resultType="community">
-		select
-		m.member_id,
-		m.member_no,
-		m.member_thumb,
-		c.community_content,
-		c.community_no,
-		(select count(*) from community_like where community_no = c.community_no) as
-		like_count,
-		(select count(*) from community_like where community_no = c.community_no and
-		member_no = #{memberNo}) as is_like,
-		(select count(*) from comment_tbl where community_no = c.community_no) as
-		comment_count,
-		(select count(*) from follow where follow_member_no = c.member_no and
-		member_no = #{memberNo}) as is_follow
-		FROM
-		community c
-		join
-		member m ON c.member_no = m.member_no order by community_no desc
+		SELECT * FROM (
+        SELECT 
+            A.*, 
+            rownum AS rnum
+        FROM (
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.member_thumb,
+                c.community_content,
+                c.community_no,
+                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no) AS like_count,
+                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{memberNo}) AS is_like,
+                (SELECT COUNT(*) FROM comment_tbl WHERE community_no = c.community_no) AS comment_count,
+                (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{memberNo}) AS is_follow
+            FROM community c
+            JOIN member m ON c.member_no = m.member_no
+            ORDER BY community_no DESC
+        ) A 
+    ) 
+    WHERE rnum BETWEEN #{startRow} AND #{endRow}
+	
+	</select>
+	
+	<select id="totalCount" resultType="int">
+		select count(*) from community
 	</select>
 
 	<select id="selectOneCommunity" resultType="community">
@@ -94,4 +102,36 @@
 	<insert id="insertComment">
 		insert into comment_tbl values(comment_tbl_seq.nextval, #{communityNo}, #{memberNo}, #{commentContent}, to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'))
 	</insert>
+	
+	<delete id="deleteCommunity">
+		delete from community where community_no = #{communityNo}
+	</delete>
+	
+	<update id="updateCommunity">
+		update community set community_content = #{communityContent} where community_no = #{communityNo}
+	</update>
+	
+	<select id="selectCommunity" resultType="community">
+	SELECT * FROM (
+        SELECT 
+            A.*, 
+            rownum AS rnum
+        FROM (
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.member_thumb,
+                c.community_content,
+                c.community_no,
+                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no) AS like_count,
+                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{memberNo}) AS is_like,
+                (SELECT COUNT(*) FROM comment_tbl WHERE community_no = c.community_no) AS comment_count,
+                (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{memberNo}) AS is_follow
+            FROM community c
+            JOIN member m ON c.member_no = m.member_no
+            ORDER BY community_no DESC
+        ) A 
+    ) 
+    WHERE rnum = #{endRow}
+	</select>
 </mapper>

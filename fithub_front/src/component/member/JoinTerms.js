@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./member.css";
 import TermsText from "./TermsText";
@@ -18,6 +18,15 @@ const JoinTerms = () => {
     setTermsAgree(newValue);
     setPrivacyAgree(newValue);
   };
+
+  useEffect(() => {
+    if (termsAgree && privacyAgree) {
+      setAllAgree(true);
+    } else {
+      setAllAgree(false);
+    }
+  }, [termsAgree, privacyAgree]);
+
   const handleSubmit = () => {
     if (termsAgree && privacyAgree) {
       navigate("/join");

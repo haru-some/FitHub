@@ -56,7 +56,7 @@ public class MyfitController {
 	}
 	
 	@PutMapping("/routine/{memberNo}")
-	public ResponseEntity<Integer> putMethodName(@PathVariable int memberNo, @RequestBody Map<String, String> routineMap) {
+	public ResponseEntity<Integer> updateRoutine(@PathVariable int memberNo, @RequestBody Map<String, String> routineMap) {
 		int result = myfitService.updateRoutine(memberNo,routineMap);
 		
 		
@@ -64,7 +64,7 @@ public class MyfitController {
 	}
 	
 	@PutMapping("record/{memberNo}")
-	public ResponseEntity<Integer> putMethodName(@PathVariable int memberNo, @RequestBody Record record) {
+	public ResponseEntity<Integer> updateRecord(@PathVariable int memberNo, @RequestBody Record record) {
 		record.setMemberNo(memberNo);
 		int result = myfitService.updateRecord(record);
 		
@@ -72,8 +72,8 @@ public class MyfitController {
 	}
 	
 	@GetMapping("/activity/{memberNo}")
-	public ResponseEntity<ActMember> selectFollow(@PathVariable int memberNo) {
-		ActMember m = myfitService.selectFollow(memberNo);
+	public ResponseEntity<ActMember> selectActMember(@PathVariable int memberNo, @RequestParam int loginMemberNo) {
+		ActMember m = myfitService.selectActMember(memberNo,loginMemberNo);
 		return ResponseEntity.ok(m);
 	}
 	
@@ -85,7 +85,7 @@ public class MyfitController {
 	}
 	
 	@GetMapping("/record/days/{memberNo}")
-	public ResponseEntity<List> getMethodName(@PathVariable int memberNo) {
+	public ResponseEntity<List> selectRecordDays(@PathVariable int memberNo) {
 		List list = myfitService.selectRecordDays(memberNo);
 		return ResponseEntity.ok(list);
 	}

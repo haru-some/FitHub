@@ -5,6 +5,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const ProfileCard = (props) => {
   const params = useParams();
@@ -19,8 +20,11 @@ const ProfileCard = (props) => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${memberNo}`)
+      .get(
+        `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${memberNo}?loginMemberNo=${loginMember.memberNo}`
+      )
       .then((res) => {
+        console.log(res.data);
         setActMember(res.data);
       })
       .catch((err) => {});
@@ -50,7 +54,24 @@ const ProfileCard = (props) => {
             </div>
             <div className="myfit-profile-info">
               <div className="name-wrap">
-                <h2>{actMember.memberName}</h2>
+                <h2>{actMember.memberId}</h2>
+                <h3>{actMember.memberName}</h3>
+                {loginMember.memberNo !== Number(memberNo) && (
+                  <span
+                  class="material-icons chat-btn"
+                  onClick={() => {
+                    // 보낸사람/받은사람
+                    navigate(
+                      `/myfit/chat/${loginMember.memberNo}/${actMember.memberNo}`
+                    );
+                  }}
+                >
+                  send
+                </span>
+                )
+                
+                }
+                
               </div>
               {actMember && (
                 <div className="myfit-profile-stats">
@@ -81,9 +102,60 @@ const ProfileCard = (props) => {
             </div>
           </div>
           <div className="myfit-profile-actions">
-            <Link to="/member">
-              <button className="myfit-profile-button">프로필 편집</button>
-            </Link>
+            {loginMember.memberNo === Number(memberNo) ? (
+              <Link to="/mypage">
+                <button className="myfit-profile-button">프로필 편집</button>
+              </Link>
+            ) : (
+              <button
+                className={`follow-button ${
+                  actMember.isFollow === 1 ? "following" : ""
+                }`}
+                onClick={() => {
+                  if (actMember.isFollow === 1) {
+                    //팔로우 취소
+                    Swal.fire({
+                      title: "팔로우 취소",
+                      text: "정말 팔로우를 취소하시겠습니까?",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "예",
+                      cancelButtonText: "아니오",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        axios
+                          .delete(
+                            `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMember.memberNo}?followMemberNo=${memberNo}`
+                          )
+                          .then((res) => {
+                            if (res.data > 0) {
+                              actMember.isFollow = 0;
+                              setActMember({ ...actMember });
+                            }
+                          });
+                      }
+                    });
+                  } else {
+                    //팔로우
+                    axios
+                      .post(
+                        `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMember.memberNo}?followMemberNo=${memberNo}`
+                      )
+                      .then((res) => {
+                        if (res.data > 0) {
+                          actMember.isFollow = 1;
+                          setActMember({ ...actMember });
+                        }
+                      });
+                  }
+                }}
+              >
+                {actMember.isFollow === 1 ? "팔로잉" : "팔로우"}
+              </button>
+            )}
+
             <button
               className="myfit-profile-button"
               onClick={() => {

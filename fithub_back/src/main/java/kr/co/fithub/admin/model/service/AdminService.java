@@ -51,19 +51,19 @@ public class AdminService {
 		int numPerPage = 6;
 		int pageNaviSize = 5;
 		int communityTotalCount = adminDao.communityTotalCount();
-		int commentTotalCount = adminDao.commnetTotalCount();
+//		int commentTotalCount = adminDao.commnetTotalCount();
 		
 		PageInfo communityPi = pageInfoUtil.getPageInfo(communityPage, numPerPage, pageNaviSize, communityTotalCount);
-		PageInfo commentPi = pageInfoUtil.getPageInfo(commentPage, numPerPage, pageNaviSize, commentTotalCount);
+//		PageInfo commentPi = pageInfoUtil.getPageInfo(commentPage, numPerPage, pageNaviSize, commentTotalCount);
 		
 		List communityList = adminDao.communityList();
-		List commentList = adminDao.commentList();
+//		List commentList = adminDao.commentList();
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("communityList", communityList);
-		map.put("commentList", commentList);
+//		map.put("commentList", commentList);
 		map.put("communityPi", communityPi);
-		map.put("commentPi", commentPi);
+//		map.put("commentPi", commentPi);
 		return map;
 	}
 	

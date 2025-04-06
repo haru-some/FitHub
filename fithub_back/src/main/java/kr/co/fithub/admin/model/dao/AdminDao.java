@@ -17,7 +17,7 @@ public interface AdminDao {
 
 	List communityList();
 
-	List commentList();
+//	List commentList();
 
 	int memberTotalCount();
 
@@ -25,6 +25,6 @@ public interface AdminDao {
 
 	int communityTotalCount();
 
-	int commnetTotalCount();
+//	int commnetTotalCount();
 
 }

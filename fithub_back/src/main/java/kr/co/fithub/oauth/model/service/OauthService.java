@@ -48,10 +48,13 @@ public class OauthService {
             member.setMemberAddr("주소를 입력해주세요");
             member.setMemberPhone("010-0000-0000");
             member.setMemberLevel(2);
+
             int result = memberDao.insertOauthMember(member);
             if (result != 1) {
                 throw new IllegalStateException("소셜 회원 등록에 실패했습니다.");
             }
+
+            memberDao.insertOauthMember(member);
             isNew = true;
         }
 
@@ -69,7 +72,6 @@ public class OauthService {
 
         return result;
     }
-    
     @Transactional
     public Map<String, Object> updateSocialMember(OauthJoinDTO joinRequest) {
         if (memberDao.exists(joinRequest.getMemberId()) > 0) {

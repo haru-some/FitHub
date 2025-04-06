@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
@@ -11,6 +11,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
@@ -59,8 +60,6 @@ const Login = () => {
       });
   };
 
-<<<<<<< Updated upstream
-=======
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       const accessToken = tokenResponse.access_token;
@@ -81,7 +80,6 @@ const Login = () => {
             window.localStorage.setItem("refreshToken", res.data.refreshToken);
             navigate("/");
           }
-        })
         .catch(() => {
           Swal.fire({
             title: "로그인 실패",
@@ -108,12 +106,10 @@ const Login = () => {
     if (!window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
-
     window.Kakao.Auth.login({
       scope: "profile_nickname, account_email",
       success: function (authObj) {
         const accessToken = authObj.access_token;
-
         axios
           .post(`${backServer}/oauth/kakao`, { access_token: accessToken })
           .then((res) => {
@@ -156,7 +152,6 @@ const Login = () => {
     });
   };
 
->>>>>>> Stashed changes
   return (
     <section className="member-wrap">
       <div className="member-left" />
@@ -237,10 +232,18 @@ const Login = () => {
             <span className="divider-text">간편 로그인</span>
             <hr className="divider" />
           </div>
-          <button type="button" className="social-login-btn">
+          <button
+            type="button"
+            className="social-login-btn"
+            onClick={googleLogin}
+          >
             <img src="/image/google_login.png" alt="Google 로그인" />
           </button>
-          <button type="button" className="social-login-btn">
+          <button
+            type="button"
+            className="social-login-btn"
+            onClick={kakaoLogin}
+          >
             <img src="/image/kakao_login.png" alt="Kakao 로그인" />
           </button>
         </form>

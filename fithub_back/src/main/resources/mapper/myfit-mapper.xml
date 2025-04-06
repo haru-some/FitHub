@@ -30,6 +30,10 @@
 		insert into routine
 		values(routine_seq.nextval,#{memberNo},#{routineContent},#{routineDay})
 	</insert>
+	
+	<delete id="deleteRoutine">
+		delete from routine where member_no = #{memberNo} and routine_day=#{routineDay}
+	</delete>
 
 	<insert id="insertRecord">
 		insert into record
@@ -52,51 +56,45 @@
 		record_content=#{recordContent} where member_no=#{memberNo} and
 		record_date=#{recordDate}
 	</update>
+	
+	<delete id="deleteRecord">
+		delete from record where member_no=#{memberNo} and record_date = #{recordDate}
+	</delete>
 
-	<select id="selectFollow" resultType="actMember">
+	<select id="selectActMember" resultType="actMember">
 		SELECT
 		m.member_no,
 		m.member_name,
 		m.member_thumb,
 		m.member_id,
-		NVL(f1.following_count, 0) AS
-		following_count,
-		NVL(f2.follower_count,
-		0) AS follower_count,
+		NVL(f1.following_count, 0) AS following_count,
+		NVL(f2.follower_count, 0) AS follower_count,
 		NVL(c.community_count, 0) AS community_count,
-		NVL(r.total_days, 0) AS
-		total_record_days,
-		NVL(r.total_time, 0) AS
-		total_record_time,
+		NVL(r.total_days, 0) AS total_record_days,
+		NVL(r.total_time, 0) AS total_record_time,
 		NVL(rw.week_days, 0) AS week_record_days,
-		NVL(rw.week_time, 0) AS
-		week_record_time
+		NVL(rw.week_time, 0) AS week_record_time,
+		CASE WHEN f3.is_follow IS NOT NULL THEN 1 ELSE 0 END AS is_follow
 		FROM
 		member m
 		LEFT JOIN (
 		SELECT
 		member_no,
-		COUNT(*) AS
-		following_count
+		COUNT(*) AS following_count
 		FROM
 		follow
 		GROUP BY
 		member_no
-		) f1
-		ON m.member_no =
-		f1.member_no
+		) f1 ON m.member_no = f1.member_no
 		LEFT JOIN (
 		SELECT
-		follow_member_no AS
-		member_no,
-		COUNT(*) AS
-		follower_count
+		follow_member_no AS member_no,
+		COUNT(*) AS follower_count
 		FROM
 		follow
 		GROUP BY
 		follow_member_no
-		) f2 ON m.member_no =
-		f2.member_no
+		) f2 ON m.member_no = f2.member_no
 		LEFT JOIN (
 		SELECT
 		member_no,
@@ -105,38 +103,40 @@
 		community
 		GROUP BY
 		member_no
-		) c
-		ON m.member_no = c.member_no
-		LEFT JOIN
-		(
+		) c ON m.member_no = c.member_no
+		LEFT JOIN (
 		SELECT
 		member_no,
-		COUNT(DISTINCT
-		record_date) AS total_days,
+		COUNT(DISTINCT record_date) AS total_days,
 		SUM(record_time) AS total_time
 		FROM
 		record
 		GROUP BY
 		member_no
-		) r ON
-		m.member_no = r.member_no
+		) r ON m.member_no = r.member_no
 		LEFT JOIN (
 		SELECT
 		member_no,
-		COUNT(DISTINCT
-		record_date) AS week_days,
-		SUM(record_time) AS
-		week_time
+		COUNT(DISTINCT record_date) AS week_days,
+		SUM(record_time) AS week_time
 		FROM
 		record
 		WHERE
-		TO_DATE(record_date, 'YYYY-MM-DD') >=
-		TRUNC(SYSDATE) - 7
+		TO_DATE(record_date, 'YYYY-MM-DD') >= TRUNC(SYSDATE) - 7
 		GROUP BY
 		member_no
 		) rw ON m.member_no = rw.member_no
-		where
-		m.member_no=#{memberNo}
+		LEFT JOIN (
+		SELECT
+		follow_member_no AS member_no,
+		1 AS is_follow
+		FROM
+		follow
+		WHERE
+		member_no = #{loginMemberNo}
+		) f3 ON m.member_no = f3.member_no
+		WHERE
+		m.member_no = #{memberNo}
 	</select>
 
 
@@ -184,11 +184,21 @@
 		m.member_no,
 		m.member_id,
 		m.member_name,
-		m.member_thumb
+		m.member_thumb,
+		CASE
+		WHEN EXISTS (
+		SELECT 1
+		FROM follow f2
+		WHERE f2.member_no = #{memberNo}
+		AND f2.follow_member_no
+		= m.member_no
+		) THEN 1
+		ELSE 0
+		END AS is_follow
 		FROM follow f
-		JOIN member m ON
-		f.member_no = m.member_no
-		WHERE f.follow_member_no = #{memebrNo}
+		JOIN member m
+		ON f.member_no = m.member_no
+		WHERE f.follow_member_no = #{memberNo}
 	</select>
 
 	<select id="selectFollowingList" resultType="member">
@@ -196,9 +206,20 @@
 		m.member_no,
 		m.member_id,
 		m.member_name,
-		m.member_thumb
+		m.member_thumb,
+		CASE
+		WHEN EXISTS (
+		SELECT 1
+		FROM follow f2
+		WHERE f2.member_no = #{memberNo}
+		AND f2.follow_member_no
+		= m.member_no
+		) THEN 1
+		ELSE 0
+		END AS is_follow
 		FROM follow f
-		JOIN member m ON f.follow_member_no = m.member_no
+		JOIN member m
+		ON f.follow_member_no = m.member_no
 		WHERE f.member_no = #{memberNo}
 	</select>
 

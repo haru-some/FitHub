@@ -23,4 +23,5 @@ public class ActMember {
 	private int totalRecordTime;		//총 운동 시간(분)
 	private int weekRecordDays;			//최근 일주일간 운동 일
 	private int weekRecordTime;			//최근 일주일간 운동 시간(분)
+	private int isFollow;
 }

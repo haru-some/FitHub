@@ -98,6 +98,7 @@ body {
   min-width: 800px;
   position: relative;
   background-color: var(--gray1);
+  padding-right: 0 !important;
 }
 html {
   scrollbar-gutter: stable;
@@ -301,7 +302,7 @@ html {
   color: #aaa;
   text-align: right;
 }
-
+/* 전체 페이지 스크롤바 스타일 */
 ::-webkit-scrollbar {
   width: 7px;
 }
@@ -311,4 +312,8 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--gray1);
+}
+/* Swal2 스크롤 스타일 */
+.swal2-shown::-webkit-scrollbar {
+  display: none;
 }

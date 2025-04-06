@@ -77,16 +77,11 @@ public class MemberController {
 	        @ModelAttribute MemberDTO member,
 	        @RequestParam(required = false) MultipartFile thumbnail) {
 	    try {
-	    	if ("null".equals(member.getMemberThumb())) {
-	    	    member.setMemberThumb(null);
-	    	}
-	        if (thumbnail != null && !thumbnail.isEmpty()) {
+	        if ("null".equals(member.getMemberThumb())) {
+	            member.setMemberThumb(null);
+	        }
+	        else if (thumbnail != null && !thumbnail.isEmpty()) {
 	            String savepath = root + "/member/profileimg/";
-<<<<<<< Updated upstream
-				String filepath = fileUtils.upload(savepath, thumbnail);
-				member.setMemberThumb(filepath);
-	        } 
-=======
 	            String filepath = fileUtils.upload(savepath, thumbnail);
 	            member.setMemberThumb(filepath);
 	        }
@@ -102,7 +97,13 @@ public class MemberController {
 	                }
 	            }
 	        }
->>>>>>> Stashed changes
+	        else if (member.getMemberThumb() == null && (thumbnail == null || thumbnail.isEmpty())) {
+	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
+	            if (origin != null) {
+	                member.setMemberThumb(origin.getMemberThumb());
+	            }
+	        }
+
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");

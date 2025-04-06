@@ -3,7 +3,27 @@
 <mapper namespace="kr.co.fithub.shop.model.dao.ShopDao">
   
   	<select id="selectGoodsList" resultType="goods">  			
- 			select goods_no, goods_name, goods_price, goods_category, goods_url  from  goods  order by goods_no desc
+ 			select goods_no, goods_name, goods_price, goods_category, goods_image  from  goods  order by goods_no desc
  	</select>
   
+  	<select id="selectOneGoods">
+  		select * from goods where goods_no= #{boardNo}
+  	</select>
+  	<insert id="insertGoods">
+  		insert into goods values 
+  		(#{goodsNo},#{goodsName},#{goodsExplain},#{goodsPrice},#{goodsStock},#{goodsImage},sysdate,#{goodsCategory}
+  		,#{goodsInfo1},#{goodsDetail1},#{goodsInfo2},#{goodsDetail2},#{goodsInfo3},#{goodsDetail3},#{goodsInfo4},#{goodsDetail4},#{goodsInfo5},#{goodsDetail5},#{goodsInfo6},#{goodsDetail6},#{goodsDetailImg})
+ 		<selectKey order="BEFORE" resultType="int" keyProperty="goodsNo">
+ 			select goods_seq.nextval from dual
+ 		</selectKey>
+  	</insert>
+  	
+  	<insert id="insertGoodsFile">
+ 		insert into goods_file values (goods_file_seq.nextval, #{goodsNo}, #{fileName}, #{filePath})
+ 	</insert>
+  	
+  	
+ 	
+ 	
+  	
 </mapper>
