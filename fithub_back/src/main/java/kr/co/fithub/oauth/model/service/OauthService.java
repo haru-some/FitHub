@@ -53,8 +53,6 @@ public class OauthService {
             if (result != 1) {
                 throw new IllegalStateException("소셜 회원 등록에 실패했습니다.");
             }
-
-            memberDao.insertOauthMember(member);
             isNew = true;
         }
 
@@ -72,6 +70,7 @@ public class OauthService {
 
         return result;
     }
+    
     @Transactional
     public Map<String, Object> updateSocialMember(OauthJoinDTO joinRequest) {
         if (memberDao.exists(joinRequest.getMemberId()) > 0) {

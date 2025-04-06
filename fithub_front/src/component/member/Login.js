@@ -107,6 +107,7 @@ const Login = () => {
     if (!window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
+
     window.Kakao.Auth.login({
       scope: "profile_nickname, account_email",
       success: function (authObj) {

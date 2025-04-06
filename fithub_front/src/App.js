@@ -24,7 +24,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoin from "./component/member/SocialJoin";
 
-
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const loginMember = useRecoilValue(memberState);

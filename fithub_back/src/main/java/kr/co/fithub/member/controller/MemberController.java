@@ -99,8 +99,14 @@ public class MemberController {
 	        }
 	        else if (member.getMemberThumb() == null && (thumbnail == null || thumbnail.isEmpty())) {
 	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
-	            if (origin != null) {
-	                member.setMemberThumb(origin.getMemberThumb());
+	            String fileName = origin.getMemberThumb();
+	            member.setMemberThumb(null);
+	            if (fileName != null && !fileName.isEmpty()) {
+	                String savepath = root + "/member/profileimg/";
+	                File file = new File(savepath + fileName);
+	                if (file.exists()) {
+	                    file.delete();
+	                }
 	            }
 	        }
 
