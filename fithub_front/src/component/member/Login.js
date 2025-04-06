@@ -80,6 +80,7 @@ const Login = () => {
             window.localStorage.setItem("refreshToken", res.data.refreshToken);
             navigate("/");
           }
+        })
         .catch(() => {
           Swal.fire({
             title: "로그인 실패",
