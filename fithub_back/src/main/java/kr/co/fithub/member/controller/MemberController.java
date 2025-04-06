@@ -82,9 +82,27 @@ public class MemberController {
 	    	}
 	        if (thumbnail != null && !thumbnail.isEmpty()) {
 	            String savepath = root + "/member/profileimg/";
+<<<<<<< Updated upstream
 				String filepath = fileUtils.upload(savepath, thumbnail);
 				member.setMemberThumb(filepath);
 	        } 
+=======
+	            String filepath = fileUtils.upload(savepath, thumbnail);
+	            member.setMemberThumb(filepath);
+	        }
+	        else if ("null".equals(member.getMemberThumb())) {
+	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
+	            String fileName = origin.getMemberThumb();
+	            member.setMemberThumb(null);
+	            if (fileName != null && !fileName.isEmpty()) {
+	                String savepath = root + "/member/profileimg/";
+	                File file = new File(savepath + fileName);
+	                if (file.exists()) {
+	                    file.delete();
+	                }
+	            }
+	        }
+>>>>>>> Stashed changes
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
@@ -98,6 +116,7 @@ public class MemberController {
 	                             .body("서버 오류 발생");
 	    }
 	}
+	//updateMember에서 이미지 삭제처리도 하도록 구현
 	@DeleteMapping(value="/profileimg")
 	public ResponseEntity<String> deleteProfileImage(@RequestParam String memberId) {
 		MemberDTO member = memberService.findByMemberId(memberId);

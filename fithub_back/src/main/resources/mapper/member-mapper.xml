@@ -58,4 +58,50 @@
 	  WHERE member_id = #{memberId} 
 	    AND member_email = #{memberEmail}
 	</select>
+<<<<<<< Updated upstream
+=======
+	
+	<select id="findByOauthId" resultType="member" parameterType="string">
+	  SELECT *
+	  FROM member
+	  WHERE oauth_id = #{oauthId}
+	</select>
+	
+	<insert id="insertOauthMember">
+	  INSERT INTO member (
+	  	member_no,
+	    member_id,
+	    member_pw,
+	    member_email,
+	    member_name,
+	    login_type,
+	    oauth_id,
+	    member_addr,
+	    member_phone,
+	    join_date
+	  ) VALUES (
+	 	member_seq.NEXTVAL,
+	    #{memberId},
+	    #{memberPw},
+	    #{memberEmail},
+	    #{memberName},
+	    #{loginType},
+	    #{oauthId},
+	    #{memberAddr},
+	    #{memberPhone},
+	    TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	  )
+	</insert>
+	
+	<update id="updateOauthMemberInfo">
+	    UPDATE member
+	    SET 
+	        member_id = #{memberId},
+	        member_name = #{memberName},
+	        member_phone = #{memberPhone},
+	        member_addr = #{memberAddr}
+	    WHERE 
+	        oauth_id = #{oauthId}
+	</update>
+>>>>>>> Stashed changes
 </mapper>

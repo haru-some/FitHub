@@ -59,6 +59,104 @@ const Login = () => {
       });
   };
 
+<<<<<<< Updated upstream
+=======
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      const accessToken = tokenResponse.access_token;
+      axios
+        .post(`${backServer}/oauth/google`, { access_token: accessToken })
+        .then((res) => {
+          if (res.data.isNew) {
+            navigate("/social-join", {
+              state: {
+                oauthId: res.data.memberId.split("_")[1],
+                loginType: res.data.loginType,
+              },
+            });
+          } else {
+            setMemberInfo(res.data);
+            axios.defaults.headers.common["Authorization"] =
+              res.data.accessToken;
+            window.localStorage.setItem("refreshToken", res.data.refreshToken);
+            navigate("/");
+          }
+        })
+        .catch(() => {
+          Swal.fire({
+            title: "로그인 실패",
+            text: "구글 로그인 처리 중 문제가 발생했습니다.",
+            icon: "error",
+          });
+        });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "로그인 실패",
+        text: "구글 로그인 중 문제가 발생했습니다.",
+        icon: "error",
+      });
+    },
+    scope: "profile email",
+  });
+
+  const kakaoLogin = () => {
+    if (!window.Kakao || !window.Kakao.Auth) {
+      console.error("❌ Kakao SDK가 로드되지 않았거나 초기화되지 않았습니다.");
+      return;
+    }
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
+    }
+
+    window.Kakao.Auth.login({
+      scope: "profile_nickname, account_email",
+      success: function (authObj) {
+        const accessToken = authObj.access_token;
+
+        axios
+          .post(`${backServer}/oauth/kakao`, { access_token: accessToken })
+          .then((res) => {
+            if (res.data.isNew) {
+              navigate("/social-join", {
+                state: {
+                  oauthId: res.data.memberId.split("_")[1],
+                  loginType: res.data.loginType,
+                },
+              });
+            } else {
+              setMemberInfo(res.data);
+              axios.defaults.headers.common["Authorization"] =
+                res.data.accessToken;
+              window.localStorage.setItem(
+                "refreshToken",
+                res.data.refreshToken
+              );
+              navigate("/");
+            }
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "로그인 실패",
+              text: "카카오 로그인 처리 중 문제가 발생했습니다.",
+              icon: "error",
+              confirmButtonColor: "#2f3e2f",
+            });
+          });
+      },
+      fail: function (err) {
+        console.error(err);
+        Swal.fire({
+          title: "로그인 실패",
+          text: "카카오 로그인 중 문제가 발생했습니다.",
+          icon: "error",
+          confirmButtonColor: "#2f3e2f",
+        });
+      },
+    });
+  };
+
+>>>>>>> Stashed changes
   return (
     <section className="member-wrap">
       <div className="member-left" />

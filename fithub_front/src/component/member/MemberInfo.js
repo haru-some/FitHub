@@ -148,29 +148,10 @@ const MemberInfo = () => {
       });
       return;
     }
-    axios
-      .delete(`${backServer}/member/profileimg`, {
-        params: { memberId: member.memberId },
-      })
-      .then(() => {
-        setMember((prev) => ({ ...prev, memberThumb: null }));
-        setThumbnailFile(null);
-        setPreviewUrl(null);
-        Swal.fire({
-          title: "삭제 완료",
-          text: "프로필 이미지가 삭제되었습니다.",
-          icon: "success",
-          confirmButtonColor: "#2f3e2f",
-        });
-      })
-      .catch(() => {
-        Swal.fire({
-          title: "삭제 실패",
-          text: "이미지 삭제 중 문제가 발생했습니다.",
-          icon: "error",
-          confirmButtonColor: "#2f3e2f",
-        });
-      });
+
+    setMember((prev) => ({ ...prev, memberThumb: null }));
+    setThumbnailFile(null);
+    setPreviewUrl(null);
   };
 
   const handleUpdate = () => {

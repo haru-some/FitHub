@@ -19,7 +19,13 @@ import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
 import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
+<<<<<<< Updated upstream
 import ChangePw from "./component/member/ChangePw";
+=======
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import LogoutCallback from "./component/common/LogoutCallback";
+import SocialJoin from "./component/member/SocialJoin";
+>>>>>>> Stashed changes
 
 function App() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -56,6 +62,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
+          <Route path="/social-join" element={<SocialJoin />} />
           <Route path="/find" element={<FindInfo />} />
           <Route path="/mypage" element={<MemberMain />} />
           <Route path="/community/*" element={<CommunityMain />} />

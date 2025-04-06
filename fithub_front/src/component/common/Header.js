@@ -62,7 +62,12 @@ const HeaderLink = () => {
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
+<<<<<<< Updated upstream
     navigate("/");
+=======
+    localStorage.removeItem("recoil-persist");
+    navigate("/login");
+>>>>>>> Stashed changes
   };
 
   return (
