@@ -97,6 +97,9 @@ const MemberInfo = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    e.target.value = "";
+
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.svg)$/i;
       if (!allowedExtensions.exec(file.name)) {
@@ -140,7 +143,7 @@ const MemberInfo = () => {
   }, [previewUrl]);
 
   const handleImageDelete = () => {
-    if (!member.memberThumb) {
+    if (!member.memberThumb && !previewUrl) {
       Swal.fire({
         title: "프로필 이미지 없음",
         text: "현재 프로필 이미지가 없습니다.",
@@ -149,10 +152,13 @@ const MemberInfo = () => {
       });
       return;
     }
-
     setMember((prev) => ({ ...prev, memberThumb: null }));
     setThumbnailFile(null);
     setPreviewUrl(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleUpdate = () => {
