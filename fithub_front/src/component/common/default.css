@@ -188,6 +188,19 @@ html {
   margin: 30px auto;
   flex: 1;
 }
+.logout-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.logout-btn svg {
+  color: white;
+  font-size: 26px;
+}
 /* 푸터 */
 .footer {
   background-color: var(--main1);

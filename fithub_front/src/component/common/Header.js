@@ -123,9 +123,9 @@ const HeaderLink = () => {
             )}
           </li>
           <li>
-            <Link to="/">
-              <LogoutIcon onClick={logOut} />
-            </Link>
+            <button onClick={logOut} className="logout-btn">
+              <LogoutIcon />
+            </button>
           </li>
         </>
       ) : (

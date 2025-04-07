@@ -27,10 +27,13 @@ function App() {
   const navigate = useNavigate();
   const loginMember = useRecoilValue(memberState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+
   useEffect(() => {
     refreshLogin();
-    window.setInterval(refreshLogin, 60 * 50 * 1000);
+    const interval = setInterval(refreshLogin, 60 * 50 * 1000);
+    return () => clearInterval(interval); // 메모리 누수 방지
   }, []);
+
   const refreshLogin = () => {
     const refreshToken = window.localStorage.getItem("refreshToken");
     if (refreshToken !== null) {
@@ -51,12 +54,10 @@ function App() {
     }
   };
   useEffect(() => {
-    if (loginMember) {
-      if (window.location.pathname === "/login") {
-        navigate("/");
-      }
+    if (loginMember && window.location.pathname === "/login") {
+      navigate("/");
     }
-  }, []);
+  }, [loginMember]);
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
