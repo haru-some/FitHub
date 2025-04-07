@@ -238,6 +238,10 @@
   width: 530px;
   margin: 0 auto;
 }
+
+.community-write-wrap .ql-container {
+  height: 400px;
+}
 .community-write-info {
   margin: 20px 0;
   display: flex;
