@@ -17,7 +17,7 @@ import MemberJoin from "./component/member/MemberJoin";
 import ShopDetail from "./component/shop/ShopDetail";
 import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
-import { ShopCartProvider } from "./component/shop/ShopCart";
+import ShopCart, { ShopCartProvider } from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 
 function App() {
@@ -58,23 +58,21 @@ function App() {
     <div className="wrap">
       <Header />
       <main className="content">
-        <ShopCartProvider>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/jointerms" element={<JoinTerms />} />
-            <Route path="/join" element={<MemberJoin />} />
-            <Route path="/find" element={<FindInfo />} />
-            <Route path="/mypage" element={<MemberMain />} />
-            <Route path="/community/*" element={<CommunityMain />} />
-            <Route path="/myfit/*" element={<MyFitMain />} />
-            <Route path="/admin/*" element={<AdminMain />} />
-            <Route path="/shop/*" element={<ShopList />} />
-            <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
-            <Route path="/cart" element={<ShopCartProvider />} />
-            <Route path="/chat" element={<MemberChat />} />
-          </Routes>
-        </ShopCartProvider>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/jointerms" element={<JoinTerms />} />
+          <Route path="/join" element={<MemberJoin />} />
+          <Route path="/find" element={<FindInfo />} />
+          <Route path="/mypage" element={<MemberMain />} />
+          <Route path="/community/*" element={<CommunityMain />} />
+          <Route path="/myfit/*" element={<MyFitMain />} />
+          <Route path="/admin/*" element={<AdminMain />} />
+          <Route path="/shop/*" element={<ShopList />} />
+          <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
+          <Route path="/cart" element={<ShopCart />} />
+          <Route path="/chat" element={<MemberChat />} />
+        </Routes>
       </main>
       <TopButton />
       <Footer />

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.fithub.shop.model.dao.ShopDao;
+import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
+
 
 
 
@@ -50,11 +52,8 @@ public class ShopService {
 		return result;
 	}
 
-	public List<GoodsFile> updateGoods(Goods goods, List<GoodsFile> goodsFileList) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	@Transactional
 	public List<GoodsFile> deleteGoods(int goodsNo) {
 		
 		List<GoodsFile> delFileList = shopDao.selectGoodsFileList(goodsNo);
@@ -64,6 +63,17 @@ public class ShopService {
 		}
 		return delFileList;
 							
+	}
+	@Transactional
+	public int insertCart(Cart cart) {
+		System.out.println(cart);
+		int result = shopDao.insertCart(cart);
+		System.out.println(cart);
+//		for(GoodsFile goodsFile : goodsFileList) {
+//			goodsFile.setGoodsNo(goods.getGoodsNo());
+//			result += shopDao.insertGoodsFile(goodsFile);
+//		}
+		return result;
 	}
 	
 		

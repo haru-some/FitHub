@@ -14,6 +14,9 @@ public class Cart {
 	private int cartNo;
 	private int memberNo;
 	private int goodsNo;
+	private String goodsName;
+	private String goodsImage;
+	private int goodsPrice;
 	private int goodsEa;
 	
 }

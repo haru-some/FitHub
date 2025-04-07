@@ -4,11 +4,15 @@ import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Info } from "@mui/icons-material";
-import { ShopCart } from "./ShopCart";
+// import { ShopCart } from "./ShopCart";
+
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 
 const ShopDetail = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
   const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
+  const [cart, setCart] = useState(null); // 상품 정보를 저장할 상태
   const [activeTab, setActiveTab] = useState("상품정보");
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
@@ -18,7 +22,10 @@ const ShopDetail = () => {
   const [commentsList, setCommentsList] = useState([]);
   const [rating, setRating] = useState(0);
   const [reviews, setReviews] = useState([]);
-  const { addToCart } = useContext(ShopCart);
+  // const { addToCart } = useContext(ShopCart);
+
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
 
   // 상품 데이터 가져오기
   useEffect(() => {
@@ -171,19 +178,29 @@ const ShopDetail = () => {
   };
 
   const plusCart = () => {
-    if (!goods) return "상품이 없습니다.";
     const cartItem = {
-      goodsImage: goods.goodsImage,
-      goodsName: goods.goodsName,
-      goodsPrice: goods.goodsPrice,
-      totalPrice: goods.goodsPrice * quantity,
+      // memberId: memberInfo.memberNo,
+      goodsNo: goods.goodsNo,
+      goodsName: goods.cartName,
+      goodsImage: goods.cartImage,
+      // goodsPrice: goods.cartPrice,
+      // quantity: cart.goodsEa, // 수량
     };
-    addToCart(cartItem); // 장바구니에 추가
-    Swal.fire({
-      icon: "success",
-      title: "장바구니에 보관하였습니다.",
-      showConfirmButton: Info,
-      timer: 2000,
+
+    axios.post(`${backServer}/goods/cart/add`, cartItem).then((res) => {
+      Swal.fire({
+        icon: "success",
+        title: "장바구니에 보관하였습니다.",
+        showConfirmButton: false,
+        timer: 2000,
+      }).catch((err) => {
+        console.error("Error adding to cart:", err);
+        Swal.fire({
+          icon: "error",
+          title: "장바구니에 추가하는 데 실패했습니다.",
+          text: "서버로부터 응답을 받을 수 없습니다.",
+        });
+      });
     });
   };
 

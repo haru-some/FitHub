@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.fithub.member.model.dto.MemberDTO;
+import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
 import kr.co.fithub.shop.model.service.ShopService;
@@ -140,4 +142,16 @@ public class ShopController {
 		}
     
     }
+        
+    @PostMapping(value="/cart/add/")
+   	public ResponseEntity<Integer> CartInsert(@ModelAttribute Cart cart){
+    	System.out.println("들어올래???");
+    	System.out.println(cart);
+    	int result = shopService.insertCart(cart);
+   				
+    	return ResponseEntity.ok(result);	
+       }
+     
+    
+    
 }
