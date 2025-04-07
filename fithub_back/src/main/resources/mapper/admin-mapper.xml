@@ -8,7 +8,7 @@
 		select * from del_member
 	</select>
 	<select id="communityList" resultType="community">
-		select * from community
+		select * from communityA
 	</select>
 	
 	<!-- <select id="commentList" resultType="comment">

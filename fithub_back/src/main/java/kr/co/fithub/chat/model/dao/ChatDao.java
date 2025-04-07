@@ -1,19 +1,15 @@
 package kr.co.fithub.chat.model.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
-import kr.co.fithub.chat.model.dto.ChatDTO;
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ChatDao {
+
+	int createChatRoom(String memberId);
+
+	List chatRoomList();
 	
-	void insertChatMessage(ChatDTO chatDTO);
 	
-    void markMessagesAsRead(@Param("chatRoomNo") String chatRoomNo);
-    
-    String checkUnreadMessages(@Param("chatRoomNo") String chatRoomNo);
-    
-    void updateMessageAlarm(@Param("chatRoomNo") String chatRoomNo, @Param("messageAlarm") String messageAlarm);
-    
 }

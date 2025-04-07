@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { memberState, isLoginState, wsState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,6 +11,18 @@ import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import SmsIcon from "@mui/icons-material/Sms";
 
 const Header = () => {
+  const isLogin = useRecoilValue(isLoginState);
+  const setWs = useSetRecoilState(wsState);
+  const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.3:8888
+  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
+
+  useEffect(() => {
+    if (isLogin) {
+      let socket = new WebSocket(`${socketServer}/dm`); //ws://192.168.10.3:8888/dm
+      setWs(socket);
+    }
+  }, [isLogin]);
+
   return (
     <header className="header">
       <div className="header-inner">
@@ -53,44 +65,31 @@ const MainNavi = () => {
 };
 
 const HeaderLink = () => {
+  const [ws, setWs] = useRecoilState(wsState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
   const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     const fetchChatAlarm = async () => {
-  //       try {
-  //         const response = await axios.get(
-  //           `/api/chat/alarm/${memberInfo.memberId}`
-  //         );
-  //         setChatAlarm(response.data.messageAlarm); // "Y" 또는 "N"
-  //       } catch (error) {
-  //         console.error("채팅 알람 정보를 불러오는데 실패했습니다.", error);
-  //       }
-  //     };
-
-  //     fetchChatAlarm();
-
-  //     // WebSocket 연결
-  //     const socket = new WebSocket("ws://localhost:8080/ws/chat");
-
-  //     socket.onmessage = (event) => {
-  //       const data = JSON.parse(event.data);
-  //       if (data.type === "message") {
-  //         setChatAlarm("Y"); // 새 메시지가 오면 'Y'로 변경
-  //       }
-  //     };
-
-  //     return () => socket.close();
-  //   }
-  // }, [isLogin, memberInfo]);
-
   const logOut = () => {
+    if (ws) ws.close();
+
+    if (memberInfo?.loginType === "kakao") {
+      const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${kakaoClientId}&logout_redirect_uri=${redirectUri}`;
+      return;
+    }
+    if (memberInfo?.loginType === "google") {
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      const logoutUrl = `https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue=${redirectUri}`;
+      window.location.href = logoutUrl;
+      return;
+    }
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
+    localStorage.removeItem("recoil-persist");
     navigate("/");
   };
 
@@ -99,7 +98,7 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to="/chat">
+            <Link to={`myfit/dm/${memberInfo.memberNo}`}>
               {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (

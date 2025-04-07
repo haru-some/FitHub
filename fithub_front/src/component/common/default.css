@@ -98,6 +98,7 @@ body {
   min-width: 800px;
   position: relative;
   background-color: var(--gray1);
+  padding-right: 0 !important;
 }
 html {
   scrollbar-gutter: stable;

@@ -19,12 +19,15 @@ import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
 import ShopCart, { ShopCartProvider } from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
+import ChangePw from "./component/member/ChangePw";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import LogoutCallback from "./component/common/LogoutCallback";
+import SocialJoin from "./component/member/SocialJoin";
 
 function App() {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const loginMember = useRecoilValue(memberState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
-  const backServer = process.env.REACT_APP_BACK_SERVER;
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
   useEffect(() => {
     refreshLogin();
     window.setInterval(refreshLogin, 60 * 50 * 1000);
@@ -48,9 +51,14 @@ function App() {
         });
     }
   };
-
   useEffect(() => {
     if (loginMember) {
+    }
+  }, []);
+
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
   }, []);
 
@@ -61,8 +69,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout/callback" element={<LogoutCallback />} />
           <Route path="/jointerms" element={<JoinTerms />} />
           <Route path="/join" element={<MemberJoin />} />
+          <Route path="/social-join" element={<SocialJoin />} />
           <Route path="/find" element={<FindInfo />} />
           <Route path="/mypage" element={<MemberMain />} />
           <Route path="/community/*" element={<CommunityMain />} />

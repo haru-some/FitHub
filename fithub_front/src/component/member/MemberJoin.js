@@ -596,6 +596,8 @@ const MemberJoin = () => {
               label="주소"
               value={member.memberAddr}
               onChange={inputMemberData}
+              InputProps={{ readOnly: true }}
+              onClick={handleAddressSearch}
               sx={{ flex: 1 }}
             />
             <button

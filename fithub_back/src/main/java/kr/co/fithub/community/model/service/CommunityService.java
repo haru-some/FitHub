@@ -95,6 +95,25 @@ public class CommunityService {
 		int result = communityDao.insertComment(comment);
 		return result;
 	}
+	
+	@Transactional
+	public CommunityDTO deleteCommunity(int communityNo, int page, int memberNo) {
+		
+		int result = communityDao.deleteCommunity(communityNo);
+		int endRow = page * 10;
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("endRow", endRow);
+		map.put("memberNo", memberNo);
+		
+		CommunityDTO community = communityDao.selectCommunity(map);
+		return community;
+	}
+	
+	@Transactional
+	public int updateCommunity(CommunityDTO community) {
+		int result = communityDao.updateCommunity(community);
+		return result;
+	}
 
 	
 }

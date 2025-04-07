@@ -77,14 +77,39 @@ public class MemberController {
 	        @ModelAttribute MemberDTO member,
 	        @RequestParam(required = false) MultipartFile thumbnail) {
 	    try {
-	    	if ("null".equals(member.getMemberThumb())) {
-	    	    member.setMemberThumb(null);
-	    	}
-	        if (thumbnail != null && !thumbnail.isEmpty()) {
+	        if ("null".equals(member.getMemberThumb())) {
+	            member.setMemberThumb(null);
+	        }
+	        else if (thumbnail != null && !thumbnail.isEmpty()) {
 	            String savepath = root + "/member/profileimg/";
-				String filepath = fileUtils.upload(savepath, thumbnail);
-				member.setMemberThumb(filepath);
-	        } 
+	            String filepath = fileUtils.upload(savepath, thumbnail);
+	            member.setMemberThumb(filepath);
+	        }
+	        else if ("null".equals(member.getMemberThumb())) {
+	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
+	            String fileName = origin.getMemberThumb();
+	            member.setMemberThumb(null);
+	            if (fileName != null && !fileName.isEmpty()) {
+	                String savepath = root + "/member/profileimg/";
+	                File file = new File(savepath + fileName);
+	                if (file.exists()) {
+	                    file.delete();
+	                }
+	            }
+	        }
+	        else if (member.getMemberThumb() == null && (thumbnail == null || thumbnail.isEmpty())) {
+	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
+	            String fileName = origin.getMemberThumb();
+	            member.setMemberThumb(null);
+	            if (fileName != null && !fileName.isEmpty()) {
+	                String savepath = root + "/member/profileimg/";
+	                File file = new File(savepath + fileName);
+	                if (file.exists()) {
+	                    file.delete();
+	                }
+	            }
+	        }
+
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
@@ -98,6 +123,7 @@ public class MemberController {
 	                             .body("서버 오류 발생");
 	    }
 	}
+	//updateMember에서 이미지 삭제처리도 하도록 구현
 	@DeleteMapping(value="/profileimg")
 	public ResponseEntity<String> deleteProfileImage(@RequestParam String memberId) {
 		MemberDTO member = memberService.findByMemberId(memberId);

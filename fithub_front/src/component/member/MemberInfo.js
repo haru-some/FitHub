@@ -47,9 +47,10 @@ const MemberInfo = () => {
           },
         })
         .then((res) => {
-          const [addr, detail = ""] = res.data.memberAddr
-            .split(",")
-            .map((s) => s.trim());
+          const splitAddr = res.data.memberAddr.split(",").map((s) => s.trim());
+          const addr = splitAddr[0] || "";
+          const detail = splitAddr[1] || "";
+
           setMember({
             ...res.data,
             memberAddr: addr,
@@ -96,6 +97,9 @@ const MemberInfo = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    e.target.value = "";
+
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.svg)$/i;
       if (!allowedExtensions.exec(file.name)) {
@@ -139,7 +143,7 @@ const MemberInfo = () => {
   }, [previewUrl]);
 
   const handleImageDelete = () => {
-    if (!member.memberThumb) {
+    if (!member.memberThumb && !previewUrl) {
       Swal.fire({
         title: "프로필 이미지 없음",
         text: "현재 프로필 이미지가 없습니다.",
@@ -148,29 +152,13 @@ const MemberInfo = () => {
       });
       return;
     }
-    axios
-      .delete(`${backServer}/member/profileimg`, {
-        params: { memberId: member.memberId },
-      })
-      .then(() => {
-        setMember((prev) => ({ ...prev, memberThumb: null }));
-        setThumbnailFile(null);
-        setPreviewUrl(null);
-        Swal.fire({
-          title: "삭제 완료",
-          text: "프로필 이미지가 삭제되었습니다.",
-          icon: "success",
-          confirmButtonColor: "#2f3e2f",
-        });
-      })
-      .catch(() => {
-        Swal.fire({
-          title: "삭제 실패",
-          text: "이미지 삭제 중 문제가 발생했습니다.",
-          icon: "error",
-          confirmButtonColor: "#2f3e2f",
-        });
-      });
+    setMember((prev) => ({ ...prev, memberThumb: null }));
+    setThumbnailFile(null);
+    setPreviewUrl(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleUpdate = () => {
@@ -226,10 +214,10 @@ const MemberInfo = () => {
 
     if (thumbnailFile) {
       formData.append("thumbnail", thumbnailFile);
-    }
-    if (!thumbnailFile && !member.memberThumb) {
+    } else if (!thumbnailFile && !member.memberThumb) {
       formData.append("memberThumb", "null");
     }
+
     axios
       .patch(`${backServer}/member`, formData, {
         headers: {
@@ -241,7 +229,8 @@ const MemberInfo = () => {
           ...loginMember,
           ...member,
           memberAddr: fullAddr,
-          memberThumb: res.data.memberThumb ?? null,
+          memberAddrDetail: member.memberAddrDetail,
+          memberThumb: res.data.memberThumb ?? loginMember.memberThumb ?? null,
           accessToken: loginMember.accessToken,
         });
         Swal.fire({

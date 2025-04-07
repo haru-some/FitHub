@@ -18,4 +18,7 @@ public interface MemberDao {
 	int existsEmail(String memberEmail);
 	MemberDTO findIdByNameAndEmail(HashMap<String, String> nameEmail);
 	MemberDTO findPwByIdAndEmail(Map<String, String> idEmail);
+	MemberDTO findByOauthId(String oauthId);
+	int insertOauthMember(MemberDTO member);
+	int updateOauthMemberInfo(MemberDTO member);
 }

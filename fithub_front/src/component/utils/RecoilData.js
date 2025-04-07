@@ -19,4 +19,9 @@ const isLoginState = selector({
   },
 });
 
-export { memberState, isLoginState };
+const wsState = atom({
+  key: "wsState",
+  default: null,
+});
+
+export { memberState, isLoginState, wsState };
