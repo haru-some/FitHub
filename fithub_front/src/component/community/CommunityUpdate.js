@@ -30,7 +30,6 @@ const CommunityUpdate = () => {
   }, []);
 
   const update = () => {
-    console.log(text);
     const community = {
       communityNo: communityNo,
       communityContent: text,
