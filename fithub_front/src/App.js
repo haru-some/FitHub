@@ -17,7 +17,7 @@ import MemberJoin from "./component/member/MemberJoin";
 import ShopDetail from "./component/shop/ShopDetail";
 import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
-import ShopCart from "./component/shop/ShopCart";
+import ShopCart, { ShopCartProvider } from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 import SocialJoin from "./component/member/SocialJoin";
 import LogoutCallback from "./component/common/LogoutCallback";

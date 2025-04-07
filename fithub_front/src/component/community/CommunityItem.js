@@ -138,18 +138,6 @@ const CommunityItem = (props) => {
               });
 
               setCommunityList([...arr]);
-              // const obj = communityList.filter(
-              //   (item, i) => item.communityNo === community.communityNo
-              // )[0];
-              // const idx = communityList.indexOf(
-              //   communityList.filter(
-              //     (item, i) => item.communityNo === community.communityNo
-              //   )[0]
-              // );
-              // obj["isFollow"] = 0;
-              // communityList[idx] = obj;
-
-              // setCommunityList([...communityList]);
             });
         }
       });
@@ -167,18 +155,6 @@ const CommunityItem = (props) => {
           });
 
           setCommunityList([...arr]);
-          // const obj = communityList.filter(
-          //   (item, i) => item.communityNo === community.communityNo
-          // )[0];
-          // const idx = communityList.indexOf(
-          //   communityList.filter(
-          //     (item, i) => item.communityNo === community.communityNo
-          //   )[0]
-          // );
-          // obj["isFollow"] = 1;
-          // communityList[idx] = obj;
-
-          // setCommunityList([...communityList]);
         });
     }
     e.stopPropagation();
@@ -221,7 +197,7 @@ const CommunityItem = (props) => {
           )}
         </div>
         {member && member.memberId === community.memberId && (
-          <>
+          <div className="community-sub-btn">
             <IconButton
               aria-controls={menuOpen ? "community-menu" : undefined}
               aria-haspopup="true"
@@ -248,7 +224,7 @@ const CommunityItem = (props) => {
               <MenuItem onClick={handleReport}>수정하기</MenuItem>
               <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
             </Menu>
-          </>
+          </div>
         )}
       </div>
       <div

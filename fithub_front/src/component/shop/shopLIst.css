@@ -91,6 +91,7 @@
 }
 
 .shop-list-wrap .goods-card {
+  position: relative;
   background-color: #f9f9f9;
   flex: 0 1 calc(25% - 20px); /* 4개씩 보이도록 설정하며 간격을 고려 */
   box-sizing: border-box; /* 패딩과 보더를 포함하여 크기 계산 */
@@ -154,4 +155,17 @@
 
 .shop-list-wrap .pagination button:disabled {
   background-color: #245329;
+}
+
+.shop-list-wrap .delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 10px;
+  padding: 0px;
+  font-weight: bold;
 }

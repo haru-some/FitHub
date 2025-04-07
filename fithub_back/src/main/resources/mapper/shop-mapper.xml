@@ -22,8 +22,23 @@
  		insert into goods_file values (goods_file_seq.nextval, #{goodsNo}, #{fileName}, #{filePath})
  	</insert>
   	
+  	<select id="selectGoodsFileList" resultType="goodsFile">
+  		select * from goods_file where goods_no= #{goodsNo}
+  	</select>
   	
- 	
- 	
+  	<delete id="deleteBoard">
+  		delete from goods where goods_no = #{goodsNo}
+  	</delete>
+  	
+  	<insert id="insertCart">
+  		insert into cart values
+  		(#{cartNo},#{memberNo},#{goodsNo},#{goodsName},#{goodsImage},#{goodsPrice},#{goodsEa})
+  		<selectKey order="BEFORE" resultType="int" keyProperty="cartNo">
+ 			select cart_seq.nextval from dual
+ 		</selectKey> 
+  	</insert>
+  	
+  	
+
   	
 </mapper>
