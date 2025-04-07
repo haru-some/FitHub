@@ -17,7 +17,7 @@ import MemberJoin from "./component/member/MemberJoin";
 import ShopDetail from "./component/shop/ShopDetail";
 import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
-import ShopCart from "./component/shop/ShopCart";
+import ShopCart, { ShopCartProvider } from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 import ChangePw from "./component/member/ChangePw";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -55,6 +55,7 @@ function App() {
     if (loginMember) {
     }
   }, []);
+
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);

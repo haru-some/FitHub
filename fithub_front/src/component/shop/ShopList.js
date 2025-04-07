@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import axios from "axios";
+import ClearIcon from "@mui/icons-material/Clear";
+import Swal from "sweetalert2";
+
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 
 const categories = [
   "모두",
@@ -65,6 +70,9 @@ const GoodsList = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
 
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
+
   useEffect(() => {
     axios
       .get(`${backServer}/goods?reqPage=${reqPage}`)
@@ -77,6 +85,29 @@ const GoodsList = () => {
         console.log(err);
       });
   }, [reqPage]);
+
+  //관리자 삭제
+  const adminDelete = (goodsNo) => {
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#45a049",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "예, 삭제합니다!",
+      cancelButtonText: "아니요, 취소합니다.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`${backServer}/goods/${goodsNo}`).then((res) => {
+          // 성공적으로 삭제된 후 상태 업데이트
+          setGoods(Goods.filter((goods) => goods.goodsNo !== goodsNo));
+        });
+        // 상태에서 즉각 삭제하는 경우
+        // setGoods(Goods.filter((goods) => goods.goodsNo !== goodsNo));
+      }
+    });
+  };
 
   //카테고리
   const handleCategoryChange = (category) => {
@@ -200,30 +231,56 @@ const GoodsList = () => {
       </select>
 
       <div className="goods-container">
-        {currentGoods.length === 0 ? (
-          <p>상품이 없습니다.</p>
-        ) : (
-          currentGoods.map((goods) => (
-            <div
-              className="goods-card"
-              key={goods.goodsNo} // goodsNo를 키로 사용
-              onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
-            >
-              <img
-                src={
-                  goods.goodsImage
-                    ? `${backServer}/shop/thumb/${goods.goodsImage}`
-                    : "/image/default_img.png"
-                }
-                alt={goods.goodsName}
-              />
-              <div className="goods-details">
-                <h3>{goods.goodsName}</h3>
-                <p>{goods.goodsPrice.toLocaleString()} 원</p>
+        {memberInfo?.memberLevel === 1
+          ? currentGoods.map((goods) => (
+              <div
+                className="goods-card"
+                key={goods.goodsNo} // goodsNo를 키로 사용
+                onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
+              >
+                <button
+                  className="delete-button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
+                    adminDelete(goods.goodsNo);
+                  }}
+                >
+                  <ClearIcon />
+                </button>
+                <img
+                  src={
+                    goods.goodsImage
+                      ? `${backServer}/shop/thumb/${goods.goodsImage}`
+                      : "/image/default_img.png"
+                  }
+                  alt={goods.goodsName}
+                />
+                <div className="goods-details">
+                  <h3>{goods.goodsName}</h3>
+                  <p>{goods.goodsPrice.toLocaleString()} 원</p>
+                </div>
               </div>
-            </div>
-          ))
-        )}
+            ))
+          : currentGoods.map((goods) => (
+              <div
+                className="goods-card"
+                key={goods.goodsNo} // goodsNo를 키로 사용
+                onClick={() => navigate(`/shop/detail/${goods.goodsNo}`)}
+              >
+                <img
+                  src={
+                    goods.goodsImage
+                      ? `${backServer}/shop/thumb/${goods.goodsImage}`
+                      : "/image/default_img.png"
+                  }
+                  alt={goods.goodsName}
+                />
+                <div className="goods-details">
+                  <h3>{goods.goodsName}</h3>
+                  <p>{goods.goodsPrice.toLocaleString()} 원</p>
+                </div>
+              </div>
+            ))}
       </div>
 
       {/* 페이지네이션 */}

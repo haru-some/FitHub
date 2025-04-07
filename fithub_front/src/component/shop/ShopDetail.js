@@ -1,16 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./shopDetail.css";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { Info } from "@mui/icons-material";
+// import { ShopCart } from "./ShopCart";
+
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 
 const ShopDetail = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
   const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
+  const [cart, setCart] = useState(null); // 상품 정보를 저장할 상태
   const [activeTab, setActiveTab] = useState("상품정보");
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const backServer = process.env.REACT_APP_BACK_SERVER;
+
+  const [comment, setComment] = useState("");
+  const [commentsList, setCommentsList] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  // const { addToCart } = useContext(ShopCart);
+
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
 
   // 상품 데이터 가져오기
   useEffect(() => {
@@ -30,6 +45,39 @@ const ShopDetail = () => {
   };
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(quantity - 1);
+  };
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const submitComment = () => {
+    if (comment.trim()) {
+      setCommentsList([...commentsList, comment]);
+      setComment("");
+    }
+  };
+
+  const submitReview = () => {
+    if (comment.trim() && rating > 0) {
+      setReviews([...reviews, { comment, rating }]);
+      setComment("");
+      setRating(0);
+    }
+  };
+
+  const renderStars = () => {
+    return [1, 2, 3, 4, 5].map((num) => (
+      <span
+        key={num}
+        onClick={() => setRating(num)}
+        style={{
+          cursor: "pointer",
+          color: num <= rating ? "gold" : "gray",
+        }}
+      >
+        ★
+      </span>
+    ));
   };
 
   const renderContent = () => {
@@ -87,7 +135,39 @@ const ShopDetail = () => {
           </div>
         );
       case "리뷰":
-        return <div>리뷰 정보</div>;
+        return (
+          <div>
+            <h2>리뷰 정보</h2>
+            <div>{renderStars()}</div>
+            <input
+              type="text"
+              value={comment}
+              onChange={handleCommentChange}
+              placeholder="코멘트를 입력하세요"
+              style={{ width: "80%", padding: "5px", marginTop: "10px" }}
+            />
+            <button
+              onClick={submitReview}
+              style={{ padding: "5px 10px", marginLeft: "10px" }}
+            >
+              제출
+            </button>
+            <div style={{ marginTop: "20px" }}>
+              {reviews.map((review, index) => (
+                <div
+                  key={index}
+                  style={{ borderTop: "1px solid #ccc", padding: "10px 0" }}
+                >
+                  <div>
+                    {"★".repeat(review.rating)}
+                    {"☆".repeat(5 - review.rating)}
+                  </div>
+                  <div>{review.comment}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
       case "배송/결제":
         return <div>배송 정보</div>;
       case "반품/교환":
@@ -98,11 +178,29 @@ const ShopDetail = () => {
   };
 
   const plusCart = () => {
-    Swal.fire({
-      icon: "success",
-      title: "장바구니에 보관하였습니다.",
-      showConfirmButton: false,
-      timer: 2000,
+    const cartItem = {
+      // memberId: memberInfo.memberNo,
+      goodsNo: goods.goodsNo,
+      goodsName: goods.cartName,
+      goodsImage: goods.cartImage,
+      // goodsPrice: goods.cartPrice,
+      // quantity: cart.goodsEa, // 수량
+    };
+
+    axios.post(`${backServer}/goods/cart/add`, cartItem).then((res) => {
+      Swal.fire({
+        icon: "success",
+        title: "장바구니에 보관하였습니다.",
+        showConfirmButton: false,
+        timer: 2000,
+      }).catch((err) => {
+        console.error("Error adding to cart:", err);
+        Swal.fire({
+          icon: "error",
+          title: "장바구니에 추가하는 데 실패했습니다.",
+          text: "서버로부터 응답을 받을 수 없습니다.",
+        });
+      });
     });
   };
 
@@ -149,7 +247,7 @@ const ShopDetail = () => {
         <div className="goods-info">
           <div className="ex-box">
             <h1>{goods.goodsName}</h1>
-            <p>{goods.goodsExplain}</p>
+            <div dangerouslySetInnerHTML={{ __html: goods.goodsExplain }} />
           </div>
           <h3>{goods.goodsPrice.toLocaleString()}원</h3>
 

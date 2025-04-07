@@ -11,17 +11,7 @@ import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import SmsIcon from "@mui/icons-material/Sms";
 
 const Header = () => {
-  const isLogin = useRecoilValue(isLoginState);
-  const setWs = useSetRecoilState(wsState);
-  const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.3:8888
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
-
-  useEffect(() => {
-    if (isLogin) {
-      let socket = new WebSocket(`${socketServer}/dm`); //ws://192.168.10.3:8888/dm
-      setWs(socket);
-    }
-  }, [isLogin]);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
 
   return (
     <header className="header">
@@ -72,8 +62,6 @@ const HeaderLink = () => {
   const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
 
   const logOut = () => {
-    if (ws) ws.close();
-
     if (memberInfo?.loginType === "kakao") {
       const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
       const redirectUri = `${window.location.origin}/logout/callback`;
@@ -89,8 +77,7 @@ const HeaderLink = () => {
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
-    localStorage.removeItem("recoil-persist");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -98,7 +85,7 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to={`myfit/dm/${memberInfo.memberNo}`}>
+            <Link to="/chat">
               {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (

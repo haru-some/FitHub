@@ -19,10 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.fithub.member.model.dto.MemberDTO;
+import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
 import kr.co.fithub.shop.model.service.ShopService;
 import kr.co.fithub.util.FileUtils;
+
 
 
 
@@ -123,7 +126,32 @@ public class ShopController {
 	}
     
    
-	
+    @DeleteMapping(value= "/{goodsNo}")
+	public ResponseEntity<Integer> deleteGoods(@PathVariable int goodsNo){
+		List<GoodsFile> delFileList =  shopService.deleteGoods(goodsNo);
+		if(delFileList == null) {
+			return ResponseEntity.ok(0);
+			
+		}else {
+			String savepath = root +"/goods/";
+			for(GoodsFile deleteFile : delFileList ) {
+				File delFile = new File(savepath+deleteFile.getFilePath());
+				delFile.delete();
+			}
+			return ResponseEntity.ok(1);
+		}
+    
+    }
+        
+    @PostMapping(value="/cart/add/")
+   	public ResponseEntity<Integer> CartInsert(@ModelAttribute Cart cart){
+    	System.out.println("들어올래???");
+    	System.out.println(cart);
+    	int result = shopService.insertCart(cart);
+   				
+    	return ResponseEntity.ok(result);	
+       }
+     
     
     
 }
