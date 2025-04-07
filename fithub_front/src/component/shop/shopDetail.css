@@ -117,6 +117,9 @@
   padding: 20px;
   border-top: 1px solid #ccc;
 }
+.shop-detail-wrap td {
+  color: #191c19;
+}
 
 .shop-pay-wrap {
   max-width: 600px;
