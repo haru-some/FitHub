@@ -117,3 +117,61 @@
   padding: 20px;
   border-top: 1px solid #ccc;
 }
+
+.shop-pay-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* header */
+.shop-pay-wrap h2,
+h4 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.shop-pay-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.shop-pay-wrap td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+/* input */
+.shop-pay-wrap input[type="text"],
+select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 체크박스 */
+.shop-pay-wrap label {
+  display: flex;
+  align-items: center;
+}
+
+/* button */
+.shop-pay-wrap button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50; /* 녹색 배경 */
+  color: white; /* 흰색 글자 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.shop-pay-wrap button:hover {
+  background-color: #45a049; /* 버튼 호버 시 색상 */
+}

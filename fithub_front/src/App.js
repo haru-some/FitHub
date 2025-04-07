@@ -23,6 +23,7 @@ import ChangePw from "./component/member/ChangePw";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoin from "./component/member/SocialJoin";
+import ShopPay from "./component/shop/ShopPay";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -81,6 +82,7 @@ function App() {
           <Route path="/shop/*" element={<ShopList />} />
           <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
           <Route path="/cart" element={<ShopCart />} />
+          <Route path="/buy" element={<ShopPay />} />
           <Route path="/chat" element={<MemberChat />} />
         </Routes>
       </main>

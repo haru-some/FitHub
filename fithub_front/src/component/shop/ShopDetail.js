@@ -214,7 +214,7 @@ const ShopDetail = () => {
       cancelButtonColor: "#8CCC8F",
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/purchase"); // 구매 페이지로 이동
+        navigate("/buy"); // 구매 페이지로 이동
       } else {
         Swal.fire({
           icon: "info",
