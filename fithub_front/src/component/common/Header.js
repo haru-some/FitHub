@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { memberState, isLoginState, wsState } from "../utils/RecoilData";
+import { memberState, isLoginState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -55,7 +55,7 @@ const MainNavi = () => {
 };
 
 const HeaderLink = () => {
-  const [ws, setWs] = useRecoilState(wsState);
+  // const [ws, setWs] = useRecoilState(wsState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();

@@ -24,4 +24,4 @@ const isLoginState = selector({
 //   default: null,
 // });
 
-export { memberState, isLoginState, wsState };
+export { memberState, isLoginState };
