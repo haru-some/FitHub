@@ -47,9 +47,9 @@
 		where member_id = #{memberId}
 	</update>
 	
-	<select id="findIdByNameAndEmail" resultType="member">
-	  SELECT * 
-	  FROM member 
+	<select id="findIdsByNameAndEmail" resultType="member">
+	  SELECT member_id
+	  FROM member
 	  WHERE member_name = #{memberName} AND member_email = #{memberEmail}
 	</select>
 	

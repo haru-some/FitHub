@@ -1,6 +1,7 @@
 package kr.co.fithub.member.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -113,12 +114,11 @@ public class MemberService {
 		int result = memberDao.changePw(member);
 		return result;
 	}
-	public MemberDTO findIdByNameAndEmail(String name, String email) {
-		HashMap<String, String> nameEmail = new HashMap<>();
-		nameEmail.put("memberName", name);
-		nameEmail.put("memberEmail", email);
-		MemberDTO m = memberDao.findIdByNameAndEmail(nameEmail);
-	    return m;
+	public List<MemberDTO> findIdsByNameAndEmail(String name, String email) {
+	    HashMap<String, String> nameEmail = new HashMap<>();
+	    nameEmail.put("memberName", name);
+	    nameEmail.put("memberEmail", email);
+	    return memberDao.findIdsByNameAndEmail(nameEmail);
 	}
 	@Transactional
 	public boolean sendTempPasswordByIdAndEmail(String memberId, String memberEmail) {

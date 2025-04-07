@@ -30,9 +30,14 @@ const FindInfo = () => {
         memberEmail: email,
       })
       .then((res) => {
+        const idList = res.data; // 배열로 응답됨
+        const htmlList = idList
+          .map((id) => `<b style="color:#2f3e2f">${id}</b>`)
+          .join("<br>");
+
         Swal.fire({
           title: "아이디 찾기 결과",
-          text: `회원님의 아이디는 ${res.data} 입니다.`,
+          html: `회원님의 아이디는 다음과 같습니다:<br><br>${htmlList}`,
           icon: "success",
           confirmButtonColor: "#2f3e2f",
           confirmButtonText: "확인",

@@ -1,6 +1,7 @@
 package kr.co.fithub.member.controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,16 +167,19 @@ public class MemberController {
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
 	}
-	@PostMapping(value="/find-id")
-	public ResponseEntity<String> findId(@RequestBody MemberDTO member) {
-		String name = member.getMemberName();
-		String email = member.getMemberEmail();
-	    MemberDTO m = memberService.findIdByNameAndEmail(name, email);
-	    if (m != null) {
-	        return ResponseEntity.ok(m.getMemberId());
-	    } else {
+	@PostMapping(value = "/find-id")
+	public ResponseEntity<?> findId(@RequestBody MemberDTO member) {
+	    String name = member.getMemberName();
+	    String email = member.getMemberEmail();
+	    List<MemberDTO> members = memberService.findIdsByNameAndEmail(name, email);
+
+	    if (members.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }
+	    List<String> memberIds = members.stream()
+	                                    .map(MemberDTO::getMemberId)
+	                                    .toList();
+	    return ResponseEntity.ok(memberIds);
 	}
 	@PostMapping(value="/find-pw")
 	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
