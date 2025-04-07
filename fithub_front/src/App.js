@@ -82,7 +82,7 @@ function App() {
           <Route path="/shop/*" element={<ShopList />} />
           <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
           <Route path="/cart" element={<ShopCart />} />
-          <Route path="/buy" element={<ShopPay />} />
+          <Route path="/shop/pay/:goodsNo" element={<ShopPay />} />
           <Route path="/chat" element={<MemberChat />} />
         </Routes>
       </main>

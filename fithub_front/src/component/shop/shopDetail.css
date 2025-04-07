@@ -127,11 +127,12 @@
   background-color: #f9f9f9;
 }
 
-/* header */
+/* 결제 페이지 */
 .shop-pay-wrap h2,
 h4 {
   text-align: center;
   margin-top: 20px;
+  margin-bottom: 3px;
 }
 
 .shop-pay-wrap table {
@@ -143,6 +144,7 @@ h4 {
 .shop-pay-wrap td {
   padding: 10px;
   border: 1px solid #ddd;
+  color: #191c19;
 }
 
 /* input */
@@ -165,13 +167,17 @@ select {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #4caf50; /* 녹색 배경 */
-  color: white; /* 흰색 글자 */
+  background-color: #4caf50;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .shop-pay-wrap button:hover {
-  background-color: #45a049; /* 버튼 호버 시 색상 */
+  background-color: #45a049;
+}
+.shop-pay-wrap .accountForShip {
+  font-size: 12px;
+  font-weight: 400;
 }

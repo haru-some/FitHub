@@ -3,11 +3,20 @@ import "./shopDetail.css";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 function ShopPay() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
 
+  const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
+  const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
+  const location = useLocation();
+  const { quantity = 1 } = location.state || {}; // 기본값 설정
+
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const [productAmount, setProductAmount] = useState(1);
   const productPrice = 3000;
 
@@ -26,6 +35,19 @@ function ShopPay() {
     };
   }, []);
 
+  // 상품 데이터 가져오기
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/${goodsNo}`)
+      .then((res) => {
+        console.log(res);
+        setGoods(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [goodsNo]);
+
   const handleAmountChange = (operation) => {
     if (operation === "-" && productAmount > 1) {
       setProductAmount(productAmount - 1);
@@ -33,8 +55,6 @@ function ShopPay() {
       setProductAmount(productAmount + 1);
     }
   };
-
-  const totalPrice = productAmount * productPrice;
 
   const clickBuy = () => {
     const date = new Date();
@@ -110,39 +130,26 @@ function ShopPay() {
     console.log(formData);
   };
 
+  if (!goods) {
+    return <div>로딩 중...</div>; // 상품 데이터가 로드되지 않았을 경우
+  }
+  const totalPrice = goods.goodsPrice * { quantity };
   return (
     <div className="shop-pay-wrap">
       <form onSubmit={handleSubmit}>
         <h2>FIT 주문/결제</h2>
 
-        {/* 구매자 정보 섹션 */}
         <div className="giver-info">
           <h4>구매자 정보</h4>
           <table>
             <tbody>
               <tr>
                 <td>이름:</td>
-                <td>
-                  <input
-                    type="text"
-                    name="buyerName"
-                    value={formData.buyerName}
-                    onChange={handleChange}
-                    required
-                  />
-                </td>
+                <td>{memberInfo.memberName}</td>
               </tr>
               <tr>
                 <td>연락처:</td>
-                <td>
-                  <input
-                    type="text"
-                    name="buyerContact"
-                    value={formData.buyerContact}
-                    onChange={handleChange}
-                    required
-                  />
-                </td>
+                <td>{memberInfo.memberPhone}</td>
               </tr>
             </tbody>
           </table>
@@ -157,9 +164,10 @@ function ShopPay() {
                 <td>
                   <input
                     type="text"
-                    name="recipientName"
-                    value={formData.recipientName}
+                    name="takerName"
+                    value={formData.takerName}
                     onChange={handleChange}
+                    placeholder={memberInfo.memberName}
                     required
                   />
                 </td>
@@ -172,6 +180,7 @@ function ShopPay() {
                     name="recipientContact"
                     value={formData.recipientContact}
                     onChange={handleChange}
+                    placeholder={memberInfo.memberPhone}
                     required
                   />
                 </td>
@@ -184,6 +193,7 @@ function ShopPay() {
                     name="recipientAddress"
                     value={formData.recipientAddress}
                     onChange={handleChange}
+                    placeholder={memberInfo.memberAddr}
                     required
                   />
                 </td>
@@ -196,28 +206,35 @@ function ShopPay() {
           <table>
             <tbody>
               <tr>
-                <td></td>
-                <td></td>
+                <td>상품명</td>
+                <td>
+                  {goods.goodsName} 수량: <span>{quantity}</span>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="pay-info">
           {/* 결제 정보 섹션 */}
-          <h4>결제 정보</h4>
+          <h4>
+            결제 정보<span className="accountForShip">(3만이상 구입 무료)</span>
+          </h4>
           <table>
             <tbody>
               <tr>
-                <td>결제 방법:</td>
+                <td>총 상품가격:</td>
+                <td>{goods.goodsPrice * quantity} 원</td>
+              </tr>
+              <tr>
+                <td>배송비:</td>
+                <td>{goods.goodsPrice * quantity >= 30000 ? 0 : 3000} 원</td>
+              </tr>
+              <tr>
+                <td>결제 금액:</td>
                 <td>
-                  <select
-                    name="paymentMethod"
-                    value={formData.paymentMethod}
-                    onChange={handleChange}
-                  >
-                    <option value="bankTransfer">은행 송금</option>
-                    <option value="creditCard">신용카드</option>
-                  </select>
+                  {goods.goodsPrice * quantity +
+                    (goods.goodsPrice * quantity >= 30000 ? 0 : 3000)}
+                  원
                 </td>
               </tr>
             </tbody>
