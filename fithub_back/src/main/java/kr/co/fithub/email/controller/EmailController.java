@@ -44,9 +44,7 @@ public class EmailController {
     public ResponseEntity<?> verifyAuthCode(@RequestBody Map<String, String> data) {
         String to = data.get("to");
         String inputCode = data.get("authCode");
-
         AuthResult result = authStorage.verify(to, inputCode);
-
         switch (result) {
             case SUCCESS:
                 authStorage.remove(to);

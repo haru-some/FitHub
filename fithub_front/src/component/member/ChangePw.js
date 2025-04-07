@@ -221,7 +221,7 @@ const ChangePw = () => {
       return;
     }
     axios
-      .patch(`${backServer}/member/memberPw`, {
+      .patch(`${backServer}/member/change-pw`, {
         memberId: loginMember.memberId,
         memberPw: memberPw,
       })

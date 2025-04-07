@@ -16,7 +16,7 @@
 	  )
 	</insert>
 	
-	<select id="exists" resultType="int">
+	<select id="existsId" resultType="int">
 		select count(*) from member where member_id=#{memberId}
 	</select>
 	

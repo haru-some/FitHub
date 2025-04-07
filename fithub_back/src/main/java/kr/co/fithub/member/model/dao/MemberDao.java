@@ -11,7 +11,7 @@ import kr.co.fithub.member.model.dto.MemberDTO;
 @Mapper
 public interface MemberDao {
 	int joinMember(MemberDTO member);
-	int exists(String memberId);
+	int existsId(String memberId);
 	MemberDTO selectOneMember(String memberId);
 	int updateMember(MemberDTO member);
 	int deleteMember(String memberId);

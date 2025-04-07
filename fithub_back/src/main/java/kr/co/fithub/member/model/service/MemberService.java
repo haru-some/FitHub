@@ -19,7 +19,6 @@ import kr.co.fithub.email.service.EmailService;
 import kr.co.fithub.member.model.dao.MemberDao;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
-import kr.co.fithub.util.FileUtils;
 import kr.co.fithub.util.JwtUtils;
 import kr.co.fithub.util.PageInfoUtil;
 
@@ -35,11 +34,7 @@ public class MemberService {
 	private PageInfoUtil pageInfoUtil;
 	@Autowired
 	private EmailService emailService;
-	@Autowired
-    private FileUtils fileUtils;
-    @Value("${file.root}")
-    private String root;
-	
+
 	@Transactional
 	public int joinMember(MemberDTO member) {
 		String memberPw = member.getMemberPw();
@@ -48,8 +43,8 @@ public class MemberService {
 		int result = memberDao.joinMember(member);
 		return result;
 	}
-	public int exists(String memberId) {
-		int result = memberDao.exists(memberId);
+	public int existsId(String memberId) {
+		int result = memberDao.existsId(memberId);
 		return result;
 	}
 	public int existsEmail(String memberEmail) {

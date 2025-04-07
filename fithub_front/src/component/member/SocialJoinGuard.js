@@ -5,15 +5,28 @@ const SocialJoinGuard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const clearJoinStorage = () => {
+    [
+      "joinStage",
+      "joinOauthId",
+      "joinLoginType",
+      "joinEmail",
+      "joinName",
+    ].forEach((key) => localStorage.removeItem(key));
+  };
+
   useEffect(() => {
     const joinStage = localStorage.getItem("joinStage");
-    const memberRaw = localStorage.getItem("recoil-persist");
-    const loginType = JSON.parse(memberRaw)?.memberState?.loginType;
-
-    const isSocial = loginType === "kakao" || loginType === "google";
+    const oauthId = localStorage.getItem("joinOauthId");
+    const loginType = localStorage.getItem("joinLoginType");
     const isOnJoinPage = location.pathname.startsWith("/social-join");
 
-    if (joinStage === "waiting" && isSocial && !isOnJoinPage) {
+    if (!oauthId || !loginType) {
+      clearJoinStorage();
+      return;
+    }
+
+    if (joinStage === "waiting" && !isOnJoinPage) {
       navigate("/social-join");
     }
   }, [location.pathname, navigate]);

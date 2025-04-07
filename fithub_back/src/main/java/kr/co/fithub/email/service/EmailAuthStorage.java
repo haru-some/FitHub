@@ -19,7 +19,6 @@ public class EmailAuthStorage {
         if (now - info.createdAt > 180_000) {
             return AuthResult.EXPIRED;
         }
-
         if (inputCode.equals(info.code)) {
             return AuthResult.SUCCESS;
         } else {

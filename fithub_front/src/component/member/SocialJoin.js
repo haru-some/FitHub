@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
@@ -12,34 +12,17 @@ import "./member.css";
 const SocialJoin = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  const location = useLocation();
   const detailRef = useRef();
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
 
   const oauthId = localStorage.getItem("joinOauthId");
   const loginType = localStorage.getItem("joinLoginType");
-
-  useEffect(() => {
-    if (!oauthId || !loginType) {
-      const storedOauthId = localStorage.getItem("joinOauthId");
-      const storedLoginType = localStorage.getItem("joinLoginType");
-
-      if (!storedOauthId || !storedLoginType) {
-        Swal.fire(
-          "잘못된 접근입니다",
-          "소셜 로그인부터 다시 시도해주세요",
-          "warning"
-        ).then(() => {
-          localStorage.removeItem("joinStage");
-          navigate("/login");
-        });
-      }
-    }
-  }, []);
+  const email = localStorage.getItem("joinEmail");
+  const name = localStorage.getItem("joinName") || "";
 
   const [form, setForm] = useState({
     memberId: "",
-    memberName: "",
+    memberName: name,
     memberPhone: "",
     memberAddr: "",
     memberAddrDetail: "",
@@ -50,10 +33,26 @@ const SocialJoin = () => {
   const [phoneValid, setPhoneValid] = useState(null);
   const [phoneMsg, setPhoneMsg] = useState("");
 
+  useEffect(() => {
+    if (!oauthId || !loginType || !email) {
+      Swal.fire(
+        "잘못된 접근입니다",
+        "소셜 로그인부터 다시 시도해주세요",
+        "warning"
+      ).then(() => {
+        localStorage.removeItem("joinStage");
+        navigate("/login");
+      });
+    }
+  }, []);
+
   const handleInput = (e) => {
     const { name, value } = e.target;
-    const newValue = name === "memberPhone" ? formatPhoneNumber(value) : value;
-    if (name === "memberPhone") checkPhone(newValue);
+    let newValue = value;
+    if (name === "memberPhone") {
+      newValue = formatPhoneNumber(value);
+      checkPhone(newValue);
+    }
     setForm((prev) => ({ ...prev, [name]: newValue }));
   };
 
@@ -65,54 +64,57 @@ const SocialJoin = () => {
     return onlyNums.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
   };
 
-  const checkPhone = (value) => {
-    const phoneReg = /^01[016789]-\d{3,4}-\d{4}$/;
-    setPhoneValid(phoneReg.test(value));
-    setPhoneMsg(
-      phoneReg.test(value)
-        ? "올바른 전화번호 형식입니다."
-        : "전화번호 형식이 올바르지 않습니다."
-    );
-  };
-
   const checkId = () => {
     const reg = /^[a-zA-Z0-9]{6,12}$/;
     if (!reg.test(form.memberId)) {
       setIdCheckValid(false);
       setIdCheckMsg("아이디는 영어 대소문자 숫자로 6~12글자 입니다.");
-      return;
+    } else {
+      axios
+        .get(`${backServer}/member/exists/id?memberId=${form.memberId}`)
+        .then((res) => {
+          if (res.data === 0) {
+            setIdCheckValid(true);
+            setIdCheckMsg("사용가능한 아이디입니다.");
+          } else {
+            setIdCheckValid(false);
+            setIdCheckMsg("이미 사용중인 아이디입니다.");
+          }
+        })
+        .catch(() => {
+          setIdCheckValid(false);
+          setIdCheckMsg("서버 오류로 확인 불가");
+        });
     }
-    axios
-      .get(`${backServer}/member/exists?memberId=${form.memberId}`)
-      .then((res) => {
-        setIdCheckValid(res.data === 0);
-        setIdCheckMsg(
-          res.data === 0
-            ? "사용가능한 아이디입니다."
-            : "이미 사용중인 아이디입니다."
-        );
-      })
-      .catch(() => {
-        setIdCheckValid(false);
-        setIdCheckMsg("서버 오류로 확인 불가");
-      });
+  };
+
+  const checkPhone = (value) => {
+    const phoneReg = /^01[016789]-\d{3,4}-\d{4}$/;
+    if (phoneReg.test(value)) {
+      setPhoneValid(true);
+      setPhoneMsg("올바른 전화번호 형식입니다.");
+    } else {
+      setPhoneValid(false);
+      setPhoneMsg("전화번호 형식이 올바르지 않습니다.");
+    }
   };
 
   const handleAddressSearch = () => {
     new window.daum.Postcode({
       oncomplete: function (data) {
-        setForm((prev) => ({ ...prev, memberAddr: data.address }));
+        const fullAddress = data.address;
+        setForm((prev) => ({ ...prev, memberAddr: fullAddress }));
         setTimeout(() => detailRef.current?.focus(), 0);
       },
     }).open();
   };
 
   const isJoinValid =
-    idCheckValid &&
-    phoneValid &&
-    form.memberName.trim() &&
-    form.memberAddr.trim() &&
-    form.memberAddrDetail.trim();
+    idCheckValid === true &&
+    phoneValid === true &&
+    form.memberName.trim() !== "" &&
+    form.memberAddr.trim() !== "" &&
+    form.memberAddrDetail.trim() !== "";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -120,6 +122,7 @@ const SocialJoin = () => {
     const payload = {
       oauthId,
       loginType,
+      email,
       memberId: form.memberId,
       name: form.memberName,
       phone: form.memberPhone,
@@ -129,33 +132,42 @@ const SocialJoin = () => {
     axios
       .post(`${backServer}/oauth/join`, payload)
       .then((res) => {
-        const { accessToken, memberId } = res.data;
+        const data = res.data;
+        if (!data.accessToken) throw new Error("토큰 발급 실패");
 
-        if (!accessToken) throw new Error("토큰 발급 실패");
-
-        return axios
-          .get(`${backServer}/member/${memberId}`, {
-            headers: { Authorization: accessToken },
+        axios
+          .get(`${backServer}/member/${data.memberId}`, {
+            headers: {
+              Authorization: data.accessToken,
+            },
           })
           .then((res) => {
             const memberData = res.data;
-            const fullMemberData = { ...memberData, accessToken };
-
-            setMemberInfo(fullMemberData);
+            setMemberInfo({
+              ...memberData,
+              accessToken: data.accessToken,
+            });
             localStorage.setItem(
               "recoil-persist",
-              JSON.stringify({ memberState: fullMemberData })
+              JSON.stringify({
+                memberState: {
+                  ...memberData,
+                  accessToken: data.accessToken,
+                },
+              })
             );
-
-            localStorage.removeItem("joinStage");
-            localStorage.removeItem("joinOauthId");
-            localStorage.removeItem("joinLoginType");
-
             Swal.fire(
               "가입 완료",
               "회원 정보가 등록되었습니다.",
               "success"
-            ).then(() => navigate("/"));
+            ).then(() => {
+              localStorage.removeItem("joinStage");
+              localStorage.removeItem("joinOauthId");
+              localStorage.removeItem("joinLoginType");
+              localStorage.removeItem("joinEmail");
+              localStorage.removeItem("joinName");
+              navigate("/");
+            });
           });
       })
       .catch((err) => {
@@ -171,7 +183,6 @@ const SocialJoin = () => {
     <section className="join-wrap">
       <h2 className="join-title">소셜 회원 추가 정보 입력</h2>
       <form className="join-form" onSubmit={handleSubmit}>
-        {/* 아이디 */}
         <div className="join-form-field">
           <Box className="join-input-wrap">
             <TextField
@@ -191,8 +202,6 @@ const SocialJoin = () => {
             </p>
           )}
         </div>
-
-        {/* 이름 */}
         <div className="join-form-field">
           <Box className="join-input-wrap">
             <TextField
@@ -204,8 +213,6 @@ const SocialJoin = () => {
             />
           </Box>
         </div>
-
-        {/* 전화번호 */}
         <div className="join-form-field">
           <Box className="join-input-wrap">
             <TextField
@@ -223,10 +230,11 @@ const SocialJoin = () => {
             </p>
           )}
         </div>
-
-        {/* 주소 */}
         <div className="join-form-field">
-          <Box className="join-input-wrap" sx={{ display: "flex", gap: 2 }}>
+          <Box
+            className="join-input-wrap"
+            sx={{ display: "flex", gap: 2, alignItems: "center" }}
+          >
             <TextField
               name="memberAddr"
               label="주소"
@@ -250,15 +258,15 @@ const SocialJoin = () => {
             value={form.memberAddrDetail}
             onChange={handleInput}
             inputRef={detailRef}
-            sx={{ width: "50%", mt: 1 }}
+            sx={{ width: "50%" }}
           />
         </div>
-
         <div className="join-button-box">
           <button
             type="submit"
             className="btn-primary lg full"
             disabled={!isJoinValid}
+            style={{ height: "56px" }}
           >
             가입 완료
           </button>

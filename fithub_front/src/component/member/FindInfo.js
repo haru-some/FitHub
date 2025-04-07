@@ -30,7 +30,7 @@ const FindInfo = () => {
         memberEmail: email,
       })
       .then((res) => {
-        const idList = res.data; // 배열로 응답됨
+        const idList = res.data;
         const htmlList = idList
           .map((id) => `<b style="color:#2f3e2f">${id}</b>`)
           .join("<br>");
