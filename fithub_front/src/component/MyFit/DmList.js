@@ -1,13 +1,26 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const DmList = () => {
-    const params = useParams();
-    const memberNo = params.memberNo;
-    const [searchText, setSearchText] = useState("");
+  const params = useParams();
+  const memberNo = params.memberNo;
+  const [searchText, setSearchText] = useState("");
+  const [dmList, setDmList] = useState([]);
+  const navigate = useNavigate();
 
-    return(
-        <div className="myfit-dm-wrap">
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/dm/${memberNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setDmList(res.data);
+      })
+      .catch((err) => {});
+  }, []);
+
+  return (
+    <div className="myfit-dm-wrap">
       <div className="input-wrap">
         <input
           type="text"
@@ -24,182 +37,41 @@ const DmList = () => {
       </div>
 
       <ul className="user-list">
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
+        {dmList.map((dm, index) => {
+          return (
+            <li
+              className="user-item-wrap"
+              onClick={() => {
+                navigate(`/myfit/chat/${memberNo}/${dm.otherMemberNo}`);
+              }}
             >
+              <div
+                className="user-item"
+                onClick={() => {
+                  //navigate(`/myfit/activity/${member.memberNo}`);
+                }}
+              >
                 <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
+                  <img
+                    src={
+                      dm.otherMemberThumb
+                        ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${dm.otherMemberThumb}`
+                        : "/image/default_img.png"
+                    }
                     className="avatar"
-                    />
+                  />
                 </div>
                 <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user01</div>
-                        <div className="username">유저1</div>
-                    </div>
-                    <div className="dm-item-content">내용내용내용내용내용내용</div>
+                  <div className="info-wrap">
+                    <div className="name">{dm.otherMemberId}</div>
+                    <div className="username">{dm.otherMemberName}</div>
+                  </div>
+                  <div className="dm-item-content">{dm.lastMessageContent}</div>
                 </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user02</div>
-                        <div className="username">유저2</div>
-                    </div>
-                    <div className="dm-item-content">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</div>
-                </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user03</div>
-                        <div className="username">유저3</div>
-                    </div>
-                    <div className="dm-item-content">앗살라말라이쿰 이이잉</div>
-                </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user04</div>
-                        <div className="username">유저4</div>
-                    </div>
-                    <div className="dm-item-content">료이키 텐카이 후쿠마미즈시</div>
-                </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user05</div>
-                        <div className="username">유저5</div>
-                    </div>
-                    <div className="dm-item-content">츠키노 코큐 이치노카타</div>
-                </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user06</div>
-                        <div className="username">유저6</div>
-                    </div>
-                    <div className="dm-item-content">삐끼삐끼</div>
-                </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user07</div>
-                        <div className="username">유저7</div>
-                    </div>
-                    <div className="dm-item-content">ㅋㅋㄹㅃㅃㅃ</div>
-                </div>
-            </div>
-        </li>
-        <li className="user-item-wrap">
-            <div
-            className="user-item"
-            onClick={() => {
-              //navigate(`/myfit/activity/${member.memberNo}`);
-            }}
-            >
-                <div className="avatar-wrap">
-                    <img
-                    src="/image/default_img.png"
-                    className="avatar"
-                    />
-                </div>
-                <div className="user-info">
-                    <div className="info-wrap">
-                        <div className="name">user08</div>
-                        <div className="username">유저8</div>
-                    </div>
-                    <div className="dm-item-content">무량공처.</div>
-                </div>
-            </div>
-        </li>
+              </div>
+            </li>
+          );
+        })}
       </ul>
       <button
         className="back-btn"
@@ -210,7 +82,7 @@ const DmList = () => {
         <span class="material-icons">reply</span>
       </button>
     </div>
-    )
-}
+  );
+};
 
-export default DmList
+export default DmList;
