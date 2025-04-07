@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import "./shopCart.css";
+import { useState } from "react";
 
 const ShopCart = () => {
   const initialCartItems = [
