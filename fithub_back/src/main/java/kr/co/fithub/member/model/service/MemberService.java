@@ -79,6 +79,9 @@ public class MemberService {
 	public MemberDTO refresh(String refreshToken) {
 		LoginMemberDTO loginMember = jwtUtil.checkToken(refreshToken);
 		MemberDTO m = memberDao.selectOneMember(loginMember.getMemberId());
+		if (m == null) {
+	        throw new RuntimeException("해당 리프레시 토큰에 해당하는 유저 정보가 존재하지 않습니다.");
+	    }
 		String accessToken = jwtUtil.createAccessToken(loginMember.getMemberId(),loginMember.getMemberLevel());
 		String newRefreshToken = jwtUtil.createRefreshToken(loginMember.getMemberId(),loginMember.getMemberLevel());
 		m.setAccessToken(accessToken);

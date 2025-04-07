@@ -21,6 +21,7 @@ import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 import SocialJoin from "./component/member/SocialJoin";
 import LogoutCallback from "./component/common/LogoutCallback";
+import SocialJoinGuard from "./component/member/SocialJoinGuard";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -29,9 +30,12 @@ function App() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
 
   useEffect(() => {
-    refreshLogin();
-    const interval = setInterval(refreshLogin, 60 * 50 * 1000);
-    return () => clearInterval(interval); // 메모리 누수 방지
+    const joinStage = localStorage.getItem("joinStage");
+    if (joinStage !== "waiting") {
+      refreshLogin();
+      const interval = setInterval(refreshLogin, 60 * 50 * 1000);
+      return () => clearInterval(interval); // 메모리 누수 방지
+    }
   }, []);
 
   const refreshLogin = () => {
@@ -63,9 +67,22 @@ function App() {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
   }, []);
+  useEffect(() => {
+    const joinStage = localStorage.getItem("joinStage");
+    const memberStateRaw = localStorage.getItem("recoil-persist");
+    const loginType = JSON.parse(memberStateRaw)?.memberState?.loginType;
+
+    const isSocialUser = loginType === "kakao" || loginType === "google";
+    const isOnJoinPage = window.location.pathname.startsWith("/social-join");
+
+    if (joinStage === "waiting" && isSocialUser && !isOnJoinPage) {
+      navigate("/social-join");
+    }
+  }, []);
 
   return (
     <div className="wrap">
+      <SocialJoinGuard />
       <Header />
       <main className="content">
         <Routes>

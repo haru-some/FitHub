@@ -44,6 +44,7 @@ const Login = () => {
     axios
       .post(`${backServer}/member/login`, member)
       .then((res) => {
+        localStorage.removeItem("joinStage");
         setMemberInfo(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         window.localStorage.setItem("refreshToken", res.data.refreshToken);
@@ -67,6 +68,12 @@ const Login = () => {
         .post(`${backServer}/oauth/google`, { access_token: accessToken })
         .then((res) => {
           if (res.data.isNew) {
+            localStorage.setItem("joinStage", "waiting");
+            localStorage.setItem(
+              "joinOauthId",
+              res.data.memberId.split("_")[1]
+            );
+            localStorage.setItem("joinLoginType", res.data.loginType);
             navigate("/social-join", {
               state: {
                 oauthId: res.data.memberId.split("_")[1],
@@ -116,6 +123,12 @@ const Login = () => {
           .post(`${backServer}/oauth/kakao`, { access_token: accessToken })
           .then((res) => {
             if (res.data.isNew) {
+              localStorage.setItem("joinStage", "waiting");
+              localStorage.setItem(
+                "joinOauthId",
+                res.data.memberId.split("_")[1]
+              );
+              localStorage.setItem("joinLoginType", res.data.loginType);
               navigate("/social-join", {
                 state: {
                   oauthId: res.data.memberId.split("_")[1],
