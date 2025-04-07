@@ -196,17 +196,50 @@
   text-indent: -21px;
 }
 /*chat*/
-.chat-box {
+.admin-section .chat-box {
   background-color: var(--main1);
   border-radius: 20px;
   height: 540px;
+  overflow-y: auto;
+}
+.admin-section .chat-box::-webkit-scrollbar {
+  display: none;
+}
+.chat-box .chat-content {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.chat-id {
+  margin-bottom: 5px;
+}
+.chat-box .chat-text {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--gray2);
 }
 /*member chat*/
 .chat-box .member-chat-line {
   display: flex;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   padding: 10px;
+}
+.chat-box .member-chat-none {
+  width: 100%;
+}
+.chat-box .chat-add-icon > svg {
+  width: 100%;
+  height: 400px;
+}
+.chat-box .chat-add-icon > svg > path {
+  width: 100%;
+  cursor: pointer;
+}
+.chat-box .chat-notice {
+  text-align: center;
+  font-size: 30px;
 }
 .member-chat-line .member-chat-profile {
   width: 60px;
@@ -220,33 +253,23 @@
   height: 100%;
 }
 
-.member-chat-main .member-chat-id {
+.member-chat-line .chat-id {
   text-align: start;
-  margin-bottom: 10px;
   color: var(--main3);
   font-weight: 900;
   display: flex;
   gap: 10px;
 }
-.member-chat-id > div {
+.member-chat-line .chat-id > div {
   color: var(--main3);
 }
-.member-chat-content {
-  width: 400px;
-  display: flex;
-  justify-content: flex-start;
-}
-.member-chat-content .member-chat-text {
-  padding: 5px;
-  border-radius: 10px;
-  background-color: var(--gray2);
-}
+
 /*admin chat*/
 .chat-box .admin-chat-line {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   padding: 10px;
 }
 .admin-chat-line .admin-chat-profile {
@@ -261,25 +284,25 @@
   height: 100%;
 }
 
-.admin-chat-main .admin-chat-id {
+.admin-chat-line .chat-id {
   text-align: end;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   color: var(--main3);
   font-weight: 900;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
-.admin-chat-id > div {
+.admin-chat-line .chat-id > div {
   color: var(--main3);
 }
-.admin-chat-content {
+.admin-chat-line .chat-content {
   width: 400px;
   display: flex;
   justify-content: flex-end;
 }
-.admin-chat-content .admin-chat-text {
-  padding: 5px;
+.admin-chat-line .chat-content .chat-text {
+  padding: 9px;
   border-radius: 10px;
   background-color: var(--gray2);
   text-align: end;

@@ -1,88 +1,208 @@
 import { useState, useEffect, useRef } from "react";
-import CircleIcon from "@mui/icons-material/Circle";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isLoginState, memberState } from "../utils/RecoilData";
+import { useRecoilValue } from "recoil";
+import { memberState } from "../utils/RecoilData";
 import "./chat.css";
+import axios from "axios";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const MemberChat = () => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
-  const ws = useRef(null);
-  const member = useRecoilValue(memberState);
+  const memberInfo = useRecoilValue(memberState); // 현재 로그인한 회원 정보 가져오기
+  const [stompClient, setStompClient] = useState(null);
   const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.34:9999
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
+  const socket = new SockJS(`${backServer}/inMessage`);
+  const [roomNo, setRoomNo] = useState(null);
+  const [newRoom, setNewRoom] = useState(null);
 
   useEffect(() => {
-    ws.current = new WebSocket(
-      `${socketServer}/allChat?chatRoomNo=${member.chatRoomNo}`
-    );
-    ws.current.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    // 기존 채팅 기록 불러오기
+    console.log(memberInfo.memberId);
+    axios
+      .get(`${backServer}/chat/getRoomId?memberId=${memberInfo.memberId}`)
+      .then((res) => {
+        console.log(res.data.chatRoomNo);
+        if (res.data.chatRoomNo !== null) {
+          setRoomNo(res.data.chatRoomNo);
+        }
+        axios
+          .get(
+            `${backServer}/chat/loadChatMember?memberId=${memberInfo.memberId}`
+          )
+          .then((res) => {
+            console.log(res);
+            setMessages(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // WebSocket 연결
+    const client = new Client({
+      // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
+      webSocketFactory: () => socket,
+      reconnectDelay: 10000,
+      onConnect: () => {
+        console.log("Connected to WebSocket");
+
+        // 채팅 메시지 구독
+        client.subscribe(`/topic/chat/messages/${roomNo}`, (message) => {
+          const receivedMessage = JSON.parse(message.body);
+          setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        });
+      },
+      onDisconnect: () => console.log("Disconnected from WebSocket"),
+    });
+
+    client.activate();
+    setStompClient(client);
+    return () => {
+      client.deactivate();
     };
-    return () => ws.current.close();
-  }, [member.chatRoomNo]);
+  }, [newRoom, roomNo]);
+
+  const chatBoxRef = useRef(null);
 
   const sendMessage = () => {
-    if (chatInput.trim() === "") return;
-    const message = {
-      type: "message",
-      chatRoomNo: member.chatRoomNo,
-      memberId: member.memberId,
-      content: chatInput,
-    };
-    ws.current.send(JSON.stringify(message));
-    setChatInput("");
+    if (stompClient && chatInput.trim() !== "") {
+      const chatMessage = {
+        chatMemberId: memberInfo.memberId,
+        messageContent: chatInput,
+        memberLevel: memberInfo.memberLevel,
+        messageDate: Date(),
+      };
+      stompClient.publish({
+        destination: `/app/chat/sendMessage/${roomNo}`,
+        body: JSON.stringify(chatMessage),
+      });
+      setChatInput("");
+    }
   };
 
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const adminChatStart = () => {
+    axios
+      .put(`${backServer}/chat/create?memberId=${memberInfo.memberId}`)
+      .then((res) => {
+        console.log(res);
+        axios
+          .get(`${backServer}/chat/getRoomId?memberId=${memberInfo.memberId}`)
+          .then((res) => {
+            console.log(res);
+            setNewRoom(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <section className="member-chat-section">
       <div className="page-title">고객센터 문의</div>
-      <div className="chat-box">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={
-              msg.memberId === member.memberId
-                ? "member-chat-line"
-                : "admin-chat-line"
-            }
-          >
-            {msg.memberId !== member.memberId && (
-              <div className="admin-chat-profile">
-                <img src="/image/default_img.png" alt="관리자" />
+      <div className="member-chat-box">
+        <div className="chat-box" ref={chatBoxRef}>
+          {roomNo !== null ? (
+            messages.map((msg, index) => (
+              <div
+                key={index}
+                className={
+                  msg.chatMemberId === memberInfo.memberId
+                    ? "admin-chat-line"
+                    : "member-chat-line"
+                }
+              >
+                {msg.chatMemberId !== memberInfo.memberId ? (
+                  <>
+                    <div className="member-chat-profile">
+                      <img
+                        src={`${backServer}/member/profileimg/${msg.memberThumb}`}
+                      />
+                    </div>
+                    <div className="chat-content">
+                      <div className="chat-id">
+                        {msg.chatMemberId} {"-"} {msg.messageDate} {"-"}
+                        {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
+                      </div>
+                      <div className="chat-text">{msg.messageContent}</div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="chat-content">
+                      <div className="chat-id">
+                        {msg.isRead === 1 ? <VisibilityOffIcon /> : ""} {"-"}
+                        {msg.messageDate} {"-"} {memberInfo.memberId}
+                      </div>
+                      <div className="chat-text">{msg.messageContent}</div>
+                    </div>
+                    <div className="admin-chat-profile">
+                      <img
+                        src={`${backServer}/member/profileimg/${memberInfo.memberThumb}`}
+                        alt="관리자"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
-            )}
-            <div className="chat-content">
-              <div className="chat-id">
-                {msg.memberId} - {msg.sentAt}
+            ))
+          ) : (
+            <div className="member-chat-none">
+              <div className="chat-add-icon">
+                <AddCommentIcon />
               </div>
-              <div className="chat-text">{msg.content}</div>
+              <div className="chat-notice">관리자 문의 시작하기</div>
             </div>
-            {msg.memberId === member.memberId && (
-              <div className="member-chat-profile">
-                <img src="/image/default_img.png" alt="프로필" />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="chat-input-box">
-        <input
-          type="text"
-          className="chat-input"
-          value={chatInput}
-          onChange={(e) => setChatInput(e.target.value)}
-          onKeyUp={(e) => {
-            if (e.key === "Enter" && chatInput !== "") {
-              sendMessage();
-            }
-          }}
-          placeholder="메시지를 입력하세요."
-        />
-        <button type="button" onClick={sendMessage}>
-          전송
-        </button>
+          )}
+        </div>
+        <div className="chat-input-box">
+          {roomNo !== null ? (
+            <>
+              <input
+                type="text"
+                className="chat-input"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter" && chatInput !== "") {
+                    sendMessage();
+                  }
+                }}
+                placeholder="메시지를 입력하세요."
+              />
+              <button type="button" onClick={sendMessage}>
+                전송
+              </button>
+            </>
+          ) : (
+            <>
+              <input
+                type="text"
+                className="chat-input"
+                placeholder="관리자 문의를 먼저 활성화 시켜주세요."
+                disabled
+              />
+              <button type="button" onClick={adminChatStart}>
+                시작하기
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </section>
   );
