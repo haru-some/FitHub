@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./shopDetail.css";
 
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -7,6 +7,79 @@ import { memberState, isLoginState } from "../utils/RecoilData";
 function ShopPay() {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
+
+  const [productAmount, setProductAmount] = useState(1);
+  const productPrice = 3000;
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.iamport.kr/v1/iamport.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      window.IMP.init("imp71036841"); // 라이브러리가 로드된 후 init 호출
+    };
+
+    return () => {
+      document.body.removeChild(script); // Clean up
+    };
+  }, []);
+
+  const handleAmountChange = (operation) => {
+    if (operation === "-" && productAmount > 1) {
+      setProductAmount(productAmount - 1);
+    } else if (operation === "+") {
+      setProductAmount(productAmount + 1);
+    }
+  };
+
+  const totalPrice = productAmount * productPrice;
+
+  const clickBuy = () => {
+    const date = new Date();
+    const dateString =
+      date.getFullYear() +
+      "" +
+      (date.getMonth() + 1) +
+      "" +
+      date.getDate() +
+      "" +
+      date.getHours() +
+      "" +
+      date.getMinutes() +
+      "" +
+      date.getSeconds();
+
+    const IMP = window.IMP; // Assuming Iamport is loaded externally
+    if (!IMP) {
+      alert("Iamport 라이브러리를 로드할 수 없습니다.");
+      return;
+    }
+
+    IMP.request_pay(
+      {
+        channelKey: "channel-key-d2893ebf-5998-4ab3-93e2-1847d2f13c8b",
+        pay_method: "card",
+        merchant_uid: "order_no_" + dateString, // Unique order number
+        name: "주문명: 결제테스트",
+        amount: totalPrice, // Payment amount
+        buyer_email: "test@portone.io",
+        buyer_name: "구매자이름",
+        buyer_tel: "010-1234-5678",
+        buyer_addr: "서울특별시 강남구 삼성동",
+        buyer_postcode: "123-456",
+      },
+      (rsp) => {
+        if (rsp.success) {
+          // Logic to handle successful payment
+          console.log("Payment Success:", rsp);
+        } else {
+          console.log("Payment Failed:", rsp);
+        }
+      }
+    );
+  };
 
   const [formData, setFormData] = useState({
     memberName: "",
@@ -163,8 +236,9 @@ function ShopPay() {
           </label>
         </div>
 
-        {/* 제출 버튼 */}
-        <button type="submit">결제하기</button>
+        <button type="submit" onClick={clickBuy}>
+          결제하기
+        </button>
       </form>
     </div>
   );
