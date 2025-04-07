@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Footer from "./component/common/Footer";
 import Header from "./component/common/Header";
 import Main from "./component/common/Main";
@@ -19,13 +19,12 @@ import FindInfo from "./component/member/FindInfo";
 import MemberMain from "./component/member/MemberMain";
 import ShopCart from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
-import ChangePw from "./component/member/ChangePw";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoin from "./component/member/SocialJoin";
+import LogoutCallback from "./component/common/LogoutCallback";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const navigate = useNavigate();
   const loginMember = useRecoilValue(memberState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   useEffect(() => {
@@ -53,6 +52,9 @@ function App() {
   };
   useEffect(() => {
     if (loginMember) {
+      if (window.location.pathname === "/login") {
+        navigate("/");
+      }
     }
   }, []);
   useEffect(() => {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
+import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.util.JwtUtils;
 
 @RestController
