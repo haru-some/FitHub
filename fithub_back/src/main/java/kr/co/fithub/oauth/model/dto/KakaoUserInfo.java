@@ -4,13 +4,11 @@ public class KakaoUserInfo implements OauthUserInfo {
     private final String oauthId;
     private final String email;
     private final String name;
-    private final String picture;
 
-    public KakaoUserInfo(String oauthId, String email, String name, String picture) {
+    public KakaoUserInfo(String oauthId, String email, String name) {
         this.oauthId = oauthId;
         this.email = email;
         this.name = name;
-        this.picture = picture;
     }
 
     @Override
@@ -31,10 +29,5 @@ public class KakaoUserInfo implements OauthUserInfo {
     @Override
     public String getName() {
         return name;
-    }
-
-    @Override
-    public String getPicture() {
-        return picture;
     }
 }

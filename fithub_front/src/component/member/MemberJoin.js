@@ -69,7 +69,7 @@ const MemberJoin = () => {
       setIdCheckMsg("아이디는 영어 대소문자 숫자로 6~12글자 입니다.");
     } else {
       axios
-        .get(`${backServer}/member/exists?memberId=${member.memberId}`)
+        .get(`${backServer}/member/exists/id?memberId=${member.memberId}`)
         .then((res) => {
           if (res.data === 0) {
             setIdCheckValid(true);

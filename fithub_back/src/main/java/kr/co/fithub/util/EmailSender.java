@@ -28,7 +28,6 @@ public class EmailSender {
             helper.setTo(receiver);
             helper.setSubject(emailTitle);
             helper.setText(emailContent, true);
-            
             ClassPathResource imageResource = new ClassPathResource("static/image/Fithub_logo.png");
             helper.addInline("fithub-logo", imageResource.getFile());
 

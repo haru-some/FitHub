@@ -1,6 +1,7 @@
 package kr.co.fithub.member.controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,9 @@ public class MemberController {
 		int result = memberService.joinMember(member);
 		return ResponseEntity.ok(result);
 	}
-	@GetMapping(value="/exists")
-	public ResponseEntity<Integer> exists(@RequestParam String memberId){
-		int result = memberService.exists(memberId);
+	@GetMapping(value="/exists/id")
+	public ResponseEntity<Integer> existsId(@RequestParam String memberId){
+		int result = memberService.existsId(memberId);
 		return ResponseEntity.ok(result);
 	}
 	@GetMapping("/exists/email")
@@ -109,7 +110,6 @@ public class MemberController {
 	                }
 	            }
 	        }
-
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
@@ -122,30 +122,6 @@ public class MemberController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                             .body("서버 오류 발생");
 	    }
-	}
-	//updateMember에서 이미지 삭제처리도 하도록 구현
-	@DeleteMapping(value="/profileimg")
-	public ResponseEntity<String> deleteProfileImage(@RequestParam String memberId) {
-		MemberDTO member = memberService.findByMemberId(memberId);
-		if (member == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보 없음");
-		}
-		String fileName = member.getMemberThumb();
-		member.setMemberThumb(null);
-		memberService.updateMember(member);
-		if (fileName != null && !fileName.isEmpty()) {
-			if (fileName.contains("..")) {
-				return ResponseEntity.badRequest().body("잘못된 파일명입니다.");
-			}
-			String savepath = root + "/member/profileimg/";
-			File file = new File(savepath  + fileName);
-			if (file.exists()) {
-				file.delete();
-			}else {
-				System.out.println("파일이 존재하지 않음: " + file.getPath());
-			}
-		}
-		return ResponseEntity.ok("프로필 이미지 삭제 완료");
 	}
 	@DeleteMapping(value="/{memberId}")
 	public ResponseEntity<String> deleteMember(@PathVariable String memberId) {
@@ -161,21 +137,24 @@ public class MemberController {
 		int result = memberService.checkPw(member);
 		return ResponseEntity.ok(result);
 	}
-	@PatchMapping(value="/memberPw")
+	@PatchMapping(value="/change-pw")
 	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
 		int result = memberService.changePw(member);
 		return ResponseEntity.ok(result);
 	}
-	@PostMapping(value="/find-id")
-	public ResponseEntity<String> findId(@RequestBody MemberDTO member) {
-		String name = member.getMemberName();
-		String email = member.getMemberEmail();
-	    MemberDTO m = memberService.findIdByNameAndEmail(name, email);
-	    if (m != null) {
-	        return ResponseEntity.ok(m.getMemberId());
-	    } else {
+	@PostMapping(value = "/find-id")
+	public ResponseEntity<?> findId(@RequestBody MemberDTO member) {
+	    String name = member.getMemberName();
+	    String email = member.getMemberEmail();
+	    List<MemberDTO> members = memberService.findIdsByNameAndEmail(name, email);
+
+	    if (members.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }
+	    List<String> memberIds = members.stream()
+	                                    .map(MemberDTO::getMemberId)
+	                                    .toList();
+	    return ResponseEntity.ok(memberIds);
 	}
 	@PostMapping(value="/find-pw")
 	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
