@@ -133,5 +133,13 @@
         ) A 
     ) 
     WHERE rnum = #{endRow}
-	</select>
+	</select>	
+
+	<delete id="deleteComment">
+		delete from comment_tbl where comment_no = #{commentNo}
+	</delete>
+	
+	<update id="updateComment">
+		update comment_tbl set comment_content = #{commentContent} where comment_no = #{commentNo}
+	</update>
 </mapper>

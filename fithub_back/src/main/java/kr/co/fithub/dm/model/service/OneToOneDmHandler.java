@@ -12,19 +12,41 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kr.co.fithub.dm.model.dao.DmDao;
 import kr.co.fithub.dm.model.dto.DmDto;
+import kr.co.fithub.dm.model.dto.DmMessage;
 
 @Component
 public class OneToOneDmHandler extends TextWebSocketHandler {
+	@Autowired
+	private DmService dmService;
 
     // 회원 번호 (memberNo)를 key로 세션을 value로 저장
     private Map<Integer, WebSocketSession> members = new HashMap<>();
 
     private ObjectMapper om = new ObjectMapper();
+    
+    //주소에서 로그인멤버 No 맵으로 주는 함수
+    private Map<String, String> parseQueryString(String query) {
+        Map<String, String> map = new HashMap<>();
+        if (query == null) return map;
+
+        for (String param : query.split("&")) {
+            String[] pair = param.split("=");
+            if (pair.length == 2) {
+                map.put(pair[0], pair[1]);
+            }
+        }
+        return map;
+    }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         System.out.println("클라이언트 접속 : " + session);
+        String query = session.getUri().getQuery(); // "memberNo=123"
+        Map<String, String> paramMap = parseQueryString(query);
+        int memberNo = Integer.parseInt(paramMap.get("memberNo"));
+        members.put(memberNo, session);
     }
 
     @Override
@@ -42,19 +64,42 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
             return;
         }
 
-        if ("message".equals(type)) {
+        if ("chat".equals(type)) {
+        	HashMap<String, Integer> memberNoMap = new HashMap<>();
+        	memberNoMap.put("memberNo1", Math.min(dm.getSenderNo(), dm.getReceiverNo()));
+        	memberNoMap.put("memberNo2", Math.max(dm.getSenderNo(), dm.getReceiverNo()));
+        	int existRoom = dmService.existRoom(memberNoMap);
+        	int result = 0;
+            
+            
+            if(existRoom == 0) {
+            	result = dmService.createRoom(memberNoMap);
+            }
+            
+            int dmMessageNo = dmService.insertMessage(dm);
+            
             int receiverNo = dm.getReceiverNo();
             WebSocketSession receiverSession = members.get(receiverNo);
-
-            String data = om.writeValueAsString(dm);
-
+            
+            int senderNo = dm.getSenderNo();
+            WebSocketSession senderSession = members.get(senderNo);
+            
+            DmMessage msg = dmService.selectOneMessage(dmMessageNo);
+            
+            String data = om.writeValueAsString(msg);
+            
             // 받는 사람에게만 메시지 전송
-            if (receiverSession != null && receiverSession.isOpen()) {
+            if (receiverSession != null) {
                 receiverSession.sendMessage(new TextMessage(data));
             }
-
-            // 보내는 사람에게도 echo (선택 사항)
-            session.sendMessage(new TextMessage(data));
+            
+            if (senderSession != null ) {
+                senderSession.sendMessage(new TextMessage(data));
+            }
+            
+            
+            
+            
         }
     }
 

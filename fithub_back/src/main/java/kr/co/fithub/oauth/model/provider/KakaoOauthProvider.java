@@ -40,9 +40,8 @@ public class KakaoOauthProvider implements OauthProvider {
         String id = String.valueOf(body.get("id"));
         String email = (String) kakaoAccount.get("email");
         String nickname = (String) profile.get("nickname");
-        String picture = (String) profile.get("profile_image_url");
 
-        return new KakaoUserInfo(id, email, nickname, picture);
+        return new KakaoUserInfo(id, email, nickname);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.fithub.dm.model.service.DmService;
 import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.myfit.model.dto.ActMember;
 import kr.co.fithub.myfit.model.dto.Graph;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class MyfitController {
 	@Autowired
 	private MyfitService myfitService;
+	@Autowired
+	private DmService dmService;
 	
 	@GetMapping(value="/record/{memberNo}")
 	public ResponseEntity<Record> selectRecord(@PathVariable int memberNo, @RequestParam String recordDate) {
@@ -95,6 +98,20 @@ public class MyfitController {
 		List<MemberDTO> list = myfitService.selectFollowList(memberNo,type);
 		return ResponseEntity.ok(list);
 	}
+	
+	@GetMapping("/dm/{memberNo}")
+	public ResponseEntity<List> selectDmList(@PathVariable int memberNo) {
+		List list = dmService.selectDmList(memberNo);
+		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping("/dm")
+	public ResponseEntity<List> selectDmContent(@RequestParam int senderNo, @RequestParam int receiverNo) {
+		List list = dmService.selectDmContent(senderNo,receiverNo);
+		return ResponseEntity.ok(list);
+	}
+	
+	
 	
 	
 	

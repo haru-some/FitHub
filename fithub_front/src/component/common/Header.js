@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { memberState, isLoginState, wsState } from "../utils/RecoilData";
+import { memberState, isLoginState } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,17 +11,7 @@ import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import SmsIcon from "@mui/icons-material/Sms";
 
 const Header = () => {
-  const isLogin = useRecoilValue(isLoginState);
-  const setWs = useSetRecoilState(wsState);
-  const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.3:8888
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
-
-  useEffect(() => {
-    if (isLogin) {
-      let socket = new WebSocket(`${socketServer}/dm`); //ws://192.168.10.3:8888/dm
-      setWs(socket);
-    }
-  }, [isLogin]);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
 
   return (
     <header className="header">
@@ -65,15 +55,13 @@ const MainNavi = () => {
 };
 
 const HeaderLink = () => {
-  const [ws, setWs] = useRecoilState(wsState);
+  // const [ws, setWs] = useRecoilState(wsState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
   const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
 
   const logOut = () => {
-    if (ws) ws.close();
-
     if (memberInfo?.loginType === "kakao") {
       const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
       const redirectUri = `${window.location.origin}/logout/callback`;
@@ -89,8 +77,7 @@ const HeaderLink = () => {
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
-    localStorage.removeItem("recoil-persist");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -98,7 +85,7 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to={`myfit/dm/${memberInfo.memberNo}`}>
+            <Link to="/chat">
               {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (
@@ -123,9 +110,9 @@ const HeaderLink = () => {
             )}
           </li>
           <li>
-            <Link to="/">
-              <LogoutIcon onClick={logOut} />
-            </Link>
+            <button onClick={logOut} className="logout-btn">
+              <LogoutIcon />
+            </button>
           </li>
         </>
       ) : (

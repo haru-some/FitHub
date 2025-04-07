@@ -85,6 +85,18 @@ public class CommunityController {
 		int result = communityService.insertFollow(memberNo, followMemberNo);
 		return ResponseEntity.ok(result);
 		
+	}	
+	
+	@DeleteMapping(value="/list/{communityNo}")
+	public ResponseEntity<CommunityDTO> deleteCommunity(@PathVariable int communityNo, @RequestParam(required = false,defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "0") int memberNo){
+		CommunityDTO community = communityService.deleteCommunity(communityNo, page, memberNo);
+		return ResponseEntity.ok(community);
+	}
+	
+	@PatchMapping
+	public ResponseEntity<Integer> updateCommunity(@RequestBody CommunityDTO community){
+		int result = communityService.updateCommunity(community);
+		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping(value="/comment/{communityNo}")
@@ -94,15 +106,16 @@ public class CommunityController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@DeleteMapping(value="/list/{communityNo}")
-	public ResponseEntity<CommunityDTO> deleteCommunity(@PathVariable int communityNo, @RequestParam int page, @RequestParam int memberNo){
-		CommunityDTO community = communityService.deleteCommunity(communityNo, page, memberNo);
-		return ResponseEntity.ok(community);
+	@DeleteMapping(value="/comment/{commentNo}")
+	public ResponseEntity<Integer> deleteComment(@PathVariable int commentNo){
+		int result = communityService.deleteComment(commentNo);
+		return ResponseEntity.ok(result);
 	}
 	
-	@PatchMapping
-	public ResponseEntity<Integer> updateCommunity(@RequestBody CommunityDTO community){
-		int result = communityService.updateCommunity(community);
+	@PatchMapping(value="/comment/{commentNo}")
+	public ResponseEntity<Integer> updateComment(@PathVariable int commentNo, @RequestBody CommentDTO comment){
+		comment.setCommentNo(commentNo);		
+		int result = communityService.updateComment(comment);
 		return ResponseEntity.ok(result);
 	}
 }

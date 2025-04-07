@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DmDto {
-	private String type;
-	private int senderNo;   // 보낸 사람 회원번호
-    private int receiverNo; // 받는 사람 회원번호
-	private String message;
+@Alias(value="dmMessage")
+public class DmMessage {
+	private int dmMessageNo;
+	private int dmRoomNo;
+	private int senderNo;
+	private String dmContent;
+	private String sentAt;
+	private String isRead;
 }

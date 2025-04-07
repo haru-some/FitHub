@@ -115,5 +115,17 @@ public class CommunityService {
 		return result;
 	}
 
+	@Transactional
+	public int deleteComment(int commentNo) {
+		int result = communityDao.deleteComment(commentNo);
+		return result;
+	}
+
+	@Transactional
+	public int updateComment(CommentDTO comment) {
+		int result = communityDao.updateComment(comment);
+		return result;
+	}
+
 	
 }

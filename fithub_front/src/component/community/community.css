@@ -38,6 +38,9 @@
   display: flex;
   gap: 15px;
 }
+.user-info:hover .community-sub-btn {
+  opacity: 1;
+}
 .user-info > div {
   display: flex;
   align-items: center;
@@ -94,6 +97,9 @@
 .community-post-item p {
   margin: 5px;
 }
+.community-post-item .community-sub-btn {
+  margin-left: auto;
+}
 .community-sub-zone {
   display: flex;
   gap: 30px;
@@ -138,6 +144,9 @@
   gap: 10px;
   cursor: pointer;
 }
+.community-view-user > .community-sub-btn {
+  margin-left: auto;
+}
 .community-view-user img {
   width: 50px;
   height: 50px;
@@ -164,7 +173,22 @@
 .comment-list:last-child {
   margin-bottom: 0;
 }
-
+.comment-user-info > .member-id {
+  display: flex;
+  justify-content: space-between;
+}
+.comment-user-info {
+  width: 100%;
+}
+.comment-sub-btn {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: inline-block;
+  margin-left: 4px; /* 아이디와 살짝 띄우기 */
+}
+.member-id:hover .comment-sub-btn {
+  opacity: 1;
+}
 .community-comment-list .member-id {
   margin-bottom: 12px;
   color: var(--main3);
@@ -173,12 +197,12 @@
 .comment-user-content {
   width: 100%;
 }
+
 /* 댓글 입력란 */
 .community-main .post-input {
   display: flex;
   gap: 20px;
   align-items: center;
-  padding: 20px 0;
 }
 .comment-text-box {
   display: flex;
@@ -213,6 +237,10 @@
 .community-write-wrap {
   width: 530px;
   margin: 0 auto;
+}
+
+.community-write-wrap .ql-container {
+  height: 400px;
 }
 .community-write-info {
   margin: 20px 0;

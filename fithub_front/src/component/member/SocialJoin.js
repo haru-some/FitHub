@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
@@ -12,16 +12,17 @@ import "./member.css";
 const SocialJoin = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  const location = useLocation();
   const detailRef = useRef();
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
 
-  const { oauthId, loginType, accessToken, refreshToken } =
-    location.state || {};
+  const oauthId = localStorage.getItem("joinOauthId");
+  const loginType = localStorage.getItem("joinLoginType");
+  const email = localStorage.getItem("joinEmail");
+  const name = localStorage.getItem("joinName") || "";
 
   const [form, setForm] = useState({
     memberId: "",
-    memberName: "",
+    memberName: name,
     memberPhone: "",
     memberAddr: "",
     memberAddrDetail: "",
@@ -31,6 +32,19 @@ const SocialJoin = () => {
   const [idCheckMsg, setIdCheckMsg] = useState("");
   const [phoneValid, setPhoneValid] = useState(null);
   const [phoneMsg, setPhoneMsg] = useState("");
+
+  useEffect(() => {
+    if (!oauthId || !loginType || !email) {
+      Swal.fire(
+        "잘못된 접근입니다",
+        "소셜 로그인부터 다시 시도해주세요",
+        "warning"
+      ).then(() => {
+        localStorage.removeItem("joinStage");
+        navigate("/login");
+      });
+    }
+  }, []);
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -57,7 +71,7 @@ const SocialJoin = () => {
       setIdCheckMsg("아이디는 영어 대소문자 숫자로 6~12글자 입니다.");
     } else {
       axios
-        .get(`${backServer}/member/exists?memberId=${form.memberId}`)
+        .get(`${backServer}/member/exists/id?memberId=${form.memberId}`)
         .then((res) => {
           if (res.data === 0) {
             setIdCheckValid(true);
@@ -108,6 +122,7 @@ const SocialJoin = () => {
     const payload = {
       oauthId,
       loginType,
+      email,
       memberId: form.memberId,
       name: form.memberName,
       phone: form.memberPhone,
@@ -118,13 +133,9 @@ const SocialJoin = () => {
       .post(`${backServer}/oauth/join`, payload)
       .then((res) => {
         const data = res.data;
+        if (!data.accessToken) throw new Error("토큰 발급 실패");
 
-        if (!data.accessToken) {
-          throw new Error("토큰 발급 실패");
-        }
-
-        // 1. accessToken으로 사용자 정보 조회
-        return axios
+        axios
           .get(`${backServer}/member/${data.memberId}`, {
             headers: {
               Authorization: data.accessToken,
@@ -132,14 +143,10 @@ const SocialJoin = () => {
           })
           .then((res) => {
             const memberData = res.data;
-
-            // 2. Recoil 상태 저장
             setMemberInfo({
               ...memberData,
               accessToken: data.accessToken,
             });
-
-            // 3. 로컬스토리지에 저장
             localStorage.setItem(
               "recoil-persist",
               JSON.stringify({
@@ -149,13 +156,18 @@ const SocialJoin = () => {
                 },
               })
             );
-
-            // 4. 메인페이지 이동
             Swal.fire(
               "가입 완료",
               "회원 정보가 등록되었습니다.",
               "success"
-            ).then(() => navigate("/"));
+            ).then(() => {
+              localStorage.removeItem("joinStage");
+              localStorage.removeItem("joinOauthId");
+              localStorage.removeItem("joinLoginType");
+              localStorage.removeItem("joinEmail");
+              localStorage.removeItem("joinName");
+              navigate("/");
+            });
           });
       })
       .catch((err) => {
@@ -171,7 +183,6 @@ const SocialJoin = () => {
     <section className="join-wrap">
       <h2 className="join-title">소셜 회원 추가 정보 입력</h2>
       <form className="join-form" onSubmit={handleSubmit}>
-        {/* 아이디 */}
         <div className="join-form-field">
           <Box className="join-input-wrap">
             <TextField
@@ -191,8 +202,6 @@ const SocialJoin = () => {
             </p>
           )}
         </div>
-
-        {/* 이름 */}
         <div className="join-form-field">
           <Box className="join-input-wrap">
             <TextField
@@ -204,8 +213,6 @@ const SocialJoin = () => {
             />
           </Box>
         </div>
-
-        {/* 전화번호 */}
         <div className="join-form-field">
           <Box className="join-input-wrap">
             <TextField
@@ -223,8 +230,6 @@ const SocialJoin = () => {
             </p>
           )}
         </div>
-
-        {/* 주소 */}
         <div className="join-form-field">
           <Box
             className="join-input-wrap"
@@ -256,7 +261,6 @@ const SocialJoin = () => {
             sx={{ width: "50%" }}
           />
         </div>
-
         <div className="join-button-box">
           <button
             type="submit"

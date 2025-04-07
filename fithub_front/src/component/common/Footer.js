@@ -11,7 +11,7 @@ const Footer = () => {
 
   const handleExploreClick = () => {
     if (isLogin) {
-      navigate("/myfit");
+      navigate("/myfit/fit");
     } else {
       navigate("/login");
     }
@@ -53,7 +53,7 @@ const Footer = () => {
               <p>Your Fitness</p>
             </div>
             <div className="explore-arrow">
-              <Link to="/myfit">
+              <Link to="/myfit/fit">
                 <ArrowOutwardIcon sx={{ fontSize: 32, color: "white" }} />
               </Link>
             </div>
