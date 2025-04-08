@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { refreshState } from "../utils/RecoilData";
 
 const DmList = (props) => {
+  const refresh = useRecoilValue(refreshState);
   const params = useParams();
   const memberNo = params.memberNo;
   const [searchText, setSearchText] = useState("");
@@ -17,7 +20,7 @@ const DmList = (props) => {
         setDmList(res.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="myfit-dm-wrap">

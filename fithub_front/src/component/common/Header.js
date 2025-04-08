@@ -1,7 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import {
+  memberState,
+  isLoginState,
+  alarmWsState,
+  refreshState,
+} from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,7 +16,61 @@ import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import ChatIcon from "@mui/icons-material/Chat";
 
 const Header = () => {
+  const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [alarmWs, setAlarmWs] = useRecoilState(alarmWsState);
+  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
+  const loginMember = useRecoilValue(memberState);
+  useEffect(() => {
+    if (loginMember) {
+      const socket = new WebSocket(
+        `${socketServer}/alarm?memberNo=${loginMember.memberNo}`
+      );
+      setAlarmWs(socket);
+    } else {
+      if (alarmWs) {
+        alarmWs.close();
+        setAlarmWs(null);
+      }
+    }
+  }, [loginMember]);
+
+  useEffect(() => {
+    if (alarmWs) {
+      alarmWs.onopen = start;
+      alarmWs.onmessage = receive;
+      alarmWs.onclose = end;
+    }
+  }, [alarmWs]);
+
+  const start = () => {
+    console.log("알람소켓 오픈");
+  };
+  const receive = (receiveData) => {
+    const data = JSON.parse(receiveData.data);
+    console.log("안읽은 메시지: " + data.readYetCount);
+    console.log("알람소켓 데이터 받음");
+    const readYetCount = data.readYetCount;
+    const refresh = data.refreshRequest;
+    console.log(refresh);
+    if (readYetCount > 0) {
+      setChatAlarm("Y");
+    } else {
+      setChatAlarm("N");
+    }
+
+    if (refresh === "refresh") {
+      setRefresh(!refresh);
+    }
+  };
+  const end = () => {
+    console.log("알람소켓 닫힘");
+  };
+
+  // useEffect(() => {
+  //   alarmWs.onmessage = receive;
+  // }, [chatAlarm, refresh]);
 
   return (
     <header className="header">
@@ -27,7 +86,7 @@ const Header = () => {
           </Link>
         </div>
         <MainNavi />
-        <HeaderLink />
+        <HeaderLink chatAlarm={chatAlarm} />
       </div>
     </header>
   );
@@ -54,12 +113,11 @@ const MainNavi = () => {
   );
 };
 
-const HeaderLink = () => {
-  // const [ws, setWs] = useRecoilState(wsState);
+const HeaderLink = (props) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
-  const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
+  const chatAlarm = props.chatAlarm;
 
   const logOut = () => {
     if (memberInfo?.loginType === "kakao") {

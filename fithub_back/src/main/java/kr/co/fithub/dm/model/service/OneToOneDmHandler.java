@@ -20,7 +20,8 @@ import kr.co.fithub.dm.model.dto.DmMessage;
 public class OneToOneDmHandler extends TextWebSocketHandler {
 	@Autowired
 	private DmService dmService;
-
+	@Autowired
+	private DmAlarmHandler alarmHandler;
     // 회원 번호 (memberNo)를 key로 세션을 value로 저장
     private Map<Integer, WebSocketSession> members = new HashMap<>();
 
@@ -57,6 +58,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         	System.out.println(data);
             receiverSession.sendMessage(new TextMessage(data));
         }
+        alarmHandler.sendReadYetCountTo(memberNo);
     }
 
     @Override
@@ -64,7 +66,6 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         System.out.println(payload);
         DmDto dm = om.readValue(payload, DmDto.class);
-        System.out.println("메시지 수신: " + dm);
 
         String type = dm.getType();
 
@@ -96,6 +97,8 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
             	isRead=1;
             }
             int dmMessageNo = dmService.insertMessage(dm,isRead);
+            alarmHandler.sendReadYetCountTo(receiverNo);
+            alarmHandler.sendRefreshRequest(receiverNo);
             
             
             

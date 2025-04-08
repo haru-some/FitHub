@@ -69,10 +69,6 @@ const ChatMain = (props) => {
   //소켓 연결시 최초 실행되는 함수
   const startChat = () => {
     console.log("웹소켓 연결이 되면 실행되는 함수");
-    //데이터를 주고 받을 때는 문자열 밖에 안됨
-    // const data = JSON.stringify(chatMsg); //전송할 데이터 객체를 문자열로 변환
-    // ws.send(data); //매개변수로 전달한 문자열을 연결된 웹소켓 서버로 전송
-    // setChatMsg({ ...chatMsg, type: "chat" }); //최초 접속 이후에는 채팅만 보낸 예정이므로 미리 작업
   };
 
   //메세지 받는 함수
@@ -149,7 +145,7 @@ const ChatMain = (props) => {
                     }
                   >
                     <div
-                      class="user"
+                      className="user"
                       onClick={() => {
                         navigate(`/myfit/activity/${chat.senderNo}`);
                       }}
@@ -173,7 +169,7 @@ const ChatMain = (props) => {
                           />
                         )}
                       </div>
-                      <span class="chat-id">
+                      <span className="chat-id">
                         {chat.senderNo == loginMember.memberNo
                           ? loginMember.memberId
                           : actMember.memberId}
@@ -188,7 +184,7 @@ const ChatMain = (props) => {
                           {chat.isRead === "N" ? 1 : ""}
                         </div>
                       )}
-                      <div class="chat-message">{chat.dmContent}</div>
+                      <div className="chat-message">{chat.dmContent}</div>
                     </div>
                   </p>
                 </div>

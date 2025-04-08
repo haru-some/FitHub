@@ -19,9 +19,14 @@ const isLoginState = selector({
   },
 });
 
-// const wsState = atom({
-//   key: "wsState",
-//   default: null,
-// });
+const alarmWsState = atom({
+  key: "alarmWsState",
+  default: null,
+});
 
-export { memberState, isLoginState };
+const refreshState = atom({
+  key: "refreshState",
+  default: 0,
+});
+
+export { memberState, isLoginState, alarmWsState, refreshState };

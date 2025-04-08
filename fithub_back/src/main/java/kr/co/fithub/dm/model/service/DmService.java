@@ -83,4 +83,9 @@ public class DmService {
 		int result = dmDao.changeIsRead(map);
 	}
 
+	public int selectReadYetCount(int memberNo) {
+		int readYetCount = dmDao.selectReadYetCount(memberNo);
+		return readYetCount;
+	}
+
 }

@@ -31,4 +31,6 @@ public interface DmDao {
 
 	int changeIsRead(HashMap<String, Integer> map);
 
+	int selectReadYetCount(int memberNo);
+
 }
