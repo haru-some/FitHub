@@ -16,7 +16,7 @@ import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import ChatIcon from "@mui/icons-material/Chat";
 
 const Header = () => {
-  const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
+  const [chatAlarm, setChatAlarm] = useState(0); // 기본값 'N'
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [alarmWs, setAlarmWs] = useRecoilState(alarmWsState);
@@ -52,16 +52,12 @@ const Header = () => {
     console.log("안읽은 메시지: " + data.readYetCount);
     console.log("알람소켓 데이터 받음");
     const readYetCount = data.readYetCount;
-    const refresh = data.refreshRequest;
-    console.log(refresh);
-    if (readYetCount > 0) {
-      setChatAlarm("Y");
-    } else {
-      setChatAlarm("N");
-    }
+    const refreshString = data.refreshRequest;
+    console.log(refreshString);
+    setChatAlarm(readYetCount);
 
-    if (refresh === "refresh") {
-      setRefresh(!refresh);
+    if (refreshString === "refresh") {
+      setRefresh(prev => prev + 1)
     }
   };
   const end = () => {
@@ -142,14 +138,15 @@ const HeaderLink = (props) => {
     <ul className="member-menu">
       {isLogin ? (
         <>
-          <li>
+          <li className="chat-icon-wrap">
             <Link to={`/myfit/dm/${memberInfo.memberNo}`}>
-              {chatAlarm === "Y" ? (
+              {chatAlarm >0 ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (
                 <ChatIcon />
               )}
             </Link>
+            {chatAlarm > 0 && <div className="unread-count"><span>{chatAlarm}</span></div>}
           </li>
           <li>
             <Link to="/mypage" className="member-name">

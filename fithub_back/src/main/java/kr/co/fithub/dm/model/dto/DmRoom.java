@@ -22,5 +22,6 @@ public class DmRoom {
 	private String otherMemberThumb;
 	private String lastMessageContent;
 	private String lastMessageSentAt;
+	private int unreadCount;
 
 }

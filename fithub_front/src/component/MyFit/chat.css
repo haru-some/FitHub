@@ -77,6 +77,7 @@
   border-radius: 8px;
   padding: 0px 20px;
   cursor: pointer;
+  padding-right: 30px;
 }
 
 .myfit-dm-wrap .avatar-wrap {
@@ -116,9 +117,29 @@
   color: #aaa;
 }
 
+.myfit-dm-wrap .bot-wrap{
+  height: 32px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.myfit-dm-wrap .unread-count{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.myfit-dm-wrap .unread{
+  font-weight: 600;
+  background-color: rgb(88, 158, 98);
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
 .myfit-dm-wrap .dm-item-content {
-  width: 100%;
-  font-size: 15px;
+  font-size: 18px;
   color: #cecece;
   overflow: hidden;
 }
@@ -291,4 +312,22 @@
   border-radius: 7px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.chat-icon-wrap {
+  position: relative;
+}
+
+.chat-icon-wrap  .unread-count{
+  background-color: #ff4545;
+  position: absolute;
+  font-size: 14px;
+  top : -6px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

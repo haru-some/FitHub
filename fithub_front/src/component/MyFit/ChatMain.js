@@ -85,7 +85,9 @@ const ChatMain = (props) => {
       });
       setChatList([...newArr]);
     } else {
-      setChatList([...chatList, data]);
+      if(data.senderNo === Number(senderNo) || data.senderNo === Number(receiverNo)){
+        setChatList([...chatList, data]);
+      }
     }
   };
 

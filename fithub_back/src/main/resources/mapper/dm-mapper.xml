@@ -28,44 +28,55 @@
     dr.member2_no,
     TO_CHAR(dr.created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
     TO_CHAR(dr.last_message_at, 'YYYY-MM-DD HH24:MI:SS') AS last_message_at,
-    
+
     -- 상대방 정보
     m.member_no AS other_member_no,
     m.member_id AS other_member_id,
     m.member_name AS other_member_name,
     m.member_thumb AS other_member_thumb,
-    
+
     -- 마지막 메시지
     last_msg.dm_content AS last_message_content,
-    TO_CHAR(last_msg.sent_at, 'YYYY-MM-DD HH24:MI:SS') AS last_message_sent_at
+    TO_CHAR(last_msg.sent_at, 'YYYY-MM-DD HH24:MI:SS') AS last_message_sent_at,
+
+    -- 읽지 않은 메시지 수
+    NVL(unread_cnt.unread_count, 0) AS unread_count
 
 FROM
     dm_room dr
 
--- 상대방 join
+-- 상대방 JOIN
 JOIN member m
     ON m.member_no = CASE
         WHEN dr.member1_no = #{memberNo} THEN dr.member2_no
         ELSE dr.member1_no
     END
 
--- 마지막 메시지 join (서브쿼리로 max(sent_at)를 기준으로 join)
+-- 마지막 메시지 (중복 방지 위해 ROW_NUMBER 사용)
 LEFT JOIN (
-    SELECT d1.dm_room_no, d1.dm_content, d1.sent_at
-    FROM dm_message d1
-    WHERE d1.sent_at = (
-        SELECT MAX(d2.sent_at)
-        FROM dm_message d2
-        WHERE d2.dm_room_no = d1.dm_room_no
+    SELECT dm_room_no, dm_content, sent_at
+    FROM (
+        SELECT dm_room_no, dm_content, sent_at,
+               ROW_NUMBER() OVER (PARTITION BY dm_room_no ORDER BY sent_at DESC, dm_message_no DESC) AS rn
+        FROM dm_message
     )
+    WHERE rn = 1
 ) last_msg
     ON last_msg.dm_room_no = dr.dm_room_no
+
+-- 안 읽은 메시지 수
+LEFT JOIN (
+    SELECT dm_room_no, COUNT(*) AS unread_count
+    FROM dm_message
+    WHERE is_read = 'N' AND sender_no != #{memberNo}
+    GROUP BY dm_room_no
+) unread_cnt
+    ON unread_cnt.dm_room_no = dr.dm_room_no
 
 -- 나와 관련된 DM방만 조회
 WHERE
     dr.member1_no = #{memberNo} OR dr.member2_no = #{memberNo}
 
--- 최신 메시지 순 정렬 (선택)
 ORDER BY dr.last_message_at DESC NULLS LAST
 	</select>
 

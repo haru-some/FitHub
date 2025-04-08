@@ -21,6 +21,7 @@ const DmList = (props) => {
       })
       .catch((err) => {});
   }, [refresh]);
+  console.log(refresh)
 
   return (
     <div className="myfit-dm-wrap">
@@ -70,7 +71,10 @@ const DmList = (props) => {
                     <div className="name">{dm.otherMemberId}</div>
                     <div className="username">{dm.otherMemberName}</div>
                   </div>
-                  <div className="dm-item-content">{dm.lastMessageContent}</div>
+                  <div className="bot-wrap">
+                    <div className="dm-item-content">{dm.lastMessageContent}</div>
+                    <div className={`unread-count ${dm.unreadCount!==0 ? 'unread' : ''}`}><span>{dm.unreadCount !==0 ? dm.unreadCount : ""}</span></div>
+                  </div>
                 </div>
               </div>
             </li>

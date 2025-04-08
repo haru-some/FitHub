@@ -36,6 +36,7 @@ public class DmAlarmHandler extends TextWebSocketHandler{
 	            int readYetCount = dmService.selectReadYetCount(memberNo);
 	            DmAlarm alarm = new DmAlarm();
 	            alarm.setReadYetCount(readYetCount);
+	            alarm.setRefreshRequest("refresh");
 	            String data = om.writeValueAsString(alarm);
 	            session.sendMessage(new TextMessage(data));
 	        } catch (Exception e) {
@@ -112,26 +113,5 @@ public class DmAlarmHandler extends TextWebSocketHandler{
         }
     }
 
-	public void sendRefreshRequest(int memberNo) {
-		if(members.containsKey(memberNo)) {
-			WebSocketSession session = members.get(memberNo);
-			int cnt = dmService.selectReadYetCount(memberNo);
-			DmAlarm da = new DmAlarm();
-			da.setRefreshRequest("refresh");
-			da.setReadYetCount(cnt);
-			try {
-				String data = om.writeValueAsString(da);
-				session.sendMessage(new TextMessage(data));
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		
-		
-	}
+	
 }
