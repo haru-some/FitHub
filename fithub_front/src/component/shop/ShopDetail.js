@@ -11,8 +11,7 @@ import { memberState, isLoginState } from "../utils/RecoilData";
 
 const ShopDetail = () => {
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
-  const [goods, setGoods] = useState(null); // 상품 정보를 저장할 상태
-  const [cart, setCart] = useState(null); // 상품 정보를 저장할 상태
+
   const [activeTab, setActiveTab] = useState("상품정보");
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
@@ -27,18 +26,21 @@ const ShopDetail = () => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
 
+  const [goods, setGoods] = useState(null);
+  const [carts, setCarts] = useState(null);
+
   // 상품 데이터 가져오기
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/goods/${goodsNo}`)
+      .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setGoods(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [goodsNo]);
+  }, [goodsNo, backServer]);
 
   const handleIncrease = () => {
     setQuantity(quantity + 1);
@@ -179,15 +181,16 @@ const ShopDetail = () => {
 
   const plusCart = () => {
     const cartItem = {
-      // memberId: memberInfo.memberNo,
       goodsNo: goods.goodsNo,
-      goodsName: goods.cartName,
-      goodsImage: goods.cartImage,
-      // goodsPrice: goods.cartPrice,
-      // quantity: cart.goodsEa, // 수량
+      memberNo: goods.memberNo,
+      goodsName: goods.goodsName,
+      goodsImage: goods.goodsImage,
+      goodsPrice: goods.goodsPrice,
+      quantity: goods.goodsEa,
     };
 
-    axios.post(`${backServer}/goods/cart/add`, cartItem).then((res) => {
+    console.log(cartItem);
+    axios.post(`${backServer}/goods/cart/add/`, cartItem).then((res) => {
       Swal.fire({
         icon: "success",
         title: "장바구니에 보관하였습니다.",

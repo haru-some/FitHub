@@ -12,6 +12,7 @@ import kr.co.fithub.shop.model.dao.ShopDao;
 import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
+import kr.co.fithub.shop.model.dto.Sell;
 
 
 
@@ -73,6 +74,11 @@ public class ShopService {
 //			goodsFile.setGoodsNo(goods.getGoodsNo());
 //			result += shopDao.insertGoodsFile(goodsFile);
 //		}
+		return result;
+	}
+
+	public int insertSell(Sell sell) {
+		int result = shopDao.insertSell(sell);
 		return result;
 	}
 	
