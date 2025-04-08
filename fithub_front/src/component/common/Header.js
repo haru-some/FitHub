@@ -8,7 +8,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useEffect, useState } from "react";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
-import SmsIcon from "@mui/icons-material/Sms";
+import ChatIcon from "@mui/icons-material/Chat";
 
 const Header = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -85,11 +85,11 @@ const HeaderLink = () => {
       {isLogin ? (
         <>
           <li>
-            <Link to="/chat">
+            <Link to={`/myfit/dm/${memberInfo.memberNo}`}>
               {chatAlarm === "Y" ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (
-                <SmsIcon />
+                <ChatIcon />
               )}
             </Link>
           </li>

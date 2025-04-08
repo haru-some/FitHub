@@ -18,7 +18,7 @@
 
 	<insert id="insertMessage">
 		insert into dm_message values(#{dmMessageNo},
-		#{dmRoomNo}, #{senderNo}, #{dmContent}, sysdate, 'N')
+		#{dmRoomNo}, #{senderNo}, #{dmContent}, sysdate, #{isRead})
 	</insert>
 
 	<select id="selectDmList" resultType="dmRoom">
@@ -80,4 +80,12 @@
 	<select id="selectOneMessage">
 		select * from dm_message where dm_message_no = #{dmMessageNo}
 	</select>
+	
+	<update id="updateLastMessageAt">
+		update dm_room set last_message_at = sysdate where dm_room_no = #{dmRoomNo}
+	</update>
+	
+	<update id="changeIsRead">
+		update dm_message set is_read = 'Y' where dm_room_no = #{dmRoomNo} and sender_no = #{receiverNo}
+	</update>
 </mapper>

@@ -2,14 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const DmList = () => {
+const DmList = (props) => {
   const params = useParams();
   const memberNo = params.memberNo;
   const [searchText, setSearchText] = useState("");
   const [dmList, setDmList] = useState([]);
   const navigate = useNavigate();
-
   useEffect(() => {
+    console.log("data");
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/dm/${memberNo}`)
       .then((res) => {
@@ -40,6 +40,7 @@ const DmList = () => {
         {dmList.map((dm, index) => {
           return (
             <li
+              key={"dm-" + index}
               className="user-item-wrap"
               onClick={() => {
                 navigate(`/myfit/chat/${memberNo}/${dm.otherMemberNo}`);
@@ -73,14 +74,6 @@ const DmList = () => {
           );
         })}
       </ul>
-      <button
-        className="back-btn"
-        onClick={() => {
-          //navigate(`/myfit/activity/${memberNo}`);
-        }}
-      >
-        <span class="material-icons">reply</span>
-      </button>
     </div>
   );
 };

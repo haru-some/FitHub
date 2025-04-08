@@ -28,7 +28,7 @@ public class DmService {
 	}
 	
 	@Transactional
-	public int insertMessage(DmDto dm) {
+	public int insertMessage(DmDto dm, int isRead) {
 		HashMap<String, Integer> memberNoMap = new HashMap<>();
     	memberNoMap.put("memberNo1", Math.min(dm.getSenderNo(), dm.getReceiverNo()));
     	memberNoMap.put("memberNo2", Math.max(dm.getSenderNo(), dm.getReceiverNo()));
@@ -40,8 +40,14 @@ public class DmService {
 		message.setDmRoomNo(dmRoomNo);
 		message.setSenderNo(dm.getSenderNo());
 		message.setDmContent(dm.getMessage());
+		if(isRead == 0) {
+			message.setIsRead("N");
+		}else {
+			message.setIsRead("Y");
+		}
 		
 		int result = dmDao.insertMessage(message);
+		result += dmDao.updateLastMessageAt(dmRoomNo);
 		return dmMessageNo;
 	}
 
@@ -63,6 +69,18 @@ public class DmService {
 	public DmMessage selectOneMessage(int dmMessageNo) {
 		DmMessage msg = dmDao.selectOneMessage(dmMessageNo);
 		return msg;
+	}
+
+	@Transactional
+	public void changeIsRead(int memberNo, int receiverNo) {
+		HashMap<String, Integer> memberNoMap = new HashMap<>();
+    	memberNoMap.put("memberNo1", Math.min(memberNo, receiverNo));
+    	memberNoMap.put("memberNo2", Math.max(memberNo, receiverNo));
+		int dmRoomNo = dmDao.selectDmRoomNo(memberNoMap);
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("receiverNo", receiverNo);
+		map.put("dmRoomNo", dmRoomNo);
+		int result = dmDao.changeIsRead(map);
 	}
 
 }

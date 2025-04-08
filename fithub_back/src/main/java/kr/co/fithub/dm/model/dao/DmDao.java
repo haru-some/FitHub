@@ -27,4 +27,8 @@ public interface DmDao {
 
 	DmMessage selectOneMessage(int dmMessageNo);
 
+	int updateLastMessageAt(int dmRoomNo);
+
+	int changeIsRead(HashMap<String, Integer> map);
+
 }
