@@ -173,22 +173,20 @@
 .comment-list:last-child {
   margin-bottom: 0;
 }
-.comment-user-info > .member-id {
+.comment-list .member-img {
+  cursor: pointer;
+}
+.comment-list .member-comment-id {
+  cursor: pointer;
+}
+.comment-list .comment-user-info > .member-id {
   display: flex;
   justify-content: space-between;
 }
 .comment-user-info {
   width: 100%;
 }
-.comment-sub-btn {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  display: inline-block;
-  margin-left: 4px; /* 아이디와 살짝 띄우기 */
-}
-.member-id:hover .comment-sub-btn {
-  opacity: 1;
-}
+
 .community-comment-list .member-id {
   margin-bottom: 12px;
   color: var(--main3);

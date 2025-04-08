@@ -167,12 +167,7 @@ const CommunityView = () => {
   return (
     <div className="community-view">
       <div className="community-view-content">
-        <div
-          className="community-view-user"
-          onClick={() => {
-            navigate(`/myfit/activity/${community.memberNo}`);
-          }}
-        >
+        <div className="community-view-user">
           <div className="member-img">
             <img
               src={
@@ -180,13 +175,22 @@ const CommunityView = () => {
                   ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
                   : "/image/default_img.png"
               }
+              onClick={() => {
+                navigate(`/myfit/activity/${community.memberNo}`);
+              }}
             />
           </div>
 
           <div className="community-member">
             {community && (
               <>
-                <p>{community.memberId}</p>
+                <p
+                  onClick={() => {
+                    navigate(`/myfit/activity/${community.memberNo}`);
+                  }}
+                >
+                  {community.memberId}
+                </p>
                 <p>{community.communityDate}</p>
               </>
             )}
@@ -296,7 +300,6 @@ const CommunityView = () => {
 const Comment = (props) => {
   const [showComment, setShowComment] = useState(false);
   const navigate = useNavigate();
-
   const comment = props.comment;
   const commentState = props.commentState;
   const setCommentState = props.setCommentState;
@@ -363,12 +366,7 @@ const Comment = (props) => {
   };
 
   return (
-    <li
-      className="comment-list"
-      onClick={() => {
-        navigate(`/myfit/activity/${comment.memberNo}`);
-      }}
-    >
+    <li className="comment-list">
       <div className="member-img">
         <img
           src={
@@ -376,11 +374,21 @@ const Comment = (props) => {
               ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${comment.memberThumb}`
               : "/image/default_img.png"
           }
+          onClick={() => {
+            navigate(`/myfit/activity/${comment.memberNo}`);
+          }}
         />
       </div>
       <div className="comment-user-info">
         <div className="member-id">
-          {comment.memberId}
+          <p
+            className="member-comment-id"
+            onClick={() => {
+              navigate(`/myfit/activity/${comment.memberNo}`);
+            }}
+          >
+            {comment.memberId}
+          </p>
           {member && member.memberNo === comment.memberNo && (
             <div className="comment-sub-btn">
               <IconButton

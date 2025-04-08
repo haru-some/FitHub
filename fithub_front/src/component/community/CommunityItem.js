@@ -166,13 +166,7 @@ const CommunityItem = (props) => {
         navigate(`/community/view/${community.communityNo}`);
       }}
     >
-      <div
-        className="user-info"
-        onClick={(e) => {
-          navigate(`/myfit/activity/${community.memberNo}`);
-          e.stopPropagation();
-        }}
-      >
+      <div className="user-info">
         <div className="member-img">
           <img
             src={
@@ -180,10 +174,21 @@ const CommunityItem = (props) => {
                 ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
                 : "/image/default_img.png"
             }
+            onClick={(e) => {
+              navigate(`/myfit/activity/${community.memberNo}`);
+              e.stopPropagation();
+            }}
           />
         </div>
         <div className="community-member">
-          <p>{community.memberId}</p>
+          <p
+            onClick={(e) => {
+              navigate(`/myfit/activity/${community.memberNo}`);
+              e.stopPropagation();
+            }}
+          >
+            {community.memberId}
+          </p>
           {member && member.memberId !== community.memberId && (
             <button
               type="button"
