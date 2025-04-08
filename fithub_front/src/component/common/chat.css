@@ -70,3 +70,13 @@
   color: var(--main1);
   font-size: 20px;
 }
+.member-chat-section .chat-box {
+  background-color: var(--main1);
+  border-radius: 20px;
+  height: 540px;
+  overflow-y: auto;
+}
+
+.member-chat-section .chat-box::-webkit-scrollbar {
+  display: none;
+}

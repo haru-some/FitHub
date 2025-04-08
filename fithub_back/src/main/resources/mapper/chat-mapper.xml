@@ -39,10 +39,54 @@
        (SELECT COUNT(*) 
         FROM chat_message cm 
         WHERE cm.chat_member_id = cr.chat_member_id 
-          AND cm.is_read = 2) AS unread_count
+          AND cm.is_read = 1) AS unread_count
 FROM chat_room cr
-LEFT JOIN member m ON cr.chat_member_id = m.member_id
+LEFT JOIN member m ON cr.chat_member_id = m.member_id where chat_room_message is not null
     </select>
     
+    <select id="loadChatMessage" resultType="chatMessage">
+		SELECT 
+    cm.*,  -- chat_message 테이블의 모든 컬럼
+    m.member_level,
+    m.warning_level,
+    m.member_thumb
+FROM 
+    chat_message cm
+JOIN 
+    member m ON cm.chat_member_id = m.member_id
+WHERE 
+    cm.chat_room_no = #{chatRoomNo}
+    order by message_date
+    </select>
+    	
+    <select id="loadChatMember" resultType="chatMessage">
+    	SELECT 
+  cm.*, 
+  m.member_id, 
+  m.member_name, 
+  m.member_thumb
+FROM 
+  chat_message cm
+JOIN 
+  member m 
+ON 
+  cm.chat_member_id = m.member_id
+WHERE 
+  cm.chat_room_no IN (
+    SELECT chat_room_no
+    FROM chat_message
+    WHERE chat_member_id = #{memberId}
+  )
+ORDER BY 
+  cm.message_date
+    </select>
+    
+    <select id="selectChatRoom" resultType="chatRoom">
+    	select chat_room_no from chat_room where chat_member_id = #{memberId}
+    </select>
+    
+    <update id="viewOk">
+    	update chat_message set is_read = 2 where chat_room_no = #{chatRoomNo}
+    </update>
     
 </mapper>

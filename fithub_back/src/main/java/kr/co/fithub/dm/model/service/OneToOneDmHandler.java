@@ -46,7 +46,17 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         String query = session.getUri().getQuery(); // "memberNo=123"
         Map<String, String> paramMap = parseQueryString(query);
         int memberNo = Integer.parseInt(paramMap.get("memberNo"));
+        int receiverNo = Integer.parseInt(paramMap.get("receiverNo"));
         members.put(memberNo, session);
+        dmService.changeIsRead(memberNo,receiverNo);
+        WebSocketSession receiverSession = members.get(receiverNo);
+        if (receiverSession != null) {
+        	DmMessage msg = new DmMessage();
+        	msg.setIsRead("isReadOk");
+        	String data = om.writeValueAsString(msg);
+        	System.out.println(data);
+            receiverSession.sendMessage(new TextMessage(data));
+        }
     }
 
     @Override
@@ -70,22 +80,32 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         	memberNoMap.put("memberNo2", Math.max(dm.getSenderNo(), dm.getReceiverNo()));
         	int existRoom = dmService.existRoom(memberNoMap);
         	int result = 0;
-            
-            
-            if(existRoom == 0) {
-            	result = dmService.createRoom(memberNoMap);
-            }
-            
-            int dmMessageNo = dmService.insertMessage(dm);
-            
-            int receiverNo = dm.getReceiverNo();
+        	
+        	int receiverNo = dm.getReceiverNo();
             WebSocketSession receiverSession = members.get(receiverNo);
             
             int senderNo = dm.getSenderNo();
             WebSocketSession senderSession = members.get(senderNo);
             
-            DmMessage msg = dmService.selectOneMessage(dmMessageNo);
             
+            if(existRoom == 0) {
+            	result = dmService.createRoom(memberNoMap);
+            }
+            int isRead=0;
+            if (receiverSession != null) {
+            	isRead=1;
+            }
+            int dmMessageNo = dmService.insertMessage(dm,isRead);
+            
+            
+            
+            
+            
+            DmMessage msg = dmService.selectOneMessage(dmMessageNo);
+            if (receiverSession != null) {
+            	msg.setIsRead("Y");
+            	dmService.changeIsRead(senderNo, receiverNo);
+            }
             String data = om.writeValueAsString(msg);
             
             // 받는 사람에게만 메시지 전송

@@ -5,6 +5,8 @@ import { isLoginState, memberState } from "../utils/RecoilData";
 import { useNavigate } from "react-router-dom"; // 관리자만 접근 제한을 위해 추가
 import axios from "axios";
 import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const AdminChat = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -15,6 +17,7 @@ const AdminChat = () => {
   const [chatList, setChatList] = useState([]);
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
+
   useEffect(() => {
     axios
       .get(`${backServer}/chat/list`)
@@ -26,6 +29,7 @@ const AdminChat = () => {
         console.log(err);
       });
   }, []);
+
   const handleSelectChatRoom = (chatRoomNo) => {
     setSelectedChatRoom(chatRoomNo);
     setChatRooms((prevRooms) =>
@@ -42,7 +46,7 @@ const AdminChat = () => {
         <div className="chat-list-box">
           <AdminChatList
             chatRooms={chatRooms}
-            onSelectChatRoom={handleSelectChatRoom}
+            handleSelectChatRoom={handleSelectChatRoom}
           />
         </div>
         <div className="chat-box-view">
@@ -56,19 +60,22 @@ const AdminChat = () => {
     </section>
   );
 };
-
-const AdminChatList = ({ chatRooms, onSelectChatRoom }) => {
+/*---------- 채팅 리스트 ----------*/
+const AdminChatList = ({ chatRooms, handleSelectChatRoom }) => {
+  console.log(chatRooms);
   return (
     <div className="chat-list">
       {chatRooms.map((room) => (
         <div
           key={room.chatRoomNo}
           className="chat-room"
-          onClick={() => onSelectChatRoom(room.chatRoomNo)}
+          onClick={() => handleSelectChatRoom(room.chatRoomNo)}
         >
           <div className="member-chat-profile">
             {room.memberThumb ? (
-              `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${room.memberThumb}`
+              <img
+                src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${room.memberThumb}`}
+              />
             ) : (
               <img src="/image/default_img.png" alt="프로필" />
             )}
@@ -97,28 +104,40 @@ const AdminChatList = ({ chatRooms, onSelectChatRoom }) => {
   );
 };
 
+/*---------- 채팅방 ----------*/
 const AdminChatView = ({ selectedChatRoom }) => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const memberInfo = useRecoilValue(memberState); // 현재 로그인한 회원 정보 가져오기
-  const isLogin = useRecoilValue(isLoginState); //로그인 후 채팅을 위해서 로그인 상태
-  const [loginId, setLoginId] = useRecoilState(memberState); //채팅 식별자로 아이디 사용
-  const [chatList, setChatList] = useState([]); //채팅메세지가 저장될 배열
-  const [ws, setWs] = useState({});
-  const [chatMsg, setChatMsg] = useState({});
+  const [stompClient, setStompClient] = useState(null);
   const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.34:9999
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
-  /*
+  const socket = new SockJS(`${backServer}/inMessage`);
+  const [roomNo, setRoomNo] = useState(null);
+
   useEffect(() => {
+    // 기존 채팅 기록 불러오기
+    axios
+      .get(`${backServer}/chat/loadChatMessage?chatRoomNo=${selectedChatRoom}`)
+      .then((res) => {
+        console.log(res);
+        setMessages(res.data);
+        setRoomNo(res.data[0].chatRoomNo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     // WebSocket 연결
     const client = new Client({
-      brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
+      // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
+      webSocketFactory: () => socket,
       reconnectDelay: 10000,
       onConnect: () => {
         console.log("Connected to WebSocket");
 
         // 채팅 메시지 구독
-        client.subscribe(`/topic/chat/${selectedChatRoom}`, (message) => {
+        client.subscribe(`/topic/chat/messages/${roomNo}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
@@ -126,12 +145,8 @@ const AdminChatView = ({ selectedChatRoom }) => {
       onDisconnect: () => console.log("Disconnected from WebSocket"),
     });
 
-    client.activate();
-    setStompClient(client);
-
-    // 기존 채팅 기록 불러오기
     axios
-      .get(`${backServer}/chat/selectChatRoom?chatRoomId=${chatRoomId}`)
+      .patch(`${backServer}/chat/viewOk?chatRoomNo=${roomNo}`)
       .then((res) => {
         console.log(res);
       })
@@ -139,56 +154,78 @@ const AdminChatView = ({ selectedChatRoom }) => {
         console.log(err);
       });
 
+    client.activate();
+    setStompClient(client);
     return () => {
       client.deactivate();
     };
-  }, [chatRoomId]);
+  }, [roomNo]);
 
   const sendMessage = () => {
-    if (stompClient && message.trim() !== "") {
+    if (stompClient && chatInput.trim() !== "") {
       const chatMessage = {
-        senderId: userId,
-        content: message,
-        chatRoomId,
-        memberLevel,
+        chatMemberId: memberInfo.memberId,
+        messageContent: chatInput,
+        memberLevel: memberInfo.memberLevel,
+        messageDate: Date(),
       };
       stompClient.publish({
-        destination: `/app/chat/${chatRoomId}`,
+        destination: `/app/chat/sendMessage/${roomNo}`,
         body: JSON.stringify(chatMessage),
       });
-      setMessage("");
+      setChatInput("");
     }
   };
-  */
-  const sendMessage = () => {};
+  const chatBoxRef = useRef(null);
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <>
-      <div className="chat-box">
+      <div className="chat-box" ref={chatBoxRef}>
         {messages.map((msg, index) => (
           <div
             key={index}
             className={
-              memberInfo?.memberLevel === 1 // 관리자 여부를 member_level로 판단
+              msg.memberLevel === 1 // 관리자 여부를 member_level로 판단
                 ? "admin-chat-line"
                 : "member-chat-line"
             }
           >
-            {memberInfo?.memberLevel !== 1 && (
-              <div className="member-chat-profile">
-                <img src="/image/default_img.png" alt="프로필" />
-              </div>
-            )}
-            <div className="chat-content">
-              <div className="chat-id">
-                {memberInfo?.memberLevel === 1 ? "관리자" : msg.memberId} -{" "}
-                {msg.sentAt}
-              </div>
-              <div className="chat-text">{msg.content}</div>
-            </div>
-            {memberInfo?.memberLevel === 1 && (
-              <div className="admin-chat-profile">
-                <img src="/image/default_img.png" alt="관리자" />
-              </div>
+            {memberInfo.memberId !== msg.chatMemberId ? (
+              <>
+                <div className="member-chat-profile">
+                  <img
+                    src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
+                  />
+                </div>
+                <div className="chat-content">
+                  <div className="chat-id">
+                    {msg.chatMemberId} - {msg.messageDate} -{" "}
+                    {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
+                  </div>
+                  <div className="chat-text">{msg.messageContent}</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="chat-content">
+                  <div className="chat-id">
+                    {msg.isRead === 1 ? <VisibilityOffIcon /> : ""} -{" "}
+                    {msg.messageDate} - {memberInfo.memberId}
+                  </div>
+                  <div className="chat-text">{msg.messageContent}</div>
+                </div>
+                <div className="admin-chat-profile">
+                  <img
+                    src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${memberInfo.memberThumb}`}
+                    alt="관리자"
+                  />
+                </div>
+              </>
             )}
           </div>
         ))}
@@ -200,7 +237,7 @@ const AdminChatView = ({ selectedChatRoom }) => {
           value={chatInput}
           onChange={(e) => setChatInput(e.target.value)}
           onKeyUp={(e) => {
-            if (e.key === "Enter" && chatMsg.message !== "") {
+            if (e.key === "Enter" && chatInput !== "") {
               sendMessage();
             }
           }}

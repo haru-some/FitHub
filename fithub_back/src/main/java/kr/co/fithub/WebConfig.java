@@ -49,5 +49,6 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 		.addHandler(dmHandler, "/dm")
 		.setAllowedOrigins("*");
 	}
-
+	
+	
 }

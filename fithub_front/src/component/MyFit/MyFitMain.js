@@ -147,6 +147,8 @@ const MyFitMain = () => {
     }
   }, [member]);
 
+  const [list, setList] = useState([]);
+
   if (!member) return null;
   return (
     <div className="myfit-wrap">
