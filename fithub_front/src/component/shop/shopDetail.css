@@ -184,3 +184,67 @@ select {
   font-size: 12px;
   font-weight: 400;
 }
+
+/* 마이리뷰 페이지 */
+
+.Myreview-wrap .review-tabs {
+  border-bottom: 1px solid #ccc;
+}
+
+.Myreview-wrap .tabs {
+  display: flex;
+}
+
+.Myreview-wrap .tabs button {
+  flex: 1; /* 각 탭이 50% 너비를 차지 */
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #45a049;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 30px;
+}
+
+.Myreview-wrap .tabs button.active {
+  border-bottom: 2px solid #4caf50;
+  color: #4caf50;
+}
+
+.Myreview-wrap .tab-content {
+  padding: 20px;
+}
+
+/* review-item을 가로로 배치하기 위한 스타일 */
+.review-item {
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  border-bottom: 1px solid #eee; /* 아이템 구분선 */
+  padding: 10px 0;
+}
+
+.review-item img {
+  width: 100px; /* 상품 이미지 너비 */
+  height: auto; /* 원본 비율 유지 */
+  margin-right: 20px; /* 이미지 오른쪽 여백 */
+}
+
+.product-info {
+  flex-grow: 1; /* 가용 공간을 차지하도록 설정 */
+}
+
+.write-review-button {
+  padding: 8px 12px; /* 버튼 패딩 */
+  background-color: #4caf50; /* 버튼 색상 */
+  color: white; /* 텍스트 색상 */
+  border: none; /* 경계선 없음 */
+  border-radius: 4px; /* 둥근 모서리 */
+  cursor: pointer; /* 포인터 커서 */
+  transition: background-color 0.3s; /* 색상 전환 효과 */
+}
+
+.write-review-button:hover {
+  background-color: #45a049; /* 호버 효과 */
+}

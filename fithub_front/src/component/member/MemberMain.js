@@ -3,6 +3,7 @@ import MemberInfo from "./MemberInfo";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import "./member.css";
 import ChangePw from "./ChangePw";
+import ShopReview from "../shop/ShopReview";
 
 const MemberMain = () => {
   const [activeMenu, setActiveMenu] = useState("info");
@@ -21,8 +22,9 @@ const MemberMain = () => {
         return <ChangePw />;
       case "reviews":
         return (
-          <div className="mypage-content">
+          <div>
             <h2>나의 리뷰 목록</h2>
+            <ShopReview />
           </div>
         );
       case "orders":

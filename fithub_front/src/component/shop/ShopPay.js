@@ -80,7 +80,7 @@ function ShopPay() {
     console.log("결제 데이터:", paymentData);
 
     axios
-      .post(`${backServer}/goods/sell/add`, formData)
+      .post(`${backServer}/goods/sell/add/`, paymentData)
       .then((res) => {
         console.log(res);
       })
