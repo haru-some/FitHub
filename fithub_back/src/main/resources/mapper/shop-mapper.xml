@@ -46,6 +46,10 @@
  		</selectKey>
   	</insert>
   	
+  	<select id="selectOneReview">
+  		select * from sell where member_no= #{memberNo}
+  	</select>
+  	
   	
 
   	

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Box } from "@mui/material"; // MUI에서 필요한 컴포넌트 임포트
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
@@ -6,8 +6,14 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import "./shopDetail.css";
 import MemberInfo from "../member/MemberInfo";
+import axios from "axios";
 
 const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [sell, setSell] = useState(null);
+
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
@@ -18,6 +24,18 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
     setComment(""); // 초기화
     onClose();
   };
+
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setSell(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Modal open={isOpen} onClose={onClose}>

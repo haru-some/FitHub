@@ -28,4 +28,6 @@ public interface ShopDao {
 
 	int insertSell(Sell sell);
 
+	Sell selectOneReview(int memberNo);
+
 }

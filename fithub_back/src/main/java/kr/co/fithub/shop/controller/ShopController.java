@@ -163,9 +163,11 @@ public class ShopController {
     	return ResponseEntity.ok(result);	
        }
     
-    @GetMapping(value="/{goodsNo}")
-	public ResponseEntity<Sell> selectOneReview(@PathVariable int goodsNo){
-		Sell sell =shopService.selectOneReview(sellNo);
+    @GetMapping(value="/sell/review/{memberNo}")
+	public ResponseEntity<Sell> selectOneReview(@PathVariable int memberNo){
+    	System.out.println("리뷰 나와!!!!");    	
+    	System.out.println(memberNo);
+		Sell sell =shopService.selectOneReview(memberNo);
 		return ResponseEntity.ok(sell);
 	}
     

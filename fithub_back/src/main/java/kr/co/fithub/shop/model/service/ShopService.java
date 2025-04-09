@@ -81,6 +81,11 @@ public class ShopService {
 		int result = shopDao.insertSell(sell);
 		return result;
 	}
+
+	public Sell selectOneReview(int memberNo) {
+		Sell sell =shopDao.selectOneReview(memberNo);
+		return sell;
+	}
 	
 		
 		
