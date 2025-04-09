@@ -9,14 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.fithub.member.model.dao.MemberDao;
 import kr.co.fithub.member.model.dto.MemberDTO;
-import kr.co.fithub.member.model.service.MemberService;
 import kr.co.fithub.oauth.model.dto.OauthJoinDTO;
 import kr.co.fithub.oauth.model.dto.OauthUserInfo;
-import kr.co.fithub.oauth.model.provider.GoogleOauthProvider;
 import kr.co.fithub.oauth.model.provider.OauthProvider;
 import kr.co.fithub.oauth.model.provider.OauthProviderFactory;
 import kr.co.fithub.util.JwtUtils;
-import lombok.RequiredArgsConstructor;
 
 @Service
 public class OauthService {
@@ -82,6 +79,7 @@ public class OauthService {
         response.put("memberName", member.getMemberName());
         response.put("memberEmail", member.getMemberEmail());
         response.put("loginType", member.getLoginType());
+        response.put("memberNo", member.getMemberNo());
         return response;
     }
 }
