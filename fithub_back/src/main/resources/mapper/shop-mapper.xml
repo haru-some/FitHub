@@ -7,7 +7,7 @@
  	</select>
   
   	<select id="selectOneGoods">
-  		select * from goods where goods_no= #{boardNo}
+  		select * from goods where goods_no= #{goodsNo}
   	</select>
   	<insert id="insertGoods">
   		insert into goods values 
@@ -36,6 +36,14 @@
   		<selectKey order="BEFORE" resultType="int" keyProperty="cartNo">
  			select cart_seq.nextval from dual
  		</selectKey> 
+  	</insert>
+  	
+  	<insert id="insertSell">
+  		insert into sell values 
+  		(#{sellNo},#{memberNo},#{goodsNo},#{goodsTotalPrice},#{goodsEa},sysdate)
+ 		<selectKey order="BEFORE" resultType="int" keyProperty="sellNo">
+ 			select sell_seq.nextval from dual
+ 		</selectKey>
   	</insert>
   	
   	

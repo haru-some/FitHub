@@ -154,15 +154,20 @@ public class ShopController {
        }
     
     @PostMapping(value="/sell/add/")
-   	public ResponseEntity<Integer> SellInsert(@ModelAttribute Sell sell ,@ModelAttribute Goods goods,@ModelAttribute MemberDTO member){
-    	System.out.println("돈벌자!!!!");
-    	System.out.println(goods);
+   	public ResponseEntity<Integer> SellInsert(@RequestBody Sell sell ){
+    	System.out.println("돈벌자!!!!");    	
     	System.out.println(sell);
-    	System.out.println(member);
+    	
     	int result = shopService.insertSell(sell);
    				
     	return ResponseEntity.ok(result);	
        }
+    
+    @GetMapping(value="/{goodsNo}")
+	public ResponseEntity<Sell> selectOneReview(@PathVariable int goodsNo){
+		Sell sell =shopService.selectOneReview(sellNo);
+		return ResponseEntity.ok(sell);
+	}
     
     
 }

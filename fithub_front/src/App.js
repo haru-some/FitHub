@@ -24,6 +24,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoin from "./component/member/SocialJoin";
 import ShopPay from "./component/shop/ShopPay";
+import ShopReview from "./component/shop/ShopReview";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -76,6 +77,7 @@ function App() {
           <Route path="/social-join" element={<SocialJoin />} />
           <Route path="/find" element={<FindInfo />} />
           <Route path="/mypage" element={<MemberMain />} />
+          <Route path="/mypage/market-review" element={<ShopReview />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />

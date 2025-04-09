@@ -21,12 +21,7 @@ const MemberMain = () => {
       case "password":
         return <ChangePw />;
       case "reviews":
-        return (
-          <div>
-            <h2>나의 리뷰 목록</h2>
-            <ShopReview />
-          </div>
-        );
+        return <ShopReview />;
       case "orders":
         return (
           <div className="mypage-content">
