@@ -39,7 +39,6 @@ public class CommunityController {
 	
 	@GetMapping(value="/list")
 	public ResponseEntity<List> communityList(@RequestParam int memberNo, @RequestParam int page, @RequestParam int size, @RequestParam String searchText, @RequestParam int showMyList){
-		System.out.println("내 게시물 "+showMyList);
 		List list = communityService.selectCommunityList(memberNo, page, size, searchText, showMyList);
 		return ResponseEntity.ok(list);
 	}
