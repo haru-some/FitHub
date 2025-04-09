@@ -82,8 +82,8 @@ const Login = () => {
     onError: () =>
       Swal.fire("로그인 실패", "구글 로그인 중 문제가 발생했습니다.", "error"),
     scope: "profile email",
+    prompt: "login",
   });
-
   const kakaoLogin = () => {
     if (!window.Kakao?.Auth) return;
     if (!window.Kakao.isInitialized()) {

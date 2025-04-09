@@ -1,7 +1,7 @@
 .myfit-dm-wrap {
   width: 780px;
   background-color: #222;
-  padding: 40px 25px;
+  padding: 45px 25px;
   border-radius: 10px;
   font-family: "Arial", sans-serif;
   color: white;
@@ -11,39 +11,9 @@
   gap: 25px;
 }
 
-.myfit-dm-wrap .input-wrap {
-  width: 700px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-  background-color: #333333;
-  border-radius: 8px;
-}
-
-.myfit-dm-wrap .search-input {
-  box-sizing: border-box;
-  width: 700px;
-  padding: 10px 14px;
-  border: none;
-  background-color: transparent;
-  color: white;
-  font-size: 16px;
-}
-
-.myfit-dm-wrap .input-wrap .search-btn {
-  color: #cfcfcf;
-  cursor: pointer;
-  transition-duration: 0.3s;
-}
-.myfit-dm-wrap .input-wrap .search-btn:hover {
-  color: #e7e7e7;
-  font-weight: 900;
-}
-
 /*ul*/
 .myfit-dm-wrap .user-list {
-  height: 400px;
+  height: 500px;
   width: 740px;
   list-style: none;
   padding: 0;
@@ -73,11 +43,11 @@
   height: 70px;
   display: flex;
   align-items: center;
+  gap: 20px;
   background-color: #3b3b3b;
   border-radius: 8px;
-  padding: 0px 20px;
+  padding: 0px 30px;
   cursor: pointer;
-  padding-right: 30px;
 }
 
 .myfit-dm-wrap .avatar-wrap {
@@ -117,19 +87,19 @@
   color: #aaa;
 }
 
-.myfit-dm-wrap .bot-wrap{
+.myfit-dm-wrap .bot-wrap {
   height: 32px;
   display: flex;
   justify-content: space-between;
 }
 
-.myfit-dm-wrap .unread-count{
+.myfit-dm-wrap .unread-count {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.myfit-dm-wrap .unread{
+.myfit-dm-wrap .unread {
   font-weight: 600;
   background-color: rgb(88, 158, 98);
   width: 30px;
@@ -288,8 +258,16 @@
 .myfit-wrap .chat-content-box {
   display: flex;
 }
+.myfit-wrap .left .chat-content-box {
+  flex-direction: row-reverse;
+}
 .myfit-wrap .is-read {
   align-self: flex-end;
+  color: #5ca17a;
+}
+.myfit-wrap .chat-time {
+  align-self: flex-end;
+  margin: 0px 10px;
   color: #7c7c7c;
 }
 
@@ -318,11 +296,11 @@
   position: relative;
 }
 
-.chat-icon-wrap  .unread-count{
+.chat-icon-wrap .unread-count {
   background-color: #ff4545;
   position: absolute;
   font-size: 14px;
-  top : -6px;
+  top: -6px;
   right: -10px;
   width: 20px;
   height: 20px;

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./community.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
@@ -10,6 +10,10 @@ import { memberState } from "../utils/RecoilData";
 import CommunityItem from "./CommunityItem";
 
 const CommunityList = () => {
+  const params = useParams();
+  console.log(params);
+  const memberNo = params["*"];
+
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [member] = useRecoilState(memberState);
   const [showInput, setShowInput] = useState(false);
@@ -25,15 +29,17 @@ const CommunityList = () => {
   useEffect(() => {
     axios
       .get(
-        `${backServer}/community/list?memberNo=${
+        `${backServer}/community/list/${
           member ? member.memberNo : 0
-        }&page=${page}&size=10&searchText=${searchText}&showMyList=${showMyList}`
+        }?memberNo=${memberNo}&page=${page}&size=10&searchText=${searchText}`
       )
       .then((res) => {
+        console.log(res.data);
         setCommunityList([...communityList, ...res.data]);
       })
       .catch((err) => console.log(err));
   }, [page, searchText, showMyList]);
+  console.log(memberNo);
 
   const loadMoreCommunities = useCallback(() => {
     if (communityList && hasMore) setPage((prevPage) => prevPage + 1);
@@ -61,7 +67,7 @@ const CommunityList = () => {
         <div className="community-head">
           <div className="community-head-title">
             <h2 className="community-title">
-              <Link to="/community/list">커뮤니티</Link>
+              {showMyList === 0 ? "커뮤니티" : "내 게시물"}
             </h2>
             <div className="community-menu">
               <SearchIcon
@@ -73,6 +79,7 @@ const CommunityList = () => {
               {member && (
                 <CreateIcon onClick={() => navigate("/community/write")} />
               )}
+
               {member && (
                 <PersonIcon
                   onClick={() => {
@@ -81,7 +88,14 @@ const CommunityList = () => {
                     setCommunityList([]);
                     setSearchText("");
                     setShowInput(false);
+
+                    navigate(
+                      memberNo === String(member.memberNo)
+                        ? "/community/list"
+                        : `/community/list/${member.memberNo}`
+                    );
                   }}
+                  style={showMyList === 1 ? { fill: "#6fff87" } : {}}
                 />
               )}
             </div>

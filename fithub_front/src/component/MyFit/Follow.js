@@ -2,11 +2,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./follow.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
 
-const Follow = () => {
+const Follow = (props) => {
+  const setFlag = props.setFlag;
   const params = useParams();
   const memberNo = params.memberNo;
   const type = params.type; //1 : 팔로워  2 : 팔로잉
@@ -95,8 +96,8 @@ const Follow = () => {
                           text: "정말 팔로우를 취소하시겠습니까?",
                           icon: "warning",
                           showCancelButton: true,
-                          confirmButtonColor: "#3085d6",
-                          cancelButtonColor: "#d33",
+                          confirmButtonColor: "rgb(93, 187, 121)",
+                          cancelButtonColor: "rgb(146, 146, 146)",
                           confirmButtonText: "예",
                           cancelButtonText: "아니오",
                         }).then((result) => {

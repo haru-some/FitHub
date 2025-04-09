@@ -13,7 +13,7 @@ const LogoutCallback = () => {
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
     navigate("/login", { replace: true });
-  }, []);
+  }, [setMemberInfo, navigate]);
 
   return null;
 };

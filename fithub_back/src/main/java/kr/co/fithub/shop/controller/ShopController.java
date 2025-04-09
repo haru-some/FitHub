@@ -23,6 +23,7 @@ import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
+import kr.co.fithub.shop.model.dto.Sell;
 import kr.co.fithub.shop.model.service.ShopService;
 import kr.co.fithub.util.FileUtils;
 
@@ -144,14 +145,31 @@ public class ShopController {
     }
         
     @PostMapping(value="/cart/add/")
-   	public ResponseEntity<Integer> CartInsert(@ModelAttribute Cart cart){
+   	public ResponseEntity<Integer> CartInsert(@ModelAttribute Cart cart ,@ModelAttribute Goods goods,@ModelAttribute MemberDTO member){
     	System.out.println("들어올래???");
     	System.out.println(cart);
     	int result = shopService.insertCart(cart);
    				
     	return ResponseEntity.ok(result);	
        }
-     
+    
+    @PostMapping(value="/sell/add/")
+   	public ResponseEntity<Integer> SellInsert(@RequestBody Sell sell ){
+    	System.out.println("돈벌자!!!!");    	
+    	System.out.println(sell);
+    	
+    	int result = shopService.insertSell(sell);
+   				
+    	return ResponseEntity.ok(result);	
+       }
+    
+    @GetMapping(value="/sell/review/{memberNo}")
+	public ResponseEntity<Sell> selectOneReview(@PathVariable int memberNo){
+    	System.out.println("리뷰 나와!!!!");    	
+    	System.out.println(memberNo);
+		Sell sell =shopService.selectOneReview(memberNo);
+		return ResponseEntity.ok(sell);
+	}
     
     
 }

@@ -184,13 +184,13 @@ const ChatMain = (props) => {
                     </div>
                     <div className="chat-content-box">
                       {chat.senderNo === Number(senderNo) && (
-                        <div
-                          className="is-read"
-                          style={{ marginRight: "10px" }}
-                        >
+                        <div className="is-read">
                           {chat.isRead === "N" ? 1 : ""}
                         </div>
                       )}
+                      <div className="chat-time">
+                        {chat.sentAt.substring(11, 16)}
+                      </div>
                       <div className="chat-message">{chat.dmContent}</div>
                     </div>
                   </p>
