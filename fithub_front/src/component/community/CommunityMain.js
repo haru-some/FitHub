@@ -9,7 +9,7 @@ const CommunityMain = () => {
   return (
     <div className="community-main">
       <Routes>
-        <Route path="list" element={<CommunityList />} />
+        <Route path="list/*" element={<CommunityList />} />
         <Route path="view/:communityNo" element={<CommunityView />} />
         <Route path="write" element={<CommunityWrite />} />
         <Route path="update/:communityNo" element={<CommunityUpdate />} />

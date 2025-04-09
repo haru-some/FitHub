@@ -15,14 +15,14 @@
                 c.community_content,
                 c.community_no,
                 (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no) AS like_count,
-                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{memberNo}) AS is_like,
+                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{loginMemberNo}) AS is_like,
                 (SELECT COUNT(*) FROM comment_tbl WHERE community_no = c.community_no) AS comment_count,
-                (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{memberNo}) AS is_follow
+                (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{loginMemberNo}) AS is_follow
             FROM community c
             JOIN member m ON c.member_no = m.member_no
             where m.member_id||c.community_content  like '%'||#{searchText}||'%' 
-            <if test="showMyList == 1">
-            and c.member_no = #{memberNo}
+            <if test="memberNo != 0">
+            and c.member_no = #{memberNo} and c.community_content  like '%'||#{searchText}||'%' 
             </if>
             ORDER BY community_no DESC
         ) A 

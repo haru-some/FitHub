@@ -10,6 +10,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Swal from "sweetalert2";
 
 const CommunityView = () => {
@@ -26,7 +27,6 @@ const CommunityView = () => {
   const [commentState, setCommentState] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
-
   useEffect(() => {
     axios
       .get(
@@ -208,6 +208,13 @@ const CommunityView = () => {
               </button>
             )}
           </div>
+          <div className="back-button">
+            <ExitToAppIcon
+              onClick={() => {
+                navigate("/community/list");
+              }}
+            />
+          </div>
           {member && community && member.memberId === community.memberId && (
             <div className="community-sub-btn">
               <IconButton
@@ -215,7 +222,7 @@ const CommunityView = () => {
                 aria-haspopup="true"
                 aria-expanded={menuOpen ? "true" : undefined}
                 onClick={handleMenuClick}
-                style={{ marginLeft: "auto" }}
+                style={{ padding: "0" }}
               >
                 <MoreVertIcon style={{ color: "#fff" }} />
               </IconButton>
@@ -276,7 +283,16 @@ const CommunityView = () => {
       </div>
       <div className="post-input">
         <div className="member-img">
-          <img src="/image/default_img.png"></img>
+          <img
+            src={
+              member.memberThumb
+                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                : "/image/default_img.png"
+            }
+            onClick={() => {
+              navigate(`/myfit/activity/${community.memberNo}`);
+            }}
+          />
         </div>
         <div className="comment-text-box">
           <input
