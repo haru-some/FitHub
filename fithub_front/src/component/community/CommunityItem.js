@@ -182,6 +182,7 @@ const CommunityItem = (props) => {
         </div>
         <div className="community-member">
           <p
+            className="community-list-member-id"
             onClick={(e) => {
               navigate(`/myfit/activity/${community.memberNo}`);
               e.stopPropagation();

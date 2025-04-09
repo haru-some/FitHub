@@ -1,4 +1,4 @@
-import React, { use, useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./community.css";
 import { Link, useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
@@ -18,8 +18,8 @@ const CommunityList = () => {
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
   const [searchText, setSearchText] = useState("");
-  const [viewList, setViewList] = useState(communityList);
-  const [myCommunityList, setMyCommunityList] = useState();
+  const [showMyList, setShowMyList] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,18 +27,16 @@ const CommunityList = () => {
       .get(
         `${backServer}/community/list?memberNo=${
           member ? member.memberNo : 0
-        }&page=${page}&size=10`
+        }&page=${page}&size=10&searchText=${searchText}&showMyList=${showMyList}`
       )
       .then((res) => {
-        setCommunityList((prev) => [...prev, ...res.data]);
-        setHasMore(res.data.length > 0);
+        setCommunityList([...communityList, ...res.data]);
       })
-      .catch((err) => console.error("Error fetching communities", err));
-  }, [page]);
+      .catch((err) => console.log(err));
+  }, [page, searchText, showMyList]);
 
   const loadMoreCommunities = useCallback(() => {
-    if (viewList === communityList && hasMore)
-      setPage((prevPage) => prevPage + 1);
+    if (communityList && hasMore) setPage((prevPage) => prevPage + 1);
   }, [hasMore]);
 
   const lastElementRef = useCallback(
@@ -57,44 +55,6 @@ const CommunityList = () => {
     [hasMore, loadMoreCommunities]
   );
 
-  function cleanContent(html) {
-    const withoutImages = html.replace(/<img[^>]*>/g, "");
-    const textOnly = withoutImages.replace(/<\/?[^>]+(>|$)/g, "");
-    return textOnly.trim();
-  }
-
-  // ✅ 검색 기능 개선 (검색 결과 없거나 검색창 닫으면 전체 리스트 출력)
-  const filteredList = searchText.trim()
-    ? communityList.filter((community) => {
-        const keyword = searchText.trim().toLowerCase();
-        return (
-          community.memberId.toLowerCase().includes(keyword) ||
-          (community.communityContent &&
-            cleanContent(community.communityContent)
-              .toLowerCase()
-              .includes(keyword))
-        );
-      })
-    : communityList;
-
-  useEffect(() => {
-    setViewList(communityList);
-  }, [communityList]);
-
-  useEffect(() => {
-    if (searchText.trim().length > 0) {
-      setViewList([...filteredList]);
-    } else {
-      setViewList(communityList);
-    }
-  }, [searchText]);
-
-  const showMyCommunityList = () => {
-    axios.get(`${backServer}/community/${member.memberNo}`).then((res) => {
-      console.log(res);
-    });
-  };
-
   return (
     <div className="community-list">
       <div className="community-list-wrap">
@@ -104,17 +64,26 @@ const CommunityList = () => {
               <Link to="/community/list">커뮤니티</Link>
             </h2>
             <div className="community-menu">
-              {/* ✅ SearchIcon 클릭 시 검색창을 열거나 닫으면서 검색어 초기화 */}
               <SearchIcon
                 onClick={() => {
                   setShowInput((prev) => !prev);
-                  setSearchText(""); // 검색어 초기화
+                  setSearchText("");
                 }}
               />
               {member && (
                 <CreateIcon onClick={() => navigate("/community/write")} />
               )}
-              {member && <PersonIcon onClick={showMyCommunityList} />}
+              {member && (
+                <PersonIcon
+                  onClick={() => {
+                    setShowMyList(showMyList ? 0 : 1);
+                    setPage(1);
+                    setCommunityList([]);
+                    setSearchText("");
+                    setShowInput(false);
+                  }}
+                />
+              )}
             </div>
           </div>
           {showInput && (
@@ -127,6 +96,8 @@ const CommunityList = () => {
                   value={searchText}
                   onChange={(e) => {
                     setSearchText(e.target.value);
+                    setPage(1);
+                    setCommunityList([]);
                   }}
                 />
               </div>
@@ -135,7 +106,7 @@ const CommunityList = () => {
         </div>
         <div className="community-content">
           <ul className="community-item-wrap">
-            {viewList.map((community, index) => {
+            {communityList.map((community, index) => {
               const isLast = index === communityList.length - 1;
               return (
                 <div
