@@ -61,8 +61,13 @@ public class DmService {
 		HashMap<String, Integer> memberNoMap = new HashMap<>();
     	memberNoMap.put("memberNo1", Math.min(senderNo, receiverNo));
     	memberNoMap.put("memberNo2", Math.max(senderNo, receiverNo));
-    	int dmRoomNo = dmDao.selectDmRoomNo(memberNoMap);
-		List list = dmDao.selectDmContent(dmRoomNo);
+    	int exist = dmDao.existRoom(memberNoMap);
+    	List list = null;
+    	if(exist > 0) {
+    		int dmRoomNo = dmDao.selectDmRoomNo(memberNoMap);
+    		list = dmDao.selectDmContent(dmRoomNo);
+    	}
+    	
 		return list;
 	}
 
@@ -76,11 +81,15 @@ public class DmService {
 		HashMap<String, Integer> memberNoMap = new HashMap<>();
     	memberNoMap.put("memberNo1", Math.min(memberNo, receiverNo));
     	memberNoMap.put("memberNo2", Math.max(memberNo, receiverNo));
-		int dmRoomNo = dmDao.selectDmRoomNo(memberNoMap);
-		HashMap<String, Integer> map = new HashMap<>();
-		map.put("receiverNo", receiverNo);
-		map.put("dmRoomNo", dmRoomNo);
-		int result = dmDao.changeIsRead(map);
+    	int exist = dmDao.existRoom(memberNoMap);
+    	if(exist>0) {
+    		
+    		int dmRoomNo = dmDao.selectDmRoomNo(memberNoMap);
+    		HashMap<String, Integer> map = new HashMap<>();
+    		map.put("receiverNo", receiverNo);
+    		map.put("dmRoomNo", dmRoomNo);
+    		int result = dmDao.changeIsRead(map);
+    	}
 	}
 
 	public int selectReadYetCount(int memberNo) {
