@@ -23,11 +23,7 @@ const MemberMain = () => {
       case "reviews":
         return <ShopReview />;
       case "orders":
-        return (
-          <div className="mypage-content">
-            <h2>주문 목록 조회</h2>
-          </div>
-        );
+        return <ShopOrder />;
       default:
         return null;
     }
