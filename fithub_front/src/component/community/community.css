@@ -38,6 +38,9 @@
   display: flex;
   gap: 15px;
 }
+.user-info:hover .community-sub-btn {
+  opacity: 1;
+}
 .user-info > div {
   display: flex;
   align-items: center;
@@ -59,6 +62,9 @@
 }
 .community-menu > svg:last-child {
   margin-right: 0;
+}
+.community-list-member-id {
+  width: 80px;
 }
 .follow-btn {
   height: 30px;
@@ -93,6 +99,9 @@
 }
 .community-post-item p {
   margin: 5px;
+}
+.community-post-item .community-sub-btn {
+  margin-left: auto;
 }
 .community-sub-zone {
   display: flex;
@@ -136,11 +145,17 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
+}
+.community-view-user > .community-sub-btn {
+  margin-left: auto;
 }
 .community-view-user img {
   width: 50px;
   height: 50px;
+  cursor: pointer;
+}
+.community-member {
+  cursor: pointer;
 }
 .community-view-texteditor {
   min-height: 200px;
@@ -164,6 +179,19 @@
 .comment-list:last-child {
   margin-bottom: 0;
 }
+.comment-list .member-img {
+  cursor: pointer;
+}
+.comment-list .member-comment-id {
+  cursor: pointer;
+}
+.comment-list .comment-user-info > .member-id {
+  display: flex;
+  justify-content: space-between;
+}
+.comment-user-info {
+  width: 100%;
+}
 
 .community-comment-list .member-id {
   margin-bottom: 12px;
@@ -173,12 +201,12 @@
 .comment-user-content {
   width: 100%;
 }
+
 /* 댓글 입력란 */
 .community-main .post-input {
   display: flex;
   gap: 20px;
   align-items: center;
-  padding: 20px 0;
 }
 .comment-text-box {
   display: flex;
@@ -213,6 +241,10 @@
 .community-write-wrap {
   width: 530px;
   margin: 0 auto;
+}
+
+.community-write-wrap .ql-container {
+  height: 400px;
 }
 .community-write-info {
   margin: 20px 0;

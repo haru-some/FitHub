@@ -1,27 +1,72 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./default.css";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { memberState, isLoginState, wsState } from "../utils/RecoilData";
+import {
+  memberState,
+  isLoginState,
+  alarmWsState,
+  refreshState,
+} from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useEffect, useState } from "react";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
-import SmsIcon from "@mui/icons-material/Sms";
+import ChatIcon from "@mui/icons-material/Chat";
 
 const Header = () => {
-  const isLogin = useRecoilValue(isLoginState);
-  const setWs = useSetRecoilState(wsState);
-  const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.3:8888
+  const [chatAlarm, setChatAlarm] = useState(0); // 기본값 'N'
+  const [refresh, setRefresh] = useRecoilState(refreshState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [alarmWs, setAlarmWs] = useRecoilState(alarmWsState);
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
+  const loginMember = useRecoilValue(memberState);
+  useEffect(() => {
+    if (loginMember) {
+      const socket = new WebSocket(
+        `${socketServer}/alarm?memberNo=${loginMember.memberNo}`
+      );
+      setAlarmWs(socket);
+    } else {
+      if (alarmWs) {
+        alarmWs.close();
+        setAlarmWs(null);
+      }
+    }
+  }, [loginMember]);
 
   useEffect(() => {
-    if (isLogin) {
-      let socket = new WebSocket(`${socketServer}/dm`); //ws://192.168.10.3:8888/dm
-      setWs(socket);
+    if (alarmWs) {
+      alarmWs.onopen = start;
+      alarmWs.onmessage = receive;
+      alarmWs.onclose = end;
     }
-  }, [isLogin]);
+  }, [alarmWs]);
+
+  const start = () => {
+    console.log("알람소켓 오픈");
+  };
+  const receive = (receiveData) => {
+    const data = JSON.parse(receiveData.data);
+    console.log("안읽은 메시지: " + data.readYetCount);
+    console.log("알람소켓 데이터 받음");
+    const readYetCount = data.readYetCount;
+    const refreshString = data.refreshRequest;
+    console.log(refreshString);
+    setChatAlarm(readYetCount);
+
+    if (refreshString === "refresh") {
+      setRefresh((prev) => prev + 1);
+    }
+  };
+  const end = () => {
+    console.log("알람소켓 닫힘");
+  };
+
+  // useEffect(() => {
+  //   alarmWs.onmessage = receive;
+  // }, [chatAlarm, refresh]);
 
   return (
     <header className="header">
@@ -37,7 +82,7 @@ const Header = () => {
           </Link>
         </div>
         <MainNavi />
-        <HeaderLink />
+        <HeaderLink chatAlarm={chatAlarm} />
       </div>
     </header>
   );
@@ -64,16 +109,14 @@ const MainNavi = () => {
   );
 };
 
-const HeaderLink = () => {
-  const [ws, setWs] = useRecoilState(wsState);
+const HeaderLink = (props) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  const [chatAlarm, setChatAlarm] = useState("N"); // 기본값 'N'
+  const chatAlarm = props.chatAlarm;
 
   const logOut = () => {
-    if (ws) ws.close();
-
     if (memberInfo?.loginType === "kakao") {
       const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
       const redirectUri = `${window.location.origin}/logout/callback`;
@@ -89,22 +132,26 @@ const HeaderLink = () => {
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
-    localStorage.removeItem("recoil-persist");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
     <ul className="member-menu">
       {isLogin ? (
         <>
-          <li>
-            <Link to={`myfit/dm/${memberInfo.memberNo}`}>
-              {chatAlarm === "Y" ? (
+          <li className="chat-icon-wrap">
+            <Link to={`/myfit/dm/${memberInfo.memberNo}`}>
+              {chatAlarm > 0 ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (
-                <SmsIcon />
+                <ChatIcon />
               )}
             </Link>
+            {chatAlarm > 0 && (
+              <div className="unread-count">
+                <span>{chatAlarm}</span>
+              </div>
+            )}
           </li>
           <li>
             <Link to="/mypage" className="member-name">
@@ -123,9 +170,9 @@ const HeaderLink = () => {
             )}
           </li>
           <li>
-            <Link to="/">
-              <LogoutIcon onClick={logOut} />
-            </Link>
+            <button onClick={logOut} className="logout-btn">
+              <LogoutIcon />
+            </button>
           </li>
         </>
       ) : (

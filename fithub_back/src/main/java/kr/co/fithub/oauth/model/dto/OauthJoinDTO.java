@@ -10,4 +10,5 @@ public class OauthJoinDTO {
     private String name;
     private String phone;
     private String address;
+    private String email;
 }

@@ -1,6 +1,7 @@
 package kr.co.fithub.member.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,7 +19,6 @@ import kr.co.fithub.email.service.EmailService;
 import kr.co.fithub.member.model.dao.MemberDao;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
-import kr.co.fithub.util.FileUtils;
 import kr.co.fithub.util.JwtUtils;
 import kr.co.fithub.util.PageInfoUtil;
 
@@ -34,11 +34,7 @@ public class MemberService {
 	private PageInfoUtil pageInfoUtil;
 	@Autowired
 	private EmailService emailService;
-	@Autowired
-    private FileUtils fileUtils;
-    @Value("${file.root}")
-    private String root;
-	
+
 	@Transactional
 	public int joinMember(MemberDTO member) {
 		String memberPw = member.getMemberPw();
@@ -47,8 +43,8 @@ public class MemberService {
 		int result = memberDao.joinMember(member);
 		return result;
 	}
-	public int exists(String memberId) {
-		int result = memberDao.exists(memberId);
+	public int existsId(String memberId) {
+		int result = memberDao.existsId(memberId);
 		return result;
 	}
 	public int existsEmail(String memberEmail) {
@@ -79,6 +75,9 @@ public class MemberService {
 	public MemberDTO refresh(String refreshToken) {
 		LoginMemberDTO loginMember = jwtUtil.checkToken(refreshToken);
 		MemberDTO m = memberDao.selectOneMember(loginMember.getMemberId());
+		if (m == null) {
+	        throw new RuntimeException("해당 리프레시 토큰에 해당하는 유저 정보가 존재하지 않습니다.");
+	    }
 		String accessToken = jwtUtil.createAccessToken(loginMember.getMemberId(),loginMember.getMemberLevel());
 		String newRefreshToken = jwtUtil.createRefreshToken(loginMember.getMemberId(),loginMember.getMemberLevel());
 		m.setAccessToken(accessToken);
@@ -110,12 +109,11 @@ public class MemberService {
 		int result = memberDao.changePw(member);
 		return result;
 	}
-	public MemberDTO findIdByNameAndEmail(String name, String email) {
-		HashMap<String, String> nameEmail = new HashMap<>();
-		nameEmail.put("memberName", name);
-		nameEmail.put("memberEmail", email);
-		MemberDTO m = memberDao.findIdByNameAndEmail(nameEmail);
-	    return m;
+	public List<MemberDTO> findIdsByNameAndEmail(String name, String email) {
+	    HashMap<String, String> nameEmail = new HashMap<>();
+	    nameEmail.put("memberName", name);
+	    nameEmail.put("memberEmail", email);
+	    return memberDao.findIdsByNameAndEmail(nameEmail);
 	}
 	@Transactional
 	public boolean sendTempPasswordByIdAndEmail(String memberId, String memberEmail) {

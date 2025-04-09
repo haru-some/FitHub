@@ -20,11 +20,14 @@
                 (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{memberNo}) AS is_follow
             FROM community c
             JOIN member m ON c.member_no = m.member_no
+            where m.member_id||c.community_content  like '%'||#{searchText}||'%' 
+            <if test="showMyList == 1">
+            and c.member_no = #{memberNo}
+            </if>
             ORDER BY community_no DESC
         ) A 
     ) 
-    WHERE rnum BETWEEN #{startRow} AND #{endRow}
-	
+    WHERE rnum BETWEEN #{startRow} AND #{endRow}   	
 	</select>
 	
 	<select id="totalCount" resultType="int">
@@ -133,5 +136,13 @@
         ) A 
     ) 
     WHERE rnum = #{endRow}
-	</select>
+	</select>	
+
+	<delete id="deleteComment">
+		delete from comment_tbl where comment_no = #{commentNo}
+	</delete>
+	
+	<update id="updateComment">
+		update comment_tbl set comment_content = #{commentContent} where comment_no = #{commentNo}
+	</update>
 </mapper>

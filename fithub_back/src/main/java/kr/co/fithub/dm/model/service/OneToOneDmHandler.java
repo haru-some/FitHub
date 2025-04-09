@@ -12,19 +12,57 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kr.co.fithub.dm.model.dao.DmDao;
 import kr.co.fithub.dm.model.dto.DmDto;
+import kr.co.fithub.dm.model.dto.DmMessage;
 
 @Component
 public class OneToOneDmHandler extends TextWebSocketHandler {
-
+	@Autowired
+	private DmService dmService;
+	@Autowired
+	private DmAlarmHandler alarmHandler;
     // 회원 번호 (memberNo)를 key로 세션을 value로 저장
     private Map<Integer, WebSocketSession> members = new HashMap<>();
-
+    private Map<Integer, Integer> focusMap = new HashMap<>();
     private ObjectMapper om = new ObjectMapper();
+    
+    
+    
+    //주소에서 로그인멤버 No 맵으로 주는 함수
+    private Map<String, String> parseQueryString(String query) {
+        Map<String, String> map = new HashMap<>();
+        if (query == null) return map;
+
+        for (String param : query.split("&")) {
+            String[] pair = param.split("=");
+            if (pair.length == 2) {
+                map.put(pair[0], pair[1]);
+            }
+        }
+        return map;
+    }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    	
         System.out.println("클라이언트 접속 : " + session);
+        String query = session.getUri().getQuery(); // "memberNo=123"
+        Map<String, String> paramMap = parseQueryString(query);
+        int memberNo = Integer.parseInt(paramMap.get("memberNo"));
+        int receiverNo = Integer.parseInt(paramMap.get("receiverNo"));
+        focusMap.put(memberNo, receiverNo);
+        members.put(memberNo, session);
+        dmService.changeIsRead(memberNo,receiverNo);
+        WebSocketSession receiverSession = members.get(receiverNo);
+        if (receiverSession != null) {
+        	DmMessage msg = new DmMessage();
+        	msg.setIsRead("isReadOk");
+        	String data = om.writeValueAsString(msg);
+        	System.out.println(data);
+            receiverSession.sendMessage(new TextMessage(data));
+        }
+        alarmHandler.sendReadYetCountTo(memberNo);
     }
 
     @Override
@@ -32,36 +70,64 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         System.out.println(payload);
         DmDto dm = om.readValue(payload, DmDto.class);
-        System.out.println("메시지 수신: " + dm);
 
         String type = dm.getType();
 
-        if ("enter".equals(type)) {
-            members.put(dm.getSenderNo(), session);
-            System.out.println("접속 등록: 회원번호 " + dm.getSenderNo());
-            return;
-        }
 
-        if ("message".equals(type)) {
-            int receiverNo = dm.getReceiverNo();
+        if ("chat".equals(type)) {
+        	HashMap<String, Integer> memberNoMap = new HashMap<>();
+        	memberNoMap.put("memberNo1", Math.min(dm.getSenderNo(), dm.getReceiverNo()));
+        	memberNoMap.put("memberNo2", Math.max(dm.getSenderNo(), dm.getReceiverNo()));
+        	int existRoom = dmService.existRoom(memberNoMap);
+        	int result = 0;
+        	
+        	int receiverNo = dm.getReceiverNo();
             WebSocketSession receiverSession = members.get(receiverNo);
-
-            String data = om.writeValueAsString(dm);
-
+            
+            int senderNo = dm.getSenderNo();
+            WebSocketSession senderSession = members.get(senderNo);
+            
+            
+            if(existRoom == 0) {
+            	result = dmService.createRoom(memberNoMap);
+            }
+            int isRead=0;
+            if (receiverSession != null && focusMap.get(receiverNo) == senderNo) {
+            	isRead=1;
+            }
+            int dmMessageNo = dmService.insertMessage(dm,isRead);
+            alarmHandler.sendReadYetCountTo(receiverNo);
+            
+            
+            
+            
+            
+            DmMessage msg = dmService.selectOneMessage(dmMessageNo);
+            if (receiverSession != null && focusMap.get(receiverNo) == senderNo) {
+            	msg.setIsRead("Y");
+            	dmService.changeIsRead(senderNo, receiverNo);
+            }
+            String data = om.writeValueAsString(msg);
+            
             // 받는 사람에게만 메시지 전송
-            if (receiverSession != null && receiverSession.isOpen()) {
+            if (receiverSession != null && focusMap.get(receiverNo) == senderNo) {
                 receiverSession.sendMessage(new TextMessage(data));
             }
-
-            // 보내는 사람에게도 echo (선택 사항)
-            session.sendMessage(new TextMessage(data));
+            
+            if (senderSession != null) {
+                senderSession.sendMessage(new TextMessage(data));
+            }
+            
+            
+            
+            
         }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("클라이언트 접속 끊김");
-
+        
         Integer disconnectedMemberNo = null;
         for (Map.Entry<Integer, WebSocketSession> entry : members.entrySet()) {
             if (entry.getValue().equals(session)) {
@@ -72,6 +138,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
 
         if (disconnectedMemberNo != null) {
             members.remove(disconnectedMemberNo);
+            focusMap.remove(disconnectedMemberNo);
             System.out.println("접속 해제: 회원번호 " + disconnectedMemberNo);
 
             // 나간 메시지 알림 (선택 사항)

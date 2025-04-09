@@ -40,5 +40,9 @@ public interface CommunityDao {
 	int updateCommunity(CommunityDTO community);
 
 	CommunityDTO selectCommunity(HashMap<String, Integer> map);
+
+	int deleteComment(int commentNo);
+
+	int updateComment(CommentDTO comment);
 	
 }

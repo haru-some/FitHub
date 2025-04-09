@@ -38,9 +38,8 @@ public class GoogleOauthProvider implements OauthProvider {
         String id = (String) body.get("sub");
         String email = (String) body.get("email");
         String name = (String) body.get("name");
-        String picture = (String) body.get("picture");
 
-        return new GoogleUserInfo(id, email, name, picture);
+        return new GoogleUserInfo(id, email, name);
     }
 
     @Override

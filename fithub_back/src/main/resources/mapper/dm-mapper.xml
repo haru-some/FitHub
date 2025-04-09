@@ -1,5 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.fithub.dm.model.dao.DmDao">
+	<select id="existRoom" resultType="int">
+		select count(*) from dm_room
+		where member1_no = #{memberNo1} and member2_no = #{memberNo2}
+	</select>
 
+	<insert id="createRoom">
+		insert into dm_room
+		values(dm_room_seq.nextval,#{memberNo1},#{memberNo2},sysdate,sysdate)
+	</insert>
+
+	<select id="selectDmRoomNo" resultType="int">
+		select dm_room_no from
+		dm_room where member1_no = #{memberNo1} and member2_no = #{memberNo2}
+	</select>
+
+	<insert id="insertMessage">
+		insert into dm_message values(#{dmMessageNo},
+		#{dmRoomNo}, #{senderNo}, #{dmContent}, sysdate, #{isRead})
+	</insert>
+
+	<select id="selectDmList" resultType="dmRoom">
+		SELECT
+    dr.dm_room_no,
+    dr.member1_no,
+    dr.member2_no,
+    TO_CHAR(dr.created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
+    TO_CHAR(dr.last_message_at, 'YYYY-MM-DD HH24:MI:SS') AS last_message_at,
+
+    -- 상대방 정보
+    m.member_no AS other_member_no,
+    m.member_id AS other_member_id,
+    m.member_name AS other_member_name,
+    m.member_thumb AS other_member_thumb,
+
+    -- 마지막 메시지
+    last_msg.dm_content AS last_message_content,
+    TO_CHAR(last_msg.sent_at, 'YYYY-MM-DD HH24:MI:SS') AS last_message_sent_at,
+
+    -- 읽지 않은 메시지 수
+    NVL(unread_cnt.unread_count, 0) AS unread_count
+
+FROM
+    dm_room dr
+
+-- 상대방 JOIN
+JOIN member m
+    ON m.member_no = CASE
+        WHEN dr.member1_no = #{memberNo} THEN dr.member2_no
+        ELSE dr.member1_no
+    END
+
+-- 마지막 메시지 (중복 방지 위해 ROW_NUMBER 사용)
+LEFT JOIN (
+    SELECT dm_room_no, dm_content, sent_at
+    FROM (
+        SELECT dm_room_no, dm_content, sent_at,
+               ROW_NUMBER() OVER (PARTITION BY dm_room_no ORDER BY sent_at DESC, dm_message_no DESC) AS rn
+        FROM dm_message
+    )
+    WHERE rn = 1
+) last_msg
+    ON last_msg.dm_room_no = dr.dm_room_no
+
+-- 안 읽은 메시지 수
+LEFT JOIN (
+    SELECT dm_room_no, COUNT(*) AS unread_count
+    FROM dm_message
+    WHERE is_read = 'N' AND sender_no != #{memberNo}
+    GROUP BY dm_room_no
+) unread_cnt
+    ON unread_cnt.dm_room_no = dr.dm_room_no
+
+-- 나와 관련된 DM방만 조회
+WHERE
+    dr.member1_no = #{memberNo} OR dr.member2_no = #{memberNo}
+
+ORDER BY dr.last_message_at DESC NULLS LAST
+	</select>
+
+	<select id="selectDmContent" resultType="dmMessage">
+		select * from dm_message
+		where dm_room_no = #{dmRoomNo}
+	</select>
+
+	<select id="selectNewMessageNo" resultType="int">
+		select
+		dm_message_seq.nextval from dual
+	</select>
+
+	<select id="selectOneMessage">
+		select * from dm_message where dm_message_no =
+		#{dmMessageNo}
+	</select>
+
+	<update id="updateLastMessageAt">
+		update dm_room set last_message_at = sysdate where
+		dm_room_no = #{dmRoomNo}
+	</update>
+
+	<update id="changeIsRead">
+		update dm_message set is_read = 'Y' where dm_room_no
+		= #{dmRoomNo} and sender_no = #{receiverNo}
+	</update>
+
+	<select id="selectReadYetCount" resultType="int">
+		SELECT COUNT(*) AS unread_count
+		FROM dm_message m
+		JOIN dm_room r ON m.dm_room_no = r.dm_room_no
+		WHERE m.is_read = 'N'
+		AND (
+		(r.member1_no = #{memberNo} AND m.sender_no = r.member2_no)
+		OR
+		(r.member2_no = #{memberNo} AND m.sender_no = r.member1_no)
+		)
+	</select>
 </mapper>

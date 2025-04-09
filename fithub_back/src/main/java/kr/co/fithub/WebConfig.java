@@ -12,6 +12,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import kr.co.fithub.dm.model.service.DmAlarmHandler;
 import kr.co.fithub.dm.model.service.OneToOneDmHandler;
 
 @Configuration
@@ -21,12 +22,13 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 	private String root;
 	@Autowired
 	private OneToOneDmHandler dmHandler;
+	@Autowired
+	private DmAlarmHandler alarmHandler;
 	
 	@Bean
 	public BCryptPasswordEncoder bCrypt() {
 		return new BCryptPasswordEncoder();
 	}
-	
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -49,6 +51,10 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 		registry
 		.addHandler(dmHandler, "/dm")
 		.setAllowedOrigins("*");
+		registry
+		.addHandler(alarmHandler, "/alarm")
+		.setAllowedOrigins("*");
 	}
-
+	
+	
 }

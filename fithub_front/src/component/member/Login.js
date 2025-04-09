@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
@@ -14,143 +14,90 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
-  const [member, setMember] = useState({ memberId: "", memberPw: "" });
-  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
-  const [showPassword, setShowPassword] = useState(false);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+  const [member, setMember] = useState({ memberId: "", memberPw: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
   const changeMember = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setMember({ ...member, [name]: value });
+    const { name, value } = e.target;
+    setMember((prev) => ({ ...prev, [name]: value }));
   };
 
   const login = () => {
     if (!member.memberId || !member.memberPw) {
-      Swal.fire({
-        title: "로그인 실패",
-        text: "아이디 또는 비밀번호를 입력하세요.",
-        icon: "info",
-        confirmButtonText: "확인",
-        confirmButtonColor: "#2b3a2e",
-      });
+      Swal.fire("로그인 실패", "아이디 또는 비밀번호를 입력하세요.", "info");
       return;
     }
     axios
       .post(`${backServer}/member/login`, member)
       .then((res) => {
+        localStorage.removeItem("joinStage");
         setMemberInfo(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
-        window.localStorage.setItem("refreshToken", res.data.refreshToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         navigate("/");
       })
       .catch(() => {
-        Swal.fire({
-          title: "로그인 실패",
-          text: "아이디 또는 비밀번호를 확인하세요.",
-          icon: "warning",
-          confirmButtonText: "확인",
-          confirmButtonColor: "#2b3a2e",
-        });
+        Swal.fire(
+          "로그인 실패",
+          "아이디 또는 비밀번호를 확인하세요.",
+          "warning"
+        );
+      });
+  };
+
+  const handleSocialLogin = (provider, accessToken) => {
+    axios
+      .post(`${backServer}/oauth/${provider}`, { access_token: accessToken })
+      .then((res) => {
+        if (res.data.isNew) {
+          localStorage.setItem("joinStage", "waiting");
+          localStorage.setItem("joinOauthId", res.data.oauthId);
+          localStorage.setItem("joinLoginType", res.data.loginType);
+          localStorage.setItem("joinEmail", res.data.email);
+          localStorage.setItem("joinName", res.data.name);
+          navigate("/social-join");
+        } else {
+          setMemberInfo(res.data);
+          axios.defaults.headers.common["Authorization"] = res.data.accessToken;
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        Swal.fire(
+          "로그인 실패",
+          `${provider} 로그인 처리 중 문제가 발생했습니다.`,
+          "error"
+        );
       });
   };
 
   const googleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      const accessToken = tokenResponse.access_token;
-      axios
-        .post(`${backServer}/oauth/google`, { access_token: accessToken })
-        .then((res) => {
-          if (res.data.isNew) {
-            navigate("/social-join", {
-              state: {
-                oauthId: res.data.memberId.split("_")[1],
-                loginType: res.data.loginType,
-              },
-            });
-          } else {
-            setMemberInfo(res.data);
-            axios.defaults.headers.common["Authorization"] =
-              res.data.accessToken;
-            window.localStorage.setItem("refreshToken", res.data.refreshToken);
-            navigate("/");
-          }
-        })
-        .catch(() => {
-          Swal.fire({
-            title: "로그인 실패",
-            text: "구글 로그인 처리 중 문제가 발생했습니다.",
-            icon: "error",
-          });
-        });
-    },
-    onError: () => {
-      Swal.fire({
-        title: "로그인 실패",
-        text: "구글 로그인 중 문제가 발생했습니다.",
-        icon: "error",
-      });
-    },
+    onSuccess: (res) => handleSocialLogin("google", res.access_token),
+    onError: () =>
+      Swal.fire("로그인 실패", "구글 로그인 중 문제가 발생했습니다.", "error"),
     scope: "profile email",
+    prompt: "login",
   });
-
   const kakaoLogin = () => {
-    if (!window.Kakao || !window.Kakao.Auth) {
-      console.error("❌ Kakao SDK가 로드되지 않았거나 초기화되지 않았습니다.");
-      return;
-    }
+    if (!window.Kakao?.Auth) return;
     if (!window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
-
     window.Kakao.Auth.login({
       scope: "profile_nickname, account_email",
-      success: function (authObj) {
-        const accessToken = authObj.access_token;
-        axios
-          .post(`${backServer}/oauth/kakao`, { access_token: accessToken })
-          .then((res) => {
-            if (res.data.isNew) {
-              navigate("/social-join", {
-                state: {
-                  oauthId: res.data.memberId.split("_")[1],
-                  loginType: res.data.loginType,
-                },
-              });
-            } else {
-              setMemberInfo(res.data);
-              axios.defaults.headers.common["Authorization"] =
-                res.data.accessToken;
-              window.localStorage.setItem(
-                "refreshToken",
-                res.data.refreshToken
-              );
-              navigate("/");
-            }
-          })
-          .catch(() => {
-            Swal.fire({
-              title: "로그인 실패",
-              text: "카카오 로그인 처리 중 문제가 발생했습니다.",
-              icon: "error",
-              confirmButtonColor: "#2f3e2f",
-            });
-          });
-      },
-      fail: function (err) {
-        console.error(err);
-        Swal.fire({
-          title: "로그인 실패",
-          text: "카카오 로그인 중 문제가 발생했습니다.",
-          icon: "error",
-          confirmButtonColor: "#2f3e2f",
-        });
-      },
+      success: ({ access_token }) => handleSocialLogin("kakao", access_token),
+      fail: () =>
+        Swal.fire(
+          "로그인 실패",
+          "카카오 로그인 중 문제가 발생했습니다.",
+          "error"
+        ),
     });
   };
 
@@ -166,6 +113,7 @@ const Login = () => {
             <strong>지금 바로 시작해보세요 - 무료입니다!</strong>
           </Link>
         </p>
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -178,7 +126,6 @@ const Login = () => {
               id="memberId"
               name="memberId"
               label="아이디"
-              variant="outlined"
               value={member.memberId}
               onChange={changeMember}
             />
@@ -190,23 +137,12 @@ const Login = () => {
               name="memberPw"
               label="비밀번호"
               type={showPassword ? "text" : "password"}
-              variant="outlined"
               value={member.memberPw}
               onChange={changeMember}
-              sx={{
-                "& label": {
-                  backgroundColor: "white",
-                  px: "4px",
-                },
-              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={toggleShowPassword}
-                      edge="end"
-                      aria-label="비밀번호 보기 토글"
-                    >
+                    <IconButton onClick={toggleShowPassword} edge="end">
                       {showPassword ? (
                         <VisibilityIcon />
                       ) : (
@@ -218,6 +154,7 @@ const Login = () => {
               }}
             />
           </Box>
+
           <button type="submit" className="btn-primary lg full">
             로그인
           </button>
@@ -229,11 +166,13 @@ const Login = () => {
             <span>/</span>
             <Link to="/find">비밀번호 찾기</Link>
           </div>
+
           <div className="login-divider-wrap">
             <hr className="divider" />
             <span className="divider-text">간편 로그인</span>
             <hr className="divider" />
           </div>
+
           <button
             type="button"
             className="social-login-btn"

@@ -24,14 +24,15 @@ public class CommunityService {
 	@Autowired
 	private PageInfoUtil pageInfoUtil;
 
-	public List selectCommunityList(int memberNo, int page, int size) {		
+	public List selectCommunityList(int memberNo, int page, int size, String searchText, int showMyList) {		
 		int startRow = (page - 1) * size + 1;
 		int endRow = page * size;
  		Map<String, Object> map = new HashMap<>();
         map.put("memberNo", memberNo);
         map.put("startRow", startRow);
         map.put("endRow", endRow);
-
+        map.put("searchText", searchText);
+        map.put("showMyList", showMyList);
 		List list = communityDao.selectCommunityList(map);
 		return list;
 	}
@@ -112,6 +113,18 @@ public class CommunityService {
 	@Transactional
 	public int updateCommunity(CommunityDTO community) {
 		int result = communityDao.updateCommunity(community);
+		return result;
+	}
+
+	@Transactional
+	public int deleteComment(int commentNo) {
+		int result = communityDao.deleteComment(commentNo);
+		return result;
+	}
+
+	@Transactional
+	public int updateComment(CommentDTO comment) {
+		int result = communityDao.updateComment(comment);
 		return result;
 	}
 

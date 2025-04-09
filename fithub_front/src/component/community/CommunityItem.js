@@ -138,18 +138,6 @@ const CommunityItem = (props) => {
               });
 
               setCommunityList([...arr]);
-              // const obj = communityList.filter(
-              //   (item, i) => item.communityNo === community.communityNo
-              // )[0];
-              // const idx = communityList.indexOf(
-              //   communityList.filter(
-              //     (item, i) => item.communityNo === community.communityNo
-              //   )[0]
-              // );
-              // obj["isFollow"] = 0;
-              // communityList[idx] = obj;
-
-              // setCommunityList([...communityList]);
             });
         }
       });
@@ -167,18 +155,6 @@ const CommunityItem = (props) => {
           });
 
           setCommunityList([...arr]);
-          // const obj = communityList.filter(
-          //   (item, i) => item.communityNo === community.communityNo
-          // )[0];
-          // const idx = communityList.indexOf(
-          //   communityList.filter(
-          //     (item, i) => item.communityNo === community.communityNo
-          //   )[0]
-          // );
-          // obj["isFollow"] = 1;
-          // communityList[idx] = obj;
-
-          // setCommunityList([...communityList]);
         });
     }
     e.stopPropagation();
@@ -190,13 +166,7 @@ const CommunityItem = (props) => {
         navigate(`/community/view/${community.communityNo}`);
       }}
     >
-      <div
-        className="user-info"
-        onClick={(e) => {
-          navigate(`/myfit/activity/${community.memberNo}`);
-          e.stopPropagation();
-        }}
-      >
+      <div className="user-info">
         <div className="member-img">
           <img
             src={
@@ -204,10 +174,22 @@ const CommunityItem = (props) => {
                 ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
                 : "/image/default_img.png"
             }
+            onClick={(e) => {
+              navigate(`/myfit/activity/${community.memberNo}`);
+              e.stopPropagation();
+            }}
           />
         </div>
         <div className="community-member">
-          <p>{community.memberId}</p>
+          <p
+            className="community-list-member-id"
+            onClick={(e) => {
+              navigate(`/myfit/activity/${community.memberNo}`);
+              e.stopPropagation();
+            }}
+          >
+            {community.memberId}
+          </p>
           {member && member.memberId !== community.memberId && (
             <button
               type="button"
@@ -221,7 +203,7 @@ const CommunityItem = (props) => {
           )}
         </div>
         {member && member.memberId === community.memberId && (
-          <>
+          <div className="community-sub-btn">
             <IconButton
               aria-controls={menuOpen ? "community-menu" : undefined}
               aria-haspopup="true"
@@ -248,7 +230,7 @@ const CommunityItem = (props) => {
               <MenuItem onClick={handleReport}>수정하기</MenuItem>
               <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
             </Menu>
-          </>
+          </div>
         )}
       </div>
       <div
