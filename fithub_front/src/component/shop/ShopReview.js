@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Box } from "@mui/material"; // MUI에서 필요한 컴포넌트 임포트
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import "./shopDetail.css";
+import MemberInfo from "../member/MemberInfo";
+import axios from "axios";
 
 const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [sell, setSell] = useState(null);
+
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
@@ -14,6 +24,18 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
     setComment(""); // 초기화
     onClose();
   };
+
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setSell(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -58,6 +80,8 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
 };
 
 const ShopReview = () => {
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
   const [activeTab, setActiveTab] = useState("작성가능한 리뷰");
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
   const [reviews, setReviews] = useState([]); // 리뷰 목록 상태 추가
@@ -75,7 +99,7 @@ const ShopReview = () => {
             <div className="review-item">
               <img src="product_image_url" alt="상품 이미지" />
               <div className="product-info">
-                <h3>상품명</h3>
+                <span>상품명 : </span>
                 <p>주문번호: 7010125031110061253</p>
               </div>
               <button
@@ -95,10 +119,22 @@ const ShopReview = () => {
               <p>작성한 리뷰가 없습니다.</p>
             ) : (
               <ul>
-                {reviews.map((review, index) => (
-                  <li key={"review -" + index}>
-                    <strong>평점:</strong> {review.rating} <br />
-                    <strong>댓글:</strong> {review.comment}
+                {reviews.map((review, index4) => (
+                  <li key={"review -" + index4}>
+                    <div className="my-star-point">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span key={star}>
+                          {star <= review.rating ? (
+                            <StarIcon />
+                          ) : (
+                            <StarBorderIcon />
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                    <br />
+                    <span> </span>
+                    {review.comment}
                   </li>
                 ))}
               </ul>

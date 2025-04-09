@@ -20,6 +20,8 @@ import MemberMain from "./component/member/MemberMain";
 import ShopCart, { ShopCartProvider } from "./component/shop/ShopCart";
 import MemberChat from "./component/common/MemberChat";
 import SocialJoin from "./component/member/SocialJoin";
+import ShopPay from "./component/shop/ShopPay";
+import ShopReview from "./component/shop/ShopReview";
 import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoinGuard from "./component/member/SocialJoinGuard";
 
@@ -93,13 +95,14 @@ function App() {
           <Route path="/join" element={<MemberJoin />} />
           <Route path="/social-join" element={<SocialJoin />} />
           <Route path="/find" element={<FindInfo />} />
-          <Route path="/mypage" element={<MemberMain />} />
+          <Route path="/mypage/*" element={<MemberMain />} />
           <Route path="/community/*" element={<CommunityMain />} />
           <Route path="/myfit/*" element={<MyFitMain />} />
           <Route path="/admin/*" element={<AdminMain />} />
           <Route path="/shop/*" element={<ShopList />} />
           <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
           <Route path="/cart" element={<ShopCart />} />
+          <Route path="/shop/pay/:goodsNo" element={<ShopPay />} />
           <Route path="/chat" element={<MemberChat />} />
         </Routes>
       </main>
