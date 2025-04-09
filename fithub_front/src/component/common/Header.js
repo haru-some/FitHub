@@ -57,7 +57,7 @@ const Header = () => {
     setChatAlarm(readYetCount);
 
     if (refreshString === "refresh") {
-      setRefresh(prev => prev + 1)
+      setRefresh((prev) => prev + 1);
     }
   };
   const end = () => {
@@ -112,6 +112,7 @@ const MainNavi = () => {
 const HeaderLink = (props) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const chatAlarm = props.chatAlarm;
 
@@ -140,13 +141,17 @@ const HeaderLink = (props) => {
         <>
           <li className="chat-icon-wrap">
             <Link to={`/myfit/dm/${memberInfo.memberNo}`}>
-              {chatAlarm >0 ? (
+              {chatAlarm > 0 ? (
                 <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
               ) : (
                 <ChatIcon />
               )}
             </Link>
-            {chatAlarm > 0 && <div className="unread-count"><span>{chatAlarm}</span></div>}
+            {chatAlarm > 0 && (
+              <div className="unread-count">
+                <span>{chatAlarm}</span>
+              </div>
+            )}
           </li>
           <li>
             <Link to="/mypage" className="member-name">
