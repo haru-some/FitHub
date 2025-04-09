@@ -1,5 +1,7 @@
 package kr.co.fithub.shop.model.dto;
 
+import java.util.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
@@ -12,9 +14,9 @@ import lombok.NoArgsConstructor;
 @Alias(value="sell")
 public class Sell {
 	private int sellNo;
-	private int memberNo;
-	private int goodsNo;
-	private int sellEa;
-	private String sellAddr;
-	private String sellDate;
+	private int memberNo;	
+	private int goodsNo;	
+	private int goodsTotalPrice;
+	private int goodsEa;	
+	private Date sellDate;
 }

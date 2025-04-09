@@ -117,3 +117,190 @@
   padding: 20px;
   border-top: 1px solid #ccc;
 }
+.shop-detail-wrap td {
+  color: #191c19;
+}
+
+.shop-pay-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* 결제 페이지 */
+.shop-pay-wrap h2,
+h4 {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 3px;
+}
+
+.shop-pay-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.shop-pay-wrap td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  color: #191c19;
+}
+
+/* input */
+.shop-pay-wrap input[type="text"],
+select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 체크박스 */
+.shop-pay-wrap label {
+  display: flex;
+  align-items: center;
+}
+
+/* button */
+.shop-pay-wrap button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.shop-pay-wrap button:hover {
+  background-color: #45a049;
+}
+.shop-pay-wrap .accountForShip {
+  font-size: 12px;
+  font-weight: 400;
+}
+.shop-pay-wrap .member-no {
+  display: none;
+}
+
+/* 마이리뷰 페이지 */
+
+.Myreview-wrap .review-tabs {
+  border-bottom: 1px solid #ccc;
+}
+
+.Myreview-wrap .tabs {
+  display: flex;
+}
+
+.Myreview-wrap .tabs button {
+  flex: 1; /* 각 탭이 50% 너비를 차지 */
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #191c19;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 30px;
+}
+
+.Myreview-wrap .tabs button.active {
+  border-bottom: 2px solid #4caf50;
+  color: #4caf50;
+}
+
+.Myreview-wrap .tab-content {
+  padding: 20px;
+}
+
+/* review-item을 가로로 배치하기 위한 스타일 */
+.Myreview-wrap .review-item {
+  display: flex;
+  align-items: center; /* 세로 정렬 */
+  border-bottom: 1px solid #eee; /* 아이템 구분선 */
+  padding: 10px 0;
+}
+
+.Myreview-wrap .review-item img {
+  width: 100px; /* 상품 이미지 너비 */
+  height: auto; /* 원본 비율 유지 */
+  margin-right: 20px; /* 이미지 오른쪽 여백 */
+}
+
+.Myreview-wrap .product-info {
+  flex-grow: 1; /* 가용 공간을 차지하도록 설정 */
+}
+
+.Myreview-wrap .write-review-button {
+  padding: 8px 12px; /* 버튼 패딩 */
+  background-color: #4caf50; /* 버튼 색상 */
+  color: white; /* 텍스트 색상 */
+  border: none; /* 경계선 없음 */
+  border-radius: 4px; /* 둥근 모서리 */
+  cursor: pointer; /* 포인터 커서 */
+  transition: background-color 0.3s; /* 색상 전환 효과 */
+}
+
+.Myreview-wrap .write-review-button:hover {
+  background-color: #45a049; /* 호버 효과 */
+}
+
+.Myreview-wrap .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Myreview-wrap .modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+.review-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white; /* MUI의 background.paper에 해당 */
+  border: 2px solid #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 16px; /* MUI의 4 단위에 해당 */
+}
+
+.review-modal-wrap .modal-content {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+.review-modal-wrap textarea {
+  width: 370px;
+  height: 130px;
+  font-size: 20px;
+  padding: 20px;
+  resize: none;
+}
+.Myreview-wrap .css-1umw9bq-MuiSvgIcon-root {
+  fill: #ffd700;
+  display: "inline-block";
+  margin-top: 10px;
+  padding: 0px;
+}

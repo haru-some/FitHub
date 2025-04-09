@@ -26,7 +26,7 @@ const alarmWsState = atom({
 
 const refreshState = atom({
   key: "refreshState",
-  default: 0,
+  default: false,
 });
 
 export { memberState, isLoginState, alarmWsState, refreshState };

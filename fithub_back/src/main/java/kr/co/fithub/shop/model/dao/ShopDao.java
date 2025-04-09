@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
+import kr.co.fithub.shop.model.dto.Sell;
 
 @Mapper
 public interface ShopDao {
@@ -24,5 +25,9 @@ public interface ShopDao {
 	int deleteBoard(int goodsNo);
 
 	int insertCart(Cart cart);
+
+	int insertSell(Sell sell);
+
+	Sell selectOneReview(int memberNo);
 
 }
