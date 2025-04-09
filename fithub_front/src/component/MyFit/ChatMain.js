@@ -41,7 +41,9 @@ const ChatMain = (props) => {
         `${process.env.REACT_APP_BACK_SERVER}/myfit/dm?senderNo=${senderNo}&receiverNo=${receiverNo}`
       )
       .then((res) => {
-        setChatList(res.data);
+        if (res.data) {
+          setChatList(res.data);
+        }
       })
       .catch((err) => {});
   }, []);
@@ -85,7 +87,10 @@ const ChatMain = (props) => {
       });
       setChatList([...newArr]);
     } else {
-      if(data.senderNo === Number(senderNo) || data.senderNo === Number(receiverNo)){
+      if (
+        data.senderNo === Number(senderNo) ||
+        data.senderNo === Number(receiverNo)
+      ) {
         setChatList([...chatList, data]);
       }
     }
