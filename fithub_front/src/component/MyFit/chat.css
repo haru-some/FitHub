@@ -234,9 +234,12 @@
   flex-direction: row-reverse;
 }
 .myfit-wrap .chat-message {
+  word-break: break-all; 
+  text-align: left;
   padding: 7px;
   border-radius: 5px;
   margin-top: 5px;
+  max-width: 300px;
 }
 
 .myfit-wrap .left .chat-message {
@@ -257,9 +260,11 @@
 
 .myfit-wrap .chat-content-box {
   display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
 }
 .myfit-wrap .left .chat-content-box {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 .myfit-wrap .is-read {
   align-self: flex-end;
@@ -267,7 +272,6 @@
 }
 .myfit-wrap .chat-time {
   align-self: flex-end;
-  margin: 0px 10px;
   color: #7c7c7c;
 }
 

@@ -27,7 +27,6 @@ const ExerciseLog = (props) => {
         `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${memberNo}?recordDate=${dateData}`
       )
       .then((res) => {
-        console.log(res.data);
         setStartTime(res.data ? res.data.recordStartTime : "12:00");
         setEndTime(res.data ? res.data.recordEndTime : "12:00");
         setText(res.data ? res.data.recordContent : "");
@@ -97,7 +96,6 @@ const ExerciseLog = (props) => {
             recordEndTime: endTime,
             recordNo: recordNo,
           };
-          console.log(obj);
           if (obj.recordStartTime < obj.recordEndTime) {
             axios
               .put(
@@ -105,7 +103,6 @@ const ExerciseLog = (props) => {
                 obj
               )
               .then((res) => {
-                console.log(res.data);
                 setIsUpdate(isUpdate + 1);
                 navigate("/myfit/fit");
               })

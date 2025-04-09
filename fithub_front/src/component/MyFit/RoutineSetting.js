@@ -84,7 +84,6 @@ const RoutineSetting = (props) => {
               updatedObj
             )
             .then((res) => {
-              console.log(res.data);
               setIsUpdate(isUpdate + 1);
               navigate("/myfit/fit");
             })

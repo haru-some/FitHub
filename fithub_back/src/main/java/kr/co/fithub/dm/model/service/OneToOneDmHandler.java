@@ -46,7 +46,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
     	
-        System.out.println("클라이언트 접속 : " + session);
+        //System.out.println("클라이언트 접속 : " + session);
         String query = session.getUri().getQuery(); // "memberNo=123"
         Map<String, String> paramMap = parseQueryString(query);
         int memberNo = Integer.parseInt(paramMap.get("memberNo"));
@@ -59,7 +59,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         	DmMessage msg = new DmMessage();
         	msg.setIsRead("isReadOk");
         	String data = om.writeValueAsString(msg);
-        	System.out.println(data);
+        	//System.out.println(data);
             receiverSession.sendMessage(new TextMessage(data));
         }
         alarmHandler.sendReadYetCountTo(memberNo);
@@ -68,7 +68,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        System.out.println(payload);
+        //System.out.println(payload);
         DmDto dm = om.readValue(payload, DmDto.class);
 
         String type = dm.getType();
@@ -126,7 +126,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("클라이언트 접속 끊김");
+        //System.out.println("클라이언트 접속 끊김");
         
         Integer disconnectedMemberNo = null;
         for (Map.Entry<Integer, WebSocketSession> entry : members.entrySet()) {
@@ -139,7 +139,7 @@ public class OneToOneDmHandler extends TextWebSocketHandler {
         if (disconnectedMemberNo != null) {
             members.remove(disconnectedMemberNo);
             focusMap.remove(disconnectedMemberNo);
-            System.out.println("접속 해제: 회원번호 " + disconnectedMemberNo);
+            //System.out.println("접속 해제: 회원번호 " + disconnectedMemberNo);
 
             // 나간 메시지 알림 (선택 사항)
             DmDto leaveMsg = new DmDto();

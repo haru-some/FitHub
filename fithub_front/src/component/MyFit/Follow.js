@@ -36,7 +36,6 @@ const Follow = (props) => {
         `${process.env.REACT_APP_BACK_SERVER}/myfit/follow/${memberNo}?type=${type}`
       )
       .then((res) => {
-        console.log(res.data);
         setMemberList(res.data);
       })
       .catch((err) => {});

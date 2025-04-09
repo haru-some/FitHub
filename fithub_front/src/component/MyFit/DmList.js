@@ -11,16 +11,13 @@ const DmList = (props) => {
   const [dmList, setDmList] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("data");
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/dm/${memberNo}`)
       .then((res) => {
-        console.log(res.data);
         setDmList(res.data);
       })
       .catch((err) => {});
   }, [refresh]);
-  console.log(refresh);
 
   return (
     <div className="myfit-dm-wrap">
