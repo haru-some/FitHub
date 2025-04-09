@@ -7,14 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,6 +73,23 @@ public class ChatController {
 	public void sendMessage(@DestinationVariable("roomId") int roomId, @Payload ChatMessageDTO message) {
 	    message.setChatRoomNo(roomId);
 	    int r = chatService.inputChatMessage(message);
+	    System.out.println(message);
 	    messagingTemplate.convertAndSend("/topic/chat/messages/" + roomId, message);
 	}
+	
+	@MessageMapping("/chat/alarm")
+    public void sendNotificationToOtherRoomUsers(int notificationMessage) {
+        messagingTemplate.convertAndSend("/queue/notifications", notificationMessage);
+    }
+	
+	@SubscribeMapping("/chat/enter/{roomId}")
+	public void onUserJoin(@DestinationVariable String roomId) {
+	    // 사용자가 채팅방에 들어올 때 해당 채팅방의 모든 메시지에 대해 isRead를 2로 변경
+//	    chatService.updateMessagesReadStatus(Integer.parseInt(roomId), 2);
+
+	    // 메시지 업데이트 후 채팅방의 상태를 알리는 메시지를 전송
+	    String view = "view"; // 예시로 "view" 메시지 전송
+	    messagingTemplate.convertAndSend("/topic/chat/messages/" + roomId, view);
+	}
+	
 }

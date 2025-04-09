@@ -190,10 +190,16 @@
   height: 100%;
 }
 .member-chat-alarm > svg > path {
+  width: 100%;
+  height: 100%;
   color: red;
 }
-.member-chat-alarm > span {
-  text-indent: -21px;
+.member-chat-alarm > .alarm-count {
+  display: block;
+  width: 30px;
+  text-align: center;
+  line-height: 25px;
+  text-indent: -30px;
 }
 /*chat*/
 .admin-section .chat-box {
@@ -251,6 +257,7 @@
 .member-chat-profile > img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .member-chat-line .chat-id {
@@ -282,6 +289,7 @@
 .admin-chat-profile > img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .admin-chat-line .chat-id {

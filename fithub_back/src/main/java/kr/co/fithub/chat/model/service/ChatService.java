@@ -50,9 +50,6 @@ public class ChatService {
 	@Transactional
 	public int inputChatMessage(ChatMessageDTO message) {
 		int r = chatDao.inputChatMessage(message);
-		if(r > 0) {
-			r += chatDao.alarmChatRoom();
-		}
 		return r;
 	}
 }
