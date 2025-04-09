@@ -24,14 +24,15 @@ public class CommunityService {
 	@Autowired
 	private PageInfoUtil pageInfoUtil;
 
-	public List selectCommunityList(int memberNo, int page, int size) {		
+	public List selectCommunityList(int memberNo, int page, int size, String searchText, int showMyList) {		
 		int startRow = (page - 1) * size + 1;
 		int endRow = page * size;
  		Map<String, Object> map = new HashMap<>();
         map.put("memberNo", memberNo);
         map.put("startRow", startRow);
         map.put("endRow", endRow);
-
+        map.put("searchText", searchText);
+        map.put("showMyList", showMyList);
 		List list = communityDao.selectCommunityList(map);
 		return list;
 	}

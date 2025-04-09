@@ -131,7 +131,7 @@ const CommunityView = () => {
     e.stopPropagation();
     setAnchorEl(null);
   };
-  // 메뉴 항목 처리 함수 예시
+
   const handleReport = (e) => {
     e.stopPropagation();
     navigate(`/community/update/${community.communityNo}`);
