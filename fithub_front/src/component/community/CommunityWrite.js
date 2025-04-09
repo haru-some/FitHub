@@ -2,6 +2,7 @@ import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import axios from "axios";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -48,7 +49,14 @@ const CommunityWrite = () => {
   return (
     <div className="community-write">
       <div className="community-write-wrap">
-        <h2 className="community-title">커뮤니티 작성</h2>
+        <div className="community-title">
+          <h2>커뮤니티 작성</h2>
+          <ExitToAppIcon
+            onClick={() => {
+              navigate("/community/list");
+            }}
+          />
+        </div>
         <div className="community-write-info">
           <div className="member-img">
             <img
