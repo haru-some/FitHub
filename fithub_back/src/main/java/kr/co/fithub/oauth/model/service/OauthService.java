@@ -48,6 +48,7 @@ public class OauthService {
             response.put("memberName", member.getMemberName());
             response.put("memberEmail", member.getMemberEmail());
             response.put("loginType", member.getLoginType());
+            response.put("memberNo", member.getMemberNo());
         }
         return response;
     }
