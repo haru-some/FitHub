@@ -51,14 +51,14 @@ const MyFit = (props) => {
                         ? "<div class='overflow-wrap'>" +
                           routine.routineContent +
                           "</div>"
-                        : "<div>루틴없음</div>"
+                        : "<div>설정한 루틴이 없습니다.</div>"
                     }<div>오늘의 운동을 완료했다면 기록해보세요!</div>`;
               } else {
                 return routine
                   ? "<div class='overflow-wrap'>" +
                       routine.routineContent +
                       "</div>"
-                  : "<div>루틴없음</div>";
+                  : "<div>루틴을 설정해보세요!</div>";
               }
             })(),
           }}
