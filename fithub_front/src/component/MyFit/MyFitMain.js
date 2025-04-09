@@ -127,7 +127,7 @@ const MyFitMain = () => {
         setPageTitle("팔로우");
       }
     } else {
-      setPageTitle("페이지");
+      setPageTitle("DM");
     }
   }, [params]);
 
