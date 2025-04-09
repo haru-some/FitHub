@@ -14,7 +14,8 @@ public class ChatRoomDTO {
 	private int chatRoomNo;
 	private String chatMemberId;
 	private int chatRoomAlarm;
-	private String chatRoomMessage;
+	private String chatLastMessage;
+	private String chatLastDate;
 	private String memberThumb;
 	private int unreadCount;
 }

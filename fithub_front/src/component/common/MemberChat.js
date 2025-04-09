@@ -62,14 +62,25 @@ const MemberChat = () => {
       onDisconnect: () => console.log("Disconnected from WebSocket"),
     });
 
+    if (roomNo !== null) {
+      axios
+        .patch(
+          `${backServer}/chat/viewOk?roomNo=${roomNo}&chatMemberId=${memberInfo.memberId}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     client.activate();
     setStompClient(client);
     return () => {
       client.deactivate();
     };
   }, [newRoom, roomNo]);
-
-  const chatBoxRef = useRef(null);
 
   const sendMessage = () => {
     if (stompClient && chatInput.trim() !== "") {
@@ -86,7 +97,7 @@ const MemberChat = () => {
       setChatInput("");
     }
   };
-
+  const chatBoxRef = useRef(null);
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;

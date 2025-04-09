@@ -39,9 +39,35 @@
        (SELECT COUNT(*) 
         FROM chat_message cm 
         WHERE cm.chat_member_id = cr.chat_member_id 
-          AND cm.is_read = 1) AS unread_count
+          AND cm.is_read = 1) AS unread_count,
+       (SELECT message_content
+        FROM (
+            SELECT chat_room_no, message_content
+            FROM chat_message
+            ORDER BY message_date DESC
+        ) cmm
+        WHERE cmm.chat_room_no = cr.chat_room_no 
+          AND ROWNUM = 1) AS last_message,
+       (SELECT message_date
+        FROM (
+            SELECT chat_room_no, message_date
+            FROM chat_message
+            ORDER BY message_date DESC
+        ) cmm
+        WHERE cmm.chat_room_no = cr.chat_room_no 
+          AND ROWNUM = 1) AS last_date
 FROM chat_room cr
-LEFT JOIN member m ON cr.chat_member_id = m.member_id where chat_room_message is not null
+LEFT JOIN member m ON cr.chat_member_id = m.member_id
+WHERE EXISTS (
+    SELECT 1
+    FROM (
+        SELECT chat_room_no, message_content
+        FROM chat_message
+        ORDER BY message_date DESC
+    ) cmm
+    WHERE cmm.chat_room_no = cr.chat_room_no AND cmm.message_content IS NOT NULL
+)
+ORDER BY last_date DESC
     </select>
     
     <select id="loadChatMessage" resultType="chatMessage">
@@ -86,7 +112,15 @@ ORDER BY
     </select>
     
     <update id="viewOk">
-    	update chat_message set is_read = 2 where chat_room_no = #{chatRoomNo}
+    	update chat_message set is_read = 2 where chat_room_no = #{chatRoomNo} and not chat_member_id = #{chatMemberId}
+    </update>
+    
+    <insert id="inputChatMessage">
+    	insert into chat_message values(chat_message_seq.nextval, #{chatRoomNo}, #{chatMemberId}, #{messageContent}, TO_DATE(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'), 1)
+    </insert>
+    
+    <update id="alarmChatRoom">
+    	update chat_room alarm
     </update>
     
 </mapper>

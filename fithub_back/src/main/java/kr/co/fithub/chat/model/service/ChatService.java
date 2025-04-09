@@ -42,13 +42,17 @@ public class ChatService {
 	}
 	
 	@Transactional
-	public int viewOk(int chatRoomNo) {
-		int r = chatDao.viewOk(chatRoomNo);
+	public int viewOk(int chatRoomNo, String chatMemberId) {
+		int r = chatDao.viewOk(chatRoomNo, chatMemberId);
 		return r;
 	}
 	
+	@Transactional
 	public int inputChatMessage(ChatMessageDTO message) {
 		int r = chatDao.inputChatMessage(message);
+		if(r > 0) {
+			r += chatDao.alarmChatRoom();
+		}
 		return r;
 	}
 }

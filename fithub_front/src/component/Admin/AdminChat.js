@@ -114,13 +114,14 @@ const AdminChatView = ({ selectedChatRoom }) => {
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
   const socket = new SockJS(`${backServer}/inMessage`);
   const [roomNo, setRoomNo] = useState(null);
-
+  console.log(memberInfo);
+  console.log(roomNo);
   useEffect(() => {
     // 기존 채팅 기록 불러오기
     axios
       .get(`${backServer}/chat/loadChatMessage?chatRoomNo=${selectedChatRoom}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.data[0].chatRoomNo);
         setMessages(res.data);
         setRoomNo(res.data[0].chatRoomNo);
       })
@@ -145,22 +146,26 @@ const AdminChatView = ({ selectedChatRoom }) => {
       onDisconnect: () => console.log("Disconnected from WebSocket"),
     });
 
-    axios
-      .patch(`${backServer}/chat/viewOk?chatRoomNo=${roomNo}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (roomNo !== null) {
+      axios
+        .patch(
+          `${backServer}/chat/viewOk?roomNo=${roomNo}&chatMemberId=${memberInfo.memberId}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
     client.activate();
     setStompClient(client);
     return () => {
       client.deactivate();
     };
-  }, [roomNo]);
-
+  }, [selectedChatRoom, roomNo]);
+  const date = new Date();
   const sendMessage = () => {
     if (stompClient && chatInput.trim() !== "") {
       const chatMessage = {
