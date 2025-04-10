@@ -162,28 +162,33 @@ const ShopDetail = () => {
   const plusCart = () => {
     const cartItem = {
       goodsNo: goods.goodsNo,
-      memberNo: goods.memberNo,
+      memberNo: memberInfo.memberNo,
       goodsName: goods.goodsName,
       goodsImage: goods.goodsImage,
       goodsPrice: goods.goodsPrice,
-      quantity: goods.goodsEa,
+      goodsEa: quantity,
     };
 
     console.log(cartItem);
+
     axios.post(`${backServer}/goods/cart/add/`, cartItem).then((res) => {
       Swal.fire({
         icon: "success",
         title: "장바구니에 보관하였습니다.",
         showConfirmButton: false,
         timer: 2000,
-      }).catch((err) => {
-        console.error("Error adding to cart:", err);
-        Swal.fire({
-          icon: "error",
-          title: "장바구니에 추가하는 데 실패했습니다.",
-          text: "서버로부터 응답을 받을 수 없습니다.",
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          Swal.fire({
+            icon: "error",
+            title: "장바구니에 추가하는 데 실패했습니다.",
+            text: "서버로부터 응답을 받을 수 없습니다.",
+          });
         });
-      });
     });
   };
 

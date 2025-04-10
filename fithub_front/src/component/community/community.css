@@ -2,7 +2,7 @@
   background-color: #1e1e1e;
   color: white;
   width: 700px;
-  margin: 20px auto;
+  margin: 50px auto;
   padding: 20px;
   border-radius: 10px;
 }
@@ -90,7 +90,7 @@
   background-color: transparent;
 }
 .community-content-texteditor img {
-  width: 300px;
+  width: 100%;
   border-radius: 10px;
   object-fit: contain;
   min-height: 75px;
@@ -103,10 +103,10 @@
   padding: 0px 15px;
 }
 .community-post-item > div {
-  padding: 5px 0;
+  padding: 10px 0;
 }
 .community-post-item p {
-  margin: 5px;
+  margin: 10px;
 }
 .community-post-item .community-sub-btn {
   margin-left: auto;
@@ -146,7 +146,6 @@
 
 /*상세보기*/
 .community-view-content {
-  border-bottom: 1px solid #ccc;
   padding-bottom: 20px;
 }
 .community-view-user {
@@ -171,8 +170,12 @@
   min-height: 200px;
   padding: 20px;
 }
+.community-view-texteditor p {
+  margin: 10px 0;
+}
 .community-view-texteditor img {
   width: 100%;
+  border-radius: 10px;
 }
 .view-btn {
   margin-left: 20px;
@@ -217,6 +220,8 @@
   display: flex;
   gap: 20px;
   align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid;
 }
 .comment-text-box {
   display: flex;
@@ -252,7 +257,9 @@
   width: 530px;
   margin: 0 auto;
 }
-
+.community-write-wrap svg:hover {
+  cursor: pointer;
+}
 .community-write-wrap .ql-container {
   height: 400px;
 }

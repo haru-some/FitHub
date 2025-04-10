@@ -14,16 +14,16 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Swal from "sweetalert2";
 
 const CommunityView = () => {
-  const [member, setMember] = useRecoilState(memberState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [member, setMember] = useRecoilState(memberState);
   const params = useParams();
   const communityNo = params.communityNo;
   //불러온 게시글 저장하는 state -> 댓글이 입력되면 새로 게시글 조회해오게 해야함
   const [community, setCommunity] = useState(null);
-  //const [isLike, setIsLike] = useState(false);
   const navigate = useNavigate();
   //서버 전송용 state가 newComment
   const [newComment, setNewComment] = useState("");
+  const [isUpdate, setIsUpdate] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
   useEffect(() => {
@@ -34,11 +34,9 @@ const CommunityView = () => {
         }`
       )
       .then((res) => {
-        console.log(res.data);
         setCommunity(res.data);
-      })
-      .catch((err) => {});
-  }, []);
+      });
+  }, [isUpdate]);
 
   const changeLike = (e) => {
     if (member) {
@@ -149,11 +147,7 @@ const CommunityView = () => {
             `${process.env.REACT_APP_BACK_SERVER}/community/list/${community.communityNo}`
           )
           .then((res) => {
-            console.log(res);
             navigate("/community/list");
-          })
-          .catch((err) => {
-            console.log(err);
           });
       }
     });
@@ -262,20 +256,6 @@ const CommunityView = () => {
           </div>
         )}
       </div>
-      <div className="community-comment-list">
-        <ul>
-          {community &&
-            community.commentList.map((comment, index) => {
-              return (
-                <Comment
-                  key={"comment-" + JSON.stringify(comment)}
-                  comment={comment}
-                  member={member}
-                />
-              );
-            })}
-        </ul>
-      </div>
       <div className="post-input">
         <div className="member-img">
           <img
@@ -304,20 +284,40 @@ const CommunityView = () => {
           <button onClick={submitComment}>send</button>
         </div>
       </div>
+      <div className="community-comment-list">
+        <ul>
+          {community &&
+            community.commentList.map((comment, index) => {
+              return (
+                <Comment
+                  key={"comment-" + JSON.stringify(comment)}
+                  comment={comment}
+                  member={member}
+                  community={community}
+                  setCommunity={setCommunity}
+                  setIsUpdate={setIsUpdate}
+                />
+              );
+            })}
+        </ul>
+      </div>
     </div>
   );
 };
 
 const Comment = (props) => {
+  const setIsUpdate = props.setIsUpdate;
   const [showComment, setShowComment] = useState(false);
   const navigate = useNavigate();
   const comment = props.comment;
   const member = props.member;
+  const community = props.community;
+  const setCommunity = props.setCommunity;
+
   const [updateComment, setUpdateComment] = useState("");
   useEffect(() => {
     setUpdateComment(comment.commentContent);
   }, []);
-
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -350,7 +350,9 @@ const Comment = (props) => {
           .delete(
             `${process.env.REACT_APP_BACK_SERVER}/community/comment/${comment.commentNo}`
           )
-          .then((res) => {});
+          .then((res) => {
+            setIsUpdate((prev) => !prev);
+          });
       }
     });
     setShowComment(false);
@@ -365,9 +367,16 @@ const Comment = (props) => {
         }
       )
       .then((res) => {
-        console.log(res);
         if (res.data > 0) {
           setShowComment(false);
+          //수정이 완료되면 기존에 있던 community 에 새로운 댓글이 들어가게 수정
+          //1. 업데이트된 코멘트 번호를 가져옴
+          //2. comment.commentNo 이거하고 community에서 commmentList find 해서 일치하는애 찾기
+          // const oldComment = community.commentList.find((item, i) => {
+          //   return item.commentNo === comment.commentNo;
+          // });
+          // oldComment.commentContent = updateComment;
+          setIsUpdate((prev) => !prev);
         }
       });
   };

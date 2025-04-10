@@ -14,10 +14,11 @@ import lombok.NoArgsConstructor;
 @Alias(value="review")
 public class Review {
 	private int reNo;
-	private int goodsNo;
+	private int goodsNo;	
 	private String memberId;
 	private String reContent;
 	private String reDate;
 	private int reStar;
+	private String goodsName;
 
 }

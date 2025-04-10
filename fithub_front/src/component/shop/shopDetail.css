@@ -352,7 +352,7 @@ select {
 .Myreview-wrap .my-star-point {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 
 .Myreview-wrap .my-star-point span {
@@ -390,4 +390,16 @@ select {
   border-radius: 4px;
   padding: 6px 12px;
   cursor: pointer;
+}
+.Myreview-wrap .review-flex {
+  display: flex;
+  align-items: center;
+}
+
+.Myreview-wrap li div:nth-child(2) {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #666;
+  align-items: center;
 }
