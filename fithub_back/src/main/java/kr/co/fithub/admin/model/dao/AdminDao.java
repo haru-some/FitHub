@@ -5,19 +5,20 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.fithub.member.model.dto.MemberDTO;
+import kr.co.fithub.util.PageInfo;
 
 @Mapper
 public interface AdminDao {
 
-	List memberList();
+	List memberList(PageInfo memberPi);
 
 	int adminMemberChange(MemberDTO memberData);
 
-	List delMemberList();
+	List delMemberList(PageInfo delMemberPi);
 
-	List communityList();
+	List communityList(PageInfo communityPi);
 
-//	List commentList();
+	List commentList(PageInfo commentPi);
 
 	int memberTotalCount();
 
@@ -25,6 +26,6 @@ public interface AdminDao {
 
 	int communityTotalCount();
 
-//	int commnetTotalCount();
+	int commnetTotalCount();
 
 }

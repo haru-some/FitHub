@@ -3,6 +3,8 @@
   margin: 0 auto;
   width: 1400px;
   gap: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .admin-section * {
@@ -79,6 +81,32 @@
 .admin-member-navi {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.admin-member-navi .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-member-navi .pagination > li {
+  cursor: pointer;
+  display: block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  padding: 5px;
+  line-height: 25px;
+}
+
+.admin-member-navi .pagination > li > .active-page {
+  border-radius: 30px;
+  background-color: var(--main3);
+  text-align: center;
+  display: block;
 }
 
 .admin-tbl {
@@ -96,6 +124,15 @@
 
 .admin-section select {
   background-color: var(--main1);
+}
+.admin-thead > tr > th {
+  white-space: npwrap;
+}
+.member-thead > tr > th {
+}
+.admin-tbody > tr > td {
+  width: 100px;
+  table-layout: fixed;
 }
 
 /*---------- AdminStat / 관리자 회원 활동, 매출 통계 관리 ----------*/
