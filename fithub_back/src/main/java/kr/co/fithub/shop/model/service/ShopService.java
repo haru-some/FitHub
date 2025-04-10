@@ -19,6 +19,7 @@ import kr.co.fithub.shop.model.dto.Sell;
 
 
 
+
 @Service
 public class ShopService {
 	
@@ -92,7 +93,11 @@ public class ShopService {
 	}
 	
 	public List<Review> selectMyReviews(String memberId) {
+		 
+		
 		 List<Review> reviews = shopDao.selectMyReviews(memberId);
+		
+		 
 		return reviews;
 	}
 	

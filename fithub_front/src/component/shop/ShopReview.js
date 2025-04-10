@@ -8,7 +8,7 @@ import "./shopDetail.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo }) => {
+const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo, goodsName }) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const [rating, setRating] = useState(0);
@@ -23,6 +23,7 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo }) => {
 
     const reviewData = {
       goodsNo: goodsNo,
+      goodsName: goodsName,
       memberId: memberInfo.memberId,
       reContent: comment,
       reStar: rating,
@@ -101,6 +102,7 @@ const ShopReview = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [sell, setSell] = useState([]);
   const [goodsNo, setGoodsNo] = useState(null);
+  const [goodsName, setGoodsName] = useState(null);
 
   const recordReview = (newReview) => {
     setReviews([...reviews, newReview]); // 새로운 리뷰 추가
@@ -154,6 +156,7 @@ const ShopReview = () => {
                     onClick={() => {
                       setGoodsNo(item.goodsNo);
                       setIsModalOpen(true);
+                      setGoodsName(item.goodsName);
                     }}
                   >
                     리뷰 작성
@@ -178,20 +181,20 @@ const ShopReview = () => {
                       navigate(`/shop/detail/${review.goodsNo}`);
                     }}
                   >
-                    <div className="my-star-point">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <span key={star}>
-                          {star <= review.reStar ? (
-                            <StarIcon />
-                          ) : (
-                            <StarBorderIcon />
-                          )}
-                        </span>
-                      ))}
-                    </div>
+                    <div>{review.goodsName}</div>
 
                     <div>
-                      <div></div>
+                      <div className="my-star-point">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span key={star}>
+                            {star <= review.reStar ? (
+                              <StarIcon />
+                            ) : (
+                              <StarBorderIcon />
+                            )}
+                          </span>
+                        ))}
+                      </div>
                       <div>{review.reDate}</div>
                     </div>
                     <div>{review.reContent}</div>
@@ -229,6 +232,7 @@ const ShopReview = () => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={recordReview}
         goodsNo={goodsNo}
+        goodsName={goodsName}
       />
     </div>
   );

@@ -154,6 +154,7 @@ public class ShopController {
     	return ResponseEntity.ok(result);	
        }
     
+    // 구매성공 to DB
     @PostMapping(value="/sell/add/")
    	public ResponseEntity<Integer> SellInsert(@RequestBody Sell sell ){
     	System.out.println("돈벌자!!!!");    	
@@ -177,8 +178,10 @@ public class ShopController {
     @GetMapping(value="/sell/myreview/{memberId}")
     public ResponseEntity<List<Review>> selectMyReviews(@PathVariable String memberId) {
         System.out.println("나의! 리뷰 목록 출력!!!");
-        System.out.println(memberId);        
+        System.out.println(memberId);
+        
         List<Review> reviewList = shopService.selectMyReviews(memberId); // 여러 개의 Sell 객체 반환
+        System.out.println("v");
         return ResponseEntity.ok(reviewList);
     }
     
