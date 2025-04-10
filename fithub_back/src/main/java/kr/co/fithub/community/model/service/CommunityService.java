@@ -34,11 +34,7 @@ public class CommunityService {
         map.put("searchText", searchText);
         map.put("loginMemberNo", loginMemberNo);
 
-
-		List list = communityDao.selectCommunityList(map);
-		for(Object obj : list) {
-			System.out.println(obj);
-		}
+		List list = communityDao.selectCommunityList(map);		
 		return list;
 	}
 

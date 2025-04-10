@@ -11,7 +11,6 @@ import CommunityItem from "./CommunityItem";
 
 const CommunityList = () => {
   const params = useParams();
-  console.log(params);
   const memberNo = params["*"];
 
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -38,8 +37,7 @@ const CommunityList = () => {
         setCommunityList([...communityList, ...res.data]);
       })
       .catch((err) => console.log(err));
-  }, [page, searchText, showMyList]);
-  console.log(memberNo);
+  }, [page, searchText, memberNo]);
 
   const loadMoreCommunities = useCallback(() => {
     if (communityList && hasMore) setPage((prevPage) => prevPage + 1);

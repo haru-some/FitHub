@@ -39,10 +39,9 @@ public class CommunityController {
 	
 	@GetMapping(value="/list/{loginMemberNo}")
 	public ResponseEntity<List> communityList(@RequestParam(required = false) Integer memberNo, @RequestParam int page, @RequestParam int size, @RequestParam String searchText, @PathVariable int loginMemberNo){
-		int mNum = memberNo == null ? 0 : memberNo;
-		System.out.println(memberNo);
-		System.out.println(loginMemberNo);
-		List list = communityService.selectCommunityList(mNum, page, size, searchText, loginMemberNo);
+		int memberNum = memberNo == null ? 0 : memberNo;		
+		List list = communityService.selectCommunityList(memberNum, page, size, searchText, loginMemberNo);
+		
 		return ResponseEntity.ok(list);
 	}
 	
