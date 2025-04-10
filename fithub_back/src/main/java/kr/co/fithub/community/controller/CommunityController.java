@@ -37,9 +37,11 @@ public class CommunityController {
 	@Value("${file.root}")
 	private String root;
 	
-	@GetMapping(value="/list")
-	public ResponseEntity<List> communityList(@RequestParam int memberNo, @RequestParam int page, @RequestParam int size, @RequestParam String searchText, @RequestParam int showMyList){
-		List list = communityService.selectCommunityList(memberNo, page, size, searchText, showMyList);
+	@GetMapping(value="/list/{loginMemberNo}")
+	public ResponseEntity<List> communityList(@RequestParam(required = false) Integer memberNo, @RequestParam int page, @RequestParam int size, @RequestParam String searchText, @PathVariable int loginMemberNo){
+		int memberNum = memberNo == null ? 0 : memberNo;		
+		List list = communityService.selectCommunityList(memberNum, page, size, searchText, loginMemberNo);
+		
 		return ResponseEntity.ok(list);
 	}
 	
@@ -100,10 +102,11 @@ public class CommunityController {
 	}
 	
 	@PostMapping(value="/comment/{communityNo}")
-	public ResponseEntity<Integer> insertComment(@PathVariable int communityNo, @RequestBody CommentDTO comment){
+	public ResponseEntity<CommentDTO> insertComment(@PathVariable int communityNo, @RequestBody CommentDTO comment){
 		comment.setCommunityNo(communityNo);
-		int result = communityService.insertComment(comment);
-		return ResponseEntity.ok(result);
+		CommentDTO c = communityService.insertComment(comment);
+	    
+		return ResponseEntity.ok(c);
 	}
 	
 	@DeleteMapping(value="/comment/{commentNo}")

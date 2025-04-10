@@ -24,7 +24,7 @@ public class CommunityService {
 	@Autowired
 	private PageInfoUtil pageInfoUtil;
 
-	public List selectCommunityList(int memberNo, int page, int size, String searchText, int showMyList) {		
+	public List selectCommunityList(int memberNo, int page, int size, String searchText, int loginMemberNo) {		
 		int startRow = (page - 1) * size + 1;
 		int endRow = page * size;
  		Map<String, Object> map = new HashMap<>();
@@ -32,8 +32,9 @@ public class CommunityService {
         map.put("startRow", startRow);
         map.put("endRow", endRow);
         map.put("searchText", searchText);
-        map.put("showMyList", showMyList);
-		List list = communityDao.selectCommunityList(map);
+        map.put("loginMemberNo", loginMemberNo);
+
+		List list = communityDao.selectCommunityList(map);		
 		return list;
 	}
 
@@ -92,9 +93,12 @@ public class CommunityService {
 	}
 
 	@Transactional
-	public int insertComment(CommentDTO comment) {
+	public CommentDTO insertComment(CommentDTO comment) {
+		int commentNo = communityDao.selectCommunityNo();
+		comment.setCommentNo(commentNo);
 		int result = communityDao.insertComment(comment);
-		return result;
+		CommentDTO c = communityDao.selectOneComment(commentNo);
+		return c;
 	}
 	
 	@Transactional

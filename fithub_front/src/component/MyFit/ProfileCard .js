@@ -8,6 +8,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const ProfileCard = (props) => {
+  const setFlag = props.setFlag;
+
   const params = useParams();
   const memberNo = params.memberNo;
   const [loginMember, setLoginMember] = useRecoilState(memberState);
@@ -24,7 +26,6 @@ const ProfileCard = (props) => {
         `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${memberNo}?loginMemberNo=${loginMember.memberNo}`
       )
       .then((res) => {
-        console.log(res.data);
         setActMember(res.data);
       })
       .catch((err) => {});
@@ -58,20 +59,17 @@ const ProfileCard = (props) => {
                 <h3>{actMember.memberName}</h3>
                 {loginMember.memberNo !== Number(memberNo) && (
                   <span
-                  class="material-icons chat-btn"
-                  onClick={() => {
-                    // 보낸사람/받은사람
-                    navigate(
-                      `/myfit/chat/${loginMember.memberNo}/${actMember.memberNo}`
-                    );
-                  }}
-                >
-                  send
-                </span>
-                )
-                
-                }
-                
+                    className="material-icons chat-btn"
+                    onClick={() => {
+                      // 보낸사람/받은사람
+                      navigate(
+                        `/myfit/chat/${loginMember.memberNo}/${actMember.memberNo}`
+                      );
+                    }}
+                  >
+                    send
+                  </span>
+                )}
               </div>
               {actMember && (
                 <div className="myfit-profile-stats">
@@ -119,8 +117,8 @@ const ProfileCard = (props) => {
                       text: "정말 팔로우를 취소하시겠습니까?",
                       icon: "warning",
                       showCancelButton: true,
-                      confirmButtonColor: "#3085d6",
-                      cancelButtonColor: "#d33",
+                      confirmButtonColor: "rgb(93, 187, 121)",
+                      cancelButtonColor: "rgb(146, 146, 146)",
                       confirmButtonText: "예",
                       cancelButtonText: "아니오",
                     }).then((result) => {
@@ -181,7 +179,7 @@ const ProfileCard = (props) => {
                     </li>
                     <li>
                       <span>
-                        <span class="material-icons">av_timer</span>{" "}
+                        <span className="material-icons">av_timer</span>{" "}
                         <span>총 운동 시간</span>
                       </span>
                       <span>{`${Math.floor(
@@ -190,14 +188,14 @@ const ProfileCard = (props) => {
                     </li>
                     <li>
                       <span>
-                        <span class="material-icons">edit_calendar</span>
+                        <span className="material-icons">edit_calendar</span>
                         <span>지난 1주 운동 일수</span>
                       </span>
                       <span>{actMember.weekRecordDays}일</span>
                     </li>
                     <li>
                       <span>
-                        <span class="material-icons">av_timer</span>{" "}
+                        <span className="material-icons">av_timer</span>{" "}
                         <span>지난 1주 운동 시간</span>
                       </span>
                       <span>

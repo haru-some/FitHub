@@ -8,38 +8,19 @@ const DmList = (props) => {
   const refresh = useRecoilValue(refreshState);
   const params = useParams();
   const memberNo = params.memberNo;
-  const [searchText, setSearchText] = useState("");
   const [dmList, setDmList] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("data");
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/myfit/dm/${memberNo}`)
       .then((res) => {
-        console.log(res.data);
         setDmList(res.data);
       })
       .catch((err) => {});
   }, [refresh]);
-  console.log(refresh)
 
   return (
     <div className="myfit-dm-wrap">
-      <div className="input-wrap">
-        <input
-          type="text"
-          placeholder="검색"
-          className="search-input"
-          value={searchText}
-          onChange={(e) => {
-            setSearchText(e.target.value);
-          }}
-        />
-        {/* <span class="material-icons search-btn" onClick={searchResult}>
-          search
-        </span> */}
-      </div>
-
       <ul className="user-list">
         {dmList.map((dm, index) => {
           return (
@@ -72,8 +53,16 @@ const DmList = (props) => {
                     <div className="username">{dm.otherMemberName}</div>
                   </div>
                   <div className="bot-wrap">
-                    <div className="dm-item-content">{dm.lastMessageContent}</div>
-                    <div className={`unread-count ${dm.unreadCount!==0 ? 'unread' : ''}`}><span>{dm.unreadCount !==0 ? dm.unreadCount : ""}</span></div>
+                    <div className="dm-item-content">
+                      {dm.lastMessageContent}
+                    </div>
+                    <div
+                      className={`unread-count ${
+                        dm.unreadCount !== 0 ? "unread" : ""
+                      }`}
+                    >
+                      <span>{dm.unreadCount !== 0 ? dm.unreadCount : ""}</span>
+                    </div>
                   </div>
                 </div>
               </div>
