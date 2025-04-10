@@ -183,7 +183,7 @@ const ShopReview = () => {
                   >
                     <div>{review.goodsName}</div>
 
-                    <div>
+                    <div className="review-flex">
                       <div className="my-star-point">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <span key={star}>
@@ -195,7 +195,7 @@ const ShopReview = () => {
                           </span>
                         ))}
                       </div>
-                      <div>{review.reDate}</div>
+                      <div className="review-date">{review.reDate}</div>
                     </div>
                     <div>{review.reContent}</div>
                   </li>

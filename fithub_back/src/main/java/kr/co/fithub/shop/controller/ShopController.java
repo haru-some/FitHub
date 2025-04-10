@@ -144,15 +144,28 @@ public class ShopController {
 		}
     
     }
-        
+    
+    //장바구니 클릭 to DB
     @PostMapping(value="/cart/add/")
-   	public ResponseEntity<Integer> CartInsert(@ModelAttribute Cart cart ,@ModelAttribute Goods goods,@ModelAttribute MemberDTO member){
+   	public ResponseEntity<Integer> CartInsert(@RequestBody Cart cart ){
     	System.out.println("들어올래???");
     	System.out.println(cart);
     	int result = shopService.insertCart(cart);
    				
     	return ResponseEntity.ok(result);	
        }
+    //장바구니 페이지 불러오기
+    @GetMapping(value="/cart/read/{memberNo}")
+    public ResponseEntity<List<Cart>> selectCart(@PathVariable int memberNo) {
+        System.out.println("장바구니 목록 출력!!!!!!");
+        System.out.println(memberNo);
+        
+        List<Cart> reviewList = shopService.selectCart(memberNo); 
+        return ResponseEntity.ok(reviewList);
+    }
+    
+    
+    
     
     // 구매성공 to DB
     @PostMapping(value="/sell/add/")
@@ -164,6 +177,8 @@ public class ShopController {
     	System.out.println(sell);	
     	return ResponseEntity.ok(result);	
        }   
+   
+       
    
     //구매한 목록에서 리뷰 출력
     @GetMapping(value="/sell/review/{memberNo}")
@@ -181,7 +196,7 @@ public class ShopController {
         System.out.println(memberId);
         
         List<Review> reviewList = shopService.selectMyReviews(memberId); // 여러 개의 Sell 객체 반환
-        System.out.println("v");
+        
         return ResponseEntity.ok(reviewList);
     }
     

@@ -32,7 +32,7 @@
   	
   	<insert id="insertCart">
   		insert into cart values
-  		(#{cartNo},#{memberNo},#{goodsNo},#{goodsPrice},#{goodsEa})
+  		(#{cartNo}, #{goodsNo}, #{memberNo}, #{goodsPrice}, #{goodsEa}, #{goodsImage})
   		<selectKey order="BEFORE" resultType="int" keyProperty="cartNo">
  			select cart_seq.nextval from dual
  		</selectKey> 
@@ -58,6 +58,10 @@
   	<select id="goodsReviews" resultType="review">
   		select re_no, goods_no, member_id, re_content, to_char(re_date, 'mm-dd hh:mi') as re_date
   		, re_star from review where goods_no= #{goodsNo} order by 1 desc 
+  	</select>
+  	
+  	<select id="selectCart" resultType="cart">
+  		select * from cart where member_no= #{memberNo} order by 1 desc 
   	</select>
   	
   	
