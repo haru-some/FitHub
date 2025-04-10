@@ -53,19 +53,19 @@ const Sidebar = () => {
         to="/admin/stat"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        통계 관리
+        사이트 통계 조회
       </NavLink>
       <NavLink
         to="/admin/chat"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        문의 관리
+        문의 채팅
       </NavLink>
       <NavLink
         to="/admin/ads"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        광고 관리
+        광고 추가
       </NavLink>
       <NavLink
         to="/admin/goods"

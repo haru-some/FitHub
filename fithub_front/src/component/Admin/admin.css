@@ -125,11 +125,6 @@
 .admin-section select {
   background-color: var(--main1);
 }
-.admin-thead > tr > th {
-  white-space: npwrap;
-}
-.member-thead > tr > th {
-}
 .admin-tbody > tr > td {
   width: 100px;
   table-layout: fixed;
@@ -381,6 +376,56 @@
 .chat-input-box > button:hover {
   cursor: pointer;
   color: var(--main3);
+}
+/*---------- ads ----------*/
+.ads-section {
+  border-radius: 30px;
+  padding: 20px;
+}
+.ads-name-input-box {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ads-name-input-box > input {
+  margin: 0 auto;
+  width: 84%;
+  height: 24px;
+  border-radius: 10px;
+  text-indent: 10px;
+  background-color: var(--main1);
+  color: #fff;
+  border: 1px double white;
+}
+.ads-link-input-box {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ads-link-input-box > input {
+  margin: 0 auto;
+  width: 84%;
+  height: 24px;
+  border-radius: 10px;
+  text-indent: 10px;
+  background-color: var(--main1);
+  color: #fff;
+  border: 1px double white;
+}
+.ads-img-input-box {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.ads-img-box {
+  margin: 0 auto;
+  width: 80%;
+  padding: 20px;
+  height: 200px;
+  border-radius: 15px;
+  border: 3px ridge white;
 }
 
 /* shop frm  */
