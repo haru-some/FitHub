@@ -45,8 +45,7 @@ const MyFitMain = () => {
   const isActivity = path.startsWith("activity");
   const isFollow = path.startsWith("follow");
 
-  let flag = true; // 기본은 보이게
-
+  let flag = true;
   if (isActivity || isFollow) {
     const pathMemberNo = Number(path.split("/")[1]); // 두 경우 다 두 번째가 memberNo
     flag = pathMemberNo === member?.memberNo;
@@ -127,7 +126,7 @@ const MyFitMain = () => {
         setPageTitle("팔로우");
       }
     } else {
-      setPageTitle("페이지");
+      setPageTitle("DM");
     }
   }, [params]);
 

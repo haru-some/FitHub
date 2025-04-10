@@ -45,6 +45,21 @@ const MemberChat = () => {
         console.log(err);
       });
 
+    if (roomNo !== null) {
+      axios
+        .patch(
+          `${backServer}/chat/viewOk?roomNo=${roomNo}&chatMemberId=${memberInfo.memberId}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
     // WebSocket 연결
     const client = new Client({
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
@@ -58,6 +73,28 @@ const MemberChat = () => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
+
+        client.subscribe(`/chat/enter/${roomNo}`, (message) => {
+          console.log("User has joined the chat room");
+          // 여기서 isRead 상태를 2로 변경하는 API 호출을 할 수도 있습니다.
+          axios
+            .patch(`${process.env.REACT_APP_BACK_SERVER}/chat/viewOk`, {
+              roomNo: roomNo,
+              chatMemberId: memberInfo.memberId,
+            })
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        });
+
+        // 서버에 채팅방에 사용자가 들어왔음을 알림
+        client.publish({
+          destination: `/app/chat/enter/${roomNo}`,
+          body: JSON.stringify({ userId: memberInfo.memberId }),
+        });
       },
       onDisconnect: () => console.log("Disconnected from WebSocket"),
     });
@@ -67,26 +104,45 @@ const MemberChat = () => {
     return () => {
       client.deactivate();
     };
-  }, [newRoom, roomNo]);
-
-  const chatBoxRef = useRef(null);
+  }, [roomNo]);
 
   const sendMessage = () => {
+    const date = new Date();
+    const today =
+      date.getFullYear() +
+      "-" +
+      date.getMonth() +
+      "-" +
+      date.getDate() +
+      "-" +
+      date.getHours() +
+      "-" +
+      date.getMinutes() +
+      "-" +
+      date.getSeconds();
     if (stompClient && chatInput.trim() !== "") {
       const chatMessage = {
         chatMemberId: memberInfo.memberId,
         messageContent: chatInput,
         memberLevel: memberInfo.memberLevel,
-        messageDate: Date(),
+        messageDate: today,
+        isRead: 1,
       };
       stompClient.publish({
         destination: `/app/chat/sendMessage/${roomNo}`,
         body: JSON.stringify(chatMessage),
       });
+      const notificationMessage = 1;
+
+      // 알림 메시지를 `queue`로 전송 (모든 사용자가 받을 수 있도록)
+      stompClient.publish({
+        destination: `/app/chat/alarm`, // 알림을 전송할 목적지 설정
+        body: notificationMessage, // 알림 메시지 전송
+      });
       setChatInput("");
     }
   };
-
+  const chatBoxRef = useRef(null);
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -137,7 +193,6 @@ const MemberChat = () => {
                     <div className="chat-content">
                       <div className="chat-id">
                         {msg.chatMemberId} {"-"} {msg.messageDate} {"-"}
-                        {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
                       </div>
                       <div className="chat-text">{msg.messageContent}</div>
                     </div>

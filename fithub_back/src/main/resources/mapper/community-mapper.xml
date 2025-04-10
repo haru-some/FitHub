@@ -15,14 +15,14 @@
                 c.community_content,
                 c.community_no,
                 (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no) AS like_count,
-                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{memberNo}) AS is_like,
+                (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{loginMemberNo}) AS is_like,
                 (SELECT COUNT(*) FROM comment_tbl WHERE community_no = c.community_no) AS comment_count,
-                (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{memberNo}) AS is_follow
+                (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{loginMemberNo}) AS is_follow
             FROM community c
             JOIN member m ON c.member_no = m.member_no
             where m.member_id||c.community_content  like '%'||#{searchText}||'%' 
-            <if test="showMyList == 1">
-            and c.member_no = #{memberNo}
+            <if test="memberNo != 0">
+            and c.member_no = #{memberNo} and c.community_content  like '%'||#{searchText}||'%' 
             </if>
             ORDER BY community_no DESC
         ) A 
@@ -87,6 +87,10 @@
 		order by comment_date desc
 	</select>
 
+	<select id="selectCommunityNo" resultType="int">
+		select comment_tbl_seq.nextval from dual
+	</select>
+
 	<insert id="insertCommunity">
 		insert into community values(community_seq.nextval,
 		#{communityContent}, #{memberNo}, sysdate, 1)
@@ -103,8 +107,22 @@
 	</insert>
 	
 	<insert id="insertComment">
-		insert into comment_tbl values(comment_tbl_seq.nextval, #{communityNo}, #{memberNo}, #{commentContent}, to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'))
+		insert into comment_tbl values(#{commentNo}, #{communityNo}, #{memberNo}, #{commentContent}, to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'))
 	</insert>
+	
+	<select id="selectOneComment" resultType="comment">
+		SELECT
+		comment_no,
+		comment_content,
+		comment_date,
+		community_no,
+		member_no,
+		member_thumb,
+		member_id
+		FROM comment_tbl
+		JOIN member USING (member_no)
+		where comment_no=#{commentNo}
+	</select>
 	
 	<delete id="deleteCommunity">
 		delete from community where community_no = #{communityNo}

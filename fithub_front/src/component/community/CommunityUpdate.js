@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize-module-react";
@@ -53,6 +54,7 @@ const CommunityUpdate = () => {
     <div className="community-write">
       <div className="community-write-wrap">
         <h2 className="community-title">커뮤니티 수정</h2>
+        <ArrowBackIosIcon />
         <div className="community-write-info">
           <div className="member-img">
             <img

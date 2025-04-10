@@ -45,15 +45,15 @@ const Header = () => {
   }, [alarmWs]);
 
   const start = () => {
-    console.log("알람소켓 오픈");
+    //console.log("알람소켓 오픈");
   };
   const receive = (receiveData) => {
     const data = JSON.parse(receiveData.data);
-    console.log("안읽은 메시지: " + data.readYetCount);
-    console.log("알람소켓 데이터 받음");
+    //console.log("안읽은 메시지: " + data.readYetCount);
+    //console.log("알람소켓 데이터 받음");
     const readYetCount = data.readYetCount;
     const refreshString = data.refreshRequest;
-    console.log(refreshString);
+    //console.log(refreshString);
     setChatAlarm(readYetCount);
 
     if (refreshString === "refresh") {
@@ -61,7 +61,7 @@ const Header = () => {
     }
   };
   const end = () => {
-    console.log("알람소켓 닫힘");
+    //console.log("알람소켓 닫힘");
   };
 
   // useEffect(() => {

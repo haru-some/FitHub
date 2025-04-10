@@ -10,6 +10,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Swal from "sweetalert2";
 
 const CommunityView = () => {
@@ -19,14 +20,12 @@ const CommunityView = () => {
   const communityNo = params.communityNo;
   //불러온 게시글 저장하는 state -> 댓글이 입력되면 새로 게시글 조회해오게 해야함
   const [community, setCommunity] = useState(null);
-  const [isLike, setIsLike] = useState(false);
+  //const [isLike, setIsLike] = useState(false);
   const navigate = useNavigate();
   //서버 전송용 state가 newComment
   const [newComment, setNewComment] = useState("");
-  const [commentState, setCommentState] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
-
   useEffect(() => {
     axios
       .get(
@@ -35,26 +34,23 @@ const CommunityView = () => {
         }`
       )
       .then((res) => {
+        console.log(res.data);
         setCommunity(res.data);
       })
       .catch((err) => {});
-  }, [isLike, commentState]);
-
-  useEffect(() => {
-    if (community) {
-      setIsLike(community.isLike === 1);
-    }
-  }, [community]);
+  }, []);
 
   const changeLike = (e) => {
     if (member) {
-      if (isLike) {
+      if (community.isLike) {
         axios
           .delete(
             `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberNo}?communityNo=${communityNo}`
           )
           .then((res) => {
-            setIsLike(!isLike);
+            community.isLike = 0;
+            community.likeCount = res.data;
+            setCommunity({ ...community });
           });
       } else {
         axios
@@ -62,7 +58,9 @@ const CommunityView = () => {
             `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberNo}?communityNo=${communityNo}`
           )
           .then((res) => {
-            setIsLike(!isLike);
+            community.isLike = 1;
+            community.likeCount = res.data;
+            setCommunity({ ...community });
           });
       }
     }
@@ -82,9 +80,8 @@ const CommunityView = () => {
         }
       )
       .then((res) => {
-        if (res.data > 0) {
-          setCommentState(commentState + 1);
-        }
+        community.commentList.unshift(res.data);
+        setCommunity({ ...community });
         setNewComment("");
       });
   };
@@ -208,6 +205,13 @@ const CommunityView = () => {
               </button>
             )}
           </div>
+          <div className="back-button">
+            <ExitToAppIcon
+              onClick={() => {
+                navigate("/community/list");
+              }}
+            />
+          </div>
           {member && community && member.memberId === community.memberId && (
             <div className="community-sub-btn">
               <IconButton
@@ -215,7 +219,7 @@ const CommunityView = () => {
                 aria-haspopup="true"
                 aria-expanded={menuOpen ? "true" : undefined}
                 onClick={handleMenuClick}
-                style={{ marginLeft: "auto" }}
+                style={{ padding: "0" }}
               >
                 <MoreVertIcon style={{ color: "#fff" }} />
               </IconButton>
@@ -264,11 +268,9 @@ const CommunityView = () => {
             community.commentList.map((comment, index) => {
               return (
                 <Comment
-                  key={"comment-" + index}
+                  key={"comment-" + JSON.stringify(comment)}
                   comment={comment}
                   member={member}
-                  commentState={commentState}
-                  setCommentState={setCommentState}
                 />
               );
             })}
@@ -276,7 +278,16 @@ const CommunityView = () => {
       </div>
       <div className="post-input">
         <div className="member-img">
-          <img src="/image/default_img.png"></img>
+          <img
+            src={
+              member.memberThumb
+                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                : "/image/default_img.png"
+            }
+            onClick={() => {
+              navigate(`/myfit/activity/${community.memberNo}`);
+            }}
+          />
         </div>
         <div className="comment-text-box">
           <input
@@ -301,8 +312,6 @@ const Comment = (props) => {
   const [showComment, setShowComment] = useState(false);
   const navigate = useNavigate();
   const comment = props.comment;
-  const commentState = props.commentState;
-  const setCommentState = props.setCommentState;
   const member = props.member;
   const [updateComment, setUpdateComment] = useState("");
   useEffect(() => {
@@ -341,11 +350,10 @@ const Comment = (props) => {
           .delete(
             `${process.env.REACT_APP_BACK_SERVER}/community/comment/${comment.commentNo}`
           )
-          .then((res) => {
-            setCommentState(commentState + 1);
-          });
+          .then((res) => {});
       }
     });
+    setShowComment(false);
     handleMenuClose(e);
   };
   const submitUpdateComment = () => {
@@ -360,7 +368,6 @@ const Comment = (props) => {
         console.log(res);
         if (res.data > 0) {
           setShowComment(false);
-          setCommentState(commentState + 1);
         }
       });
   };

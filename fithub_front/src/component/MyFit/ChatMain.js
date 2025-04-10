@@ -55,7 +55,6 @@ const ChatMain = (props) => {
     setWs(socket);
     //useEffect() 함수 내부의 return 함수는 컴포넌트가 언마운트될 때 동작해야할 코드를 작성하는 영역 -> 해당 페이지를 벗어날 때 초기화해야 하는게 있으면 여기서
     return () => {
-      console.log("채팅페이지에서 벗어나면");
       socket.close();
     };
   }, []);
@@ -70,14 +69,14 @@ const ChatMain = (props) => {
 
   //소켓 연결시 최초 실행되는 함수
   const startChat = () => {
-    console.log("웹소켓 연결이 되면 실행되는 함수");
+    //console.log("웹소켓 연결이 되면 실행되는 함수");
   };
 
   //메세지 받는 함수
   const receiveMsg = (receiveData) => {
-    console.log("서버에서 데이터를 받으면 실행되는 함수");
+    //console.log("서버에서 데이터를 받으면 실행되는 함수");
     const data = JSON.parse(receiveData.data); //문자열을 javascript 객체형식으로 전환
-    console.log(data);
+    
     if (data.isRead === "isReadOk") {
       const newArr = chatList.map((item) => {
         if (item.senderNo == loginMember.memberNo) {
@@ -98,7 +97,7 @@ const ChatMain = (props) => {
 
   //챗 끝나면 돌아가는 함수
   const endChat = () => {
-    console.log("웹소켓 연결이 끊어지면 실행되는 함수");
+    //console.log("웹소켓 연결이 끊어지면 실행되는 함수");
   };
   useEffect(() => {
     if (ws) {
@@ -142,6 +141,24 @@ const ChatMain = (props) => {
         <div className="chat-content-wrap">
           <div className="chat-message-area" ref={chatDiv}>
             {chatList.map((chat, index) => {
+              const isLastOfGroup = (() => {
+                const next = chatList[index + 1];
+                if (!next) return true; 
+          
+                const sameSender = next.senderNo === chat.senderNo;
+                const sameMinute =
+                  next.sentAt.substring(0, 16) === chat.sentAt.substring(0, 16); 
+          
+                return !(sameSender && sameMinute);
+              })();
+
+              const isFirstOfGroup = (() => {
+                const prev = chatList[index - 1];
+                if (!prev) return true; 
+              
+                return prev.senderNo !== chat.senderNo; 
+              })();
+
               return (
                 <div key={"chat-" + index} className="one-chat">
                   <p
@@ -151,7 +168,8 @@ const ChatMain = (props) => {
                         : "chat left"
                     }
                   >
-                    <div
+                    {isFirstOfGroup && (
+                      <div
                       className="user"
                       onClick={() => {
                         navigate(`/myfit/activity/${chat.senderNo}`);
@@ -182,16 +200,20 @@ const ChatMain = (props) => {
                           : actMember.memberId}
                       </span>
                     </div>
+                    )}
+                    
                     <div className="chat-content-box">
-                      {chat.senderNo === Number(senderNo) && (
-                        <div
-                          className="is-read"
-                          style={{ marginRight: "10px" }}
-                        >
-                          {chat.isRead === "N" ? 1 : ""}
-                        </div>
-                      )}
                       <div className="chat-message">{chat.dmContent}</div>
+                      {isLastOfGroup && (
+                          <div className="chat-time">
+                            {chat.sentAt.substring(11, 16)}
+                          </div>
+                        )}
+                        {chat.senderNo === Number(senderNo) && (
+                          <div className="is-read">
+                            {chat.isRead === "N" ? 1 : ""}
+                          </div>
+                        )}
                     </div>
                   </p>
                 </div>

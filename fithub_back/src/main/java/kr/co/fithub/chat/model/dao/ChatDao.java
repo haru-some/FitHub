@@ -20,9 +20,11 @@ public interface ChatDao {
 
 	ChatRoomDTO selectChatRoom(String memberId);
 
-	int viewOk(int chatRoomNo);
+	int viewOk(int chatRoomNo, String chatMemberId);
 
 	int inputChatMessage(ChatMessageDTO message);
+
+	int alarmChatRoom(ChatMessageDTO message);
 	
 	
 }
