@@ -3,7 +3,7 @@
   display: flex;
   width: 1300px;
   height: 900px;
-  margin: 10px auto;
+  margin: 40px auto;
   background-color: white;
   font-family: pd-r;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -191,7 +191,7 @@
   display: flex;
   width: 700px;
   height: 800px;
-  margin: 10px auto;
+  margin: 40px auto;
   background-color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
@@ -304,7 +304,7 @@
 /* 회원가입 */
 .join-wrap {
   width: 520px;
-  margin: 10px auto;
+  margin: 40px auto;
   padding: 40px 60px;
   background-color: white;
   border-radius: 12px;
@@ -441,6 +441,7 @@
   display: flex;
   gap: 80px;
   padding: 20px;
+  margin: 30px auto;
   box-sizing: border-box;
 }
 /* 좌측 사이드바 */

@@ -12,7 +12,9 @@ import kr.co.fithub.shop.model.dao.ShopDao;
 import kr.co.fithub.shop.model.dto.Cart;
 import kr.co.fithub.shop.model.dto.Goods;
 import kr.co.fithub.shop.model.dto.GoodsFile;
+import kr.co.fithub.shop.model.dto.Review;
 import kr.co.fithub.shop.model.dto.Sell;
+
 
 
 
@@ -76,18 +78,54 @@ public class ShopService {
 //		}
 		return result;
 	}
-
+	public List<Cart> selectCart(int memberNo) {
+		List<Cart> reviews = shopDao.selectCart(memberNo);		 
+		return reviews;
+	}
+	
+	
+	
+	
+	@Transactional
 	public int insertSell(Sell sell) {
 		int result = shopDao.insertSell(sell);
 		return result;
 	}
 
-	public Sell selectOneReview(int memberNo) {
-		Sell sell =shopDao.selectOneReview(memberNo);
-		return sell;
+	
+	
+	public List<Sell> selectReviews(int memberNo) {	    
+	    List<Sell> reviews = shopDao.selectReviews(memberNo);
+	    
+	    return reviews;
 	}
 	
+	public List<Review> selectMyReviews(String memberId) {		 
 		
+		 List<Review> reviews = shopDao.selectMyReviews(memberId);		
+		 
+		return reviews;
+	}
+	
+	
+	public List<Review> goodsReviews(int goodsNo) {
+		 List<Review> reviews = shopDao.goodsReviews(goodsNo);
+		return reviews;
+	}	
+	
+	
+	
+	@Transactional
+	public int insertReview(Review review) {
+		int result = shopDao.insertReview(review);
+		return result;
+	}
+
+	
+
+	
+
+	
 		
 	
 

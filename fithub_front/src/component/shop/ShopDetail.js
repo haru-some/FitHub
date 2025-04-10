@@ -4,13 +4,15 @@ import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Info } from "@mui/icons-material";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 // import { ShopCart } from "./ShopCart";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
 
 const ShopDetail = () => {
-  const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
+  const { goodsNo } = useParams();
 
   const [activeTab, setActiveTab] = useState("상품정보");
   const [quantity, setQuantity] = useState(1);
@@ -21,7 +23,7 @@ const ShopDetail = () => {
   const [commentsList, setCommentsList] = useState([]);
   const [rating, setRating] = useState(0);
   const [reviews, setReviews] = useState([]);
-  // const { addToCart } = useContext(ShopCart);
+  const [review, setReview] = useState([]);
 
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
@@ -29,7 +31,7 @@ const ShopDetail = () => {
   const [goods, setGoods] = useState(null);
   const [carts, setCarts] = useState(null);
 
-  // 상품 데이터 가져오기
+  // 상품
   useEffect(() => {
     axios
       .get(`${backServer}/goods/${goodsNo}`)
@@ -48,39 +50,19 @@ const ShopDetail = () => {
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
-  const handleCommentChange = (e) => {
-    setComment(e.target.value);
-  };
 
-  const submitComment = () => {
-    if (comment.trim()) {
-      setCommentsList([...commentsList, comment]);
-      setComment("");
-    }
-  };
-
-  const submitReview = () => {
-    if (comment.trim() && rating > 0) {
-      setReviews([...reviews, { comment, rating }]);
-      setComment("");
-      setRating(0);
-    }
-  };
-
-  const renderStars = () => {
-    return [1, 2, 3, 4, 5].map((num) => (
-      <span
-        key={num}
-        onClick={() => setRating(num)}
-        style={{
-          cursor: "pointer",
-          color: num <= rating ? "gold" : "gray",
-        }}
-      >
-        ★
-      </span>
-    ));
-  };
+  // 리뷰
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/review/read/${goodsNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setReview(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [setReview]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -139,35 +121,33 @@ const ShopDetail = () => {
       case "리뷰":
         return (
           <div>
-            <h2>리뷰 정보</h2>
-            <div>{renderStars()}</div>
-            <input
-              type="text"
-              value={comment}
-              onChange={handleCommentChange}
-              placeholder="코멘트를 입력하세요"
-              style={{ width: "80%", padding: "5px", marginTop: "10px" }}
-            />
-            <button
-              onClick={submitReview}
-              style={{ padding: "5px 10px", marginLeft: "10px" }}
-            >
-              제출
-            </button>
-            <div style={{ marginTop: "20px" }}>
-              {reviews.map((review, index) => (
-                <div
-                  key={index}
-                  style={{ borderTop: "1px solid #ccc", padding: "10px 0" }}
-                >
-                  <div>
-                    {"★".repeat(review.rating)}
-                    {"☆".repeat(5 - review.rating)}
-                  </div>
-                  <div>{review.comment}</div>
-                </div>
-              ))}
-            </div>
+            <h2>상품 리뷰</h2>
+            {review.length > 0 ? (
+              <ul>
+                {review.map((review, index) => (
+                  <li key={"review-" + index}>
+                    <div className="my-star-point">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span key={star}>
+                          {star <= review.reStar ? (
+                            <StarIcon />
+                          ) : (
+                            <StarBorderIcon />
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                    <div>
+                      <div>{review.memberId}</div>
+                      <div>{review.reDate}</div>
+                    </div>
+                    <div>{review.reContent}</div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>작성된 리뷰가 없습니다.</p>
+            )}
           </div>
         );
       case "배송/결제":
@@ -182,28 +162,33 @@ const ShopDetail = () => {
   const plusCart = () => {
     const cartItem = {
       goodsNo: goods.goodsNo,
-      memberNo: goods.memberNo,
+      memberNo: memberInfo.memberNo,
       goodsName: goods.goodsName,
       goodsImage: goods.goodsImage,
       goodsPrice: goods.goodsPrice,
-      quantity: goods.goodsEa,
+      goodsEa: quantity,
     };
 
     console.log(cartItem);
+
     axios.post(`${backServer}/goods/cart/add/`, cartItem).then((res) => {
       Swal.fire({
         icon: "success",
         title: "장바구니에 보관하였습니다.",
         showConfirmButton: false,
         timer: 2000,
-      }).catch((err) => {
-        console.error("Error adding to cart:", err);
-        Swal.fire({
-          icon: "error",
-          title: "장바구니에 추가하는 데 실패했습니다.",
-          text: "서버로부터 응답을 받을 수 없습니다.",
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          Swal.fire({
+            icon: "error",
+            title: "장바구니에 추가하는 데 실패했습니다.",
+            text: "서버로부터 응답을 받을 수 없습니다.",
+          });
         });
-      });
     });
   };
 

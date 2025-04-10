@@ -7,6 +7,10 @@
   align-items: center;
   padding: 20px;
   min-height: 600px;
+  padding-top: 50px;
+}
+.myfit-wrap .page-title {
+  margin-bottom: 20px;
 }
 
 .myfit-content {

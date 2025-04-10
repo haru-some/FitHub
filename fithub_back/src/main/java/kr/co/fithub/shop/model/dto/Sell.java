@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Alias(value="sell")
 public class Sell {
 	private int sellNo;
+	private String goodsName;
 	private int memberNo;	
 	private int goodsNo;	
 	private int goodsTotalPrice;
