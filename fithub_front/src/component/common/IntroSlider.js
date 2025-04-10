@@ -7,7 +7,7 @@ const slides = [
     EDescription: "Share your itinerary and travel together",
     KTitle: "나만의 여행을 계획하세요",
     KDescription: "여행 일정을 공유하고 함께 할 수 있어요",
-    image: "/image/intro_plan.png",
+    image: "/image/default_img.png",
   },
   {
     ETitle: "Have a place you’ve always wanted to visit?",
@@ -64,7 +64,9 @@ const IntroSlider = () => {
             <p>{slides[activeIndex].EDescription}</p>
           </div>
           <div className="intro-btn-wrap">
-            <button className="btn-primary">시작하기</button>
+            {activeIndex === 4 && (
+              <button className="btn-primary">시작하기</button>
+            )}
           </div>
         </div>
         {/* Right image section */}

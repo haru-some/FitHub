@@ -8,18 +8,23 @@
   align-items: center;
   padding: 40px 0px;
   gap: 10px;
-  background-color: #757575;
+  background-color: #000000;
 }
 .intro-wrap > .intro {
   display: flex;
+  justify-content: space-between;
+  background-color: antiquewhite;
+  width: 1000px;
+  padding: 20px;
 }
 .intro > .intro-text {
-  width: 50%;
+  width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 30px;
   padding: 10px;
+  background-color: aqua;
 }
 .intro-text > .intro-title {
   text-indent: 60px;
@@ -35,5 +40,6 @@
   width: 200px;
 }
 .intro > .intro-img {
-  width: 40%;
+  background-color: brown;
+  width: 400px;
 }
