@@ -69,8 +69,12 @@ const CommunityList = () => {
             <div className="community-menu">
               <SearchIcon
                 onClick={() => {
-                  setShowInput((prev) => !prev);
-                  setSearchText("");
+                  if (showInput && searchText !== "") {
+                    setCommunityList([]);
+                    setSearchText("");
+                    setPage(1);
+                  }
+                  setShowInput(!showInput);
                 }}
               />
               {member && (
