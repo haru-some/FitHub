@@ -151,7 +151,7 @@ const MyFitMain = () => {
   if (!member) return null;
   return (
     <div className="myfit-wrap">
-      <h1>{pageTitle}</h1>
+      <h1 className="page-title">{pageTitle}</h1>
       <div className="myfit-content">
         <Sidebar memberNo={member.memberNo} flag={flag} />
         <div className="myfit-content-box">

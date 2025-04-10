@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import { Modal, Button, Box } from "@mui/material"; // MUI에서 필요한 컴포넌트 임포트
+import { Modal, Button, Box } from "@mui/material";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import "./shopDetail.css";
-import MemberInfo from "../member/MemberInfo";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
+const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo }) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
-  const backServer = process.env.REACT_APP_BACK_SERVER;
-  const [sell, setSell] = useState(null);
-
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
@@ -23,20 +20,34 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
     setRating(0); // 초기화
     setComment(""); // 초기화
     onClose();
-  };
 
-  useEffect(() => {
+    const reviewData = {
+      goodsNo: goodsNo,
+      memberId: memberInfo.memberId,
+      reContent: comment,
+      reStar: rating,
+    };
+
+    console.log(reviewData);
+
     axios
-      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .post(
+        `${process.env.REACT_APP_BACK_SERVER}/goods/review/add/`,
+        reviewData
+      )
       .then((res) => {
-        console.log(res.data);
-        setSell(res.data);
+        console.log("리뷰 제출 성공:", res.data);
+        onSubmit(reviewData); // 상태 업데이트
+        setRating(0); // 초기화
+        setComment(""); // 초기화
+        onClose();
       })
       .catch((err) => {
-        console.log(err);
+        console.log("리뷰 제출 실패:", err);
       });
-  }, []);
+  };
 
+  ////////////////////////////////////////////////////////////////////////////// 모달 창
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box className="review-modal">
@@ -80,51 +91,97 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
 };
 
 const ShopReview = () => {
+  const navigate = useNavigate();
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const [activeTab, setActiveTab] = useState("작성가능한 리뷰");
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
+  const [review, setReview] = useState([]); // 리뷰 목록 상태 추가
   const [reviews, setReviews] = useState([]); // 리뷰 목록 상태 추가
+  const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [sell, setSell] = useState([]);
+  const [goodsNo, setGoodsNo] = useState(null);
 
   const recordReview = (newReview) => {
     setReviews([...reviews, newReview]); // 새로운 리뷰 추가
   };
 
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setSell(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [setSell]);
+
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/sell/myreview/${memberInfo.memberId}`)
+      .then((res) => {
+        console.log(res.data);
+        setReview(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  ///////////////////////////////////////////////////////////////////////// 리뷰 탭
   const renderContent = () => {
     switch (activeTab) {
       case "작성가능한 리뷰":
         return (
           <div>
-            <div>작성가능한 리뷰</div>
-            <div className="review-item">
-              <img src="product_image_url" alt="상품 이미지" />
-              <div className="product-info">
-                <span>상품명 : </span>
-                <p>주문번호: 7010125031110061253</p>
-              </div>
-              <button
-                className="write-review-button"
-                onClick={() => setIsModalOpen(true)}
-              >
-                리뷰 작성
-              </button>
-            </div>
+            <h2>작성 가능한 리뷰</h2>
+            {sell && sell.length > 0 ? (
+              sell.map((item, index) => (
+                <div className="review-item" key={"sell-" + index}>
+                  <div className="product-info">
+                    <div>상품명: {item.goodsName}</div>
+                    <div>상품번호 :{item.sellNo}</div>
+                    <div>
+                      상품 총 가격 : {item.goodsTotalPrice} 원 (수량 :{" "}
+                      {item.goodsEa})
+                    </div>
+                    <div className="goods-no">{item.goodsNo}</div>
+                  </div>
+                  <button
+                    className="write-review-button"
+                    onClick={() => {
+                      setGoodsNo(item.goodsNo);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    리뷰 작성
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>구매한 상품이 없습니다.</p>
+            )}
           </div>
         );
       case "내가 작성한 리뷰":
         return (
           <div>
             <h2>내가 작성한 리뷰</h2>
-            {reviews.length === 0 ? (
-              <p>작성한 리뷰가 없습니다.</p>
-            ) : (
+            {review.length > 0 ? (
               <ul>
-                {reviews.map((review, index4) => (
-                  <li key={"review -" + index4}>
+                {review.map((review, index) => (
+                  <li
+                    key={"review-" + index}
+                    onClick={() => {
+                      navigate(`/shop/detail/${review.goodsNo}`);
+                    }}
+                  >
                     <div className="my-star-point">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <span key={star}>
-                          {star <= review.rating ? (
+                          {star <= review.reStar ? (
                             <StarIcon />
                           ) : (
                             <StarBorderIcon />
@@ -132,12 +189,17 @@ const ShopReview = () => {
                         </span>
                       ))}
                     </div>
-                    <br />
-                    <span> </span>
-                    {review.comment}
+
+                    <div>
+                      <div></div>
+                      <div>{review.reDate}</div>
+                    </div>
+                    <div>{review.reContent}</div>
                   </li>
                 ))}
               </ul>
+            ) : (
+              <p>작성된 리뷰가 없습니다.</p>
             )}
           </div>
         );
@@ -145,7 +207,7 @@ const ShopReview = () => {
         return null;
     }
   };
-
+  ////////////////////////////////////////////////////////////////////////// 화면구현
   return (
     <div className="Myreview-wrap">
       <div className="review-tabs">
@@ -166,6 +228,7 @@ const ShopReview = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={recordReview}
+        goodsNo={goodsNo}
       />
     </div>
   );

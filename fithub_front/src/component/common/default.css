@@ -185,7 +185,7 @@ html {
 .content {
   width: 100%;
   max-width: 1400px;
-  margin: 30px auto;
+  margin: 0px auto;
   flex: 1;
 }
 .logout-btn {
@@ -326,7 +326,6 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--gray1);
 }
-/* Swal2 스크롤 스타일 */
-.swal2-shown::-webkit-scrollbar {
-  display: none;
+.main-bg {
+  background-color: #020202;
 }

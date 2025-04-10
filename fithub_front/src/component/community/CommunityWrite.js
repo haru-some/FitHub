@@ -41,11 +41,11 @@ const CommunityWrite = () => {
           },
         })
         .then((res) => {
-          console.log(res);
           navigate("/community/list");
         });
     }
   };
+
   return (
     <div className="community-write">
       <div className="community-write-wrap">
@@ -68,6 +68,7 @@ const CommunityWrite = () => {
             />
           </div>
           <div className="write-memberId">{member.memberId}</div>
+          <div className="write-date"></div>
         </div>
         <div className="community-content">
           <TextEditor data={communityContent} setData={setCommunityContent} />

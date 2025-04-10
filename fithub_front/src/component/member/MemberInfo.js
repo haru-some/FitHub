@@ -1,16 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, TextField } from "@mui/material";
 import Swal from "sweetalert2";
-import { useRecoilState } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isLoginState, memberState } from "../utils/RecoilData";
 import axios from "axios";
 import "./member.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MemberInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+  const location = useLocation();
   const [loginMember, setLoginMember] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
+
+  useEffect(() => {
+    if (!isLogin) {
+      Swal.fire({
+        title: "로그인 필요",
+        text: "로그인 후 이용할 수 있는 페이지입니다.",
+        icon: "warning",
+        confirmButtonText: "로그인하러 가기",
+        confirmButtonColor: "#2f3e2f",
+      }).then(() => {
+        navigate("/login", {
+          state: { from: location.pathname },
+        });
+      });
+    }
+  }, [isLogin, navigate, location]);
+
   const [member, setMember] = useState({
     memberId: "",
     memberName: "",
@@ -288,7 +307,6 @@ const MemberInfo = () => {
       }
     });
   };
-
   return (
     <section className="info-wrap">
       <h2 className="info-title">내 정보</h2>

@@ -34,11 +34,7 @@ public class CommunityService {
         map.put("searchText", searchText);
         map.put("loginMemberNo", loginMemberNo);
 
-
-		List list = communityDao.selectCommunityList(map);
-		for(Object obj : list) {
-			System.out.println(obj);
-		}
+		List list = communityDao.selectCommunityList(map);		
 		return list;
 	}
 
@@ -97,9 +93,12 @@ public class CommunityService {
 	}
 
 	@Transactional
-	public int insertComment(CommentDTO comment) {
+	public CommentDTO insertComment(CommentDTO comment) {
+		int commentNo = communityDao.selectCommunityNo();
+		comment.setCommentNo(commentNo);
 		int result = communityDao.insertComment(comment);
-		return result;
+		CommentDTO c = communityDao.selectOneComment(commentNo);
+		return c;
 	}
 	
 	@Transactional
