@@ -93,9 +93,12 @@ public class CommunityService {
 	}
 
 	@Transactional
-	public int insertComment(CommentDTO comment) {
+	public CommentDTO insertComment(CommentDTO comment) {
+		int commentNo = communityDao.selectCommunityNo();
+		comment.setCommentNo(commentNo);
 		int result = communityDao.insertComment(comment);
-		return result;
+		CommentDTO c = communityDao.selectOneComment(commentNo);
+		return c;
 	}
 	
 	@Transactional

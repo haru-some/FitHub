@@ -12,7 +12,6 @@ import CommunityItem from "./CommunityItem";
 const CommunityList = () => {
   const params = useParams();
   const memberNo = params["*"];
-
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [member] = useRecoilState(memberState);
   const [showInput, setShowInput] = useState(false);
