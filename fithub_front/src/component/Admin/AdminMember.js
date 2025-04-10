@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import PageNavigation from "../utils/PageNavigation";
 
 const AdminMember = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -7,39 +8,64 @@ const AdminMember = () => {
   const [delMemberList, setDelMemberList] = useState();
   const [communityList, setCommunityList] = useState();
   const [commentList, setCommentList] = useState();
-  const [pi, setPi] = useState({});
-  const [memberPage, setMemberPage] = useState(1);
-  const [delMemberPage, setDelMemberPage] = useState(1);
-  const [communityPage, setCommunityPage] = useState(1);
-  const [commentPage, setCommentPage] = useState(1);
+  const [memberPage, setMemberPage] = useState(null);
+  const [delMemberPage, setDelMemberPage] = useState(null);
+  const [communityPage, setCommunityPage] = useState(null);
+  const [commentPage, setCommentPage] = useState(null);
   const [tabChange, setTabChange] = useState(1);
+  const [reqPage, setReqPage] = useState(1);
   useEffect(() => {
-    if (tabChange === 1) {
-      axios
-        .get(
-          `${backServer}/admin/memberList?memberPage=${memberPage}&delMemberPage=${delMemberPage}`
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log("member 에러");
-        });
-    } else if (tabChange === 2) {
-      axios
-        .get(
-          `${backServer}/admin/boardList?communityPage=${communityPage}&commentPage=${commentPage}`
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log("board 에러");
-        });
-    }
-  }, [tabChange]);
+    axios
+      .get(`${backServer}/admin/memberList?memberPage=${memberPage}`)
+      .then((res) => {
+        console.log(res);
+        setMemberList(res.data.memberList);
+        setMemberPage(res.data.memberPi);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("member 에러");
+      });
+  }, [tabChange === 1]);
+  useEffect(() => {
+    axios
+      .get(`${backServer}/admin/delMemberList?delMemberPage=${delMemberPage}`)
+      .then((res) => {
+        console.log(res);
+        setDelMemberList(res.data.delMemberList);
+        setDelMemberPage(res.data.delMemberPi);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("member 에러");
+      });
+  }, [tabChange === 1]);
+  useEffect(() => {
+    axios
+      .get(
+        `${backServer}/admin/boardList?communityPage=${communityPage}&commentPage=${commentPage}`
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("board 에러");
+      });
+  }, [tabChange === 2]);
+  useEffect(() => {
+    axios
+      .get(
+        `${backServer}/admin/boardList?communityPage=${communityPage}&commentPage=${commentPage}`
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("board 에러");
+      });
+  }, [tabChange === 2]);
   const changeTab = (e) => {
     const member = e.target.id;
     if (member === "member") {
@@ -75,11 +101,29 @@ const AdminMember = () => {
                 setMemberList={setMemberList}
               />
             </div>
+            <div>
+              {memberPage && (
+                <PageNavigation
+                  pi={memberPage}
+                  reqPage={reqPage}
+                  setReqPage={setReqPage}
+                />
+              )}
+            </div>
             <div className="del-member-list">
               <DelMemberListTBL
                 delMemberList={delMemberList}
                 setDelMemberList={setDelMemberList}
               />
+            </div>
+            <div>
+              {delMemberPage && (
+                <PageNavigation
+                  pi={delMemberPage}
+                  reqPage={reqPage}
+                  setReqPage={setReqPage}
+                />
+              )}
             </div>
           </div>
         ) : (

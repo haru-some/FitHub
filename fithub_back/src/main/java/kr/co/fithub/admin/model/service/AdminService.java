@@ -20,24 +20,34 @@ public class AdminService {
 	@Autowired
 	private PageInfoUtil pageInfoUtil;
 
-	public Map memberList(int memberPage, int delMemberPage) {
+	public Map memberList(int memberPage) {
 		int numPerPage = 6;
 		int pageNaviSize = 5;
 		int memberTotalCount = adminDao.memberTotalCount();
 		int delMemberTotalCount = adminDao.delMemberTotalCount();
 		
 		PageInfo memberPi = pageInfoUtil.getPageInfo(memberPage, numPerPage, pageNaviSize, memberTotalCount);
-		PageInfo delMemberPi = pageInfoUtil.getPageInfo(delMemberPage, numPerPage, pageNaviSize, delMemberTotalCount);
 		
 		List memberList = adminDao.memberList();
-		List delMemberList = adminDao.delMemberList();
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("memberList", memberList);
-		map.put("delMemberList", delMemberList);
 		map.put("memberPi", memberPi);
-		map.put("delMemberPi", delMemberPi);
 		return map;
+	}
+	
+	public Map delMemberList(int delMemberPage) {
+		int numPerPage = 6;
+		int pageNaviSize = 5;
+		int delMemberTotalCount = adminDao.delMemberTotalCount();
+		
+		PageInfo delMemberPi = pageInfoUtil.getPageInfo(delMemberPage, numPerPage, pageNaviSize, delMemberTotalCount);
+		List delMemberList = adminDao.delMemberList();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("delMemberList", delMemberList);
+		map.put("delMemberPi", delMemberPi);
+		return null;
 	}
 	
 	@Transactional
@@ -66,5 +76,7 @@ public class AdminService {
 //		map.put("commentPi", commentPi);
 		return map;
 	}
+
+	
 	
 }

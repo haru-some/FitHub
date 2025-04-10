@@ -12,9 +12,6 @@ const Main = () => {
       <hr></hr>
       <Link to="/shop">Shopping</Link>
       <hr></hr>
-      <Link to="/chat">
-        <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
-      </Link>
     </div>
   );
 };

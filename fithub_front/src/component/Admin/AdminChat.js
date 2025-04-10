@@ -37,6 +37,9 @@ const AdminChat = () => {
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
+      connectHeaders: {
+        Authorization: memberInfo.memberNo,
+      },
       onConnect: () => {
         console.log("Connected to WebSocket");
 
@@ -48,11 +51,6 @@ const AdminChat = () => {
             setMessages((prevMessages) => [...prevMessages, receivedMessage]);
           }
         );
-
-        client.subscribe(`/topic/chat/messages/${selectedChatRoom}`, (view) => {
-          const receivedMessage = JSON.parse(view.body);
-          console.log(view);
-        });
 
         client.subscribe("/queue/notifications", (message) => {
           // 받은 메시지가 "1"일 경우 알림을 처리
@@ -192,7 +190,7 @@ const AdminChatView = ({
           console.log(err);
         });
     }
-  }, []);
+  }, [selectedChatRoom]);
 
   const sendMessage = () => {
     const date = new Date();
@@ -214,16 +212,12 @@ const AdminChatView = ({
         messageContent: chatInput,
         memberLevel: memberInfo.memberLevel,
         messageDate: today,
-        isRead: 1,
+        isRead: 2,
+        memberThumb: memberInfo.memberThumb,
       };
       stompClient.publish({
         destination: `/app/chat/sendMessage/${selectedChatRoom}`,
         body: JSON.stringify(chatMessage),
-      });
-
-      stompClient.publish({
-        destination: `/app/chat/visit/${selectedChatRoom}`,
-        body: memberInfo.memberId,
       });
       setChatInput("");
     }
@@ -267,7 +261,7 @@ const AdminChatView = ({
                 <>
                   <div className="chat-content">
                     <div className="chat-id">
-                      {msg.isRead === 1 ? <VisibilityOffIcon /> : ""} -{" "}
+                      {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
                       {msg.messageDate} - {memberInfo.memberId}
                     </div>
                     <div className="chat-text">{msg.messageContent}</div>
