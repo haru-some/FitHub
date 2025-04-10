@@ -6,13 +6,14 @@ import "./main.css";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoginState } from "../utils/RecoilData";
+import "./intro.css";
 
 const Main = () => {
   const navigate = useNavigate();
   const isLogin = useRecoilValue(isLoginState);
   const nowStart = () => {
     if (isLogin) {
-      navigate("/myfit");
+      navigate("/myfit/fit");
     } else {
       navigate("/login");
     }
@@ -41,6 +42,7 @@ const Main = () => {
 
       <section className="feature-slide-section">
         <h2>지금, 이런 기능을 이용할 수 있어요!</h2>
+        <IntroSlider />
       </section>
 
       <section className="closing-section">
