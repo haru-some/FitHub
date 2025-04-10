@@ -3,39 +3,41 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 const slides = [
   {
-    ETitle: "Plan your own trip",
-    EDescription: "Share your itinerary and travel together",
-    KTitle: "나만의 여행을 계획하세요",
-    KDescription: "여행 일정을 공유하고 함께 할 수 있어요",
-    image: "/image/default_img.png",
+    ETitle: "Date-based workout routine and log management",
+    EDescription:
+      "Select a date to log your weekly routine and completed workouts.",
+    KTitle: "날짜별로 운동 루틴과 기록 관리",
+    KDescription:
+      "날짜를 선택하여 요일별 루틴과 완료한 운동을 기록할 수 있어요.",
+    image: "/image/calendar_record.png",
   },
   {
-    ETitle: "Have a place you’ve always wanted to visit?",
-    EDescription: "Search and discover the information you need",
-    KTitle: "꼭 가보고 싶은 곳이 있었나요?",
-    KDescription: "검색을 통해 원하시는 정보를 찾으세요",
-    image: "/image/default_img.png",
+    ETitle: "Log completed workouts",
+    EDescription: "Log the time and details of your completed workouts.",
+    KTitle: "완료한 운동을 기록",
+    KDescription: "완료한 운동의 시간과 내용을 기록해보세요.",
+    image: "/image/record.png",
   },
   {
-    ETitle: "From cozy stays and more",
-    EDescription: "Share honest reviews with other travelers",
-    KTitle: "편하게 머물 수 있는 공간들부터",
-    KDescription: "여러분들의 솔직한 평가를 나누세요",
-    image: "/image/default_img.png",
+    ETitle: "Set weekly routines",
+    EDescription: "Customize your routine for each day of the week.",
+    KTitle: "요일별 루틴 설정",
+    KDescription: "요일별로 루틴을 설정할 수 있어요.",
+    image: "/image/calendarImg.png",
   },
   {
-    ETitle: "Fun activities, tailored for you",
-    EDescription: "We provide recommendations just for you",
-    KTitle: "재미있는 즐길거리까지",
-    KDescription: "여러분이 원한 맞춤 추천을 제공합니다",
-    image: "/image/default_img.png",
+    ETitle: "Workout Summary & Statistics",
+    EDescription: "Check the summary and statistics of your logged workouts.",
+    KTitle: "운동 요약&통계",
+    KDescription: "기록된 운동의 요약과 통계를 확인해보세요.",
+    image: "/image/calendarImg.png",
   },
   {
-    ETitle: "Chat in real time and share reviews",
-    EDescription: "Plan your trip with friends, comfortably",
-    KTitle: "실시간 채팅과 다양한 리뷰와 함께",
-    KDescription: "친구들과 편하게 여행을 계획해보세요",
-    image: "/image/default_img.png",
+    ETitle: "Freely interact with other members",
+    EDescription: "Use the community and DMs to interact with fellow members.",
+    KTitle: "회원간 자유로운 소통",
+    KDescription: "커뮤니티와 DM을 활용하여 다른 회원과 소통해보세요.",
+    image: "/image/calendarImg.png",
   },
 ];
 const IntroSlider = () => {
@@ -63,19 +65,10 @@ const IntroSlider = () => {
             <p>{slides[activeIndex].KDescription}</p>
             <p>{slides[activeIndex].EDescription}</p>
           </div>
-          <div className="intro-btn-wrap">
-            {activeIndex === 4 && (
-              <button className="btn-primary">시작하기</button>
-            )}
-          </div>
         </div>
         {/* Right image section */}
         <div className="intro-img">
-          <img
-            src={slides[activeIndex].image}
-            alt="slide"
-            style={{ width: "100%", borderRadius: "8px", float: "right" }}
-          />
+          <img src={slides[activeIndex].image} alt="slide" />
         </div>
       </div>
       {/* 하단 원형 페이지네이션 */}
