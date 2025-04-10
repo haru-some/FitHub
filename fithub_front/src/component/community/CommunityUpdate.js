@@ -26,8 +26,7 @@ const CommunityUpdate = () => {
       )
       .then((res) => {
         setText(res.data.communityContent);
-      })
-      .catch((err) => {});
+      });
   }, []);
 
   const update = () => {
@@ -44,9 +43,6 @@ const CommunityUpdate = () => {
         }).then((res) => {
           navigate("/community/view/" + communityNo);
         });
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -110,7 +106,6 @@ const TextEditor = (props) => {
             },
           })
           .then((res) => {
-            console.log(res);
             const editor = editorRef.current.getEditor();
             const range = editor.getSelection();
             editor.insertEmbed(

@@ -35,8 +35,7 @@ const CommunityView = () => {
       )
       .then((res) => {
         setCommunity(res.data);
-      })
-      .catch((err) => {});
+      });
   }, [isUpdate]);
 
   const changeLike = (e) => {
@@ -148,11 +147,7 @@ const CommunityView = () => {
             `${process.env.REACT_APP_BACK_SERVER}/community/list/${community.communityNo}`
           )
           .then((res) => {
-            console.log(res);
             navigate("/community/list");
-          })
-          .catch((err) => {
-            console.log(err);
           });
       }
     });

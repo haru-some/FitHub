@@ -107,7 +107,6 @@ const TextEditor = (props) => {
             },
           })
           .then((res) => {
-            console.log(res);
             const editor = editorRef.current.getEditor();
             const range = editor.getSelection();
             editor.insertEmbed(
