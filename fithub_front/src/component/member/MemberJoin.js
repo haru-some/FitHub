@@ -14,10 +14,26 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import SecurityIcon from "@mui/icons-material/Security";
+import { useRecoilValue } from "recoil";
+import { agreeState } from "../utils/RecoilData";
 
 const MemberJoin = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+  const agree = useRecoilValue(agreeState);
+  useEffect(() => {
+    if (!agree.all) {
+      Swal.fire({
+        title: "약관 동의 필요",
+        text: "약관에 동의해야 회원가입을 진행할 수 있습니다.",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#2f3e2f",
+      }).then(() => {
+        navigate("/jointerms");
+      });
+    }
+  }, [agree, navigate]);
   const [member, setMember] = useState({
     memberId: "",
     memberPw: "",

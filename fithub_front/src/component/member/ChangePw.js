@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextField,
   Box,
@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useRecoilValue } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { isLoginState, memberState } from "../utils/RecoilData";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import clsx from "clsx";
@@ -27,7 +27,7 @@ import {
   LockReset as LockResetIcon,
   CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./member.css";
 
 const iconMap = {
@@ -97,6 +97,7 @@ const ChangePw = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const loginMember = useRecoilValue(memberState);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [step, setStep] = useState(1);
   const [currentPw, setCurrentPw] = useState("");
@@ -108,6 +109,23 @@ const ChangePw = () => {
   const [pwCheckMsg, setPwCheckMsg] = useState("");
   const [pwStrength, setPwStrength] = useState("");
   const [pwStrengthMsg, setPwStrengthMsg] = useState("");
+  const isLogin = useRecoilValue(isLoginState);
+
+  useEffect(() => {
+    if (!isLogin) {
+      Swal.fire({
+        title: "로그인 필요",
+        text: "로그인 후 이용할 수 있는 페이지입니다.",
+        icon: "warning",
+        confirmButtonText: "로그인하러 가기",
+        confirmButtonColor: "#2f3e2f",
+      }).then(() => {
+        navigate("/login", {
+          state: { from: location.pathname },
+        });
+      });
+    }
+  }, [isLogin, navigate, location]);
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
   const toggleShowPasswordRe = () => setShowPasswordRe((prev) => !prev);

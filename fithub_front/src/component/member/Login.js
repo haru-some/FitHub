@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import { memberState } from "../utils/RecoilData";
@@ -16,6 +16,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 const Login = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
+  const location = useLocation();
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -35,11 +36,12 @@ const Login = () => {
     axios
       .post(`${backServer}/member/login`, member)
       .then((res) => {
+        const redirectTo = location.state?.from || "/";
         localStorage.removeItem("joinStage");
         setMemberInfo(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         localStorage.setItem("refreshToken", res.data.refreshToken);
-        navigate("/");
+        navigate(redirectTo, { replace: true });
       })
       .catch(() => {
         Swal.fire(
@@ -100,7 +102,6 @@ const Login = () => {
         ),
     });
   };
-
   return (
     <section className="member-wrap">
       <div className="member-left" />

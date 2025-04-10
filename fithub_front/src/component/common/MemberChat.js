@@ -65,6 +65,9 @@ const MemberChat = () => {
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
+      connectHeaders: {
+        Authorization: memberInfo.memberNo,
+      },
       onConnect: () => {
         console.log("Connected to WebSocket");
 
@@ -72,28 +75,6 @@ const MemberChat = () => {
         client.subscribe(`/topic/chat/messages/${roomNo}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-        });
-
-        client.subscribe(`/chat/enter/${roomNo}`, (message) => {
-          console.log("User has joined the chat room");
-          // 여기서 isRead 상태를 2로 변경하는 API 호출을 할 수도 있습니다.
-          axios
-            .patch(`${process.env.REACT_APP_BACK_SERVER}/chat/viewOk`, {
-              roomNo: roomNo,
-              chatMemberId: memberInfo.memberId,
-            })
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        });
-
-        // 서버에 채팅방에 사용자가 들어왔음을 알림
-        client.publish({
-          destination: `/app/chat/enter/${roomNo}`,
-          body: JSON.stringify({ userId: memberInfo.memberId }),
         });
       },
       onDisconnect: () => console.log("Disconnected from WebSocket"),
@@ -126,7 +107,8 @@ const MemberChat = () => {
         messageContent: chatInput,
         memberLevel: memberInfo.memberLevel,
         messageDate: today,
-        isRead: 1,
+        isRead: 2,
+        memberThumb: memberInfo.memberThumb,
       };
       stompClient.publish({
         destination: `/app/chat/sendMessage/${roomNo}`,
@@ -201,7 +183,7 @@ const MemberChat = () => {
                   <>
                     <div className="chat-content">
                       <div className="chat-id">
-                        {msg.isRead === 1 ? <VisibilityOffIcon /> : ""} {"-"}
+                        {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
                         {msg.messageDate} {"-"} {memberInfo.memberId}
                       </div>
                       <div className="chat-text">{msg.messageContent}</div>

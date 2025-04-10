@@ -26,10 +26,17 @@ public class AdminController {
 	private AdminService adminService;
 	
 	@GetMapping("/memberList")
-	public ResponseEntity<Map> memberList(@RequestParam int memberPage, @RequestParam int delMemberPage) {
-		Map map = adminService.memberList(memberPage, delMemberPage);
+	public ResponseEntity<Map> memberList(@RequestParam int memberPage) {
+		Map map = adminService.memberList(memberPage);
 		return ResponseEntity.ok(map);
 	}
+	@GetMapping("/delMemberList")
+	public ResponseEntity<Map> delMemberList(@RequestParam int delMemberPage) {
+		Map map = adminService.delMemberList(delMemberPage);
+		return ResponseEntity.ok(map);
+	}
+	
+	
 	@GetMapping("/boardList")
 	public ResponseEntity<Map> boardList(@RequestParam int communityPage, @RequestParam int commentPage) {
 		Map map = adminService.boardList(communityPage, commentPage);
