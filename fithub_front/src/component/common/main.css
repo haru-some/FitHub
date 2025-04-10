@@ -1,45 +1,106 @@
-.main-wrap .intro-wrap {
-  width: 100%;
+/* 상단 히어로 섹션 스타일 */
+.main-page-wrap {
+  background-color: #020202;
   color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0 auto;
-  align-items: center;
-  padding: 40px 0px;
-  gap: 10px;
-  background-color: #000000;
+  overflow-x: hidden;
 }
-.intro-wrap > .intro {
+.main-page-wrap .hero-section {
   display: flex;
   justify-content: space-between;
-  background-color: antiquewhite;
-  width: 1000px;
-  padding: 20px;
+  padding: 0px 80px;
+  margin: 80px auto;
+  margin-bottom: 20px;
+  background-color: #020202;
+  height: 650px;
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
 }
-.intro > .intro-text {
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 30px;
-  padding: 10px;
-  background-color: aqua;
+.main-page-wrap .hero-content {
+  max-width: 900px;
 }
-.intro-text > .intro-title {
-  text-indent: 60px;
+.main-page-wrap .hero-content .main-ment {
+  font-size: 45px;
+  font-family: pd-b;
+  margin-bottom: 20px;
 }
-.intro-text > .intro-description {
-  text-indent: 80px;
+.main-page-wrap .features {
+  list-style: none;
+  padding-left: 45px;
+  margin-top: 45px;
+  margin-bottom: 50px;
+  font-size: 25px;
+  font-family: pd-r;
 }
-.intro-text > .intro-btn-wrap {
-  padding-top: 100px;
-  align-self: center;
+.main-page-wrap .features li {
+  margin-bottom: 30px;
 }
-.intro-btn-wrap > .btn-primary {
+.main-page-wrap .start-btn {
+  background-color: #2e3d2f;
+  color: #fff;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 24px;
+  font-size: 20px;
+  font-family: pd-b;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 60px;
   width: 200px;
 }
-.intro > .intro-img {
-  background-color: brown;
-  width: 400px;
+.main-page-wrap .start-btn:hover {
+  background-color: #3b4e3a;
+}
+.main-page-wrap .hero-image {
+  position: relative;
+  width: 500px;
+  height: 600px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 0;
+}
+.main-page-wrap .hero-image img {
+  width: 120%;
+  height: auto;
+  transform: translateY(-40px) scale(1.2);
+  object-fit: cover;
+}
+.main-page-wrap .hero-image {
+  position: relative;
+  width: 500px;
+  height: 600px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 1;
+}
+.main-page-wrap .hero-image img {
+  width: 120%;
+  height: auto;
+  transform: translate(-30px, 150px) scale(1.3);
+  object-fit: cover;
+}
+
+/* 하단 클로징 섹션 스타일 */
+.main-page-wrap .closing-section {
+  margin: 50px auto;
+  background-color: #020202;
+  height: 300px;
+  width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-page-wrap .closing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+}
+.main-page-wrap .closing-ment {
+  font-size: 45px;
+  font-family: pd-b;
+  text-align: center;
+  background-color: #020202;
 }

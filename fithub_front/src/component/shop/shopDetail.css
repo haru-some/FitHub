@@ -226,6 +226,7 @@ select {
   align-items: center; /* 세로 정렬 */
   border-bottom: 1px solid #eee; /* 아이템 구분선 */
   padding: 10px 0;
+  margin-top: 30px;
 }
 
 .Myreview-wrap .review-item img {
@@ -303,4 +304,90 @@ select {
   display: "inline-block";
   margin-top: 10px;
   padding: 0px;
+}
+
+.Myreview-wrap .goods-no {
+  display: none;
+}
+
+/* 상품 상세 리뷰 list  */
+.shop-detail-wrap .my-star-point {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.shop-detail-wrap .my-star-point span {
+  color: #ffd700;
+}
+
+.shop-detail-wrap li {
+  margin-top: 10px;
+  list-style: none;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.shop-detail-wrap li div {
+  margin: 4px 0;
+}
+
+.shop-detail-wrap li div:nth-child(2) {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #666;
+}
+
+.shop-detail-wrap li div:last-child {
+  font-size: 19px;
+  color: #333;
+}
+
+/* 마이 리뷰 list  */
+.Myreview-wrap .my-star-point {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.Myreview-wrap .my-star-point span {
+  color: #ffd700;
+}
+.Myreview-wrap li {
+  list-style: none;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.Myreview-wrap li div {
+  margin: 4px 0;
+}
+
+.Myreview-wrap li div:nth-child(2) {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #666;
+}
+
+.Myreview-wrap li div:last-child {
+  font-size: 19px;
+  color: #333;
+}
+
+.Myreview-wrap .delButton {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
 }

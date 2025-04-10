@@ -6,11 +6,14 @@ import PrivacyText from "./PrivacyText";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Swal from "sweetalert2";
+import { agreeState } from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 const JoinTerms = () => {
   const [allAgree, setAllAgree] = useState(false);
   const [termsAgree, setTermsAgree] = useState(false);
   const [privacyAgree, setPrivacyAgree] = useState(false);
+  const [agree, setAgree] = useRecoilState(agreeState);
   const navigate = useNavigate();
   const toggleAll = () => {
     const newValue = !allAgree;
@@ -29,6 +32,11 @@ const JoinTerms = () => {
 
   const handleSubmit = () => {
     if (termsAgree && privacyAgree) {
+      setAgree({
+        all: true,
+        terms: true,
+        privacy: true,
+      });
       navigate("/join");
     } else {
       Swal.fire({
@@ -37,6 +45,11 @@ const JoinTerms = () => {
         icon: "info",
         confirmButtonText: "확인",
         confirmButtonColor: "#2b3a2e",
+      });
+      setAgree({
+        all: false,
+        terms: termsAgree,
+        privacy: privacyAgree,
       });
     }
   };

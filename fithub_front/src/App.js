@@ -1,4 +1,10 @@
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Footer from "./component/common/Footer";
 import Header from "./component/common/Header";
 import Main from "./component/common/Main";
@@ -29,6 +35,9 @@ function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const loginMember = useRecoilValue(memberState);
+  const location = useLocation();
+  const isMainPage = location.pathname === "/";
+
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
 
   useEffect(() => {
@@ -83,7 +92,7 @@ function App() {
   }, []);
 
   return (
-    <div className="wrap">
+    <div className={`wrap ${isMainPage ? "main-bg" : ""}`}>
       <SocialJoinGuard />
       <Header />
       <main className="content">

@@ -29,4 +29,13 @@ const refreshState = atom({
   default: false,
 });
 
-export { memberState, isLoginState, alarmWsState, refreshState };
+const agreeState = atom({
+  key: "agreeState",
+  default: {
+    all: false,
+    terms: false,
+    privacy: false,
+  },
+});
+
+export { memberState, isLoginState, alarmWsState, refreshState, agreeState };
