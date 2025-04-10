@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
+import IntroSlider from "./IntroSlider";
 
 const Main = () => {
   return (
-    <div>
+    <div className="main-wrap">
       <Link to="/myfit">My Fit</Link>
       <hr></hr>
       <Link to="/community/list">community</Link>
@@ -15,6 +16,7 @@ const Main = () => {
       <Link to="/chat">
         <MarkUnreadChatAltIcon style={{ color: "#589c5f" }} />
       </Link>
+      <IntroSlider />
     </div>
   );
 };

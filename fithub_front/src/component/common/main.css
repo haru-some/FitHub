@@ -1,0 +1,39 @@
+.main-wrap .intro-wrap {
+  width: 100%;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  align-items: center;
+  padding: 40px 0px;
+  gap: 10px;
+  background-color: #757575;
+}
+.intro-wrap > .intro {
+  display: flex;
+}
+.intro > .intro-text {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  padding: 10px;
+}
+.intro-text > .intro-title {
+  text-indent: 60px;
+}
+.intro-text > .intro-description {
+  text-indent: 80px;
+}
+.intro-text > .intro-btn-wrap {
+  padding-top: 100px;
+  align-self: center;
+}
+.intro-btn-wrap > .btn-primary {
+  width: 200px;
+}
+.intro > .intro-img {
+  width: 40%;
+}
