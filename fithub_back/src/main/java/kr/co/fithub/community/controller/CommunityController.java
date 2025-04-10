@@ -102,10 +102,11 @@ public class CommunityController {
 	}
 	
 	@PostMapping(value="/comment/{communityNo}")
-	public ResponseEntity<Integer> insertComment(@PathVariable int communityNo, @RequestBody CommentDTO comment){
+	public ResponseEntity<CommentDTO> insertComment(@PathVariable int communityNo, @RequestBody CommentDTO comment){
 		comment.setCommunityNo(communityNo);
-		int result = communityService.insertComment(comment);
-		return ResponseEntity.ok(result);
+		CommentDTO c = communityService.insertComment(comment);
+	    
+		return ResponseEntity.ok(c);
 	}
 	
 	@DeleteMapping(value="/comment/{commentNo}")
