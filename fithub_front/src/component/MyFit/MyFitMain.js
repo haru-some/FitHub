@@ -131,13 +131,11 @@ const MyFitMain = () => {
     }
   }, [params]);
 
-  useEffect(() => {}, [member]);
   if (logoutST) {
     navigate("/");
     setLogoutST(false);
   } else {
     if (!member) {
-      navigate("/login");
       Swal.fire({
         title: "로그인 필요",
         text: "로그인이 필요한 서비스입니다.",
