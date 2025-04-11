@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.fithub.admin.model.dto.AdsDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.util.PageInfo;
 
@@ -27,5 +28,9 @@ public interface AdminDao {
 	int communityTotalCount();
 
 	int commnetTotalCount();
+
+	int writeAds(AdsDTO ads);
+
+	List getAds();
 
 }

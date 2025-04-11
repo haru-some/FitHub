@@ -1,29 +1,37 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const AdBanners = () => {
   const [ad, setAd] = useState(null);
 
   useEffect(() => {
-    const fetchAd = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/ads");
-        setAd(response.data);
-      } catch (error) {
-        console.error("광고 로드 실패");
-      }
-    };
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getAds`)
+      .then((res) => {
+        console.log(res.data);
+        const adsArray = res.data;
 
-    fetchAd();
+        if (adsArray.length > 0) {
+          const randomIndex = Math.floor(Math.random() * adsArray.length);
+          setAd(adsArray[randomIndex]);
+        }
+      })
+      .catch((err) => {
+        console.log("광고 배너 가져오기 실패", err);
+      });
   }, []);
 
-  if (!ad) return <div>광고를 불러오는 중...</div>;
+  if (!ad) return null; // 데이터가 없을 때는 렌더링 X
 
   return (
     <div className="ad-banner">
-      <a href={ad.link} target="_blank" rel="noopener noreferrer">
-        <img src={ad.image} alt={ad.title} />
-      </a>
+      <Link to={ad.adsLink}>
+        <img
+          src={`${process.env.REACT_APP_BACK_SERVER}/ads/img/${ad.adsImg}`}
+          alt={ad.adsName}
+        />
+      </Link>
     </div>
   );
 };

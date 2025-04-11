@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.fithub.admin.model.dao.AdminDao;
+import kr.co.fithub.admin.model.dto.AdsDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.util.PageInfo;
 import kr.co.fithub.util.PageInfoUtil;
@@ -83,6 +84,17 @@ public class AdminService {
 		map.put("commentList", commentList);
 		map.put("commentPi", commentPi);
 		return map;
+	}
+	
+	@Transactional
+	public int writeAds(AdsDTO ads) {
+		int result = adminDao.writeAds(ads);
+		return result;
+	}
+
+	public List getAds() {
+		List list = adminDao.getAds();
+		return list;
 	}
 	
 	
