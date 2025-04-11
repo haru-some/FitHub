@@ -42,7 +42,7 @@ const DmList = (props) => {
                     src={
                       dm.otherMemberThumb
                         ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${dm.otherMemberThumb}`
-                        : "/image/default_img.png"
+                        : "/image/profile.png"
                     }
                     className="avatar"
                   />

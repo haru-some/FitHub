@@ -93,9 +93,9 @@ public class MyfitController {
 		return ResponseEntity.ok(list);
 	}
 	
-	@GetMapping("/follow/{memberNo}")
-	public ResponseEntity<List<MemberDTO>> selectFollowList(@PathVariable int memberNo,@RequestParam int type) {
-		List<MemberDTO> list = myfitService.selectFollowList(memberNo,type);
+	@GetMapping("/follow/{loginMemberNo}")
+	public ResponseEntity<List<MemberDTO>> selectFollowList(@PathVariable int loginMemberNo,@RequestParam int type,@RequestParam int memberNo) {
+		List<MemberDTO> list = myfitService.selectFollowList(loginMemberNo,type,memberNo);
 		return ResponseEntity.ok(list);
 	}
 	

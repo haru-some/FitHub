@@ -6,6 +6,9 @@ import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 const ProfileCard = (props) => {
   const setFlag = props.setFlag;
@@ -39,185 +42,262 @@ const ProfileCard = (props) => {
       setShowSummary(false);
     }
   }, [act]);
+
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+
+  const handleUnfollow = () => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMember.memberNo}?followMemberNo=${memberNo}`
+      )
+      .then((res) => {
+        if (res.data > 0) {
+          actMember.isFollow = 0;
+          setActMember({ ...actMember });
+          setOpen(false);
+        }
+      });
+  };
   return (
-    <div className="myfit-profile-card">
-      {actMember && (
-        <>
-          <div className="myfit-profile-header">
-            <div className="myfit-profile-icon">
-              <img
-                src={
-                  actMember.memberThumb
-                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
-                    : "/image/default_img.png"
-                }
-              />
-            </div>
-            <div className="myfit-profile-info">
-              <div className="name-wrap">
-                <h2>{actMember.memberId}</h2>
-                <h3>{actMember.memberName}</h3>
-                {loginMember.memberNo !== Number(memberNo) && (
-                  <span
-                    className="material-icons chat-btn"
-                    onClick={() => {
-                      // 보낸사람/받은사람
-                      navigate(
-                        `/myfit/chat/${loginMember.memberNo}/${actMember.memberNo}`
-                      );
-                    }}
-                  >
-                    send
-                  </span>
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "transparent", // 배경 투명
+            borderRadius: "12px",
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              bgcolor: "#1E1E1E", // 내부 박스 배경색 (dark mode 느낌)
+              color: "#fff",
+              textAlign: "center",
+              padding: "24px 16px",
+              paddingBottom: "0px",
+            }}
+          >
+            <img
+              src={
+                actMember && actMember.memberThumb
+                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
+                  : "/image/default_img.png"
+              }
+              alt="프로필"
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: "50%",
+                objectFit: "cover",
+                marginBottom: "16px",
+              }}
+            />
+            {actMember && (
+              <Typography sx={{ fontSize: "15px", marginBottom: "24px" }}>
+                {actMember.memberId}님의 팔로우를 취소하시겠어요?
+              </Typography>
+            )}
+            <button
+              onClick={handleUnfollow}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                border: "none",
+                borderTop: "1px solid #444",
+                color: "#F33535",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              팔로우 취소
+            </button>
+            <button
+              onClick={handleClose}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                border: "none",
+                borderTop: "1px solid #444",
+                color: "#fff",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              취소
+            </button>
+          </Box>
+        </Box>
+      </Modal>
+
+      <div className="myfit-profile-card">
+        {actMember && (
+          <>
+            <div className="myfit-profile-header">
+              <div className="myfit-profile-icon">
+                <img
+                  src={
+                    actMember.memberThumb
+                      ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
+                      : "/image/profile.png"
+                  }
+                />
+              </div>
+              <div className="myfit-profile-info">
+                <div className="name-wrap">
+                  <h2>{actMember.memberId}</h2>
+                  <h3>{actMember.memberName}</h3>
+                  {loginMember.memberNo !== Number(memberNo) && (
+                    <span
+                      className="material-icons chat-btn"
+                      onClick={() => {
+                        // 보낸사람/받은사람
+                        navigate(
+                          `/myfit/chat/${loginMember.memberNo}/${actMember.memberNo}`
+                        );
+                      }}
+                    >
+                      send
+                    </span>
+                  )}
+                </div>
+                {actMember && (
+                  <div className="myfit-profile-stats">
+                    <div>
+                      <p>{actMember.communityCount}</p>
+                      <p>게시물</p>
+                    </div>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        navigate(`/myfit/follow/${actMember.memberNo}/1`);
+                      }}
+                    >
+                      <p>{actMember.followerCount}</p>
+                      <p>팔로워</p>
+                    </div>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        navigate(`/myfit/follow/${actMember.memberNo}/2`);
+                      }}
+                    >
+                      <p>{actMember.followingCount}</p>
+                      <p>팔로잉</p>
+                    </div>
+                  </div>
                 )}
               </div>
-              {actMember && (
-                <div className="myfit-profile-stats">
-                  <div>
-                    <p>{actMember.communityCount}</p>
-                    <p>게시물</p>
-                  </div>
-                  <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      navigate(`/myfit/follow/${actMember.memberNo}/1`);
-                    }}
-                  >
-                    <p>{actMember.followerCount}</p>
-                    <p>팔로워</p>
-                  </div>
-                  <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      navigate(`/myfit/follow/${actMember.memberNo}/2`);
-                    }}
-                  >
-                    <p>{actMember.followingCount}</p>
-                    <p>팔로잉</p>
+            </div>
+            <div className="myfit-profile-actions">
+              {loginMember.memberNo === Number(memberNo) ? (
+                <Link to="/mypage">
+                  <button className="myfit-profile-button">프로필 편집</button>
+                </Link>
+              ) : (
+                <button
+                  className={`follow-button ${
+                    actMember.isFollow === 1 ? "following" : ""
+                  }`}
+                  onClick={() => {
+                    if (actMember.isFollow === 1) {
+                      setOpen(true);
+                    } else {
+                      //팔로우
+                      axios
+                        .post(
+                          `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMember.memberNo}?followMemberNo=${memberNo}`
+                        )
+                        .then((res) => {
+                          if (res.data > 0) {
+                            actMember.isFollow = 1;
+                            setActMember({ ...actMember });
+                          }
+                        });
+                    }
+                  }}
+                >
+                  {actMember.isFollow === 1 ? "팔로잉" : "팔로우"}
+                </button>
+              )}
+
+              <button
+                className="myfit-profile-button"
+                onClick={() => {
+                  setAct(act === 1 ? 2 : 1);
+                }}
+              >
+                {act === 1 ? "My Fit 통계" : "My Fit 요약"}
+              </button>
+            </div>
+            <div className="myfit-profile-summary">
+              {act === 1 ? <h3>요약</h3> : <h3>주간 운동 통계</h3>}
+
+              {act === 1 ? (
+                <div className={`summary-wrap ${showSummary ? "test" : ""}`}>
+                  {actMember && (
+                    <ul>
+                      <li>
+                        <span>
+                          <span className="material-icons">edit_calendar</span>{" "}
+                          <span>총 운동 일수</span>
+                        </span>
+                        <span>{actMember.totalRecordDays}일</span>
+                      </li>
+                      <li>
+                        <span>
+                          <span className="material-icons">av_timer</span>{" "}
+                          <span>총 운동 시간</span>
+                        </span>
+                        <span>{`${Math.floor(
+                          actMember.totalRecordTime / 60
+                        )}시간 ${actMember.totalRecordTime % 60}분`}</span>
+                      </li>
+                      <li>
+                        <span>
+                          <span className="material-icons">edit_calendar</span>
+                          <span>지난 1주 운동 일수</span>
+                        </span>
+                        <span>{actMember.weekRecordDays}일</span>
+                      </li>
+                      <li>
+                        <span>
+                          <span className="material-icons">av_timer</span>{" "}
+                          <span>지난 1주 운동 시간</span>
+                        </span>
+                        <span>
+                          {`${Math.floor(actMember.weekRecordTime / 60)}시간 ${
+                            actMember.weekRecordTime % 60
+                          }분`}
+                        </span>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <div className="chart-wrap">
+                    <MyLineChart member={actMember} />
                   </div>
                 </div>
               )}
             </div>
-          </div>
-          <div className="myfit-profile-actions">
-            {loginMember.memberNo === Number(memberNo) ? (
-              <Link to="/mypage">
-                <button className="myfit-profile-button">프로필 편집</button>
-              </Link>
-            ) : (
-              <button
-                className={`follow-button ${
-                  actMember.isFollow === 1 ? "following" : ""
-                }`}
-                onClick={() => {
-                  if (actMember.isFollow === 1) {
-                    //팔로우 취소
-                    Swal.fire({
-                      title: "팔로우 취소",
-                      text: "정말 팔로우를 취소하시겠습니까?",
-                      icon: "warning",
-                      showCancelButton: true,
-                      confirmButtonColor: "rgb(93, 187, 121)",
-                      cancelButtonColor: "rgb(146, 146, 146)",
-                      confirmButtonText: "예",
-                      cancelButtonText: "아니오",
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        axios
-                          .delete(
-                            `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMember.memberNo}?followMemberNo=${memberNo}`
-                          )
-                          .then((res) => {
-                            if (res.data > 0) {
-                              actMember.isFollow = 0;
-                              setActMember({ ...actMember });
-                            }
-                          });
-                      }
-                    });
-                  } else {
-                    //팔로우
-                    axios
-                      .post(
-                        `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMember.memberNo}?followMemberNo=${memberNo}`
-                      )
-                      .then((res) => {
-                        if (res.data > 0) {
-                          actMember.isFollow = 1;
-                          setActMember({ ...actMember });
-                        }
-                      });
-                  }
-                }}
-              >
-                {actMember.isFollow === 1 ? "팔로잉" : "팔로우"}
-              </button>
-            )}
-
-            <button
-              className="myfit-profile-button"
-              onClick={() => {
-                setAct(act === 1 ? 2 : 1);
-              }}
-            >
-              {act === 1 ? "My Fit 통계" : "My Fit 요약"}
-            </button>
-          </div>
-          <div className="myfit-profile-summary">
-            {act === 1 ? <h3>요약</h3> : <h3>주간 운동 통계</h3>}
-
-            {act === 1 ? (
-              <div className={`summary-wrap ${showSummary ? "test" : ""}`}>
-                {actMember && (
-                  <ul>
-                    <li>
-                      <span>
-                        <span className="material-icons">edit_calendar</span>{" "}
-                        <span>총 운동 일수</span>
-                      </span>
-                      <span>{actMember.totalRecordDays}일</span>
-                    </li>
-                    <li>
-                      <span>
-                        <span className="material-icons">av_timer</span>{" "}
-                        <span>총 운동 시간</span>
-                      </span>
-                      <span>{`${Math.floor(
-                        actMember.totalRecordTime / 60
-                      )}시간 ${actMember.totalRecordTime % 60}분`}</span>
-                    </li>
-                    <li>
-                      <span>
-                        <span className="material-icons">edit_calendar</span>
-                        <span>지난 1주 운동 일수</span>
-                      </span>
-                      <span>{actMember.weekRecordDays}일</span>
-                    </li>
-                    <li>
-                      <span>
-                        <span className="material-icons">av_timer</span>{" "}
-                        <span>지난 1주 운동 시간</span>
-                      </span>
-                      <span>
-                        {`${Math.floor(actMember.weekRecordTime / 60)}시간 ${
-                          actMember.weekRecordTime % 60
-                        }분`}
-                      </span>
-                    </li>
-                  </ul>
-                )}
-              </div>
-            ) : (
-              <div>
-                <div className="chart-wrap">
-                  <MyLineChart member={actMember} />
-                </div>
-              </div>
-            )}
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
