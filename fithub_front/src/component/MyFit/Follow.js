@@ -73,7 +73,7 @@ const Follow = (props) => {
                     src={
                       member.memberThumb
                         ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                        : "/image/default_img.png"
+                        : "/image/profile.png"
                     }
                     className="avatar"
                   />

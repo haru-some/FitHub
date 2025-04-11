@@ -49,7 +49,7 @@ const ProfileCard = (props) => {
                 src={
                   actMember.memberThumb
                     ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
-                    : "/image/default_img.png"
+                    : "/image/profile.png"
                 }
               />
             </div>
