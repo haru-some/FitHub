@@ -11,7 +11,11 @@ import Main from "./component/common/Main";
 import MyFitMain from "./component/MyFit/MyFitMain";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginIdState, memberState } from "./component/utils/RecoilData";
+import {
+  loginIdState,
+  logoutState,
+  memberState,
+} from "./component/utils/RecoilData";
 import { useEffect } from "react";
 import TopButton from "./component/utils/TopButton";
 import AdminMain from "./component/Admin/AdminMain";
@@ -32,6 +36,7 @@ import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoinGuard from "./component/member/SocialJoinGuard";
 
 function App() {
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const loginMember = useRecoilValue(memberState);

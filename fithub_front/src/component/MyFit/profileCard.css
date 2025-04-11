@@ -203,3 +203,11 @@
   border: 1px solid #007bff;
   background-color: transparent;
 }
+
+.myfit-profile-actions .follow-button:hover {
+  background-color: #238eff;
+}
+.myfit-profile-actions .follow-button.following:hover {
+  background-color: transparent;
+  border: 1px solid #238eff;
+}
