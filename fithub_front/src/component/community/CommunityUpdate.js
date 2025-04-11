@@ -49,8 +49,8 @@ const CommunityUpdate = () => {
   return (
     <div className="community-write">
       <div className="community-write-wrap">
-        <div className="community-title">
-          <h2>커뮤니티 작성</h2>
+        <div className="community-head-title">
+          <p className="community-title">커뮤니티 수정</p>
           <ExitToAppIcon
             onClick={() => {
               navigate("/community/list");

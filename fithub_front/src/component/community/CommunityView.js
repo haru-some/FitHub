@@ -12,6 +12,9 @@ import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Swal from "sweetalert2";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 const CommunityView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -84,28 +87,11 @@ const CommunityView = () => {
       });
   };
 
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
   const changeFollow = (e) => {
     if (community.isFollow === 1) {
-      Swal.fire({
-        title: "팔로우 취소",
-        text: "정말 팔로우를 취소하시겠습니까?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "예",
-        cancelButtonText: "아니오",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axios
-            .delete(
-              `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
-            )
-            .then((res) => {
-              setCommunity({ ...community, isFollow: 0 });
-            });
-        }
-      });
+      setOpen(true);
     } else {
       axios
         .post(
@@ -115,7 +101,18 @@ const CommunityView = () => {
           setCommunity({ ...community, isFollow: 1 });
         });
     }
+
     e.stopPropagation();
+  };
+  const handleUnfollow = () => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
+      )
+      .then((res) => {
+        setCommunity({ ...community, isFollow: 0 });
+        setOpen(false);
+      });
   };
 
   const handleMenuClick = (e) => {
@@ -156,14 +153,196 @@ const CommunityView = () => {
   };
 
   return (
-    <div className="community-view">
-      <div className="community-view-content">
-        <div className="community-view-user">
-          <div className="member-img">
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "transparent", // 배경 투명
+            borderRadius: "12px",
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              bgcolor: "#1e1e1e", // 내부 박스 배경색 (dark mode 느낌)
+              color: "#fff",
+              textAlign: "center",
+              padding: "24px 16px",
+              paddingBottom: "0px",
+            }}
+          >
             <img
               src={
                 community && community.memberThumb
                   ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
+                  : "/image/default_img.png"
+              }
+              alt="프로필"
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: "50%",
+                objectFit: "cover",
+                marginBottom: "16px",
+              }}
+            />
+            {community && (
+              <Typography sx={{ fontSize: "15px", marginBottom: "24px" }}>
+                {community.memberId}님의 팔로우를 취소하시겠어요?
+              </Typography>
+            )}
+
+            <button
+              onClick={handleUnfollow}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                border: "none",
+                borderTop: "1px solid #444",
+                color: "#f33535",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              팔로우 취소
+            </button>
+            <button
+              onClick={handleClose}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                border: "none",
+                borderTop: "1px solid #444",
+                color: "#fff",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              취소
+            </button>
+          </Box>
+        </Box>
+      </Modal>
+      <div className="community-view">
+        <div className="community-view-content">
+          <div className="community-view-user">
+            <div className="member-img">
+              <img
+                src={
+                  community && community.memberThumb
+                    ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
+                    : "/image/default_img.png"
+                }
+                onClick={() => {
+                  navigate(`/myfit/activity/${community.memberNo}`);
+                }}
+              />
+            </div>
+
+            <div className="community-member">
+              {community && (
+                <>
+                  <p
+                    onClick={() => {
+                      navigate(`/myfit/activity/${community.memberNo}`);
+                    }}
+                  >
+                    {community.memberId}
+                  </p>
+                  <p>{community.communityDate}</p>
+                </>
+              )}
+            </div>
+            <div>
+              {member &&
+                community &&
+                member.memberId !== community.memberId && (
+                  <button
+                    type="button"
+                    className={`follow-btn ${
+                      community.isFollow === 1 ? "following" : ""
+                    }`}
+                    onClick={changeFollow}
+                  >
+                    {community.isFollow === 1 ? "팔로잉" : "팔로우"}
+                  </button>
+                )}
+            </div>
+            <div className="back-button">
+              <ExitToAppIcon
+                onClick={() => {
+                  navigate("/community/list");
+                }}
+              />
+            </div>
+            {member && community && member.memberId === community.memberId && (
+              <div className="community-sub-btn">
+                <IconButton
+                  aria-controls={menuOpen ? "community-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={menuOpen ? "true" : undefined}
+                  onClick={handleMenuClick}
+                  style={{ padding: "0" }}
+                >
+                  <MoreVertIcon style={{ color: "#fff" }} />
+                </IconButton>
+                <Menu
+                  id="community-menu"
+                  anchorEl={anchorEl}
+                  open={menuOpen}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  <MenuItem onClick={handleReport}>수정하기</MenuItem>
+                  <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
+                </Menu>
+              </div>
+            )}
+          </div>
+          {community && (
+            <div
+              className="community-view-texteditor"
+              dangerouslySetInnerHTML={{ __html: community.communityContent }}
+            ></div>
+          )}
+          {community && (
+            <div className="community-sub-zone view-btn">
+              <div className="community-likes" onClick={changeLike}>
+                {community.isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                {community.likeCount}
+              </div>
+              <div className="community-comments">
+                <ChatIcon />
+                {community.commentCount}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="post-input">
+          <div className="member-img">
+            <img
+              src={
+                member.memberThumb
+                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
                   : "/image/default_img.png"
               }
               onClick={() => {
@@ -171,137 +350,40 @@ const CommunityView = () => {
               }}
             />
           </div>
-
-          <div className="community-member">
-            {community && (
-              <>
-                <p
-                  onClick={() => {
-                    navigate(`/myfit/activity/${community.memberNo}`);
-                  }}
-                >
-                  {community.memberId}
-                </p>
-                <p>{community.communityDate}</p>
-              </>
-            )}
-          </div>
-          <div>
-            {member && community && member.memberId !== community.memberId && (
-              <button
-                type="button"
-                className={`follow-btn ${
-                  community.isFollow === 1 ? "following" : ""
-                }`}
-                onClick={changeFollow}
-              >
-                {community.isFollow === 1 ? "팔로잉" : "팔로우"}
-              </button>
-            )}
-          </div>
-          <div className="back-button">
-            <ExitToAppIcon
-              onClick={() => {
-                navigate("/community/list");
+          <div className="comment-text-box">
+            <input
+              type="text"
+              value={newComment}
+              onChange={inputComment}
+              onKeyUp={(e) => {
+                if (e.key === "Enter" && newComment.message !== "") {
+                  submitComment();
+                }
               }}
-            />
+              placeholder="댓글을 입력하세요..."
+            ></input>
+            <button onClick={submitComment}>send</button>
           </div>
-          {member && community && member.memberId === community.memberId && (
-            <div className="community-sub-btn">
-              <IconButton
-                aria-controls={menuOpen ? "community-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={menuOpen ? "true" : undefined}
-                onClick={handleMenuClick}
-                style={{ padding: "0" }}
-              >
-                <MoreVertIcon style={{ color: "#fff" }} />
-              </IconButton>
-              <Menu
-                id="community-menu"
-                anchorEl={anchorEl}
-                open={menuOpen}
-                onClose={handleMenuClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              >
-                <MenuItem onClick={handleReport}>수정하기</MenuItem>
-                <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
-              </Menu>
-            </div>
-          )}
         </div>
-        {community && (
-          <div
-            className="community-view-texteditor"
-            dangerouslySetInnerHTML={{ __html: community.communityContent }}
-          ></div>
-        )}
-        {community && (
-          <div className="community-sub-zone view-btn">
-            <div className="community-likes" onClick={changeLike}>
-              {community.isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              {community.likeCount}
-            </div>
-            <div className="community-comments">
-              <ChatIcon />
-              {community.commentCount}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="post-input">
-        <div className="member-img">
-          <img
-            src={
-              member.memberThumb
-                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                : "/image/default_img.png"
-            }
-            onClick={() => {
-              navigate(`/myfit/activity/${community.memberNo}`);
-            }}
-          />
-        </div>
-        <div className="comment-text-box">
-          <input
-            type="text"
-            value={newComment}
-            onChange={inputComment}
-            onKeyUp={(e) => {
-              if (e.key === "Enter" && newComment.message !== "") {
-                submitComment();
-              }
-            }}
-            placeholder="댓글을 입력하세요..."
-          ></input>
-          <button onClick={submitComment}>send</button>
+        <div className="community-comment-list">
+          <ul>
+            {community &&
+              community.commentList.map((comment, index) => {
+                return (
+                  <Comment
+                    key={"comment-" + JSON.stringify(comment)}
+                    comment={comment}
+                    member={member}
+                    community={community}
+                    setCommunity={setCommunity}
+                    setIsUpdate={setIsUpdate}
+                  />
+                );
+              })}
+          </ul>
         </div>
       </div>
-      <div className="community-comment-list">
-        <ul>
-          {community &&
-            community.commentList.map((comment, index) => {
-              return (
-                <Comment
-                  key={"comment-" + JSON.stringify(comment)}
-                  comment={comment}
-                  member={member}
-                  community={community}
-                  setCommunity={setCommunity}
-                  setIsUpdate={setIsUpdate}
-                />
-              );
-            })}
-        </ul>
-      </div>
-    </div>
+    </>
   );
 };
 

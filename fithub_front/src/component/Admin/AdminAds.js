@@ -42,7 +42,8 @@ const AdminAds = () => {
           <div></div>
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form>
+        {/* onSubmit={handleSubmit} */}
         <div className="ads-name-input-box">
           <input
             type="text"
