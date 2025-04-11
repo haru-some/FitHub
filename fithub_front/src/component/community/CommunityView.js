@@ -402,8 +402,6 @@ const Comment = (props) => {
   const navigate = useNavigate();
   const comment = props.comment;
   const member = props.member;
-  const community = props.community;
-  const setCommunity = props.setCommunity;
 
   const [updateComment, setUpdateComment] = useState("");
   useEffect(() => {
@@ -521,7 +519,9 @@ const Comment = (props) => {
                   horizontal: "right",
                 }}
               >
-                <MenuItem onClick={handleReport}>수정하기</MenuItem>
+                <MenuItem onClick={handleReport}>
+                  {showComment ? "수정취소" : "수정하기"}
+                </MenuItem>
                 <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
               </Menu>
             </div>

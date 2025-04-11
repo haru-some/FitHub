@@ -46,7 +46,7 @@ const IntroSlider = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 10000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
   const handleDotClick = (index) => {
