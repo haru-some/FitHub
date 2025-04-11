@@ -155,7 +155,7 @@
 .admin-section .admin-chat-box {
   margin: 0 auto;
   width: 90%;
-  background-color: var(--gray2);
+  background-color: var(--main1);
   border-radius: 30px;
   padding: 10px;
   display: flex;
@@ -235,7 +235,7 @@
 }
 /*chat*/
 .admin-section .chat-box {
-  background-color: var(--main1);
+  background-color: white;
   border-radius: 20px;
   height: 540px;
   overflow-y: auto;
@@ -252,79 +252,73 @@
 .chat-id {
   margin-bottom: 5px;
 }
-.chat-box .chat-text {
-  padding: 5px;
-  border-radius: 10px;
-  background-color: var(--gray2);
-}
-/*member chat*/
-.chat-box .member-chat-line {
+/*right chat*/
+.chat-box .right-chat-line {
   display: flex;
+  justify-content: flex-start;
   gap: 10px;
   margin-bottom: 5px;
   padding: 10px;
 }
-.chat-box .member-chat-none {
-  width: 100%;
-}
-.chat-box .chat-add-icon > svg {
-  width: 100%;
-  height: 400px;
-}
-.chat-box .chat-add-icon > svg > path {
-  width: 100%;
-  cursor: pointer;
-}
-.chat-box .chat-notice {
-  text-align: center;
-  font-size: 30px;
-}
-.member-chat-line .member-chat-profile {
+.right-chat-line .right-chat-profile {
   width: 60px;
   height: 60px;
   overflow: hidden;
   border-radius: 10px;
   background-color: white;
 }
-.member-chat-profile > img {
+.right-chat-profile > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.member-chat-line .chat-id {
+.right-chat-line .chat-id {
   text-align: start;
+  margin-bottom: 3px;
   color: var(--main3);
   font-weight: 900;
   display: flex;
+  justify-content: flex-start;
   gap: 10px;
 }
-.member-chat-line .chat-id > div {
+.right-chat-line .chat-id > div {
   color: var(--main3);
 }
+.right-chat-line .chat-content {
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+}
+.right-chat-line .chat-content .chat-text {
+  padding: 9px;
+  border-radius: 10px;
+  background-color: var(--gray2);
+  text-align: start;
+}
 
-/*admin chat*/
-.chat-box .admin-chat-line {
+/*left chat*/
+.chat-box .left-chat-line {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-bottom: 5px;
   padding: 10px;
 }
-.admin-chat-line .admin-chat-profile {
+.left-chat-line .left-chat-profile {
   width: 60px;
   height: 60px;
   overflow: hidden;
   border-radius: 10px;
   background-color: white;
 }
-.admin-chat-profile > img {
+.left-chat-profile > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.admin-chat-line .chat-id {
+.left-chat-line .chat-id {
   text-align: end;
   margin-bottom: 3px;
   color: var(--main3);
@@ -333,15 +327,15 @@
   justify-content: flex-end;
   gap: 10px;
 }
-.admin-chat-line .chat-id > div {
+.left-chat-line .chat-id > div {
   color: var(--main3);
 }
-.admin-chat-line .chat-content {
+.left-chat-line .chat-content {
   width: 400px;
   display: flex;
   justify-content: flex-end;
 }
-.admin-chat-line .chat-content .chat-text {
+.left-chat-line .chat-content .chat-text {
   padding: 9px;
   border-radius: 10px;
   background-color: var(--gray2);
@@ -354,7 +348,7 @@
   box-sizing: border-box;
   display: flex;
   justify-content: space-around;
-  background-color: var(--gray2);
+  background-color: transparent;
   padding: 10px;
 }
 .chat-input-box > input {
@@ -369,13 +363,13 @@
   padding: 5px 10px;
   border-radius: 10px;
   color: #fff;
-  background-color: var(--main1);
+  background-color: var(--main3);
   font-weight: 900;
-  font-size: 20px;
+  font-size: 16px;
 }
 .chat-input-box > button:hover {
   cursor: pointer;
-  color: var(--main3);
+  color: white;
 }
 /*---------- ads ----------*/
 .ads-section {
@@ -385,6 +379,7 @@
 .ads-list {
   margin: 0 auto;
   width: 80%;
+  margin-bottom: 30px;
 }
 .list-box {
   width: 100%;
@@ -394,6 +389,8 @@
   padding: 10px;
   height: 200px;
   overflow-y: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .list-box::-webkit-scrollbar {
   display: none;
@@ -458,12 +455,14 @@
   border: 3px double white;
   box-sizing: border-box;
 }
+.ads-input {
+  cursor: pointer;
+}
 .ads-img-input-box {
   margin-top: 5px;
   margin-bottom: 5px;
   width: 100%;
 }
-
 .ads-img-box {
   margin: 0 auto;
   padding: 20px;
@@ -471,8 +470,32 @@
   border-radius: 10px;
   border: 3px ridge white;
   box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+.ads-img-box > svg {
+  width: 100px;
+  height: 100px;
+}
+
+.ads-size-input-box {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+}
+.ads-size-input-box > select {
+  width: 20%;
+  border: 3px solid white;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .ads-button {
+  margin-top: 5px;
+  margin-bottom: 5px;
   margin: 0 auto;
   display: flex;
   justify-content: flex-end;
@@ -710,4 +733,15 @@
 .shop-detail-frm-wrap .input-item input:focus {
   outline: none;
   background-color: #e0e0e0;
+}
+
+.ad-banner {
+  width: 85%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.ad-banner img {
+  width: 100%;
+  height: 100%;
 }

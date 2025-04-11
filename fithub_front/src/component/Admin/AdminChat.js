@@ -85,7 +85,6 @@ const AdminChat = () => {
 
   return (
     <section className="admin-chat-section">
-      <div className="page-title">문의 관리</div>
       <div className="admin-chat-box">
         <div className="chat-list-box">
           <AdminChatList
@@ -239,20 +238,26 @@ const AdminChatView = ({
               key={index}
               className={
                 msg.memberLevel === 1 // 관리자 여부를 member_level로 판단
-                  ? "admin-chat-line"
-                  : "member-chat-line"
+                  ? "left-chat-line"
+                  : "right-chat-line"
               }
             >
               {memberInfo.memberId !== msg.chatMemberId ? (
                 <>
-                  <div className="member-chat-profile">
+                  <div className="right-chat-profile">
                     <img
                       src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
                     />
                   </div>
                   <div className="chat-content">
                     <div className="chat-id">
-                      {msg.chatMemberId} - {msg.messageDate} -{" "}
+                      {msg.chatMemberId} -{" "}
+                      {msg.messageDate
+                        ?.split(" ")[1]
+                        ?.split(":")
+                        .slice(0, 2)
+                        .join(":")}{" "}
+                      -{" "}
                     </div>
                     <div className="chat-text">{msg.messageContent}</div>
                   </div>
@@ -262,11 +267,16 @@ const AdminChatView = ({
                   <div className="chat-content">
                     <div className="chat-id">
                       {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
-                      {msg.messageDate} - {memberInfo.memberId}
+                      {msg.messageDate
+                        ?.split(" ")[1]
+                        ?.split(":")
+                        .slice(0, 2)
+                        .join(":")}{" "}
+                      - {memberInfo.memberId}
                     </div>
                     <div className="chat-text">{msg.messageContent}</div>
                   </div>
-                  <div className="admin-chat-profile">
+                  <div className="left-chat-profile">
                     <img
                       src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${memberInfo.memberThumb}`}
                       alt="관리자"

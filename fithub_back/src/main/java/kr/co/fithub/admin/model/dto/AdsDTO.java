@@ -21,6 +21,8 @@ public class AdsDTO {
 	private String adsImg;
 	@Schema(description = "광고 링크", example = "https://www.myprotein.co.kr/")
 	private String adsLink;
+	@Schema(description = "광고 타입", example = "w")
+	private String adsType;
 	@Schema(description = "광고 날짜", example = "2025-04-11 12:12:12")
 	private String adsDate;
 }

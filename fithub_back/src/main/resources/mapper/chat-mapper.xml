@@ -72,7 +72,7 @@ ORDER BY last_date DESC
     
     <select id="loadChatMessage" resultType="chatMessage">
 		SELECT 
-    cm.*,  -- chat_message 테이블의 모든 컬럼
+    cm.*,
     m.member_level,
     m.warning_level,
     m.member_thumb

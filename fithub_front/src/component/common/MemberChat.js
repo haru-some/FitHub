@@ -160,21 +160,27 @@ const MemberChat = () => {
               <div
                 key={index}
                 className={
-                  msg.chatMemberId === memberInfo.memberId
-                    ? "admin-chat-line"
-                    : "member-chat-line"
+                  msg.chatMemberId !== memberInfo.memberId // 관리자 여부를 member_level로 판단
+                    ? "left-chat-line"
+                    : "right-chat-line"
                 }
               >
-                {msg.chatMemberId !== memberInfo.memberId ? (
+                {memberInfo.memberId !== msg.chatMemberId ? (
                   <>
-                    <div className="member-chat-profile">
+                    <div className="right-chat-profile">
                       <img
-                        src={`${backServer}/member/profileimg/${msg.memberThumb}`}
+                        src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
                       />
                     </div>
                     <div className="chat-content">
                       <div className="chat-id">
-                        {msg.chatMemberId} {"-"} {msg.messageDate} {"-"}
+                        {msg.chatMemberId} -{" "}
+                        {msg.messageDate
+                          ?.split(" ")[1]
+                          ?.split(":")
+                          .slice(0, 2)
+                          .join(":")}{" "}
+                        -{" "}
                       </div>
                       <div className="chat-text">{msg.messageContent}</div>
                     </div>
@@ -184,13 +190,18 @@ const MemberChat = () => {
                     <div className="chat-content">
                       <div className="chat-id">
                         {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
-                        {msg.messageDate} {"-"} {memberInfo.memberId}
+                        {msg.messageDate
+                          ?.split(" ")[1]
+                          ?.split(":")
+                          .slice(0, 2)
+                          .join(":")}{" "}
+                        - {memberInfo.memberId}
                       </div>
                       <div className="chat-text">{msg.messageContent}</div>
                     </div>
-                    <div className="admin-chat-profile">
+                    <div className="left-chat-profile">
                       <img
-                        src={`${backServer}/member/profileimg/${memberInfo.memberThumb}`}
+                        src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${memberInfo.memberThumb}`}
                         alt="관리자"
                       />
                     </div>

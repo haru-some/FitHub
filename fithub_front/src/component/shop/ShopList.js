@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
+import AdBanners from "../utils/AdBanners";
 
 const categories = [
   "모두",
@@ -50,9 +51,7 @@ const Advertisements = () => {
   return (
     <div className="Banner-wrap">
       <button onClick={previousAd}>←</button>
-      <div className="adBanner" onClick={nextAd}>
-        <h2>{ads[currentAd]}</h2>
-      </div>
+      <AdBanners />
       <button onClick={nextAd}>→</button>
     </div>
   );

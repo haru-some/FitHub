@@ -1,9 +1,11 @@
 .member-chat-section {
-  margin: 0 auto;
+  margin: 0px auto;
   width: 700px;
   background-color: var(--main1);
   border-radius: 30px;
   padding: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .member-chat-section * {
   color: white;
@@ -15,14 +17,14 @@
   font-size: 32px;
 }
 
-.member-chat-section .member-chat-box {
+.member-chat-section .left-chat-box {
   margin: 0 auto;
   width: 90%;
   background-color: var(--gray2);
   border-radius: 30px;
   padding: 10px;
 }
-.member-chat-section .member-chat-list {
+.member-chat-section .left-chat-list {
   margin: 0 auto;
   background-color: var(--main1);
   height: 500px;
@@ -30,7 +32,7 @@
   border-radius: 20px;
 }
 
-.member-chat-section .member-chat-room {
+.member-chat-section .left-chat-room {
   display: flex;
   gap: 20px;
   align-items: center;
@@ -39,7 +41,7 @@
   overflow: hidden;
 }
 
-.member-chat-section .member-chat-room .chat-member-profile {
+.member-chat-section .left-chat-room .chat-member-profile {
   width: 60px;
   height: 60px;
   overflow: hidden;

@@ -30,6 +30,7 @@ const AdBanners = () => {
         <img
           src={`${process.env.REACT_APP_BACK_SERVER}/ads/img/${ad.adsImg}`}
           alt={ad.adsName}
+          style={{ objectFit: "contain" }}
         />
       </Link>
     </div>

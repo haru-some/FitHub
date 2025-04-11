@@ -96,7 +96,7 @@ public class AdminController {
 	    @ApiResponse(responseCode = "500", description = "광고 등록 실패")
 	})
 	@PostMapping("/writeAds")
-	public ResponseEntity<Integer> writeAds(@RequestParam("adsName") String adsName, @RequestParam("adsLink") String adsLink, @RequestParam(value = "adsImg", required = false) MultipartFile adsImg) {	    
+	public ResponseEntity<Integer> writeAds(@RequestParam("adsName") String adsName, @RequestParam("adsLink") String adsLink, @RequestParam("adsType") String adsType, @RequestParam(value = "adsImg", required = false) MultipartFile adsImg) {	    
         AdsDTO ads = new AdsDTO();
         ads.setAdsName(adsName);
         ads.setAdsLink(adsLink);
