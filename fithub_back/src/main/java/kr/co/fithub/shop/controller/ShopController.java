@@ -147,6 +147,17 @@ public class ShopController {
 		}
     
     }
+    @Operation(summary = "장바구니 상품 삭제", description = "단일 상품 정보를 삭제합니다.")
+    @DeleteMapping(value= "/cart/{cartNo}")
+	public ResponseEntity<Integer> deleteCart(@PathVariable int cartNo){
+    	System.out.println(cartNo);
+    	int result =  shopService.deleteCart(cartNo);
+		
+			return ResponseEntity.ok(1);
+		
+    
+    }
+    
     
     //장바구니 클릭 to DB
     @Operation(summary = "장바구니 버튼", description = "버튼을 누르면 상품 목록 리스트에 저장됩니다.")
@@ -163,8 +174,7 @@ public class ShopController {
     @Operation(summary = "장바구니 페이지", description = "장바구니에 저장된 상품 목록 리스트를 불러옵니다.")
     @GetMapping(value="/cart/read/{memberNo}")
     public ResponseEntity<List<Cart>> selectCart(@PathVariable int memberNo) {
-        System.out.println("장바구니 목록 출력!!!!!!");
-        System.out.println(memberNo);
+        
         
         List<Cart> reviewList = shopService.selectCart(memberNo); 
         return ResponseEntity.ok(reviewList);

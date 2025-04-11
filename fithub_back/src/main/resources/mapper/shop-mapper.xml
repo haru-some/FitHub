@@ -26,13 +26,17 @@
   		select * from goods_file where goods_no= #{goodsNo}
   	</select>
   	
-  	<delete id="deleteBoard">
+  	<delete id="deleteGoods">
   		delete from goods where goods_no = #{goodsNo}
+  	</delete>
+  	
+  	<delete id="deleteCart">
+  		delete from cart where cart_no = #{cartNo}
   	</delete>
   	
   	<insert id="insertCart">
   		insert into cart values
-  		(#{cartNo}, #{goodsNo}, #{memberNo}, #{goodsPrice}, #{goodsEa}, #{goodsImage})
+  		(#{cartNo}, #{goodsNo}, #{memberNo}, #{goodsPrice}, #{goodsEa}, #{goodsImage}, #{goodsName})
   		<selectKey order="BEFORE" resultType="int" keyProperty="cartNo">
  			select cart_seq.nextval from dual
  		</selectKey> 

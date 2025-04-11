@@ -60,13 +60,22 @@ public class ShopService {
 	public List<GoodsFile> deleteGoods(int goodsNo) {
 		
 		List<GoodsFile> delFileList = shopDao.selectGoodsFileList(goodsNo);
-		int result = shopDao.deleteBoard(goodsNo);
+		int result = shopDao.deleteGoods(goodsNo);
 		if(result >0) {
 			return null;
 		}
-		return delFileList;
-							
+		return delFileList;							
 	}
+	
+	@Transactional
+	public int deleteCart(int cartNo) {
+		
+		int result = shopDao.deleteCart(cartNo);
+		
+		return result;
+		
+	}
+	
 	@Transactional
 	public int insertCart(Cart cart) {
 		System.out.println(cart);
@@ -120,6 +129,8 @@ public class ShopService {
 		int result = shopDao.insertReview(review);
 		return result;
 	}
+	
+	
 
 	
 

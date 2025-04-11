@@ -1,38 +1,58 @@
 .cart-wrap .cart-container {
-  width: 800px;
   margin: auto;
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
+  padding: 20px;
+  max-width: 800px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.cart-wrap .cart-items {
-  margin-bottom: 20px;
+.cart-wrap h2 {
+  text-align: center;
+  color: #333;
 }
-
 .cart-wrap .cart-item {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
   border-bottom: 1px solid #eaeaea;
   padding-bottom: 10px;
+  padding: 10px;
 }
 
 .cart-wrap .cart-item img {
-  width: 100px; /* 이미지 크기 조정 */
+  width: 80px;
   height: auto;
+  object-fit: cover;
   margin-right: 20px;
 }
 
 .cart-wrap .item-details {
+  display: flex;
+  justify-content: space-between;
   flex: 1;
+}
+
+.cart-wrap .item-details h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.cart-wrap .item-details p {
+  margin: 5px 0;
 }
 
 .cart-wrap .cart-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
+}
+
+.cart-wrap .cart-summary h3 {
+  margin: 0;
 }
 
 .cart-wrap .checkout-button {
@@ -46,4 +66,52 @@
 
 .cart-wrap .checkout-button:hover {
   background-color: #45a049;
+}
+
+input[type="checkbox"] {
+  margin-right: 15px;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.cart-wrap .purchase-button,
+.delete-button,
+.checkout-button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cart-wrap .purchase-button {
+  background-color: #28a745; /* 구매 버튼 색상 */
+  margin-right: 20px;
+  margin-top: 30px;
+}
+
+.cart-wrap .purchase-button:hover {
+  background-color: #218838; /* 구매 버튼 hover 색상 */
+}
+
+.cart-wrap .delete-button {
+  background-color: #dc3545; /* 삭제 버튼 색상 */
+}
+
+.cart-wrap .delete-button:hover {
+  background-color: #c82333; /* 삭제 버튼 hover 색상 */
+}
+
+.cart-wrap .delete-button-item {
+  position: relative; /* 상위 요소에 상대적 위치 조정 */
+  top: -30px; /* 위로 20px 이동 */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 10px;
+  padding: 0;
+  font-weight: bold;
 }
