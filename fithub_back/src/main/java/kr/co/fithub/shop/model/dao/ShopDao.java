@@ -37,4 +37,6 @@ public interface ShopDao {
 
 	List<Review> selectMyReviews(String memberId);
 
+	List<Cart> selectCart(int memberNo);
+
 }

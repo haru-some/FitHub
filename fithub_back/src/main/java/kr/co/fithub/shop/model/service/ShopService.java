@@ -19,6 +19,7 @@ import kr.co.fithub.shop.model.dto.Sell;
 
 
 
+
 @Service
 public class ShopService {
 	
@@ -77,6 +78,14 @@ public class ShopService {
 //		}
 		return result;
 	}
+	public List<Cart> selectCart(int memberNo) {
+		List<Cart> reviews = shopDao.selectCart(memberNo);		 
+		return reviews;
+	}
+	
+	
+	
+	
 	@Transactional
 	public int insertSell(Sell sell) {
 		int result = shopDao.insertSell(sell);
@@ -91,8 +100,10 @@ public class ShopService {
 	    return reviews;
 	}
 	
-	public List<Review> selectMyReviews(String memberId) {
-		 List<Review> reviews = shopDao.selectMyReviews(memberId);
+	public List<Review> selectMyReviews(String memberId) {		 
+		
+		 List<Review> reviews = shopDao.selectMyReviews(memberId);		
+		 
 		return reviews;
 	}
 	
@@ -109,6 +120,8 @@ public class ShopService {
 		int result = shopDao.insertReview(review);
 		return result;
 	}
+
+	
 
 	
 

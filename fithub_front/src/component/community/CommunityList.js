@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./community.css";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateIcon from "@mui/icons-material/Create";
@@ -32,10 +32,8 @@ const CommunityList = () => {
         }?memberNo=${memberNo}&page=${page}&size=10&searchText=${searchText}`
       )
       .then((res) => {
-        console.log(res.data);
         setCommunityList([...communityList, ...res.data]);
-      })
-      .catch((err) => console.log(err));
+      });
   }, [page, searchText, memberNo]);
 
   const loadMoreCommunities = useCallback(() => {
@@ -69,8 +67,12 @@ const CommunityList = () => {
             <div className="community-menu">
               <SearchIcon
                 onClick={() => {
-                  setShowInput((prev) => !prev);
-                  setSearchText("");
+                  if (showInput && searchText !== "") {
+                    setCommunityList([]);
+                    setSearchText("");
+                    setPage(1);
+                  }
+                  setShowInput(!showInput);
                 }}
               />
               {member && (

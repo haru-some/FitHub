@@ -52,11 +52,8 @@ const CommunityItem = (props) => {
             const newCommunity = communityList.filter((item) => {
               return item.communityNo !== community.communityNo;
             });
-            console.log(newCommunity);
+
             setCommunityList([...newCommunity, res.data]);
-          })
-          .catch((err) => {
-            console.log(err);
           });
       }
     });

@@ -24,11 +24,10 @@ public class AdminService {
 		int numPerPage = 6;
 		int pageNaviSize = 5;
 		int memberTotalCount = adminDao.memberTotalCount();
-		int delMemberTotalCount = adminDao.delMemberTotalCount();
 		
 		PageInfo memberPi = pageInfoUtil.getPageInfo(memberPage, numPerPage, pageNaviSize, memberTotalCount);
 		
-		List memberList = adminDao.memberList();
+		List memberList = adminDao.memberList(memberPi);
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("memberList", memberList);
@@ -42,7 +41,7 @@ public class AdminService {
 		int delMemberTotalCount = adminDao.delMemberTotalCount();
 		
 		PageInfo delMemberPi = pageInfoUtil.getPageInfo(delMemberPage, numPerPage, pageNaviSize, delMemberTotalCount);
-		List delMemberList = adminDao.delMemberList();
+		List delMemberList = adminDao.delMemberList(delMemberPi);
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("delMemberList", delMemberList);
@@ -57,26 +56,34 @@ public class AdminService {
 		return result;
 	}
 
-	public Map boardList(int communityPage, int commentPage) {
+	public Map communityList(int communityPage) {
 		int numPerPage = 6;
 		int pageNaviSize = 5;
 		int communityTotalCount = adminDao.communityTotalCount();
-//		int commentTotalCount = adminDao.commnetTotalCount();
 		
 		PageInfo communityPi = pageInfoUtil.getPageInfo(communityPage, numPerPage, pageNaviSize, communityTotalCount);
-//		PageInfo commentPi = pageInfoUtil.getPageInfo(commentPage, numPerPage, pageNaviSize, commentTotalCount);
 		
-		List communityList = adminDao.communityList();
-//		List commentList = adminDao.commentList();
-		
+		List communityList = adminDao.communityList(communityPi);
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("communityList", communityList);
-//		map.put("commentList", commentList);
 		map.put("communityPi", communityPi);
-//		map.put("commentPi", commentPi);
 		return map;
 	}
 
+	public Map commentList(int commentPage) {
+		int numPerPage = 6;
+		int pageNaviSize = 5;
+		int commentTotalCount = adminDao.commnetTotalCount();
+		
+		PageInfo commentPi = pageInfoUtil.getPageInfo(commentPage, numPerPage, pageNaviSize, commentTotalCount);
+		
+		List commentList = adminDao.commentList(commentPi);
+		Map<String, Object> map = new HashMap<>();
+		map.put("commentList", commentList);
+		map.put("commentPi", commentPi);
+		return map;
+	}
 	
 	
 }

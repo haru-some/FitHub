@@ -3,6 +3,8 @@
   margin: 0 auto;
   width: 1400px;
   gap: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .admin-section * {
@@ -79,6 +81,32 @@
 .admin-member-navi {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.admin-member-navi .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-member-navi .pagination > li {
+  cursor: pointer;
+  display: block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  padding: 5px;
+  line-height: 25px;
+}
+
+.admin-member-navi .pagination > li > .active-page {
+  border-radius: 30px;
+  background-color: var(--main3);
+  text-align: center;
+  display: block;
 }
 
 .admin-tbl {
@@ -96,6 +124,10 @@
 
 .admin-section select {
   background-color: var(--main1);
+}
+.admin-tbody > tr > td {
+  width: 100px;
+  table-layout: fixed;
 }
 
 /*---------- AdminStat / 관리자 회원 활동, 매출 통계 관리 ----------*/
@@ -344,6 +376,56 @@
 .chat-input-box > button:hover {
   cursor: pointer;
   color: var(--main3);
+}
+/*---------- ads ----------*/
+.ads-section {
+  border-radius: 30px;
+  padding: 20px;
+}
+.ads-name-input-box {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ads-name-input-box > input {
+  margin: 0 auto;
+  width: 84%;
+  height: 24px;
+  border-radius: 10px;
+  text-indent: 10px;
+  background-color: var(--main1);
+  color: #fff;
+  border: 1px double white;
+}
+.ads-link-input-box {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.ads-link-input-box > input {
+  margin: 0 auto;
+  width: 84%;
+  height: 24px;
+  border-radius: 10px;
+  text-indent: 10px;
+  background-color: var(--main1);
+  color: #fff;
+  border: 1px double white;
+}
+.ads-img-input-box {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.ads-img-box {
+  margin: 0 auto;
+  width: 80%;
+  padding: 20px;
+  height: 200px;
+  border-radius: 15px;
+  border: 3px ridge white;
 }
 
 /* shop frm  */
