@@ -113,14 +113,17 @@ public class MyfitService {
 		return list;
 	}
 
-	public List<MemberDTO> selectFollowList(int memberNo, int type) {
+	public List<MemberDTO> selectFollowList(int loginMemberNo, int type, int memberNo) {
 		List<MemberDTO> list = null;
+		HashMap<String,Integer> map = new HashMap<>();
+		map.put("loginMemberNo", loginMemberNo);
+		map.put("memberNo", memberNo);
 		if(type == 1) {
 			//팔로워 조회
-			list = myfitDao.selectFollowerList(memberNo);
+			list = myfitDao.selectFollowerList(map);
 		}else {
 			//팔로잉 조회
-			list = myfitDao.selectFollowingList(memberNo);
+			list = myfitDao.selectFollowingList(map);
 		}
 		return list;
 	}

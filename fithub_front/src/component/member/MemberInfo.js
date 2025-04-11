@@ -133,21 +133,7 @@ const MemberInfo = () => {
       }
 
       if (member.memberThumb) {
-        axios
-          .delete(`${backServer}/member/profileimg`, {
-            params: { memberId: member.memberId },
-          })
-          .then(() => {
-            setMember((prev) => ({ ...prev, memberThumb: null }));
-          })
-          .catch(() => {
-            Swal.fire({
-              title: "이미지 삭제 실패",
-              text: "기존 이미지 삭제 중 문제가 발생했습니다.",
-              icon: "error",
-              confirmButtonColor: "#2f3e2f",
-            });
-          });
+        setMember((prev) => ({ ...prev, memberThumb: null }));
       }
 
       setThumbnailFile(file);

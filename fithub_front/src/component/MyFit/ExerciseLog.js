@@ -83,7 +83,7 @@ const ExerciseLog = (props) => {
           onChange={(value) => {
             setText(value);
           }}
-          placeholder="루틴을 입력하세요..."
+          placeholder="기록을 입력하세요..."
         />
       </div>
       <button

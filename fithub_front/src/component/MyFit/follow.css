@@ -127,6 +127,10 @@
 .myfit-follow-wrap .follow-button:hover {
   background-color: #238eff;
 }
+.myfit-follow-wrap .follow-button.following:hover {
+  background-color: transparent;
+  border: 1px solid #238eff;
+}
 
 .myfit-follow-wrap .back-btn {
   background-color: transparent;

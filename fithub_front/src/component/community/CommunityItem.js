@@ -9,6 +9,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import dayjs from "dayjs";
 
 const CommunityItem = (props) => {
   const page = props.page;
@@ -109,35 +113,12 @@ const CommunityItem = (props) => {
     e.stopPropagation();
   };
 
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
   const changeFollow = (e) => {
+    e.stopPropagation();
     if (community.isFollow === 1) {
-      Swal.fire({
-        title: "팔로우 취소",
-        text: "정말 팔로우를 취소하시겠습니까?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "예",
-        cancelButtonText: "아니오",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axios
-            .delete(
-              `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
-            )
-            .then((res) => {
-              const arr = communityList.map((item) => {
-                if (item.memberNo === community.memberNo) {
-                  item.isFollow = 0;
-                }
-                return item;
-              });
-
-              setCommunityList([...arr]);
-            });
-        }
-      });
+      setOpen(true);
     } else {
       axios
         .post(
@@ -154,98 +135,222 @@ const CommunityItem = (props) => {
           setCommunityList([...arr]);
         });
     }
-    e.stopPropagation();
   };
+
+  const handleUnfollow = () => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACK_SERVER}/community/follow/${member.memberNo}?followMemberNo=${community.memberNo}`
+      )
+      .then((res) => {
+        const arr = communityList.map((item) => {
+          if (item.memberNo === community.memberNo) {
+            item.isFollow = 0;
+          }
+          return item;
+        });
+        setCommunityList([...arr]);
+        setOpen(false);
+      });
+  };
+  {
+    /*게시물 올린 시간 계산*/
+  }
+  const formatTimeAgo = (timeString) => {
+    const now = dayjs();
+    const past = dayjs(timeString);
+
+    const diffInSeconds = now.diff(past, "second");
+    const diffInMinutes = now.diff(past, "minute");
+    const diffInHours = now.diff(past, "hour");
+    const diffInDays = now.diff(past, "day");
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds}초 전`;
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes}분 전`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours}시간 전`;
+    } else {
+      return `${diffInDays}일 전`;
+    }
+  };
+
   return (
-    <li
-      className="community-post-item"
-      onClick={() => {
-        navigate(`/community/view/${community.communityNo}`);
-      }}
-    >
-      <div className="user-info">
-        <div className="member-img">
-          <img
-            src={
-              community && community.memberThumb
-                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
-                : "/image/default_img.png"
-            }
-            onClick={(e) => {
-              navigate(`/myfit/activity/${community.memberNo}`);
-              e.stopPropagation();
-            }}
-          />
-        </div>
-        <div className="community-member">
-          <p
-            className="community-list-member-id"
-            onClick={(e) => {
-              navigate(`/myfit/activity/${community.memberNo}`);
-              e.stopPropagation();
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "transparent", // 배경 투명
+            borderRadius: "12px",
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              bgcolor: "#1e1e1e", // 내부 박스 배경색 (dark mode 느낌)
+              color: "#fff",
+              textAlign: "center",
+              padding: "24px 16px",
+              paddingBottom: "0px",
             }}
           >
-            {community.memberId}
-          </p>
-          {member && member.memberId !== community.memberId && (
+            <img
+              src={
+                community && community.memberThumb
+                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
+                  : "/image/default_img.png"
+              }
+              alt="프로필"
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: "50%",
+                objectFit: "cover",
+                marginBottom: "16px",
+              }}
+            />
+            <Typography sx={{ fontSize: "15px", marginBottom: "24px" }}>
+              @{community.memberId}님의 팔로우를 취소하시겠어요?
+            </Typography>
+
             <button
-              type="button"
-              className={`follow-btn ${
-                community.isFollow === 1 ? "following" : ""
-              }`}
-              onClick={changeFollow}
+              onClick={handleUnfollow}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                border: "none",
+                borderTop: "1px solid #444",
+                color: "#f33535",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
             >
-              {community.isFollow === 1 ? "팔로잉" : "팔로우"}
+              팔로우 취소
             </button>
+            <button
+              onClick={handleClose}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                border: "none",
+                borderTop: "1px solid #444",
+                color: "#fff",
+                background: "transparent",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              취소
+            </button>
+          </Box>
+        </Box>
+      </Modal>
+
+      <li
+        className="community-post-item"
+        onClick={() => {
+          navigate(`/community/view/${community.communityNo}`);
+        }}
+      >
+        <div className="user-info">
+          <div className="member-img">
+            <img
+              src={
+                community && community.memberThumb
+                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
+                  : "/image/default_img.png"
+              }
+              onClick={(e) => {
+                navigate(`/myfit/activity/${community.memberNo}`);
+                e.stopPropagation();
+              }}
+            />
+          </div>
+          <div className="community-member">
+            <p
+              className="community-list-member-id"
+              onClick={(e) => {
+                navigate(`/myfit/activity/${community.memberNo}`);
+                e.stopPropagation();
+              }}
+            >
+              {community.memberId}
+            </p>
+            <p className="community-list-date">
+              {formatTimeAgo(community.communityDate)}
+            </p>
+            {member && member.memberId !== community.memberId && (
+              <button
+                type="button"
+                className={`follow-btn ${
+                  community.isFollow === 1 ? "following" : ""
+                }`}
+                onClick={changeFollow}
+              >
+                {community.isFollow === 1 ? "팔로잉" : "팔로우"}
+              </button>
+            )}
+          </div>
+          {member && member.memberId === community.memberId && (
+            <div className="community-sub-btn">
+              <IconButton
+                aria-controls={menuOpen ? "community-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={menuOpen ? "true" : undefined}
+                onClick={handleMenuClick}
+                style={{ marginLeft: "auto" }}
+              >
+                <MoreVertIcon style={{ color: "#fff" }} />
+              </IconButton>
+              <Menu
+                id="community-menu"
+                anchorEl={anchorEl}
+                open={menuOpen}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <MenuItem onClick={handleReport}>수정하기</MenuItem>
+                <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
+              </Menu>
+            </div>
           )}
         </div>
-        {member && member.memberId === community.memberId && (
-          <div className="community-sub-btn">
-            <IconButton
-              aria-controls={menuOpen ? "community-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={menuOpen ? "true" : undefined}
-              onClick={handleMenuClick}
-              style={{ marginLeft: "auto" }}
-            >
-              <MoreVertIcon style={{ color: "#fff" }} />
-            </IconButton>
-            <Menu
-              id="community-menu"
-              anchorEl={anchorEl}
-              open={menuOpen}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-            >
-              <MenuItem onClick={handleReport}>수정하기</MenuItem>
-              <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
-            </Menu>
-          </div>
-        )}
-      </div>
-      <div
-        className="community-content-texteditor"
-        dangerouslySetInnerHTML={{ __html: community.communityContent }}
-      ></div>
+        <div
+          className="community-content-texteditor"
+          dangerouslySetInnerHTML={{ __html: community.communityContent }}
+        ></div>
 
-      <div className="community-sub-zone">
-        <div className="community-likes" onClick={changeLike}>
-          {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          {community.likeCount}
+        <div className="community-sub-zone">
+          <div className="community-likes" onClick={changeLike}>
+            {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {community.likeCount}
+          </div>
+          <div className="community-comments">
+            <ChatIcon />
+            {community.commentCount}
+          </div>
         </div>
-        <div className="community-comments">
-          <ChatIcon />
-          {community.commentCount}
-        </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 };
 

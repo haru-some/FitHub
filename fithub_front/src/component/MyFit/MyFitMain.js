@@ -17,13 +17,14 @@ import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { logoutState, memberState } from "../utils/RecoilData";
 import Follow from "./Follow";
 import Swal from "sweetalert2";
 import ChatMain from "./ChatMain";
 import DmList from "./DmList";
 
 const MyFitMain = () => {
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const navigate = useNavigate();
   const params = useParams();
   const [pageTitle, setPageTitle] = useState(
@@ -130,21 +131,26 @@ const MyFitMain = () => {
     }
   }, [params]);
 
-  useEffect(() => {
+  useEffect(() => {}, [member]);
+  if (logoutST) {
+    navigate("/");
+    setLogoutST(false);
+  } else {
     if (!member) {
+      navigate("/login");
       Swal.fire({
         title: "로그인 필요",
-        text: "로그인 후 이용하세요",
+        text: "로그인이 필요한 서비스입니다.",
         icon: "warning",
         confirmButtonColor: "#589c5f",
-        confirmButtonText: "로그인",
+        confirmButtonText: "확인",
       }).then((result) => {
         if (result.isConfirmed) {
           navigate("/login");
         }
       });
     }
-  }, [member]);
+  }
 
   const [list, setList] = useState([]);
 

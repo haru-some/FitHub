@@ -38,4 +38,16 @@ const agreeState = atom({
   },
 });
 
-export { memberState, isLoginState, alarmWsState, refreshState, agreeState };
+const logoutState = atom({
+  key: "logoutState",
+  default: false,
+});
+
+export {
+  memberState,
+  isLoginState,
+  alarmWsState,
+  refreshState,
+  agreeState,
+  logoutState,
+};

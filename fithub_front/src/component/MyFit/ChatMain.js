@@ -76,7 +76,7 @@ const ChatMain = (props) => {
   const receiveMsg = (receiveData) => {
     //console.log("서버에서 데이터를 받으면 실행되는 함수");
     const data = JSON.parse(receiveData.data); //문자열을 javascript 객체형식으로 전환
-    
+
     if (data.isRead === "isReadOk") {
       const newArr = chatList.map((item) => {
         if (item.senderNo == loginMember.memberNo) {
@@ -143,20 +143,20 @@ const ChatMain = (props) => {
             {chatList.map((chat, index) => {
               const isLastOfGroup = (() => {
                 const next = chatList[index + 1];
-                if (!next) return true; 
-          
+                if (!next) return true;
+
                 const sameSender = next.senderNo === chat.senderNo;
                 const sameMinute =
-                  next.sentAt.substring(0, 16) === chat.sentAt.substring(0, 16); 
-          
+                  next.sentAt.substring(0, 16) === chat.sentAt.substring(0, 16);
+
                 return !(sameSender && sameMinute);
               })();
 
               const isFirstOfGroup = (() => {
                 const prev = chatList[index - 1];
-                if (!prev) return true; 
-              
-                return prev.senderNo !== chat.senderNo; 
+                if (!prev) return true;
+
+                return prev.senderNo !== chat.senderNo;
               })();
 
               return (
@@ -170,50 +170,50 @@ const ChatMain = (props) => {
                   >
                     {isFirstOfGroup && (
                       <div
-                      className="user"
-                      onClick={() => {
-                        navigate(`/myfit/activity/${chat.senderNo}`);
-                      }}
-                    >
-                      <div className="img-wrap">
-                        {chat.senderNo === loginMember.memberNo ? (
-                          <img
-                            src={
-                              loginMember.memberThumb
-                                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${loginMember.memberThumb}`
-                                : "/image/default_img.png"
-                            }
-                          />
-                        ) : (
-                          <img
-                            src={
-                              actMember.memberThumb
-                                ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
-                                : "/image/default_img.png"
-                            }
-                          />
-                        )}
+                        className="user"
+                        onClick={() => {
+                          navigate(`/myfit/activity/${chat.senderNo}`);
+                        }}
+                      >
+                        <div className="img-wrap">
+                          {chat.senderNo === loginMember.memberNo ? (
+                            <img
+                              src={
+                                loginMember.memberThumb
+                                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${loginMember.memberThumb}`
+                                  : "/image/profile.png"
+                              }
+                            />
+                          ) : (
+                            <img
+                              src={
+                                actMember.memberThumb
+                                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
+                                  : "/image/profile.png"
+                              }
+                            />
+                          )}
+                        </div>
+                        <span className="chat-id">
+                          {chat.senderNo == loginMember.memberNo
+                            ? loginMember.memberId
+                            : actMember.memberId}
+                        </span>
                       </div>
-                      <span className="chat-id">
-                        {chat.senderNo == loginMember.memberNo
-                          ? loginMember.memberId
-                          : actMember.memberId}
-                      </span>
-                    </div>
                     )}
-                    
+
                     <div className="chat-content-box">
                       <div className="chat-message">{chat.dmContent}</div>
                       {isLastOfGroup && (
-                          <div className="chat-time">
-                            {chat.sentAt.substring(11, 16)}
-                          </div>
-                        )}
-                        {chat.senderNo === Number(senderNo) && (
-                          <div className="is-read">
-                            {chat.isRead === "N" ? 1 : ""}
-                          </div>
-                        )}
+                        <div className="chat-time">
+                          {chat.sentAt.substring(11, 16)}
+                        </div>
+                      )}
+                      {chat.senderNo === Number(senderNo) && (
+                        <div className="is-read">
+                          {chat.isRead === "N" ? 1 : ""}
+                        </div>
+                      )}
                     </div>
                   </p>
                 </div>
