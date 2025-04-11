@@ -6,6 +6,7 @@ import {
   isLoginState,
   alarmWsState,
   refreshState,
+  logoutState,
 } from "../utils/RecoilData";
 import axios from "axios";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -110,6 +111,7 @@ const MainNavi = () => {
 };
 
 const HeaderLink = (props) => {
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -132,7 +134,10 @@ const HeaderLink = (props) => {
     setMemberInfo(null);
     delete axios.defaults.headers.common["Authorization"];
     window.localStorage.removeItem("refreshToken");
-    navigate("/login");
+    navigate("/");
+  };
+  const logo = (a) => {
+    a();
   };
 
   return (
@@ -170,7 +175,13 @@ const HeaderLink = (props) => {
             )}
           </li>
           <li>
-            <button onClick={logOut} className="logout-btn">
+            <button
+              onClick={() => {
+                setLogoutST(true);
+                logOut();
+              }}
+              className="logout-btn"
+            >
               <LogoutIcon />
             </button>
           </li>

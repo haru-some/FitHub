@@ -44,6 +44,9 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 		registry
 		.addResourceHandler("/shop/detail/**")
 		.addResourceLocations("file:///"+root+"/goods/detail/");
+		registry
+		.addResourceHandler("/ads/img/**")
+		.addResourceLocations("file:///"+root+"/ads/img/");
 	}
 	
 	@Override

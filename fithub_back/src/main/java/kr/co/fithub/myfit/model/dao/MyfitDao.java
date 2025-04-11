@@ -40,9 +40,9 @@ public interface MyfitDao {
 
 	List selectRecordDays(int memberNo);
 
-	List<MemberDTO> selectFollowerList(int memberNo);
+	List<MemberDTO> selectFollowerList(HashMap<String, Integer> map);
 
-	List<MemberDTO> selectFollowingList(int memberNo);
+	List<MemberDTO> selectFollowingList(HashMap<String, Integer> map);
 
 
 	
