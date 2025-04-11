@@ -153,7 +153,9 @@ const CommunityItem = (props) => {
         setOpen(false);
       });
   };
-
+  {
+    /*게시물 올린 시간 계산*/
+  }
   const formatTimeAgo = (timeString) => {
     const now = dayjs();
     const past = dayjs(timeString);

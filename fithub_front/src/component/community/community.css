@@ -63,6 +63,7 @@
   border-bottom: 1px solid #ccc;
   margin-top: 10px;
   padding: 0px 15px;
+  padding-bottom: 10px;
 }
 .community-list-member-id {
   width: 80px;
@@ -72,7 +73,7 @@
   padding: 10px 0;
 }
 .community-post-item p {
-  margin: 10px;
+  margin: 0 10px;
 }
 .community-post-item .community-sub-btn {
   margin-left: auto;
@@ -91,6 +92,10 @@
   align-items: center;
   gap: 15px;
 }
+
+.community-content-texteditor > p:first-child {
+  margin: 10px;
+}
 .community-content-texteditor img {
   width: 100%;
   border-radius: 10px;
@@ -103,7 +108,6 @@
   display: flex;
   gap: 15px;
   margin-left: 10px;
-  margin-bottom: 10px;
   width: 130px;
 }
 .community-likes {
@@ -118,15 +122,6 @@
   gap: 5px;
   align-items: center;
   width: calc(100% / 2);
-}
-
-/*커뮤니티 작성 헤드*/
-.community-write-wrap > .community-head-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--line2);
-  padding-bottom: 20px;
 }
 
 /*팔로우 버튼*/
@@ -148,7 +143,8 @@
 
 /*상세보기*/
 .community-view-content {
-  padding-bottom: 20px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--line2);
 }
 .community-view-user {
   display: flex;
@@ -187,6 +183,13 @@
 .community-comment-list {
   padding: 20px;
 }
+.community-comment-all-list {
+  height: 500px;
+  overflow-y: auto;
+}
+.community-comment-all-list::-webkit-scrollbar {
+  display: none;
+}
 .comment-list {
   display: flex;
   gap: 20px;
@@ -222,8 +225,7 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid;
+  padding-top: 30px;
 }
 .comment-text-box {
   display: flex;
@@ -256,8 +258,15 @@
 
 /*게시글 작성*/
 .community-write-wrap {
-  width: 530px;
+  width: 550px;
   margin: 0 auto;
+}
+.community-write-wrap > .community-head-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line2);
+  padding-bottom: 20px;
 }
 .community-write-wrap svg:hover {
   cursor: pointer;

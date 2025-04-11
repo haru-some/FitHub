@@ -336,37 +336,46 @@ const CommunityView = () => {
               </div>
             </div>
           )}
+          {member && (
+            <div className="post-input">
+              <div className="member-img">
+                <img
+                  src={
+                    member.memberThumb
+                      ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                      : "/image/default_img.png"
+                  }
+                  onClick={() => {
+                    navigate(`/myfit/activity/${community.memberNo}`);
+                  }}
+                />
+              </div>
+              <div className="comment-text-box">
+                <input
+                  type="text"
+                  value={newComment}
+                  onChange={inputComment}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter" && newComment.message !== "") {
+                      submitComment();
+                    }
+                  }}
+                  placeholder="댓글을 입력하세요..."
+                ></input>
+                <button onClick={submitComment}>send</button>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="post-input">
-          <div className="member-img">
-            <img
-              src={
-                member.memberThumb
-                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                  : "/image/default_img.png"
-              }
-              onClick={() => {
-                navigate(`/myfit/activity/${community.memberNo}`);
-              }}
-            />
-          </div>
-          <div className="comment-text-box">
-            <input
-              type="text"
-              value={newComment}
-              onChange={inputComment}
-              onKeyUp={(e) => {
-                if (e.key === "Enter" && newComment.message !== "") {
-                  submitComment();
-                }
-              }}
-              placeholder="댓글을 입력하세요..."
-            ></input>
-            <button onClick={submitComment}>send</button>
-          </div>
-        </div>
+
         <div className="community-comment-list">
-          <ul>
+          <ul
+            className={
+              community && community.commentCount < 6
+                ? ""
+                : "community-comment-all-list"
+            }
+          >
             {community &&
               community.commentList.map((comment, index) => {
                 return (
