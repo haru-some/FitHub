@@ -1,17 +1,17 @@
 .community-main {
   background-color: var(--main1);
   color: #fff;
-  width: 700px;
+  width: 800px;
   margin: 50px auto;
   padding: 20px;
   border-radius: 10px;
-  padding-top: 40px;
+  padding-top: 50px;
   font-family: pd-r;
 }
 
 /*커뮤니티 전체보기*/
 .community-list-wrap {
-  width: 550px;
+  width: 700px;
   margin: 0 auto;
 }
 
@@ -23,10 +23,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 }
 .community-head-title > .community-title {
-  font-size: 30px;
+  font-size: 35px;
   font-family: pd-b;
   cursor: default;
 }
@@ -59,9 +59,9 @@
 /*커뮤니티 컨텐츠*/
 .community-post-item {
   list-style: none;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   border-bottom: 1px solid #ccc;
-  margin-top: 10px;
+  margin-top: 20px;
   padding: 0px 15px;
   padding-bottom: 10px;
 }
