@@ -147,7 +147,7 @@ public class ShopController {
 		}
     
     }
-    @Operation(summary = "장바구니 상품 삭제", description = "단일 상품 정보를 삭제합니다.")
+    @Operation(summary = "장바구니 상품 삭제", description = "단일 상품 장바구니 정보를 삭제합니다.")
     @DeleteMapping(value= "/cart/{cartNo}")
 	public ResponseEntity<Integer> deleteCart(@PathVariable int cartNo){
     	System.out.println(cartNo);
@@ -195,7 +195,25 @@ public class ShopController {
     	return ResponseEntity.ok(result);	
        }   
    
+    // 구매성공 to DB
+    @Operation(summary = "장바구니 구매 버튼", description = "버튼을 누르면 상품을 구매하고 Sell 테이블에 저장됩니다.")
+    @PostMapping(value="/sell/payAll/")
+   	public ResponseEntity<Integer> SellAllInsert(@RequestBody List<Cart> carts ){
+    	System.out.println("전체 구매!!!!");    	
+    	System.out.println(carts);
+    	
+    	int result = shopService.SellAllInsert(carts);
+    		
+    	return ResponseEntity.ok(result);	
+       }   
        
+    
+    
+    	
+    	
+    
+    
+   
    
     //구매한 목록에서 리뷰 출력
     @Operation(summary = "(내 정보)리뷰 가능한 상품", description = "내 정보에서 리뷰 가능한 상품 목록을 출력합니다.")
@@ -245,5 +263,7 @@ public class ShopController {
     	System.out.println(review);
     	return ResponseEntity.ok(result);	
        }
+    
+    
     
 }

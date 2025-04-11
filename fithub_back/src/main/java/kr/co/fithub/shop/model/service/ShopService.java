@@ -1,5 +1,6 @@
 package kr.co.fithub.shop.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +69,8 @@ public class ShopService {
 	}
 	
 	@Transactional
-	public int deleteCart(int cartNo) {
-		
-		int result = shopDao.deleteCart(cartNo);
-		
+	public int deleteCart(int cartNo) {		
+		int result = shopDao.deleteCart(cartNo);		
 		return result;
 		
 	}
@@ -130,6 +129,36 @@ public class ShopService {
 		return result;
 	}
 	
+	
+	    
+	@Transactional
+	public int SellAllInsert(List<Cart> carts) {
+	    List<Sell> sells = new ArrayList<>(); 
+
+	    for (Cart cart : carts) {
+	        Sell sell = new Sell(); // Sell 객체 생성
+	        sell.setMemberNo(cart.getMemberNo());
+	        sell.setGoodsNo(cart.getGoodsNo());
+	        sell.setGoodsName(cart.getGoodsName());
+	        sell.setGoodsPrice(cart.getGoodsPrice());
+	        sell.setGoodsEa(cart.getGoodsEa());
+	        sell.setGoodsTotalPrice(cart.getGoodsPrice() * cart.getGoodsEa()); 
+
+	        sells.add(sell); // Sell 객체 리스트에 추가
+	    }
+
+	    // Sell 객체를 DAO를 통해 데이터베이스에 저장
+	    int insertCount = 0;
+	    for (Sell sell : sells) {
+	        insertCount += shopDao.insertSell(sell); // insertSell 메서드가 저장한 레코드 수를 반환한다고 가정
+	    }
+
+	    System.out.println("저장된 Sell 객체 수: " + insertCount);
+	    return insertCount; // 실질적으로 저장된 Sell의 개수를 반환
+	}
+	
+	    
+	    	    
 	
 
 	

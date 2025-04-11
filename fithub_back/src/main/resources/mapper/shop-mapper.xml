@@ -44,7 +44,7 @@
   	
   	<insert id="insertSell">
   		insert into sell values 
-  		(#{sellNo}, #{goodsNo}, #{memberNo}, #{goodsName}, #{goodsTotalPrice}, #{goodsEa},sysdate)
+  		(#{sellNo}, #{goodsNo}, #{memberNo}, #{goodsName}, #{goodsTotalPrice},#{goodsPrice}, #{goodsEa},sysdate)
  		<selectKey order="BEFORE" resultType="int" keyProperty="sellNo">
  			select sell_seq.nextval from dual
  		</selectKey>

@@ -41,4 +41,6 @@ public interface ShopDao {
 
 	int deleteCart(int cartNo);
 
+	int insertAllSell(List<Sell> sells);
+
 }

@@ -72,6 +72,7 @@ function ShopPay() {
       goodsNo: goods.goodsNo,
       goodsName: goods.goodsName,
       goodsEa: quantity,
+      goodsPrice: goods.goodsPrice,
       goodsTotalPrice:
         goods.goodsPrice * quantity +
         (goods.goodsPrice * quantity >= 30000 ? 0 : 3000),

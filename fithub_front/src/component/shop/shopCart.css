@@ -43,7 +43,9 @@
 .cart-wrap .item-details p {
   margin: 5px 0;
 }
-
+.cart-wrap .hidden-detail {
+  /* display: none; */
+}
 .cart-wrap .cart-summary {
   display: flex;
   justify-content: space-between;
@@ -55,16 +57,17 @@
   margin: 0;
 }
 
-.cart-wrap .checkout-button {
+.cart-wrap .pay-all-button {
   background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  margin-right: 55px;
 }
 
-.cart-wrap .checkout-button:hover {
+.cart-wrap .pay-all-button-button:hover {
   background-color: #45a049;
 }
 
@@ -75,8 +78,7 @@ input[type="checkbox"] {
 }
 
 .cart-wrap .purchase-button,
-.delete-button,
-.checkout-button {
+.pay-all-button-button {
   padding: 10px 15px;
   margin: 5px;
   border: none;
@@ -94,14 +96,6 @@ input[type="checkbox"] {
 
 .cart-wrap .purchase-button:hover {
   background-color: #218838; /* 구매 버튼 hover 색상 */
-}
-
-.cart-wrap .delete-button {
-  background-color: #dc3545; /* 삭제 버튼 색상 */
-}
-
-.cart-wrap .delete-button:hover {
-  background-color: #c82333; /* 삭제 버튼 hover 색상 */
 }
 
 .cart-wrap .delete-button-item {
