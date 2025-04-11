@@ -61,9 +61,9 @@ const CommunityList = () => {
       <div className="community-list-wrap">
         <div className="community-head">
           <div className="community-head-title">
-            <h2 className="community-title">
+            <p className="community-title">
               {showMyList === 0 ? "커뮤니티" : "내 게시물"}
-            </h2>
+            </p>
             <div className="community-menu">
               <SearchIcon
                 onClick={() => {

@@ -13,6 +13,7 @@
                 m.member_no,
                 m.member_thumb,
                 c.community_content,
+                c.community_date,
                 c.community_no,
                 (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no) AS like_count,
                 (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{loginMemberNo}) AS is_like,
