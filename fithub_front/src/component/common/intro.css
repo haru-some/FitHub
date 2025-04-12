@@ -5,28 +5,29 @@
   font-size: 38px;
   margin-bottom: 50px;
 }
-
 .intro-wrap {
-  text-align: center;
   width: 100%;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0 auto;
-  align-items: center;
-  padding: 40px 0px;
-  gap: 40px;
+  overflow: hidden; /* 보여지는 영역 제한 */
+  position: relative;
 }
-.intro-wrap > .intro {
-  width: 100%;
+
+.intro-top-wrap {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  transition: transform 0.5s ease-in-out;
+  width: 100%; /* 얘는 슬라이드 전체 넓이 만큼 늘려줄 거야 (JSX에서) */
+  text-align: center;
+}
+
+.intro-wrap  .intro {
+  width: 20%; /* 한 슬라이드가 전체 너비 차지하게 */
+  flex-shrink: 0;
+  display: flex;
   align-items: center;
   gap: 30px;
 }
-.intro-wrap > .intro .intro-item {
-  width: 40%;
+.intro-wrap  .intro .intro-item {
+  width: 45%;
 }
 .intro .intro-text {
   display: flex;
@@ -57,7 +58,7 @@
 }
 .intro > .intro-img {
   padding: 15px;
-  width: 700px;
+  width: 60%;
   height: 500px;
   background-color: var(--gray1);
   border-radius: 10px;
