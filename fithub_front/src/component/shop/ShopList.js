@@ -51,7 +51,7 @@ const Advertisements = () => {
   return (
     <div className="Banner-wrap">
       <button onClick={previousAd}>←</button>
-      <AdBanners />
+      <AdBanners adsType={"w"} />
       <button onClick={nextAd}>→</button>
     </div>
   );

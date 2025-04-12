@@ -31,6 +31,7 @@ const AdminAds = () => {
     formData.append("adsName", ads.adsName);
     formData.append("adsLink", ads.adsLink);
     formData.append("adsImg", adsImg);
+    formData.append("adsType", ads.adsType);
 
     axios
       .post(`${process.env.REACT_APP_BACK_SERVER}/admin/writeAds`, formData, {
@@ -93,23 +94,36 @@ const AdminAds = () => {
         <div>현재 진행 중인 광고</div>
         <div className="list-box">
           <div className="one-list">
-            <div>이름(회사명)</div>
-            <div style={{ width: "20%", textAlign: "center" }}>이미지</div>
-            <div style={{ width: "25%" }}>주소 리스트</div>
-            <div>게시일</div>
-            <div>타입</div>
-            <div>삭제</div>
+            <div style={{ width: "20%", textAlign: "center" }}>이름</div>
+            <div style={{ width: "23%", textAlign: "center" }}>이미지</div>
+            <div style={{ width: "34%", textAlign: "center" }}>주소 리스트</div>
+            <div style={{ width: "13%", textAlign: "center" }}>게시일</div>
+            <div style={{ width: "5%", textAlign: "center" }}>타입</div>
+            <div style={{ width: "5%", textAlign: "center" }}>삭제</div>
           </div>
           {adsList &&
             adsList.map((ad, index) => {
               return (
                 <div key={"ad-" + index} className="one-list">
-                  <div>{ad.adsName}</div>
-                  <div>{ad.adsImg}</div>
-                  <div>{ad.adsLink}</div>
-                  <div>{ad.adsDate}</div>
-                  <div>{ad.adsType}</div>
-                  <div onClick={() => deleteAds(ad.adsNo)}>
+                  <div style={{ width: "20%", textAlign: "center" }}>
+                    {ad.adsName}
+                  </div>
+                  <div style={{ width: "23%", textAlign: "center" }}>
+                    {ad.adsImg}
+                  </div>
+                  <div style={{ width: "34%", textAlign: "center" }}>
+                    {ad.adsLink}
+                  </div>
+                  <div style={{ width: "13%", textAlign: "center" }}>
+                    {ad.adsDate}
+                  </div>
+                  <div style={{ width: "5%", textAlign: "center" }}>
+                    {ad.adsType}
+                  </div>
+                  <div
+                    onClick={() => deleteAds(ad.adsNo)}
+                    style={{ width: "5%", textAlign: "center" }}
+                  >
                     <DisabledByDefaultIcon />
                   </div>
                 </div>
@@ -162,11 +176,7 @@ const AdminAds = () => {
           />
         </div>
         <div className="ads-size-input-box">
-          <select
-            name="adsType"
-            value={ads.adsDirection || ""}
-            onChange={inputAds}
-          >
+          <select name="adsType" value={ads.adsType || ""} onChange={inputAds}>
             <option value="">배너 방향 선택</option>
             <option value="w">가로 (width)</option>
             <option value="h">세로 (height)</option>
