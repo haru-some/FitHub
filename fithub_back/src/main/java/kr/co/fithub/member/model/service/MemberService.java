@@ -1,5 +1,7 @@
 package kr.co.fithub.member.model.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.fithub.email.service.EmailService;
 import kr.co.fithub.member.model.dao.MemberDao;
+import kr.co.fithub.member.model.dto.DelMemberDTO;
 import kr.co.fithub.member.model.dto.LoginMemberDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.util.JwtUtils;
@@ -90,17 +93,48 @@ public class MemberService {
 		int result = memberDao.updateMember(member);
 		return result;
 	}
+	
 	@Transactional
-	public int deleteMember(String memberId) {
-		int result = memberDao.deleteMember(memberId);
-		return result;
+	public int deleteMember(String memberId, String delIp, String adminId) {
+	    MemberDTO origin = memberDao.selectOneMember(memberId);
+	    if (origin == null) {
+	        throw new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+	    }
+	    String uuidSuffix = UUID.randomUUID().toString().substring(0, 8);
+	    String newMemberId = memberId + "_deleted_" +
+	        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) +
+	        "_" + uuidSuffix;
+
+	    Map<String, Object> idUpdateMap = new HashMap<>();
+	    idUpdateMap.put("memberId", memberId);
+	    idUpdateMap.put("newMemberId", newMemberId);
+
+	    int updateResult = memberDao.deactivateMember(idUpdateMap);
+
+	    DelMemberDTO del = new DelMemberDTO();
+	    del.setMemberNo(origin.getMemberNo());
+	    del.setMemberId(memberId);
+	    del.setMemberEmail(origin.getMemberEmail());
+	    del.setJoinDate(origin.getJoinDate());
+	    del.setDelDate(LocalDate.now().toString());
+	    del.setDelIp(delIp);
+	    del.setAdminId(adminId);
+
+	    int insertResult = memberDao.insertDelMember(del);
+
+	    return (updateResult > 0 && insertResult > 0) ? 1 : 0;
 	}
+	
+	
 	public int checkPw(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());
-		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
-			return 1;
-		}
-		return 0;
+	    if (m == null) {
+	        return 0;
+	    }
+	    if (!"local".equalsIgnoreCase(m.getLoginType())) {
+	        throw new IllegalStateException("소셜 로그인 계정은 비밀번호 확인이 불가능합니다.");
+	    }
+	    return encoder.matches(member.getMemberPw(), m.getMemberPw()) ? 1 : 0;
 	}
 	@Transactional
 	public int changePw(MemberDTO member) {

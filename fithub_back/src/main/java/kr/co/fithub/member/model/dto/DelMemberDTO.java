@@ -23,4 +23,8 @@ public class DelMemberDTO {
     private String joinDate;
     @Schema(description = "탈퇴일", example = "2024-03-01")
     private String delDate;
+    @Schema(description = "탈퇴 요청 IP", example = "192.168.10.40")
+    private String delIp;
+    @Schema(description = "탈퇴 처리자", example = "admin")
+    private String adminId;
 }
