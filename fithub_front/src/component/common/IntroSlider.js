@@ -42,7 +42,7 @@ const slides = [
 ];
 const IntroSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const intervalRef = useRef(null); // ✅ interval을 저장할 ref
+  const intervalRef = useRef(null); // interval을 저장할 ref
 
   const startAutoSlide = () => {
     if (intervalRef.current) {
@@ -50,24 +50,24 @@ const IntroSlider = () => {
     }
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 8000);
+    }, 5000);
   };
 
   useEffect(() => {
     startAutoSlide(); // 최초 실행
-    return () => clearInterval(intervalRef.current); // 언마운트 시 정리
+    return () => clearInterval(intervalRef.current); 
   }, []);
 
   const handleDotClick = (index) => {
     setActiveIndex(index);
-    startAutoSlide(); // ✅ 클릭 시 타이머 리셋
+    startAutoSlide(); 
   };
   return (
     <div className="intro-wrap">
   <div
     className="intro-top-wrap"
     style={{
-      width: `${slides.length * 100}%`, // 5개면 500%
+      width: `${slides.length * 100}%`, 
       transform: `translateX(-${activeIndex * (100 / slides.length)}%)`,
     }}
   >
@@ -92,7 +92,6 @@ const IntroSlider = () => {
     ))}
   </div>
 
-  {/* 페이지네이션 */}
   <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 1 }}>
     {slides.map((_, index) => (
       <Box

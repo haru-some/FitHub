@@ -17,14 +17,17 @@
   width: 1300px;
   margin: 0 auto;
   display: flex;
-  gap: 10px;
+  gap: 55px;
   margin-top: 20px;
 }
 
 .myfit-content-box {
   width: 920px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
 }
 
 .fit-wrap {
@@ -199,4 +202,27 @@
 
 .fit-wrap .calendar .css-1rv8zyt-MuiStack-root {
   overflow: hidden;
+}
+
+.record-ai-summary{
+  width: 830px;
+  margin-bottom: 50px;
+}
+.record-ai-summary>h1{
+  color: #ffffff;
+}
+
+.ai-wrap{
+  margin-top: 20px;
+  background-color: #222;
+  border-radius: 10px;
+  padding: 30px;
+  
+}
+
+.ai-summary-content{
+  min-height: 120px;
+  font-size: 18px;
+  text-align: left;
+  word-break: break-all;
 }

@@ -57,9 +57,6 @@ const Follow = (props) => {
             setSearchText(e.target.value);
           }}
         />
-        {/* <span class="material-icons search-btn" onClick={searchResult}>
-          search
-        </span> */}
       </div>
 
       <ul className="user-list">
@@ -104,14 +101,14 @@ const Follow = (props) => {
                       left: "50%",
                       transform: "translate(-50%, -50%)",
                       width: 400,
-                      bgcolor: "transparent", // 배경 투명
+                      bgcolor: "transparent", 
                       borderRadius: "12px",
                       overflow: "hidden",
                     }}
                   >
                     <Box
                       sx={{
-                        bgcolor: "#1E1E1E", // 내부 박스 배경색 (dark mode 느낌)
+                        bgcolor: "#1E1E1E", 
                         color: "#fff",
                         textAlign: "center",
                         padding: "24px 16px",
@@ -194,7 +191,7 @@ const Follow = (props) => {
                       <div className="name">{member.memberId}</div>
                       <div className="username">{member.memberName}</div>
                     </div>
-                    {loginMember && (
+                    {(loginMember && member.memberNo !== loginMemberNo) &&  (
                       <button
                         className={`follow-button ${
                           member.isFollow === 1 ? "following" : ""

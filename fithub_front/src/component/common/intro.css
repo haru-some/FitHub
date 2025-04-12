@@ -3,11 +3,11 @@
 }
 .feature-slide-section > h2 {
   font-size: 38px;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 .intro-wrap {
   width: 100%;
-  overflow: hidden; /* 보여지는 영역 제한 */
+  overflow: hidden; 
   position: relative;
 }
 
@@ -15,12 +15,13 @@
   display: flex;
   justify-content: flex-start;
   transition: transform 0.5s ease-in-out;
-  width: 100%; /* 얘는 슬라이드 전체 넓이 만큼 늘려줄 거야 (JSX에서) */
+  width: 100%; 
   text-align: center;
+  margin-bottom: 70px;
 }
 
 .intro-wrap  .intro {
-  width: 20%; /* 한 슬라이드가 전체 너비 차지하게 */
+  width: 20%; 
   flex-shrink: 0;
   display: flex;
   align-items: center;
