@@ -90,6 +90,7 @@ const AdminChat = () => {
           <AdminChatList
             chatRooms={chatRooms}
             handleSelectChatRoom={handleSelectChatRoom}
+            selectedChatRoom={selectedChatRoom}
           />
         </div>
         <div className="chat-box-view">
@@ -110,44 +111,51 @@ const AdminChat = () => {
   );
 };
 /*---------- 채팅 리스트 ----------*/
-const AdminChatList = ({ chatRooms, handleSelectChatRoom }) => {
+const AdminChatList = ({
+  chatRooms,
+  handleSelectChatRoom,
+  selectedChatRoom,
+}) => {
   return (
     <div className="chat-list">
-      {chatRooms.map((room) => (
-        <div
-          key={room.chatRoomNo}
-          className="chat-room"
-          onClick={() => handleSelectChatRoom(room.chatRoomNo)}
-        >
-          <div className="member-chat-profile">
-            {room.memberThumb ? (
-              <img
-                src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${room.memberThumb}`}
-              />
-            ) : (
-              <img src="/image/default_img.png" alt="프로필" />
-            )}
-          </div>
-          <div className="chat-room-main">
-            <div className="member-chat-id">
-              <div>{room.chatMemberId}</div>
+      {chatRooms.map((room) => {
+        const isActive = room.chatRoomNo === selectedChatRoom;
+        return (
+          <div
+            key={room.chatRoomNo}
+            className={`chat-room ${isActive ? "active-room" : ""}`}
+            onClick={() => handleSelectChatRoom(room.chatRoomNo)}
+          >
+            <div className="member-chat-profile">
+              {room.memberThumb ? (
+                <img
+                  src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${room.memberThumb}`}
+                />
+              ) : (
+                <img src="/image/default_img.png" alt="프로필" />
+              )}
             </div>
-            <div className="member-chat-content">
-              <div>
-                {room.lastMessage
-                  ? room.lastMessage
-                  : "아직 입력된 채팅이 없습니다."}
+            <div className="chat-room-main">
+              <div className="member-chat-id">
+                <div>{room.chatMemberId}</div>
+              </div>
+              <div className="member-chat-content">
+                <div>
+                  {room.lastMessage
+                    ? room.lastMessage
+                    : "아직 입력된 채팅이 없습니다."}
+                </div>
               </div>
             </div>
+            {room.unreadCount > 0 && (
+              <div className="member-chat-alarm">
+                <CircleIcon />
+                <span className="alarm-count">{room.unreadCount}</span>
+              </div>
+            )}
           </div>
-          {room.unreadCount > 0 && (
-            <div className="member-chat-alarm">
-              <CircleIcon />
-              <span className="alarm-count">{room.unreadCount}</span>
-            </div>
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
@@ -178,7 +186,6 @@ const AdminChatView = ({
       .catch((err) => {
         console.log(err);
       });
-
     if (selectedChatRoom !== null) {
       axios
         .patch(
@@ -193,25 +200,27 @@ const AdminChatView = ({
 
   const sendMessage = () => {
     const date = new Date();
+    const pad = (n) => (n < 10 ? "0" + n : n);
     const today =
       date.getFullYear() +
       "-" +
-      date.getMonth() +
+      pad(date.getMonth() + 1) +
       "-" +
-      date.getDate() +
-      "-" +
-      date.getHours() +
-      "-" +
-      date.getMinutes() +
-      "-" +
-      date.getSeconds();
+      pad(date.getDate()) +
+      " " +
+      pad(date.getHours()) +
+      ":" +
+      pad(date.getMinutes()) +
+      ":" +
+      pad(date.getSeconds());
+    console.log(today);
     if (stompClient && chatInput.trim() !== "") {
       const chatMessage = {
         chatMemberId: memberInfo.memberId,
         messageContent: chatInput,
         memberLevel: memberInfo.memberLevel,
         messageDate: today,
-        isRead: 2,
+        isRead: 1,
         memberThumb: memberInfo.memberThumb,
       };
       stompClient.publish({
@@ -221,7 +230,7 @@ const AdminChatView = ({
       setChatInput("");
     }
   };
-
+  console.log(messages);
   const chatBoxRef = useRef(null);
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -256,8 +265,7 @@ const AdminChatView = ({
                         ?.split(" ")[1]
                         ?.split(":")
                         .slice(0, 2)
-                        .join(":")}{" "}
-                      -{" "}
+                        .join(":")}
                     </div>
                     <div className="chat-text">{msg.messageContent}</div>
                   </div>

@@ -45,8 +45,16 @@
 	</insert>
 	
 	<select id="getAds" resultType="ads">
-		select * from ads_tbl order by 1
+		select * from ads_tbl where ads_type = #{adsType} order by 1
 	</select>
 	
+	<select id="getMember" resultType="admin">
+    	SELECT 
+  (SELECT COUNT(*) FROM member WHERE member_level = 2) AS member_count,
+  (SELECT COUNT(*) FROM member WHERE member_level = 1) AS admin_count,
+  (SELECT COUNT(*) FROM del_member) AS del_member_count,
+  (SELECT COUNT(*) FROM member WHERE warning_level = 3) AS kick_member_count
+FROM dual
+    </select>
 	
 </mapper>
