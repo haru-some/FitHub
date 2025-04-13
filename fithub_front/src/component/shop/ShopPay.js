@@ -73,6 +73,7 @@ function ShopPay() {
       goodsNo: goods.goodsNo,
       goodsName: goods.goodsName,
       goodsEa: quantity,
+
       goodsPrice: goods.goodsPrice,
       goodsTotalPrice:
         goods.goodsPrice * quantity +

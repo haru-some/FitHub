@@ -32,7 +32,7 @@ public class OpenAiController {
         String content = body.get("content");
         String time = body.get("time");
 
-        String prompt = "나는 운동 기록에 대한 피드백을 제공하는 사이트를 만들고있는데, 다음 운동 기록을 보고 운동에 대한 평가와 대략적인 칼로리 소모량을 숫자로 알려줘(kcal). 운동기록(운동시간은 " + time+ "분) : " + stripAllHtmlTags(content);
+        String prompt = "다음 운동 기록을 보고 운동에 대한 평가와 대략적인 칼로리 소모량을 숫자로 알려줘(kcal). 운동기록(운동시간은 " + time+ "분) : " + stripAllHtmlTags(content);
 
         String requestBody = """
             {

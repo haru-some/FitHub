@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { logoutState, memberState } from "../utils/RecoilData";
 import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -7,13 +7,14 @@ import axios from "axios";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize-module-react";
+import Swal from "sweetalert2";
 Quill.register("modules/ImageResize", ImageResize);
 
 const CommunityWrite = () => {
+  const [logoutSt, setLogoutSt] = useRecoilState(logoutState);
   const [member, setMember] = useRecoilState(memberState);
   const memberNo = member.memberNo;
   const [communityContent, setCommunityContent] = useState("");
-
   const navigate = useNavigate();
 
   function isBlank(str) {
@@ -45,6 +46,24 @@ const CommunityWrite = () => {
         });
     }
   };
+  // if (logoutSt) {
+  //   navigate("/");
+  //   setLogoutSt(false);
+  // } else {
+  //   if (!member) {
+  //     Swal.fire({
+  //       title: "로그인 필요",
+  //       text: "로그인이 필요한 서비스입니다.",
+  //       icon: "warning",
+  //       confirmButtonColor: "#589c5f",
+  //       confirmButtonText: "확인",
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         navigate("/login");
+  //       }
+  //     });
+  //   }
+  // }
 
   return (
     <div className="community-write">
@@ -67,7 +86,7 @@ const CommunityWrite = () => {
               }
             />
           </div>
-          <div className="write-memberId">{member.memberId}</div>
+          <div className="write-member-id">{member.memberId}</div>
           <div className="write-date"></div>
         </div>
         <div className="community-content">
@@ -75,7 +94,7 @@ const CommunityWrite = () => {
         </div>
         <div className="write-btn-zone">
           <button className="write-btn" type="button" onClick={write}>
-            작성
+            등록
           </button>
         </div>
       </div>

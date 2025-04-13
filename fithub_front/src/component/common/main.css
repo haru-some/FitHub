@@ -60,12 +60,6 @@
   justify-content: center;
   z-index: 0;
 }
-.main-page-wrap .hero-image img {
-  width: 120%;
-  height: auto;
-  transform: translateY(-40px) scale(1.2);
-  object-fit: cover;
-}
 .main-page-wrap .hero-image {
   position: relative;
   width: 500px;
@@ -78,29 +72,164 @@
 .main-page-wrap .hero-image img {
   width: 120%;
   height: auto;
-  transform: translate(-30px, 150px) scale(1.3);
+  transform: translate(-150px, 150px) scale(1.3);
   object-fit: cover;
 }
-
-/* 하단 클로징 섹션 스타일 */
+/* ✅ 섹션 전체 영역 - 그대로 유지 */
 .main-page-wrap .closing-section {
-  margin: 50px auto;
+  margin: 0px auto;
+  margin-bottom: 50px;
   background-color: #020202;
-  height: 300px;
+  height: 500px;
   width: 1400px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.main-page-wrap .closing-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 50px;
-}
-.main-page-wrap .closing-ment {
+
+/* ✅ 타이핑 문장 래퍼 */
+.closing-ment-wrap {
   font-size: 45px;
   font-family: pd-b;
+  font-weight: bold;
   text-align: center;
   background-color: #020202;
+  color: #ffffff;
+  white-space: pre-line;
+  line-height: 1.2;
+  animation: zoomFade 1s ease-out;
+}
+@keyframes zoomFade {
+  from {
+    transform: scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* ✅ 출력 텍스트 */
+.closing-ment {
+  display: inline;
+  font-size: 45px;
+  font-family: pd-b;
+}
+
+/* ✅ 커서 애니메이션 */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: #ffffff;
+  margin-left: 3px;
+  vertical-align: -0.1em;
+  animation: blink-caret 0.8s step-end infinite;
+  transition: opacity 0.8s ease-in;
+}
+
+.fade-out-cursor {
+  animation: none;
+  opacity: 0;
+}
+
+/* ✅ 커서 깜빡임 효과 */
+@keyframes blink-caret {
+  from,
+  to {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ✅ 타이핑 페이드 효과 */
+.fade-char {
+  display: inline-block;
+  opacity: 0;
+  animation: fadeIn 0.25s ease-in forwards;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.main-ment {
+  opacity: 0;
+  animation: fadeUp 0.6s ease-out forwards;
+}
+.main-ment:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.main-ment:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.main-ment:nth-child(3) {
+  animation-delay: 0.5s;
+}
+.features li {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: fadeInLeft 0.5s ease-out forwards;
+}
+@keyframes fadeInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.features li:nth-child(1) {
+  animation-delay: 0.6s;
+}
+.features li:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.features li:nth-child(3) {
+  animation-delay: 1s;
+}
+.features li:nth-child(4) {
+  animation-delay: 1.2s;
+}
+.hero-image img {
+  opacity: 0;
+  transform: translate(-70px, 150px) scale(1.3);
+  animation: slideFadeIn 1s ease-out 1.2s forwards;
+  width: 120%;
+  height: auto;
+  object-fit: cover;
+}
+@keyframes slideFadeIn {
+  to {
+    opacity: 1;
+    transform: translate(-150px, 150px) scale(1.3);
+  }
+}
+.start-btn {
+  opacity: 0;
+  transform: scale(0.9);
+  animation: btnFadeIn 0.6s ease-out 1.8s forwards;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.start-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+@keyframes btnFadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

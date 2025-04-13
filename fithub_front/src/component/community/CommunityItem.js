@@ -291,18 +291,18 @@ const CommunityItem = (props) => {
             <p className="community-list-date">
               {formatTimeAgo(community.communityDate)}
             </p>
-            {member && member.memberId !== community.memberId && (
-              <button
-                type="button"
-                className={`follow-btn ${
-                  community.isFollow === 1 ? "following" : ""
-                }`}
-                onClick={changeFollow}
-              >
-                {community.isFollow === 1 ? "팔로잉" : "팔로우"}
-              </button>
-            )}
           </div>
+          {member && member.memberId !== community.memberId && (
+            <button
+              type="button"
+              className={`follow-btn ${
+                community.isFollow === 1 ? "following" : ""
+              }`}
+              onClick={changeFollow}
+            >
+              {community.isFollow === 1 ? "팔로잉" : "팔로우"}
+            </button>
+          )}
           {member && member.memberId === community.memberId && (
             <div className="community-sub-btn">
               <IconButton
