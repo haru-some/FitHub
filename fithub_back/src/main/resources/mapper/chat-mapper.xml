@@ -71,8 +71,8 @@ ORDER BY last_date DESC
     </select>
     
     <select id="loadChatMessage" resultType="chatMessage">
-		SELECT 
-    cm.*,  -- chat_message 테이블의 모든 컬럼
+		<!-- SELECT 
+    cm.*,
     m.member_level,
     m.warning_level,
     m.member_thumb
@@ -82,7 +82,25 @@ JOIN
     member m ON cm.chat_member_id = m.member_id
 WHERE 
     cm.chat_room_no = #{chatRoomNo}
-    order by message_date
+    order by message_date -->
+    SELECT *
+FROM (
+    SELECT 
+        cm.*,
+        m.member_level,
+        m.warning_level,
+        m.member_thumb
+    FROM 
+        chat_message cm
+    JOIN 
+        member m ON cm.chat_member_id = m.member_id
+    WHERE 
+        cm.chat_room_no = #{chatRoomNo}
+    ORDER BY 
+        cm.message_date DESC
+)
+WHERE ROWNUM &lt;= 30
+ORDER BY message_date
     </select>
     	
     <select id="loadChatMember" resultType="chatMessage">

@@ -256,8 +256,14 @@ const MemberInfo = () => {
   };
 
   const handleDelete = () => {
+    if (!isLogin || !loginMember) {
+      Swal.fire("오류", "로그인이 필요한 작업입니다.", "warning");
+      return;
+    }
+
     Swal.fire({
       title: "정말 탈퇴하시겠습니까?",
+      text: "탈퇴 후에는 계정이 복구되지 않습니다.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "확인",
@@ -267,10 +273,10 @@ const MemberInfo = () => {
       if (result.isConfirmed) {
         axios
           .delete(`${backServer}/member/${member.memberId}`)
-          .then(() => {
+          .then((res) => {
             Swal.fire({
               title: "탈퇴 완료",
-              text: "회원 탈퇴가 완료되었습니다.",
+              text: res.data || "회원 탈퇴가 완료되었습니다.",
               icon: "success",
               confirmButtonColor: "#2f3e2f",
               confirmButtonText: "확인",
@@ -282,10 +288,12 @@ const MemberInfo = () => {
               }, 100);
             });
           })
-          .catch(() => {
+          .catch((err) => {
+            const message =
+              err.response?.data || "회원 탈퇴 중 오류가 발생했습니다.";
             Swal.fire({
               title: "탈퇴 실패",
-              text: "회원 탈퇴 중 오류가 발생했습니다.",
+              text: message,
               icon: "error",
               confirmButtonColor: "#2f3e2f",
             });

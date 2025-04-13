@@ -435,7 +435,14 @@
 .login-link {
   margin-left: 5px;
 }
-
+.join-cancel-link {
+  color: #2f3e2f;
+  text-align: center;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 25px;
+  font-family: pd-r;
+}
 /* 마이페이지 전체 레이아웃 */
 .mypage-wrap {
   display: flex;

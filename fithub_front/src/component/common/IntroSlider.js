@@ -1,5 +1,5 @@
 import "./main.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 const slides = [
   {
@@ -42,55 +42,73 @@ const slides = [
 ];
 const IntroSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  // 자동 슬라이드 전환 (5초 간격)
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const intervalRef = useRef(null); // interval을 저장할 ref
+
+  const startAutoSlide = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 10000);
-    return () => clearInterval(interval);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    startAutoSlide(); // 최초 실행
+    return () => clearInterval(intervalRef.current); 
   }, []);
+
   const handleDotClick = (index) => {
     setActiveIndex(index);
+    startAutoSlide(); 
   };
   return (
     <div className="intro-wrap">
-      <div className="intro">
-        {/* Left text section */}
+  <div
+    className="intro-top-wrap"
+    style={{
+      width: `${slides.length * 100}%`, 
+      transform: `translateX(-${activeIndex * (100 / slides.length)}%)`,
+    }}
+  >
+    {slides.map((slide, index) => (
+      <div className="intro" key={index}>
         <div className="intro-item">
           <div className="intro-text">
             <div className="intro-title">
-              <h2>{slides[activeIndex].KTitle}</h2>
-              <h2>{slides[activeIndex].ETitle}</h2>
+              <h2>{slide.KTitle}</h2>
+              <h2>{slide.ETitle}</h2>
             </div>
             <div className="intro-description">
-              <p>{slides[activeIndex].KDescription}</p>
-              <p>{slides[activeIndex].EDescription}</p>
+              <p>{slide.KDescription}</p>
+              <p>{slide.EDescription}</p>
             </div>
           </div>
         </div>
-        {/* Right image section */}
         <div className="intro-img">
-          <img src={slides[activeIndex].image} alt="slide" />
+          <img src={slide.image} alt="slide" />
         </div>
       </div>
-      {/* 하단 원형 페이지네이션 */}
-      <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 1 }}>
-        {slides.map((_, index) => (
-          <Box
-            key={index}
-            onClick={() => handleDotClick(index)}
-            sx={{
-              width: 12,
-              height: 12,
-              borderRadius: "50%",
-              backgroundColor: index === activeIndex ? "#2ECC71" : "#888",
-              cursor: "pointer",
-              transition: "background-color 0.3s",
-            }}
-          />
-        ))}
-      </Box>
-    </div>
+    ))}
+  </div>
+
+  <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 1 }}>
+    {slides.map((_, index) => (
+      <Box
+        key={index}
+        onClick={() => handleDotClick(index)}
+        sx={{
+          width: 12,
+          height: 12,
+          borderRadius: "50%",
+          backgroundColor: index === activeIndex ? "#2ECC71" : "#888",
+          cursor: "pointer",
+          transition: "background-color 0.3s",
+        }}
+      />
+    ))}
+  </Box>
+</div>
   );
 };
 export default IntroSlider;

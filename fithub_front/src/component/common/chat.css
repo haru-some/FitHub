@@ -1,9 +1,11 @@
 .member-chat-section {
-  margin: 0 auto;
+  margin: 0px auto;
   width: 700px;
   background-color: var(--main1);
   border-radius: 30px;
   padding: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .member-chat-section * {
   color: white;
@@ -15,66 +17,13 @@
   font-size: 32px;
 }
 
-.member-chat-section .member-chat-box {
-  margin: 0 auto;
-  width: 90%;
-  background-color: var(--gray2);
-  border-radius: 30px;
-  padding: 10px;
-}
-.member-chat-section .member-chat-list {
-  margin: 0 auto;
-  background-color: var(--main1);
-  height: 500px;
-  overflow: auto;
-  border-radius: 20px;
-}
-
-.member-chat-section .member-chat-room {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  border-bottom: 2px solid var(--gray2);
-  padding: 10px;
-  overflow: hidden;
-}
-
-.member-chat-section .member-chat-room .chat-member-profile {
-  width: 60px;
-  height: 60px;
-  overflow: hidden;
-  border-radius: 10px;
-  background-color: var(--gray2);
-}
-
-.member-chat-section .chat-member-profile > img {
-  width: 100%;
-  height: 100%;
-}
-
-.chat-member-main {
-  width: 75%;
-}
-.chat-member-main .chat-member-id {
-  border-radius: 30px;
-  width: 100px;
-  padding: 5px;
-  text-align: center;
-  background-color: var(--main3);
-  margin-bottom: 10px;
-}
-.chat-member-type > div {
-  text-align: center;
-}
-.member-chat-section .chat-member-main .chat-member-content {
-  color: var(--main1);
-  font-size: 20px;
-}
 .member-chat-section .chat-box {
-  background-color: var(--main1);
+  background-color: #1d2917;
   border-radius: 20px;
   height: 540px;
   overflow-y: auto;
+  border: 1px solid white;
+  box-sizing: border-box;
 }
 
 .member-chat-section .chat-box::-webkit-scrollbar {

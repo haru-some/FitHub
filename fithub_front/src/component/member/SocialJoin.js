@@ -266,12 +266,40 @@ const SocialJoin = () => {
             type="submit"
             className="btn-primary lg full"
             disabled={!isJoinValid}
-            style={{ height: "56px" }}
+            style={{ height: "56px", marginTop: "16px" }}
           >
             가입 완료
           </button>
         </div>
       </form>
+      <p
+        className="join-cancel-link"
+        onClick={() => {
+          Swal.fire({
+            title: "가입을 취소하시겠습니까?",
+            text: "입력하신 정보는 저장되지 않습니다.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+            confirmButtonColor: "#2f3e2f",
+          }).then((res) => {
+            if (res.isConfirmed) {
+              localStorage.removeItem("joinStage");
+              localStorage.removeItem("joinOauthId");
+              localStorage.removeItem("joinLoginType");
+              localStorage.removeItem("joinEmail");
+              localStorage.removeItem("joinName");
+              navigate("/login");
+            }
+          });
+        }}
+      >
+        가입을 원하지 않으신가요?{" "}
+        <span style={{ marginLeft: "6px" }}>
+          <strong>로그인 페이지로 돌아가기</strong>
+        </span>
+      </p>
     </section>
   );
 };

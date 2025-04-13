@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.fithub.admin.model.dto.AdminDTO;
 import kr.co.fithub.admin.model.dto.AdsDTO;
 import kr.co.fithub.admin.model.service.AdminService;
 import kr.co.fithub.member.model.dto.MemberDTO;
@@ -96,10 +97,11 @@ public class AdminController {
 	    @ApiResponse(responseCode = "500", description = "광고 등록 실패")
 	})
 	@PostMapping("/writeAds")
-	public ResponseEntity<Integer> writeAds(@RequestParam("adsName") String adsName, @RequestParam("adsLink") String adsLink, @RequestParam(value = "adsImg", required = false) MultipartFile adsImg) {	    
+	public ResponseEntity<Integer> writeAds(@RequestParam("adsName") String adsName, @RequestParam("adsLink") String adsLink, @RequestParam("adsType") String adsType, @RequestParam(value = "adsImg", required = false) MultipartFile adsImg) {	    
         AdsDTO ads = new AdsDTO();
         ads.setAdsName(adsName);
         ads.setAdsLink(adsLink);
+        ads.setAdsType(adsType);
 
         if (adsImg != null && !adsImg.isEmpty()) {
             String savePath = root + "/ads/img/";
@@ -117,10 +119,20 @@ public class AdminController {
 	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
 	})
 	@GetMapping("/getAds")
-	public ResponseEntity<List> getAds() {
-		List list = adminService.getAds();
+	public ResponseEntity<List> getAds(@RequestParam String adsType) {
+		List list = adminService.getAds(adsType);
 		return ResponseEntity.ok(list);
 	}
 	
+	@Operation(summary = "회원 등급 조회", description = "회원을 등급별로 몇명인지 조회합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	})
+	@GetMapping("/getMember")
+	public ResponseEntity<AdminDTO> getMember() {
+		AdminDTO admin = adminService.getMember();
+		return ResponseEntity.ok(admin);
+	}
 	
 }

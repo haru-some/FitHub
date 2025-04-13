@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const AdBanners = () => {
+const AdBanners = ({ adsType }) => {
   const [ad, setAd] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getAds`)
+      .get(
+        `${process.env.REACT_APP_BACK_SERVER}/admin/getAds?adsType=${adsType}`
+      )
       .then((res) => {
         console.log(res.data);
         const adsArray = res.data;
@@ -30,6 +32,7 @@ const AdBanners = () => {
         <img
           src={`${process.env.REACT_APP_BACK_SERVER}/ads/img/${ad.adsImg}`}
           alt={ad.adsName}
+          style={{ objectFit: "contain" }}
         />
       </Link>
     </div>

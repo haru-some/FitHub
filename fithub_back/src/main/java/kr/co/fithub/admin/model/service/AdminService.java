@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.fithub.admin.model.dao.AdminDao;
+import kr.co.fithub.admin.model.dto.AdminDTO;
 import kr.co.fithub.admin.model.dto.AdsDTO;
 import kr.co.fithub.member.model.dto.MemberDTO;
 import kr.co.fithub.util.PageInfo;
@@ -92,9 +93,14 @@ public class AdminService {
 		return result;
 	}
 
-	public List getAds() {
-		List list = adminDao.getAds();
+	public List getAds(String adsType) {
+		List list = adminDao.getAds(adsType);
 		return list;
+	}
+
+	public AdminDTO getMember() {
+		AdminDTO admin = adminDao.getMember();
+		return admin;
 	}
 	
 	
