@@ -29,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer, WebSocketConfigurer{
 	public BCryptPasswordEncoder bCrypt() {
 		return new BCryptPasswordEncoder();
 	}
-	
+    
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry

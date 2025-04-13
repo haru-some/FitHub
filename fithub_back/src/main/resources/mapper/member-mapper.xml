@@ -25,7 +25,9 @@
 	</select>
 	
 	<select id="selectOneMember" resultType="member">
-		select * from member where member_id = #{memberId}
+	  select * from member 
+	  where member_id = #{memberId}
+	    and del_status = 'N'
 	</select>
 	
 	<update id="updateMember">
@@ -50,20 +52,24 @@
 	<select id="findIdsByNameAndEmail" resultType="member">
 	  SELECT member_id
 	  FROM member
-	  WHERE member_name = #{memberName} AND member_email = #{memberEmail}
+	  WHERE member_name = #{memberName}
+	    AND member_email = #{memberEmail}
+	    AND del_status = 'N'
 	</select>
-	
+
 	<select id="findPwByIdAndEmail" resultType="member">
 	  SELECT * 
 	  FROM member 
-	  WHERE member_id = #{memberId} 
+	  WHERE member_id = #{memberId}
 	    AND member_email = #{memberEmail}
+	    AND del_status = 'N'
 	</select>
 	
 	<select id="findByOauthId" resultType="member" parameterType="string">
 	  SELECT *
 	  FROM member
 	  WHERE oauth_id = #{oauthId}
+	    AND del_status = 'N'
 	</select>
 	
 	<insert id="insertOauthMember">
@@ -102,4 +108,31 @@
 	    WHERE 
 	        oauth_id = #{oauthId}
 	</update>
+	
+	<update id="deactivateMember">
+	  UPDATE member
+	  SET member_id = #{newMemberId},
+	      del_status = 'Y'
+	  WHERE member_id = #{memberId}
+	</update>
+	
+	<insert id="insertDelMember" parameterType="kr.co.fithub.member.model.dto.DelMemberDTO">
+	  INSERT INTO del_member (
+	    member_no,
+	    member_id,
+	    member_email,
+	    join_date,
+	    del_date,
+	    del_ip,
+	    admin_id
+	  ) VALUES (
+	    #{memberNo},
+	    #{memberId},
+	    #{memberEmail},
+	    #{joinDate},
+	    #{delDate},
+	    #{delIp},
+	    #{adminId}
+	  )
+	</insert>
 </mapper>

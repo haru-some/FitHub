@@ -126,6 +126,18 @@ const ChangePw = () => {
       });
     }
   }, [isLogin, navigate, location]);
+  useEffect(() => {
+    if (!loginMember) return;
+    if (loginMember.loginType !== "local") {
+      Swal.fire({
+        title: "접근 불가",
+        text: "소셜 로그인 계정은 비밀번호 변경이 불가능합니다.",
+        icon: "warning",
+        confirmButtonColor: "#2f3e2f",
+        confirmButtonText: "확인",
+      }).then(() => navigate("/mypage"));
+    }
+  }, [loginMember]);
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
   const toggleShowPasswordRe = () => setShowPasswordRe((prev) => !prev);
@@ -208,10 +220,11 @@ const ChangePw = () => {
           });
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        const errorMessage = err.response?.data || "서버 오류가 발생했습니다.";
         Swal.fire({
-          title: "오류",
-          text: "서버 요청 중 문제가 발생했습니다.",
+          title: "요청 실패",
+          text: errorMessage,
           icon: "error",
           confirmButtonColor: "#2f3e2f",
         });

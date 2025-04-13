@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./shopList.css";
+import "./shopLIst.css";
 import { useNavigate } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -281,9 +281,10 @@ const GoodsList = () => {
               </div>
             ))}
       </div>
-
-      {/* 페이지네이션 */}
-      <div className="pagination">{renderPagination()}</div>
+      <div className="page-wrap">
+        {/* 페이지네이션 */}
+        <div className="pagination">{renderPagination()}</div>
+      </div>
     </div>
   );
 };

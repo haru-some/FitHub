@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,6 +30,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.fithub.member.model.service.MemberService;
@@ -230,14 +232,20 @@ public class MemberController {
 	        )
 	    )
 	})
-	@DeleteMapping(value="/{memberId}")
-	public ResponseEntity<String> deleteMember(@Parameter(description = "탈퇴할 회원 ID", example = "fithub123")
-    										@PathVariable String memberId) {
-	    int result = memberService.deleteMember(memberId);
+	@DeleteMapping("/{memberId}")
+	public ResponseEntity<String> deleteMember(
+	    @PathVariable String memberId,
+	    @RequestParam(required = false) String adminId,
+	    HttpServletRequest request
+	) {
+	    String delIp = request.getRemoteAddr();
+
+	    int result = memberService.deleteMember(memberId, delIp, adminId);
 	    if (result > 0) {
-	        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+	        return ResponseEntity.ok("회원 탈퇴 성공");
 	    } else {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴에 실패했습니다.");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("회원 탈퇴 실패");
 	    }
 	}
 	
@@ -346,5 +354,11 @@ public class MemberController {
 	    } else {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }
+	}
+	
+	//예외 핸들러
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<String> handleIllegalState(IllegalStateException e) {
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 }
