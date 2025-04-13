@@ -171,13 +171,6 @@ public class ShopController {
     	return ResponseEntity.ok(result);	
        }   
        
-    
-    
-    	
-    	
-    
-    
-   
    
     //구매한 목록에서 리뷰 출력
     @Operation(summary = "(내 정보)리뷰 가능한 상품", description = "내 정보에서 리뷰 가능한 상품 목록을 출력합니다.")

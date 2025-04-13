@@ -44,18 +44,20 @@
   	
   	<insert id="insertSell">
   		insert into sell values 
-  		(#{sellNo}, #{goodsNo}, #{memberNo}, #{goodsName}, #{goodsTotalPrice},#{goodsPrice}, #{goodsEa},sysdate)
+  		(#{sellNo}, #{goodsNo}, #{memberNo}, #{goodsName}, #{goodsTotalPrice},#{goodsPrice}, #{goodsEa}, to_char(sell_date, 'yy-mm-dd'))
  		<selectKey order="BEFORE" resultType="int"  keyProperty="sellNo">
  			select sell_seq.nextval from dual
  		</selectKey>
   	</insert>
   	
   	<select id="selectReviews" resultType="sell">
-  		select * from sell where member_no= #{memberNo} order by 1 desc 
+  		select sell_no, goods_no, member_no, goods_name, goods_total_price, goods_price,
+  		goods_ea, sell_date
+  		 from sell where member_no= #{memberNo} order by 1 desc 
   	</select>
   	
   	<select id="selectMyReviews">
-  		select re_no, goods_no, member_id, re_content, to_char(re_date, 'yy-mm-dd') as re_date
+  		select re_no, goods_no, member_id, re_content, to_char(re_date, 'yyyy-mm-dd') as re_date
   		, re_star, goods_name from review where member_id= #{memberId} order by 1 desc 
   	</select>
   	
@@ -72,7 +74,7 @@
   	
 	<insert id="insertReview">
 		insert into review values 
-  		(#{reNo}, #{goodsNo}, #{memberId}, #{reContent}, sysdate, #{reStar}, #{goodsName})
+  		(#{reNo}, #{goodsNo}, #{memberId}, #{reContent}, to_char(re_date, 'yy-mm-dd'), #{reStar}, #{goodsName})
  		<selectKey order="BEFORE" resultType="int" keyProperty="reNo">
  			select review_seq.nextval from dual
  		</selectKey>
