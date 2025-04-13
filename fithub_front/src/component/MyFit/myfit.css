@@ -209,15 +209,15 @@
   margin-bottom: 50px;
 }
 .record-ai-summary>h1{
-  color: #ffffff;
 }
 
 .ai-wrap{
+  box-sizing: border-box;
   margin-top: 20px;
   background-color: #222;
   border-radius: 10px;
   padding: 30px;
-  
+  border: 2px solid #2e8a39;
 }
 
 .ai-summary-content{
