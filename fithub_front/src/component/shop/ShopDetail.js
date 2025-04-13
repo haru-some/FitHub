@@ -69,9 +69,12 @@ const ShopDetail = () => {
       case "상품정보":
         return (
           <div>
-            <div style={{ textAlign: "center" }}>상품정보</div>
             <div className="goods-info-wrap">
-              <table className="tbl" border="1" style={{ width: "100%" }}>
+              <table
+                className="tbl"
+                border="1"
+                style={{ width: "100%", marginTop: "8px" }}
+              >
                 <tbody>
                   {goods.goodsInfo1 ? (
                     <tr>

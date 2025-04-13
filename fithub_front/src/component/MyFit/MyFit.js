@@ -17,16 +17,25 @@ const MyFit = (props) => {
   const today = props.today;
   const title = props.title;
   const inputDate = props.inputDate;
+  const calory = props.calory
 
   const [content, setContent] = useState();
+  
+  function convertNewlinesToBr(input) {
+    if (!input) return "";
+    return input.replace(/(\r\n|\n|\r)/g, "<br/>");
+  }
+
 
   return (
+    <>
     <div className="fit-wrap">
       <Calendar date={date} setDate={setDate} />
       <div className="exercise-record">
         <h2>{inputDate.isSame(today, "day") && record ? "운동기록" : title}</h2>
 
         {/* 내용 출력 */}
+        
         <div
           className="exercise-record-content"
           dangerouslySetInnerHTML={{
@@ -99,6 +108,21 @@ const MyFit = (props) => {
         </div>
       </div>
     </div>
+    
+    {record && (
+      <div className="record-ai-summary">
+        <h1>AI 요약</h1>
+        <div className="ai-wrap">
+
+        <div
+          className="ai-summary-content"
+          dangerouslySetInnerHTML={{ __html: convertNewlinesToBr(calory) }}
+        ></div>
+        </div>
+      </div>
+    )}
+    
+    </>
   );
 };
 

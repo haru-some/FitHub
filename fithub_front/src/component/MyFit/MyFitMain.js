@@ -68,10 +68,14 @@ const MyFitMain = () => {
   const [title, setTitle] = useState(weekday + "요일 루틴");
   const dateFormat =
     date.$y + "-" + (date.$M + 1) + "-" + date.$D + "-" + weekday;
+  
+  const [calory, setCalory] = useState("요약중...");
 
   useEffect(() => {
     if (!member) return;
+    
     if (inputDate.isBefore(today, "day")) {
+      setCalory("요약중...")
       setTitle("운동기록");
       //과거이면 기록 조회
       axios
@@ -80,18 +84,44 @@ const MyFitMain = () => {
         )
         .then((res) => {
           setRecord(res.data);
+
+          if(res.data){
+
+            axios.post(`${process.env.REACT_APP_BACK_SERVER}/openai/calories`, {
+              content : res.data.recordContent,
+              time : res.data.recordTime
+            }).then(response=>{
+              setCalory(response.data.choices[0].message.content)
+            })
+          }
+
         })
         .catch((err) => {});
+
+        
     } else {
+      setCalory(null)
       if (inputDate.isSame(today, "day")) {
+        setCalory("요약중...")
         axios
           .get(
             `${process.env.REACT_APP_BACK_SERVER}/myfit/record/${member.memberNo}?recordDate=${dateData}`
           )
           .then((res) => {
             setRecord(res.data);
+            if(res.data){
+
+              axios.post(`${process.env.REACT_APP_BACK_SERVER}/openai/calories`, {
+                content : res.data.recordContent,
+                time : res.data.recordTime
+              }).then(response=>{
+                setCalory(response.data.choices[0].message.content)
+              })
+            }
           })
           .catch((err) => {});
+      }else if(inputDate.isAfter(today, "day")){
+        setRecord(null)
       }
       setTitle(weekday + "요일 루틴");
       //오늘이나 미래이면 루틴 조회
@@ -174,6 +204,7 @@ const MyFitMain = () => {
                   today={today}
                   title={title}
                   inputDate={inputDate}
+                  calory={calory}
                 />
               }
             />

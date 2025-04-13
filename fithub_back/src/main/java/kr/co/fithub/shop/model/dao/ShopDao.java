@@ -23,7 +23,7 @@ public interface ShopDao {
 
 	List<GoodsFile> selectGoodsFileList(int goodsNo);
 
-	int deleteBoard(int goodsNo);
+	int deleteGoods(int goodsNo);
 
 	int insertCart(Cart cart);
 
@@ -38,5 +38,9 @@ public interface ShopDao {
 	List<Review> selectMyReviews(String memberId);
 
 	List<Cart> selectCart(int memberNo);
+
+	int deleteCart(int cartNo);
+
+	int insertAllSell(List<Sell> sells);
 
 }
