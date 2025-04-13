@@ -148,7 +148,9 @@ const MemberInfo = () => {
   }, [previewUrl]);
 
   const handleImageDelete = () => {
-    if (!member.memberThumb && !previewUrl) {
+    const hasOriginalImage = member.memberThumb && !previewUrl;
+    const hasPreviewImage = previewUrl;
+    if (!hasOriginalImage && !hasPreviewImage) {
       Swal.fire({
         title: "프로필 이미지 없음",
         text: "현재 프로필 이미지가 없습니다.",
@@ -165,7 +167,6 @@ const MemberInfo = () => {
       fileInputRef.current.value = "";
     }
   };
-
   const handleUpdate = () => {
     const fullAddr =
       member.memberAddr +
@@ -219,7 +220,11 @@ const MemberInfo = () => {
 
     if (thumbnailFile) {
       formData.append("thumbnail", thumbnailFile);
-    } else if (!thumbnailFile && !member.memberThumb) {
+    } else if (
+      !thumbnailFile &&
+      member.memberThumb === null &&
+      loginMember.memberThumb
+    ) {
       formData.append("memberThumb", "null");
     }
 

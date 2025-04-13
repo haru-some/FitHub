@@ -167,44 +167,45 @@ public class MemberController {
 	})
 	@PatchMapping
 	public ResponseEntity<String> updateMember(
-			@Parameter(description = "회원 정보 (form-data 형식)", required = true, schema = @Schema(implementation = MemberDTO.class))
-		    @ModelAttribute MemberDTO member,
+	    @Parameter(description = "회원 정보 (form-data 형식)", required = true, schema = @Schema(implementation = MemberDTO.class))
+	    @ModelAttribute MemberDTO member,
 
-		    @Parameter(description = "새 프로필 이미지 (선택)", required = false)
-		    @RequestParam(required = false) MultipartFile thumbnail) {
+	    @Parameter(description = "새 프로필 이미지 (선택)", required = false)
+	    @RequestParam(required = false) MultipartFile thumbnail) {
+	    
 	    try {
+	        MemberDTO origin = memberService.findByMemberId(member.getMemberId());
+
+	        // 1. 클라이언트에서 삭제 의도 시
 	        if ("null".equals(member.getMemberThumb())) {
-	            member.setMemberThumb(null);
+	            // 기존 이미지가 있으면 삭제
+	            if (origin.getMemberThumb() != null && !origin.getMemberThumb().isEmpty()) {
+	                String savepath = root + "/member/profileimg/";
+	                File file = new File(savepath + origin.getMemberThumb());
+	                if (file.exists()) file.delete();
+	            }
+	            member.setMemberThumb(null); // DB에 null로 저장
 	        }
+
+	        // 2. 새 이미지 업로드 시
 	        else if (thumbnail != null && !thumbnail.isEmpty()) {
+	            // 기존 이미지가 있으면 삭제
+	            if (origin.getMemberThumb() != null && !origin.getMemberThumb().isEmpty()) {
+	                String savepath = root + "/member/profileimg/";
+	                File file = new File(savepath + origin.getMemberThumb());
+	                if (file.exists()) file.delete();
+	            }
+
 	            String savepath = root + "/member/profileimg/";
 	            String filepath = fileUtils.upload(savepath, thumbnail);
-	            member.setMemberThumb(filepath);
+	            member.setMemberThumb(filepath); // DB에 새 이미지 경로 저장
 	        }
-	        else if ("null".equals(member.getMemberThumb())) {
-	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
-	            String fileName = origin.getMemberThumb();
-	            member.setMemberThumb(null);
-	            if (fileName != null && !fileName.isEmpty()) {
-	                String savepath = root + "/member/profileimg/";
-	                File file = new File(savepath + fileName);
-	                if (file.exists()) {
-	                    file.delete();
-	                }
-	            }
+
+	        // 3. 아무것도 안 보내면 기존 이미지 유지 → 현재 DB의 memberThumb 그대로 사용
+	        else {
+	            member.setMemberThumb(origin.getMemberThumb());
 	        }
-	        else if (member.getMemberThumb() == null && (thumbnail == null || thumbnail.isEmpty())) {
-	            MemberDTO origin = memberService.findByMemberId(member.getMemberId());
-	            String fileName = origin.getMemberThumb();
-	            member.setMemberThumb(null);
-	            if (fileName != null && !fileName.isEmpty()) {
-	                String savepath = root + "/member/profileimg/";
-	                File file = new File(savepath + fileName);
-	                if (file.exists()) {
-	                    file.delete();
-	                }
-	            }
-	        }
+
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
@@ -212,6 +213,7 @@ public class MemberController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                                 .body("회원 정보 수정 실패");
 	        }
+
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
