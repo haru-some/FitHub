@@ -25,6 +25,8 @@ public class Sell {
 	private int goodsNo;	
 	@Schema(description = "총 구매 가격", example = "16400")
 	private int goodsTotalPrice;
+	@Schema(description = " 구매 가격", example = "16400")
+	private int goodsPrice;
 	@Schema(description = "상품 수량", example = "1")
 	private int goodsEa;	
 	@Schema(description = "구매 날짜", example = "sysdate")

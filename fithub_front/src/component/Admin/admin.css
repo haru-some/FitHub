@@ -13,7 +13,7 @@
 
 .admin-section section {
   width: 992px;
-  background-color: var(--main1);
+  background-color: #222;
 }
 .admin-section .navi-bar {
   border-radius: 10px;
