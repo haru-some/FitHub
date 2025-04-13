@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { logoutState, memberState } from "../utils/RecoilData";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 Quill.register("modules/ImageResize", ImageResize);
 
 const CommunityUpdate = () => {
+  const [logoutSt, setLogoutSt] = useRecoilState(logoutState);
   const params = useParams();
   const communityNo = params.communityNo;
   const [member, setMember] = useRecoilState(memberState);
@@ -45,6 +46,25 @@ const CommunityUpdate = () => {
         });
       });
   };
+
+  // if (logoutSt) {
+  //   navigate("/");
+  //   setLogoutSt(false);
+  // } else {
+  //   if (!member) {
+  //     Swal.fire({
+  //       title: "로그인 필요",
+  //       text: "로그인이 필요한 서비스입니다.",
+  //       icon: "warning",
+  //       confirmButtonColor: "#589c5f",
+  //       confirmButtonText: "확인",
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         navigate("/login");
+  //       }
+  //     });
+  //   }
+  // }
 
   return (
     <div className="community-write">
