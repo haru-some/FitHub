@@ -18,14 +18,14 @@ const AdminAds = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getAds`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getAdsList`)
       .then((res) => {
         console.log(res);
         setAdsList(res.data);
       })
       .catch((err) => {});
   }, [reload]);
-
+  console.log(ads);
   const writeAds = () => {
     const formData = new FormData();
     formData.append("adsName", ads.adsName);

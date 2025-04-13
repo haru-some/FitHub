@@ -44,7 +44,11 @@
 		insert into ads_tbl values(ads_seq.nextval, #{adsName}, #{adsImg}, #{adsLink}, #{adsType}, to_char(sysdate, 'yyyy-mm-dd'))
 	</insert>
 	
-	<select id="getAds" resultType="ads">
+	<select id="getAdsList" resultType="ads">
+		select * from ads_tbl order by 1
+	</select>
+	
+	<select id="getAdsType" resultType="ads">
 		select * from ads_tbl where ads_type = #{adsType} order by 1
 	</select>
 	
@@ -56,5 +60,74 @@
   (SELECT COUNT(*) FROM member WHERE warning_level = 3) AS kick_member_count
 FROM dual
     </select>
+    
+    <select id="selectOneMember">
+    	select * from member where member_no = #{memberNo}
+    </select>
+    
+    <insert id="adminDelMemberInsert">
+    	insert into del_member values(#{memberNo}, #{memberId}, #{memberEmail}, #{joinDate}, to_char(sysdate, 'yyyy-mm-dd'), null, #{adminId})
+    </insert>
+    
+    <delete id="adminMemberDelete">
+    	delete from member where member_no = #{memberNo}
+    </delete>
+    
+    <select id="categoryTotalPrice" resultType="sell">
+    	select goods_category, sum(s.goods_total_price) as category_total_price from sell s join goods g on s.goods_no = g.goods_no group by goods_category order by goods_category
+    </select>
+    
+    <select id="totalSell" resultType="sell">
+    	select count(*) as total_sell, goods_name from sell group by goods_name order by total_sell desc
+    </select>
+    
+    <select id="weekSales" resultType="sell">
+  WITH date_range AS (
+  SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYY-MM-DD') AS sale_date
+  FROM dual
+  CONNECT BY LEVEL &lt;= 7
+),
+sales_data AS (
+  SELECT TO_CHAR(sell_date, 'YYYY-MM-DD') AS sale_date,
+         SUM(goods_total_price) AS total_week_price
+  FROM sell
+  WHERE sell_date >= TRUNC(SYSDATE) - 6 AND sell_date &lt; TRUNC(SYSDATE) + 1
+  GROUP BY TO_CHAR(sell_date, 'YYYY-MM-DD')
+)
+SELECT
+  d.sale_date,
+  NVL(s.total_week_price, 0) AS total_week_price
+FROM
+  date_range d
+LEFT JOIN
+  sales_data s ON d.sale_date = s.sale_date
+ORDER BY
+  d.sale_date
+</select>
+    
+    <select id="monthSales" resultType="sell">
+  WITH date_range AS (
+  SELECT TRUNC(SYSDATE, 'MM') + LEVEL - 1 AS sale_date
+  FROM dual
+  CONNECT BY TRUNC(SYSDATE, 'MM') + LEVEL - 1 &lt;= TRUNC(SYSDATE)
+),
+sales_data AS (
+  SELECT TRUNC(sell_date) AS sale_date,
+         SUM(goods_total_price) AS total_month_price
+  FROM sell
+  WHERE sell_date >= TRUNC(SYSDATE, 'MM') AND sell_date &lt; TRUNC(SYSDATE) + 1
+  GROUP BY TRUNC(sell_date)
+)
+SELECT
+  TO_CHAR(d.sale_date, 'YYYY-MM-DD') AS sale_date,
+  NVL(s.total_month_price, 0) AS total_month_price
+FROM
+  date_range d
+LEFT JOIN
+  sales_data s ON d.sale_date = s.sale_date
+ORDER BY
+  d.sale_date
+</select>
+
 	
 </mapper>

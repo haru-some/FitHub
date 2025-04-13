@@ -32,9 +32,24 @@ public interface AdminDao {
 
 	int writeAds(AdsDTO ads);
 
-	List getAds(String adsType);
+	List getAdsType(String adsType);
 
 	AdminDTO getMember();
 
+	List getAdsList();
+
+	int adminMemberDelete(int memberNo);
+
+	int adminDelMemberInsert(MemberDTO m, String adminId);
+
+	MemberDTO selectOneMember(int memberNo);
+
+	List categoryTotalPrice();
+
+	List totalSell();
+
+	List weekSales();
+
+	List monthSales();
 
 }

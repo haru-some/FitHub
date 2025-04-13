@@ -2,6 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PageNavigation from "../utils/PageNavigation";
 import { useNavigate } from "react-router-dom";
+import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
+import { useRecoilState } from "recoil";
+import { memberState } from "../utils/RecoilData";
 
 const AdminMember = () => {
   const [tabChange, setTabChange] = useState(1);
@@ -61,7 +64,7 @@ const MemberListTBL = ({ tabChange }, props) => {
   const [memberList, setMemberList] = useState([]);
   const [memberPage, setMemberPage] = useState(1);
   const [memberPagNavi, setMemberPagNavi] = useState(null);
-
+  const memberInfo = useRecoilState(memberState);
   useEffect(() => {
     axios
       .get(
@@ -105,18 +108,32 @@ const MemberListTBL = ({ tabChange }, props) => {
         console.error("업데이트 실패:", err);
       });
   };
+  const deleteMember = (memberNo) => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberNo}`,
+        memberInfo.memberId
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <table className="admin-tbl">
         <thead className="admin-thead member-thead">
           <tr>
-            <th>프로필</th>
-            <th>아이디</th>
-            <th>가입일</th>
-            <th>이메일</th>
-            <th>전화번호</th>
-            <th>경고처리</th>
-            <th>회원등급</th>
+            <th style={{ width: "10%" }}>프로필</th>
+            <th style={{ width: "10%" }}>아이디</th>
+            <th style={{ width: "10%" }}>가입일</th>
+            <th style={{ width: "15%" }}>이메일</th>
+            <th style={{ width: "15%" }}>전화번호</th>
+            <th style={{ width: "10%" }}>경고처리</th>
+            <th style={{ width: "10%" }}>회원등급</th>
+            <th style={{ width: "5%" }}>강퇴</th>
           </tr>
         </thead>
         <tbody className="admin-tbody">
@@ -124,7 +141,7 @@ const MemberListTBL = ({ tabChange }, props) => {
             memberList.map((member, index) => {
               return (
                 <tr key={"member-" + index}>
-                  <td>
+                  <td style={{ width: "10%" }}>
                     {member.memberThumb ? (
                       <img
                         src="/image/default_img.png"
@@ -137,11 +154,11 @@ const MemberListTBL = ({ tabChange }, props) => {
                       />
                     )}
                   </td>
-                  <td>{member.memberId}</td>
-                  <td>{member.joinDate}</td>
-                  <td>{member.memberEmail}</td>
-                  <td>{member.memberPhone}</td>
-                  <td>
+                  <td style={{ width: "10%" }}>{member.memberId}</td>
+                  <td style={{ width: "10%" }}>{member.joinDate}</td>
+                  <td style={{ width: "20%" }}>{member.memberEmail}</td>
+                  <td style={{ width: "15%" }}>{member.memberPhone}</td>
+                  <td style={{ width: "10%" }}>
                     <select
                       className="warning-select"
                       name="warningLevel"
@@ -153,7 +170,7 @@ const MemberListTBL = ({ tabChange }, props) => {
                       <option value={3}>블랙</option>
                     </select>
                   </td>
-                  <td>
+                  <td style={{ width: "10%" }}>
                     <select
                       className="type-select"
                       name="memberLevel"
@@ -163,6 +180,12 @@ const MemberListTBL = ({ tabChange }, props) => {
                       <option value={1}>관리자</option>
                       <option value={2}>정회원</option>
                     </select>
+                  </td>
+                  <td
+                    style={{ width: "5%" }}
+                    onClick={() => deleteMember(member.memberNo)}
+                  >
+                    <DisabledByDefaultIcon />
                   </td>
                 </tr>
               );
@@ -195,6 +218,7 @@ const DelMemberListTBL = ({ tabChange }, props) => {
         `${process.env.REACT_APP_BACK_SERVER}/admin/delMemberList?delMemberPage=${delMemberPage}`
       )
       .then((res) => {
+        console.log(res);
         setDelMemberList(res.data.delMemberList);
         setDelMemberPagNavi(res.data.delMemberPi);
       })
@@ -202,6 +226,7 @@ const DelMemberListTBL = ({ tabChange }, props) => {
         console.log("delMember 에러");
       });
   }, [tabChange, delMemberPage]);
+  console.log(delMemberList);
   return (
     <div>
       <table className="admin-tbl">
@@ -211,6 +236,8 @@ const DelMemberListTBL = ({ tabChange }, props) => {
             <th>가입일</th>
             <th>탈퇴일</th>
             <th>이메일</th>
+            <th>탈퇴요청</th>
+            <th>강퇴자</th>
           </tr>
         </thead>
         <tbody className="admin-tbody">
@@ -222,6 +249,8 @@ const DelMemberListTBL = ({ tabChange }, props) => {
                   <td>{delMember.joinDate}</td>
                   <td>{delMember.delDate}</td>
                   <td>{delMember.memberEmail}</td>
+                  <td>{delMember.delIp ? "요청 O" : "요청 X"}</td>
+                  <td>{delMember.adminId ? "강퇴" : "탈퇴"}</td>
                 </tr>
               );
             })}
