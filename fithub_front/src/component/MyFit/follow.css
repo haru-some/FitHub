@@ -83,7 +83,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  margin-right: 12px;
+  margin-right: 16px;
   overflow: hidden;
 }
 
@@ -94,19 +94,31 @@
 }
 
 .myfit-follow-wrap .user-info {
-  flex: 1;
+  display: flex;
+  flex-grow: 1;
+  gap: 10px;
 }
 
 .myfit-follow-wrap .name {
   font-weight: bold;
   font-size: 16px;
-  margin-bottom: 4px;
+  line-height: 19px;
 }
 
 .myfit-follow-wrap .username {
   font-size: 14px;
   color: #aaa;
+  line-height: 19px;
 }
+
+.myfit-follow-wrap .chat-btn{
+  margin-left: 20px;
+  color: #aaa;
+}
+.myfit-follow-wrap .chat-btn:hover{
+  color: #fff;
+}
+
 
 .myfit-follow-wrap .follow-button {
   height: 30px;
@@ -117,9 +129,9 @@
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 .myfit-follow-wrap .following {
-  box-sizing: border-box;
   border: 1px solid #007bff;
   background-color: transparent;
 }

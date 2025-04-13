@@ -74,17 +74,20 @@
 .myfit-dm-wrap .info-wrap {
   width: 100%;
   overflow: hidden;
+  display: flex;
+  gap: 10px;
 }
 
 .myfit-dm-wrap .name {
   font-weight: bold;
   font-size: 16px;
-  margin-bottom: 4px;
+  line-height: 23px;
 }
 
 .myfit-dm-wrap .username {
   font-size: 14px;
   color: #aaa;
+  line-height: 23px;
 }
 
 .myfit-dm-wrap .bot-wrap {
@@ -112,6 +115,9 @@
   font-size: 18px;
   color: #cecece;
   overflow: hidden;
+  line-height: 32px;
+  width: 550px;
+  text-align: left;
 }
 
 .myfit-dm-wrap .back-btn {
@@ -168,6 +174,7 @@
   background-color: #222;
   padding: 20px;
   padding-top: 35px;
+  margin: 0px;
 }
 .myfit-wrap .section.chat-wrap > * {
   color: #ffffff;
