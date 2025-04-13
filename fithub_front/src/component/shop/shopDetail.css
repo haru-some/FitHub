@@ -456,3 +456,35 @@ select {
 .shop-detail-wrap .goods-image {
   margin-top: 25px;
 }
+
+.order-list {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.order-list-wrap .order-item {
+  display: flex;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.order-list-wrap .item-image img {
+  width: 100px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.order-list-wrap .item-details {
+  flex: 1;
+}
+
+.order-list-wrap .item-details h3 {
+  margin: 0 0 10px;
+}
+
+.order-list-wrap .item-details p {
+  margin: 5px 0;
+}

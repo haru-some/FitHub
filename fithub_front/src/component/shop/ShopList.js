@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
 import AdBanners from "../utils/AdBanners";
+import FormatPaintIcon from "@mui/icons-material/FormatPaint";
 
 const categories = [
   "모두",
@@ -104,6 +105,24 @@ const GoodsList = () => {
         });
         // 상태에서 즉각 삭제하는 경우
         // setGoods(Goods.filter((goods) => goods.goodsNo !== goodsNo));
+      }
+    });
+  };
+
+  //관리자 상품 수정페이지
+  const adminModify = (goodsNo) => {
+    Swal.fire({
+      title: "수정하시겠습니까?",
+      text: "수정 페이지로 이동합니다..",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#45a049",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "예, 수정합니다!",
+      cancelButtonText: "아니요, 취소합니다.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/shop/modify/${goodsNo}`);
       }
     });
   };
@@ -245,6 +264,15 @@ const GoodsList = () => {
                   }}
                 >
                   <ClearIcon />
+                </button>
+                <button
+                  className="modify-button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
+                    adminModify(goods.goodsNo);
+                  }}
+                >
+                  <FormatPaintIcon />
                 </button>
                 <img
                   src={

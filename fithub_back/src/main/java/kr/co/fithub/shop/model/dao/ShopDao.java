@@ -43,4 +43,6 @@ public interface ShopDao {
 
 	int insertAllSell(List<Sell> sells);
 
+	int modifyGoods(Goods goods);
+
 }
