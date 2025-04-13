@@ -36,6 +36,7 @@ function ShopPay() {
       .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
         setGoods(res.data);
+        setFormData(res.data);
       })
       .catch((err) => {
         console.log(err);
