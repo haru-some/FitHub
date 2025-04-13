@@ -48,7 +48,7 @@ public class AdminService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("delMemberList", delMemberList);
 		map.put("delMemberPi", delMemberPi);
-		return null;
+		return map;
 	}
 	
 	@Transactional
@@ -56,6 +56,18 @@ public class AdminService {
 		memberData.setMemberId(memberId);
 		int result = adminDao.adminMemberChange(memberData);
 		return result;
+	}
+	
+	@Transactional
+	public int adminMemberDelete(int memberNo, String adminId) {
+		MemberDTO m = adminDao.selectOneMember(memberNo);
+		if(m != null) {			
+			int result = adminDao.adminDelMemberInsert(m, adminId);
+			result += adminDao.adminMemberDelete(memberNo);
+			return result;
+		}else {
+			return 0;
+		}
 	}
 
 	public Map communityList(int communityPage) {
@@ -93,8 +105,13 @@ public class AdminService {
 		return result;
 	}
 
-	public List getAds(String adsType) {
-		List list = adminDao.getAds(adsType);
+	public List getAdsList() {
+		List list = adminDao.getAdsList();
+		return list;
+	}
+	
+	public List getAdsType(String adsType) {
+		List list = adminDao.getAdsType(adsType);
 		return list;
 	}
 
@@ -102,6 +119,28 @@ public class AdminService {
 		AdminDTO admin = adminDao.getMember();
 		return admin;
 	}
+
+	public List categoryTotalPrice() {
+		List list = adminDao.categoryTotalPrice();
+		return list;
+	}
+
+	public List totalSell() {
+		List list = adminDao.totalSell();
+		return list;
+	}
+
+	public List weekSales() {
+		List list = adminDao.weekSales();
+		return list;
+	}
+
+	public List monthSales() {
+		List list = adminDao.monthSales();
+		return list;
+	}
+
+	
 	
 	
 }

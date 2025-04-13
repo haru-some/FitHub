@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import kr.co.fithub.admin.model.dto.AdminDTO;
 import kr.co.fithub.admin.model.dto.AdsDTO;
 import kr.co.fithub.admin.model.service.AdminService;
 import kr.co.fithub.member.model.dto.MemberDTO;
+import kr.co.fithub.shop.model.dto.Sell;
 import kr.co.fithub.util.FileUtils;
 
 @CrossOrigin("*")
@@ -90,6 +92,15 @@ public class AdminController {
 		int result = adminService.adminMemberChange(memberId, memberData);
 		return ResponseEntity.ok(result);
 	}
+	@Operation(summary = "회원 정보 삭제", description = "회원을 삭제합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "삭제 성공")
+	})
+	@DeleteMapping("/member/{memberNo}")
+	public ResponseEntity<Integer> adminMemberDelete(@PathVariable int memberNo, @RequestBody String adminId) {
+		int result = adminService.adminMemberDelete(memberNo, adminId);
+		return ResponseEntity.ok(result);
+	}
 	
 	@Operation(summary = "광고 추가", description = "광고를 추가합니다.")
 	@ApiResponses({
@@ -118,9 +129,20 @@ public class AdminController {
 	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
 	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
 	})
-	@GetMapping("/getAds")
-	public ResponseEntity<List> getAds(@RequestParam String adsType) {
-		List list = adminService.getAds(adsType);
+	@GetMapping("/getAdsList")
+	public ResponseEntity<List> getAdsList() {
+		List list = adminService.getAdsList();
+		return ResponseEntity.ok(list);
+	}
+	
+	@Operation(summary = "광고 조회", description = "광고를 조회합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	})
+	@GetMapping("/getAdsType")
+	public ResponseEntity<List> getAdsType(@RequestParam String adsType) {
+		List list = adminService.getAdsType(adsType);
 		return ResponseEntity.ok(list);
 	}
 	
@@ -133,6 +155,27 @@ public class AdminController {
 	public ResponseEntity<AdminDTO> getMember() {
 		AdminDTO admin = adminService.getMember();
 		return ResponseEntity.ok(admin);
+	}
+	
+	@GetMapping("/totalPrice")
+	public ResponseEntity<List> categoryTotalPrice() {
+		List list = adminService.categoryTotalPrice();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping("/totalSell")
+	public ResponseEntity<List> totalSell() {
+		List list = adminService.totalSell();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping("/weekSales")
+	public ResponseEntity<List> weekSales() {
+		List list = adminService.weekSales();
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping("/monthSales")
+	public ResponseEntity<List> monthSales() {
+		List list = adminService.monthSales();
+		return ResponseEntity.ok(list);
 	}
 	
 }

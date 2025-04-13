@@ -31,4 +31,10 @@ public class Sell {
 	private int goodsEa;	
 	@Schema(description = "구매 날짜", example = "sysdate")
 	private Date sellDate;
+	private int categoryTotalPrice;
+	private int goodsCategory;
+	private int totalSell;
+	private int totalWeekPrice;
+	private int totalMonthPrice;
+	private String saleDate;
 }

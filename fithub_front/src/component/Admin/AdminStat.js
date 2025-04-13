@@ -259,7 +259,7 @@ const MemberStatChart = () => {
         </div>
       </div>
       <div>
-        <div>세번째 차트</div>
+        <div>회원 수</div>
         <div className="chart-div" style={{ height: "300px" }}>
           <MyResponsivePie pieChartData={pieChartData} />
         </div>
@@ -270,43 +270,173 @@ const MemberStatChart = () => {
 
 /*---------- 매출 통계 탭 ----------*/
 const SalesStatChart = () => {
+  const [totalPrice, setTotalPrice] = useState([]);
+  const [totalSell, setTotalSell] = useState([]);
+  const [weekPrice, setWeekPrice] = useState([]);
+  const [monthPrice, setMonthPrice] = useState([]);
+  // 보충제: 1,
+  // 비타민: 2,
+  // 스포츠웨어남: 3,
+  // 스포츠웨어여: 4,
+  // 운동기구: 5,
+
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/salesStat`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/totalPrice`)
       .then((res) => {
         console.log(res);
+        setTotalPrice([
+          {
+            id: res.data[0].goodsCategory === 1 && "보충제",
+            label: res.data[0].goodsCategory === 1 && "보충제",
+            value: res.data[0].categoryTotalPrice,
+            color: "hsl(182, 70%, 50%)",
+          },
+          {
+            id: res.data[1].goodsCategory === 2 && "비타민",
+            label: res.data[1].goodsCategory === 2 && "비타민",
+            value: res.data[1].categoryTotalPrice,
+            color: "hsl(100, 70%, 50%)",
+          },
+          {
+            id: res.data[2].goodsCategory === 3 && "스포츠웨어(남)",
+            label: res.data[2].goodsCategory === 3 && "스포츠웨어(남)",
+            value: res.data[2].categoryTotalPrice,
+            color: "hsl(40, 70%, 50%)",
+          },
+          {
+            id: res.data[3].goodsCategory === 4 && "스포츠웨어(여)",
+            label: res.data[3].goodsCategory === 4 && "스포츠웨어(여)",
+            value: res.data[3].categoryTotalPrice,
+            color: "hsl(0, 70%, 50%)",
+          },
+          {
+            id: res.data[4].goodsCategory === 5 && "운동기구",
+            label: res.data[4].goodsCategory === 5 && "운동기구",
+            value: res.data[4].categoryTotalPrice,
+            color: "hsl(0, 70%, 50%)",
+          },
+        ]);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+  const totalSum = totalPrice.reduce((acc, cur) => acc + cur.value, 0);
+  const formattedSum = totalSum.toLocaleString();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/totalSell`)
+      .then((res) => {
+        console.log(res);
+        setTotalSell(
+          res.data.map((item) => ({
+            id: item.goodsName,
+            label: item.goodsName,
+            value: item.totalSell,
+          }))
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  const totalCount = totalSell.reduce((acc, cur) => acc + cur.value, 0);
+
+  /*------------------------------------ 절대 건들지마 ------------------*/
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/weekSales`)
+      .then((res) => {
+        console.log(res.data);
+        setWeekPrice(
+          res.data.map((item) => ({
+            country: item.saleDate,
+            "주간 매출": item.totalWeekPrice,
+          }))
+        );
+        setType(["주간 매출", "월간 매출"]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/monthSales`)
+      .then((res) => {
+        setMonthPrice(
+          res.data.map((item) => ({
+            country: item.saleDate,
+            "월간 매출": item.totalMonthPrice,
+          }))
+        );
+        setType(["주간 매출", "월간 매출"]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    // 초기값으로 주간 매출 세팅
+    if (weekPrice.length > 0) {
+      setDaySales(weekPrice);
+    }
+  }, [weekPrice]);
+
+  const [daySales, setDaySales] = useState([]);
+  const [type, setType] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const changeType = (click) => {
+    setActiveIndex(click);
+    switch (click) {
+      case 0:
+        setDaySales(weekPrice);
+        break;
+      case 1:
+        setDaySales(monthPrice);
+        break;
+    }
+  };
+
   return (
     <div className="sales-stat-chart">
       <div className="chart-first">
         <div className="chart-day-member">
-          <h3>총 회원 통계</h3>
-          <div style={{ height: "300px" }}>
-            {/* <MyResponsivePieCanvas /> */}
+          <h3>카테고리별 매출 통계 - 총 {formattedSum}원</h3>
+          <div className="chart-div" style={{ height: "300px" }}>
+            <MyResponsivePie pieChartData={totalPrice} />
           </div>
         </div>
         <div className="chart-day-visit">
-          <h3>사이트 방문 통계</h3>
-          <div style={{ height: "300px" }}>
-            {/* {visitData && <MyResponsiveCalendar visitData={visitData} />} */}
+          <h3>상품별 판매 갯수 - 총 {totalCount}개</h3>
+          <div className="chart-div" style={{ height: "300px" }}>
+            <MyResponsivePie pieChartData={totalSell} />
           </div>
-        </div>
-      </div>
-      <div className="chart-second">
-        <div className="chart-day-post">
-          <h3>게시글 생성 통계</h3>
-          <div style={{ height: "300px" }}></div>
         </div>
       </div>
       <div className="chart-third">
         <div className="chart-day-sales">
           <h3>매출 통계</h3>
-          <div style={{ height: "300px" }}>
-            {/* {salesData && <MyResponsiveBar salesData={salesData} />} */}
+          <div className="chart-div" style={{ height: "300px" }}>
+            <MyResponsiveBar2 daySales={daySales} type={type} />
+          </div>
+          <div className="chart-filter">
+            <div
+              onClick={() => changeType(0)}
+              className={`filter ${activeIndex === 0 ? "active-filter" : ""}`}
+            >
+              주간 매출 통계
+            </div>
+            <div
+              onClick={() => changeType(1)}
+              className={`filter ${activeIndex === 1 ? "active-filter" : ""}`}
+            >
+              월간 매출 통계
+            </div>
           </div>
         </div>
       </div>
@@ -345,40 +475,6 @@ const MyResponsiveBar = (props) => {
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={({ id }) => colorMap[id]}
-      defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "#38bcb2",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "#eed312",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
-      fill={[
-        {
-          match: {
-            id: "fries",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "sandwich",
-          },
-          id: "lines",
-        },
-      ]}
       borderColor={{
         from: "color",
         modifiers: [["darker", 1.6]],
@@ -441,139 +537,79 @@ const MyResponsiveBar = (props) => {
   );
 };
 
+const MyResponsiveBar2 = ({ daySales, type }) => (
+  <ResponsiveBar
+    data={daySales}
+    keys={type}
+    indexBy="country"
+    margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+    padding={0.3}
+    valueScale={{ type: "linear" }}
+    indexScale={{ type: "band", round: true }}
+    colors={{ scheme: "nivo" }}
+    borderColor={{
+      from: "color",
+      modifiers: [["darker", 1.6]],
+    }}
+    axisTop={null}
+    axisRight={null}
+    axisBottom={{
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legend: "날짜",
+      legendPosition: "middle",
+      legendOffset: 32,
+      truncateTickAt: 0,
+    }}
+    axisLeft={{
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legend: "매출",
+      legendPosition: "middle",
+      legendOffset: -40,
+      truncateTickAt: 0,
+    }}
+    labelSkipWidth={12}
+    labelSkipHeight={12}
+    labelTextColor={{
+      from: "color",
+      modifiers: [["darker", 1.6]],
+    }}
+    legends={[
+      {
+        dataFrom: "keys",
+        anchor: "bottom-right",
+        direction: "column",
+        justify: false,
+        translateX: 120,
+        translateY: 0,
+        itemsSpacing: 2,
+        itemWidth: 100,
+        itemHeight: 20,
+        itemDirection: "left-to-right",
+        itemOpacity: 0.85,
+        symbolSize: 20,
+        effects: [
+          {
+            on: "hover",
+            style: {
+              itemOpacity: 1,
+            },
+          },
+        ],
+      },
+    ]}
+    role="application"
+    ariaLabel="Nivo bar chart demo"
+    barAriaLabel={(e) =>
+      e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+    }
+  />
+);
+
 /* 회원 이용 통계 */
-/*
-const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
-  useEffect(() => {
-    // access_token을 발급받은 후 runReport 요청
-    axios
-      .post("https://accounts.google.com/o/oauth2/token", {
-        client_id: process.env.REACT_APP_OAUTH_CLIENT_ID,
-        client_secret: process.env.REACT_APP_OAUTH_CLIENT_SECRET,
-        refresh_token: process.env.REACT_APP_OAUTH_REFRESH_TOKEN,
-        grant_type: "refresh_token",
-      })
-      .then((response) => {
-        const accessToken = response.data.access_token;
-
-        return axios.post(
-          `https://analyticsdata.googleapis.com/v1beta/properties/${process.env.REACT_APP_GA4_PROPERTY_ID}:runReport`,
-          {
-            dimensions: [{ name: "date" }],
-            metrics: [
-              { name: "screenPageViews" },
-              { name: "averageSessionDuration" },
-            ],
-            dateRanges: [{ startDate: "2025-03-27", endDate: "today" }],
-            keepEmptyRows: true,
-            orderBys: [
-              {
-                dimension: {
-                  dimensionName: "date",
-                  orderType: "ALPHANUMERIC",
-                },
-                desc: false,
-              },
-            ],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-      })
-      .then((response) => {
-        const rows = response.data.rows || [];
-
-        // GA4 데이터 → Nivo 데이터 형식으로 변환
-        const viewsData = [];
-        const sessionData = [];
-
-        rows.forEach((row) => {
-          const date = row.dimensionValues[0].value;
-          const pageViews = parseInt(row.metricValues[0].value, 10);
-          const sessionDuration = parseFloat(row.metricValues[1].value);
-
-          viewsData.push({ x: date, y: pageViews });
-          sessionData.push({ x: date, y: sessionDuration });
-        });
-        console.log("📊 변환된 데이터:", viewsData, sessionData);
-        setLineChartData([
-          { id: "페이지뷰", color: "hsl(220, 70%, 50%)", data: viewsData },
-          {
-            id: "평균 세션 시간",
-            color: "hsl(120, 70%, 50%)",
-            data: sessionData,
-          },
-        ]);
-      })
-      .catch((error) => {
-        console.error("GA4 API 호출 실패:", error);
-      });
-  }, []);
-
-  return (
-    <div>
-      {lineChartData && lineChartData.length > 0 && (
-        <ResponsiveLine
-          data={lineChartData}
-          margin={{ top: 50, right: 60, bottom: 50, left: 60 }}
-          xScale={{ type: "point" }}
-          yScale={{ type: "linear", stacked: false, min: "auto", max: "auto" }}
-          axisBottom={{
-            orient: "bottom",
-            legend: "날짜",
-            legendOffset: 36,
-            legendPosition: "middle",
-          }}
-          axisLeft={{
-            orient: "left",
-            legend: "수치",
-            legendOffset: -40,
-            legendPosition: "middle",
-          }}
-          colors={{ scheme: "category10" }}
-          pointSize={8}
-          pointColor={{ theme: "background" }}
-          pointBorderWidth={2}
-          pointBorderColor={{ from: "serieColor" }}
-          useMesh={true}
-          legends={[
-            {
-              anchor: "bottom-right",
-              direction: "column",
-              justify: false,
-              translateX: 100,
-              translateY: 0,
-              itemsSpacing: 4,
-              itemDirection: "left-to-right",
-              itemWidth: 120,
-              itemHeight: 20,
-              symbolSize: 12,
-              symbolShape: "circle",
-            },
-          ]}
-          tooltip={({ point }) => (
-            <div
-              style={{
-                background: "white",
-                padding: "8px 12px",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-              }}
-            >
-              <strong>{point.serieId}</strong>: {point.data.yFormatted}
-              <br />
-              <span>{point.data.xFormatted}</span>
-            </div>
-          )}
-        />
-      )}
-    </div>
-  );
-};
-*/
 const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
   useEffect(() => {
     // access_token을 발급받은 후 runReport 요청
@@ -676,6 +712,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         legendPosition: "middle",
         truncateTickAt: 0,
       }}
+      colors={{ scheme: "accent" }}
       pointSize={10}
       pointColor={{ theme: "background" }}
       pointBorderWidth={2}
@@ -738,76 +775,6 @@ const MyResponsivePie = ({ pieChartData }) => {
         from: "color",
         modifiers: [["darker", 2]],
       }}
-      defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "rgba(255, 255, 255, 0.3)",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
-      fill={[
-        {
-          match: {
-            id: "ruby",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "c",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "go",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "python",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "scala",
-          },
-          id: "lines",
-        },
-        {
-          match: {
-            id: "lisp",
-          },
-          id: "lines",
-        },
-        {
-          match: {
-            id: "elixir",
-          },
-          id: "lines",
-        },
-        {
-          match: {
-            id: "javascript",
-          },
-          id: "lines",
-        },
-      ]}
       motionConfig={{
         mass: 1,
         tension: 500,
@@ -818,12 +785,12 @@ const MyResponsivePie = ({ pieChartData }) => {
       }}
       legends={[
         {
-          anchor: "bottom",
-          direction: "row",
+          anchor: "right",
+          direction: "column",
           justify: false,
-          translateX: 0,
+          translateX: -20,
           translateY: 56,
-          itemsSpacing: 0,
+          itemsSpacing: 1,
           itemWidth: 100,
           itemHeight: 18,
           itemTextColor: "#999",

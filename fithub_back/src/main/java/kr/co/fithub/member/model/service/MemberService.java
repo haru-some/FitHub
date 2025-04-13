@@ -56,6 +56,9 @@ public class MemberService {
 	}
 	public MemberDTO login(MemberDTO member) {
 		MemberDTO m = memberDao.selectOneMember(member.getMemberId());
+		if(m.getWarningLevel() == 3) {
+			m = null;
+		}
 		if(m != null && encoder.matches(member.getMemberPw(), m.getMemberPw())) {
 			String accessToken = jwtUtil.createAccessToken(m.getMemberId(),m.getMemberLevel());
 			String refreshToken = jwtUtil.createRefreshToken(m.getMemberId(),m.getMemberLevel());

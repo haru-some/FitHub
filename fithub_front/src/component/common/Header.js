@@ -15,6 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useEffect, useState } from "react";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import ChatIcon from "@mui/icons-material/Chat";
+import Swal from "sweetalert2";
 
 const Header = () => {
   const [chatAlarm, setChatAlarm] = useState(0); // 기본값 'N'
@@ -23,6 +24,7 @@ const Header = () => {
   const [alarmWs, setAlarmWs] = useRecoilState(alarmWsState);
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
   const loginMember = useRecoilValue(memberState);
+
   useEffect(() => {
     if (loginMember) {
       const socket = new WebSocket(
@@ -117,6 +119,14 @@ const HeaderLink = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const chatAlarm = props.chatAlarm;
+
+  if (memberInfo) {
+    if (memberInfo.warningLevel === 3) {
+      Swal.fire("블랙당한 시끼", "어딜 오려고 다시 돌아가", "warning");
+      setLogoutST(true);
+      logOut();
+    }
+  }
 
   const logOut = () => {
     if (memberInfo?.loginType === "kakao") {

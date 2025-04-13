@@ -112,6 +112,7 @@
 .admin-tbl {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .admin-tbl th,
@@ -120,14 +121,13 @@
   color: white;
   padding: 10px 5px;
   border-bottom: 1px solid var(--gray3);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .admin-section select {
   background-color: var(--main1);
-}
-.admin-tbody > tr > td {
-  width: 100px;
-  table-layout: fixed;
 }
 
 /*---------- AdminStat / 관리자 회원 활동, 매출 통계 관리 ----------*/
@@ -140,7 +140,8 @@
 .admin-stat-section text {
   fill: #fff !important;
 }
-
+.admin-stat-section .chart-div {
+}
 .admin-stat-section .chart-div > div > div > div * {
   fill: #000 !important;
   color: #000 !important;
