@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
+import CircularProgress from '@mui/material/CircularProgress';
 dayjs.locale("ko");
 const MyFit = (props) => {
   const date = props.date;
@@ -113,11 +114,14 @@ const MyFit = (props) => {
       <div className="record-ai-summary">
         <h1>AI 요약</h1>
         <div className="ai-wrap">
-
-        <div
-          className="ai-summary-content"
-          dangerouslySetInnerHTML={{ __html: convertNewlinesToBr(calory) }}
-        ></div>
+          {calory === "요약중..." ? <CircularProgress color="success" /> : (
+              <div
+              className="ai-summary-content"
+              dangerouslySetInnerHTML={{ __html: convertNewlinesToBr(calory) }}
+            ></div>
+          )}
+          
+          
         </div>
       </div>
     )}
