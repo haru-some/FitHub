@@ -541,6 +541,9 @@
 /* shop frm  */
 
 .shop-detail-frm-wrap {
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
   width: 1000px;
   background-color: var(--gray3);
   padding: 20px;

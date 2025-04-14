@@ -98,5 +98,11 @@
   	<delete id="deleteMyReview">
   		delete from review where re_no= #{reNo}
   	</delete>
+  	<select id="getGoodsImage">
+  		select goods_image from goods where goods_no= #{goodsNo}  
+  	</select>
+  	<select id="getGoodsDetailImg">
+  		select goods_detail_img from goods where goods_no= #{goodsNo}
+  	</select>
   	
 </mapper>

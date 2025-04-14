@@ -1,6 +1,8 @@
 .shop-list-wrap {
+  margin-top: 30px;
+  margin-bottom: 30px;
   background-color: #ffffff;
-  min-height: 1250px;
+  min-height: 1000px;
 }
 
 .shop-list-wrap div {

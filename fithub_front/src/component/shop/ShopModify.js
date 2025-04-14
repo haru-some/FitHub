@@ -115,145 +115,133 @@ const ShopModify = () => {
             <div className="goods-info-wrap">
               <table className="tbl">
                 <tbody>
-                  {infoArr.length > 0 ? (
-                    <tr>
-                      <th style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsInfo1}
-                            onChange={(e) => setGoodsInfo1(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </th>
-                      <td style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsDetail1}
-                            onChange={(e) => setGoodsDetail1(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </td>
-                      <th style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsInfo2}
-                            onChange={(e) => setGoodsInfo2(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </th>
-                      <td style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsDetail2}
-                            onChange={(e) => setGoodsDetail2(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    "1행 안나옴"
-                  )}
-                  {infoArr.length > 2 ? (
-                    <tr>
-                      <th style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsInfo3}
-                            onChange={(e) => setGoodsInfo3(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </th>
-                      <td style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsDetail3}
-                            onChange={(e) => setGoodsDetail3(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </td>
-                      <th style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsInfo4}
-                            onChange={(e) => setGoodsInfo4(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </th>
-                      <td style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsDetail4}
-                            onChange={(e) => setGoodsDetail4(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    "2행 안나옴"
-                  )}
+                  <tr>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo1}
+                          onChange={(e) => setGoodsInfo1(e.target.value)}
+                          placeholder="표기정보 (속성)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail1}
+                          onChange={(e) => setGoodsDetail1(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo2}
+                          onChange={(e) => setGoodsInfo2(e.target.value)}
+                          placeholder="표기정보 (속성)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail2}
+                          onChange={(e) => setGoodsDetail2(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
 
-                  {infoArr.length > 4 ? (
-                    <tr>
-                      <th style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsInfo5}
-                            onChange={(e) => setGoodsInfo5(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </th>
-                      <td style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsDetail5}
-                            onChange={(e) => setGoodsDetail5(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </td>
-                      <th style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsInfo6}
-                            onChange={(e) => setGoodsInfo6(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </th>
-                      <td style={{ width: "25%" }}>
-                        <div className="input-item">
-                          <input
-                            type="text"
-                            value={goodsDetail6}
-                            onChange={(e) => setGoodsDetail6(e.target.value)}
-                            placeholder="표기정보 (상세)"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    "3행 안나옴"
-                  )}
+                  <tr>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo3}
+                          onChange={(e) => setGoodsInfo3(e.target.value)}
+                          placeholder="표기정보 (속성)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail3}
+                          onChange={(e) => setGoodsDetail3(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo4}
+                          onChange={(e) => setGoodsInfo4(e.target.value)}
+                          placeholder="표기정보 (속성)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail4}
+                          onChange={(e) => setGoodsDetail4(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo5}
+                          onChange={(e) => setGoodsInfo5(e.target.value)}
+                          placeholder="표기정보 (속성)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail5}
+                          onChange={(e) => setGoodsDetail5(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                    <th style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsInfo6}
+                          onChange={(e) => setGoodsInfo6(e.target.value)}
+                          placeholder="표기정보 (속성)"
+                        />
+                      </div>
+                    </th>
+                    <td style={{ width: "25%" }}>
+                      <div className="input-item">
+                        <input
+                          type="text"
+                          value={goodsDetail6}
+                          onChange={(e) => setGoodsDetail6(e.target.value)}
+                          placeholder="표기정보 (상세)"
+                        />
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

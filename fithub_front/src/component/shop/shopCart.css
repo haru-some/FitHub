@@ -1,3 +1,8 @@
+.cart-wrap {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 .cart-wrap .cart-container {
   margin: auto;
   padding: 20px;

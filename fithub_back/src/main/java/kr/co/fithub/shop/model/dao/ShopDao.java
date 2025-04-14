@@ -49,4 +49,8 @@ public interface ShopDao {
 
 	int deleteMyReview(int reNo);
 
+	String getGoodsImage(int goodsNo);
+
+	String getGoodsDetailImg(int goodsNo);
+
 }
