@@ -94,7 +94,7 @@ const CommunityList = () => {
                         : `/community/list/${member.memberNo}`
                     );
                   }}
-                  style={showMyList === 1 ? { fill: "#6fff87" } : {}}
+                  style={memberNo ? { fill: "#6fff87" } : {}}
                 />
               )}
             </div>
@@ -132,6 +132,7 @@ const CommunityList = () => {
                     setCommunityList={setCommunityList}
                     member={member}
                     page={page}
+                    memberNo={memberNo}
                   />
                 </div>
               );

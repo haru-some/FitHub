@@ -37,6 +37,7 @@ const CommunityView = () => {
         }`
       )
       .then((res) => {
+        console.log(res);
         setCommunity(res.data);
       });
   }, [isUpdate]);
@@ -123,6 +124,21 @@ const CommunityView = () => {
     e.stopPropagation();
     setAnchorEl(null);
   };
+  const handleStatus = (e) => {
+    const communityStatus = community.communityStatus === 1 ? 2 : 1;
+    const obj = {
+      communityNo: community.communityNo,
+      communityStatus: communityStatus,
+      memberNo: member ? member.memberNo : 0,
+    };
+    axios
+      .patch(`${process.env.REACT_APP_BACK_SERVER}/community/list`, obj)
+      .then((res) => {
+        navigate("/community/list");
+      });
+    e.stopPropagation();
+    handleMenuClose(e);
+  };
 
   const handleReport = (e) => {
     e.stopPropagation();
@@ -198,7 +214,7 @@ const CommunityView = () => {
             />
             {community && (
               <Typography sx={{ fontSize: "15px", marginBottom: "24px" }}>
-                {community.memberId}님의 팔로우를 취소하시겠어요?
+                @{community.memberId}님의 팔로우를 취소하시겠어요?
               </Typography>
             )}
 
@@ -265,6 +281,11 @@ const CommunityView = () => {
                 </>
               )}
             </div>
+            <div className="community-status">
+              <p>
+                {community && community.communityStatus === 1 ? "" : "비공개"}
+              </p>
+            </div>
             <div>
               {member &&
                 community &&
@@ -312,6 +333,9 @@ const CommunityView = () => {
                     horizontal: "right",
                   }}
                 >
+                  <MenuItem onClick={handleStatus}>
+                    {community.communityStatus === 1 ? "비공개" : "공개"}
+                  </MenuItem>
                   <MenuItem onClick={handleReport}>수정하기</MenuItem>
                   <MenuItem onClick={handleBlock}>삭제하기</MenuItem>
                 </Menu>

@@ -63,31 +63,16 @@ const AdminGoods = () => {
       form.append("detailImg", goodsDetailImg);
     }
 
-    if (goodsInfo1) {
-      form.append("goodsInfo1", goodsInfo1);
-      form.append("goodsDetail1", goodsDetail1);
-    }
-    if (goodsInfo2) {
-      form.append("goodsInfo2", goodsInfo2);
-      form.append("goodsDetail2", goodsDetail2);
-    }
-    if (goodsInfo3) {
-      form.append("goodsInfo3", goodsInfo3);
-      form.append("goodsDetail3", goodsDetail3);
-    }
-    if (goodsInfo4) {
-      form.append("goodsInfo4", goodsInfo4);
-      form.append("goodsDetail4", goodsDetail4);
-    }
-    if (goodsInfo5) {
-      form.append("goodsInfo5", goodsInfo5);
-      form.append("goodsDetail5", goodsDetail5);
-    }
-    if (goodsInfo6) {
-      form.append("goodsInfo6", goodsInfo6);
-      form.append("goodsDetail6", goodsDetail6);
-    }
+    const obj = {};
+    if (goodsInfo1?.trim()) obj[goodsInfo1] = goodsDetail1;
+    if (goodsInfo2?.trim()) obj[goodsInfo2] = goodsDetail2;
+    if (goodsInfo3?.trim()) obj[goodsInfo3] = goodsDetail3;
+    if (goodsInfo4?.trim()) obj[goodsInfo4] = goodsDetail4;
+    if (goodsInfo5?.trim()) obj[goodsInfo5] = goodsDetail5;
+    if (goodsInfo6?.trim()) obj[goodsInfo6] = goodsDetail6;
 
+    form.append("goodsInfos", JSON.stringify(obj));
+    console.log(JSON.stringify(obj));
     console.log("ㄱㄱ");
     console.log(goodsImage);
     console.log(goodsDetailImg);
