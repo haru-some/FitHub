@@ -89,7 +89,7 @@ const MyFitMain = () => {
             axios
               .post(`${process.env.REACT_APP_BACK_SERVER}/myfit/calories`, {
                 content: res.data.recordContent,
-                time: res.data.recordTime,
+                time: Math.floor(res.data.recordTime),
               })
               .then((response) => {
                 setCalory(response.data.choices[0].message.content);
@@ -111,7 +111,7 @@ const MyFitMain = () => {
               axios
                 .post(`${process.env.REACT_APP_BACK_SERVER}/myfit/calories`, {
                   content: res.data.recordContent,
-                  time: res.data.recordTime,
+                  time: Math.floor(res.data.recordTime),
                 })
                 .then((response) => {
                   setCalory(response.data.choices[0].message.content);
