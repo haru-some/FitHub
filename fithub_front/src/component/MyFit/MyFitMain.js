@@ -87,7 +87,7 @@ const MyFitMain = () => {
 
           if (res.data) {
             axios
-              .post(`${process.env.REACT_APP_BACK_SERVER}/openai/calories`, {
+              .post(`${process.env.REACT_APP_BACK_SERVER}/myfit/calories`, {
                 content: res.data.recordContent,
                 time: res.data.recordTime,
               })
@@ -109,7 +109,7 @@ const MyFitMain = () => {
             setRecord(res.data);
             if (res.data) {
               axios
-                .post(`${process.env.REACT_APP_BACK_SERVER}/openai/calories`, {
+                .post(`${process.env.REACT_APP_BACK_SERVER}/myfit/calories`, {
                   content: res.data.recordContent,
                   time: res.data.recordTime,
                 })
