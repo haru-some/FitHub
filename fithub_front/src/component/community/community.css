@@ -95,6 +95,9 @@
 .community-member > .community-list-date {
   margin: 0;
 }
+.community-list-status {
+  margin: 0;
+}
 .community-post-item > div {
   padding: 10px 0;
 }
@@ -305,11 +308,11 @@
 .community-write-info {
   margin: 20px 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 20px;
 }
 .community-write-info > .write-member-id {
-  font-size: 24px;
+  font-size: 20px;
 }
 .community-main-wrap .write-btn {
   width: 100%;

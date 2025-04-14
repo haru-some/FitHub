@@ -149,4 +149,12 @@ public class CommunityController {
 		int result = communityService.updateComment(comment);
 		return ResponseEntity.ok(result);
 	}
+	
+	@Operation(summary = "커뮤니티 공개/비공개", description = "커뮤니티 댓글을 수정합니다.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "수정 성공") })
+	@PatchMapping(value="/list")
+	public ResponseEntity<CommunityDTO> changeStatus(@RequestBody CommunityDTO community){		
+		CommunityDTO c = communityService.changeStatus(community);
+		return ResponseEntity.ok(c);
+	}
 }
