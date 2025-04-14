@@ -150,7 +150,7 @@ public class CommunityController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@Operation(summary = "커뮤니티 공개/비공개", description = "커뮤니티 댓글을 수정합니다.")
+	@Operation(summary = "커뮤니티 공개/비공개", description = "커뮤니티의 공개 여부(공개/비공개)를 변경합니다.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "수정 성공") })
 	@PatchMapping(value="/list")
 	public ResponseEntity<CommunityDTO> changeStatus(@RequestBody CommunityDTO community){		
