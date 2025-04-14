@@ -42,10 +42,16 @@ public class ShopService {
 		return goods;
 	}
 	@Transactional
-	public int insertgoods(Goods goods, List<GoodsFile> goodsFileList) {
-		System.out.println(goods);
+	public int insertgoods(Goods goods, HashMap<String, String> map ,List<GoodsFile> goodsFileList) {
+		String goodsInfo = "";
+		for(Map.Entry<String,String> entry : map.entrySet()) {
+			goodsInfo += "&"+entry.getKey() + "=" + entry.getValue();
+		}
+		goodsInfo = goodsInfo.substring(1, goodsInfo.length());
+		
+		goods.setGoodsInfo(goodsInfo);
 		int result = shopDao.insertGoods(goods);
-		System.out.println(goods);
+		
 		
 		
 		for(GoodsFile goodsFile : goodsFileList) {
@@ -152,13 +158,23 @@ public class ShopService {
 	    for (Sell sell : sells) {
 	        insertCount += shopDao.insertSell(sell); // insertSell 메서드가 저장한 레코드 수를 반환한다고 가정
 	    }
-
-	    System.out.println("저장된 Sell 객체 수: " + insertCount);
+	    
+	    for (Cart cart : carts) {
+	    	insertCount += shopDao.clearCart(cart.getCartNo());//
+	    }
+	    
 	    return insertCount; // 실질적으로 저장된 Sell의 개수를 반환
 	}
 	@Transactional
-	public int modifygoods(Goods goods, List<GoodsFile> goodsFileList) {
+	public int modifygoods(Goods goods,HashMap<String, String> map, List<GoodsFile> goodsFileList) {
 		System.out.println(goods);
+		String goodsInfo = "";
+		for(Map.Entry<String,String> entry : map.entrySet()) {
+			goodsInfo += "&"+entry.getKey() + "=" + entry.getValue();
+		}
+		goodsInfo = goodsInfo.substring(1, goodsInfo.length());
+		
+		goods.setGoodsInfo(goodsInfo);
 		int result = shopDao.modifyGoods(goods);
 		System.out.println(goods);
 		

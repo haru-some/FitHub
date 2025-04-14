@@ -12,7 +12,7 @@
   	<insert id="insertGoods">
   		insert into goods values 
   		(#{goodsNo},#{goodsName},#{goodsExplain},#{goodsPrice},#{goodsStock},#{goodsImage},sysdate,#{goodsCategory}
-  		,#{goodsInfo1},#{goodsDetail1},#{goodsInfo2},#{goodsDetail2},#{goodsInfo3},#{goodsDetail3},#{goodsInfo4},#{goodsDetail4},#{goodsInfo5},#{goodsDetail5},#{goodsInfo6},#{goodsDetail6},#{goodsDetailImg})
+  		,#{goodsDetailImg},#{goodsInfo})
  		<selectKey order="BEFORE" resultType="int" keyProperty="goodsNo">
  			select goods_seq.nextval from dual
  		</selectKey>
@@ -87,14 +87,13 @@
  			goods_name = #{goodsName}, goods_explain = #{goodsExplain},
  			goods_price = #{goodsPrice}, goods_stock = #{goodsStock},
  			goods_image = #{goodsImage}, goods_category = #{goodsCategory},
-  			goods_info1 = #{goodsInfo1}, goods_detail1 = #{goodsDetail1},
-  			goods_info2 = #{goodsInfo2}, goods_detail2 = #{goodsDetail2},
-  			goods_info3 = #{goodsInfo3}, goods_detail3 = #{goodsDetail3},
-  			goods_info4 = #{goodsInfo4}, goods_detail4 = #{goodsDetail4},
-  			goods_info5 = #{goodsInfo5}, goods_detail5 = #{goodsDetail5},
-  			goods_info6 = #{goodsInfo6}, goods_detail6 = #{goodsDetail6}, 
+  			goods_info = #{goodsInfo},
   			goods_detail_img = #{goodsDetailImg}
  		where goods_no = #{goodsNo}	
   	</update>
+  	
+  	<delete id="clearCart">
+  		delete from cart where cart_no= #{cartNo}
+  	</delete>
   	
 </mapper>
