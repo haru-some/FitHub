@@ -33,7 +33,7 @@ import kr.co.fithub.util.FileUtils;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/community")
-@Tag(name = "06. 커뮤니티 API", description = "커뮤니티 관련 기능")
+@Tag(name = "커뮤니티 API 🧑‍🤝‍🧑", description = "커뮤니티 관련 기능")
 public class CommunityController {
 	@Autowired
 	private CommunityService communityService;

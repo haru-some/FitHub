@@ -41,7 +41,7 @@ import kr.co.fithub.member.model.dto.MemberDTO;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/member")
-@Tag(name = "01. 회원 API", description = "회원 관련 기능")
+@Tag(name = "회원 API 👤", description = "회원 관련 기능")
 public class MemberController {
 	@Autowired
 	private MemberService memberService;

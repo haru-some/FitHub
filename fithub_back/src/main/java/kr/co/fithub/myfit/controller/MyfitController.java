@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/myfit")
-@Tag(name = "07. 운동기록 & 활동 API", description = "운동관리와 회원활동 관련 기능")
+@Tag(name = "운동기록 & 활동 API 🏃‍♂️", description = "운동관리와 회원활동 관련 기능")
 public class MyfitController {
 	@Autowired
 	private MyfitService myfitService;

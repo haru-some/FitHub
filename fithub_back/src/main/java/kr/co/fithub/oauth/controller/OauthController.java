@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
-@Tag(name = "02. 소셜 로그인 API", description = "Google/Kakao 소셜 로그인 및 소셜 회원가입 기능")
+@Tag(name = "소셜 로그인 API 🔗", description = "Google/Kakao 소셜 로그인 및 소셜 회원가입 기능")
 public class OauthController {
 
     private final OauthService oauthService;
