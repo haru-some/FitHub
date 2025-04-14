@@ -33,7 +33,7 @@ import kr.co.fithub.util.FileUtils;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/community")
-@Tag(name = "06. 커뮤니티 API", description = "커뮤니티 관련 기능")
+@Tag(name = "커뮤니티 API 🧑‍🤝‍🧑", description = "커뮤니티 관련 기능")
 public class CommunityController {
 	@Autowired
 	private CommunityService communityService;
@@ -148,5 +148,13 @@ public class CommunityController {
 		comment.setCommentNo(commentNo);		
 		int result = communityService.updateComment(comment);
 		return ResponseEntity.ok(result);
+	}
+	
+	@Operation(summary = "커뮤니티 공개/비공개", description = "커뮤니티의 공개 여부(공개/비공개)를 변경합니다.")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "수정 성공") })
+	@PatchMapping(value="/list")
+	public ResponseEntity<CommunityDTO> changeStatus(@RequestBody CommunityDTO community){		
+		CommunityDTO c = communityService.changeStatus(community);
+		return ResponseEntity.ok(c);
 	}
 }

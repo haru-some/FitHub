@@ -33,7 +33,7 @@ import kr.co.fithub.util.FileUtils;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/admin")
-@Tag(name = "04. 관리자 페이지 API", description = "관리자 관련 기능")
+@Tag(name = "관리자 페이지 API 🛠️", description = "관리자 관련 기능")
 public class AdminController {
 	@Autowired
 	private AdminService adminService;

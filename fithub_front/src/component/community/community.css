@@ -95,6 +95,9 @@
 .community-member > .community-list-date {
   margin: 0;
 }
+.community-list-status {
+  margin: 0;
+}
 .community-post-item > div {
   padding: 10px 0;
 }
@@ -104,16 +107,16 @@
 .community-post-item .community-sub-btn {
   margin-left: auto;
 }
-.user-info {
+.community-main-wrap .user-info {
   display: flex;
   gap: 20px;
 }
-.member-img > img {
+.community-main-wrap .member-img > img {
   width: 60px;
   height: 60px;
   border-radius: 50%;
 }
-.user-info > div {
+.community-main-wrap .user-info > div {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -150,7 +153,7 @@
 }
 
 /*팔로우 버튼*/
-.follow-btn {
+.community-main-wrap .follow-btn {
   height: 30px;
   background-color: #007bff;
   color: white;
@@ -160,7 +163,7 @@
   font-size: 14px;
   cursor: pointer;
 }
-.following {
+.community-main-wrap .following {
   box-sizing: border-box;
   border: 1px solid #007bff;
   background-color: transparent;
@@ -203,7 +206,7 @@
   width: 100%;
   border-radius: 10px;
 }
-.view-btn {
+.community-main-wrap .view-btn {
   margin-left: 20px;
 }
 
@@ -305,13 +308,13 @@
 .community-write-info {
   margin: 20px 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 20px;
 }
 .community-write-info > .write-member-id {
-  font-size: 24px;
+  font-size: 20px;
 }
-.write-btn {
+.community-main-wrap .write-btn {
   width: 100%;
   padding: 10px;
   margin-top: 30px;
@@ -321,7 +324,7 @@
   color: #fff;
   font-size: 18px;
 }
-.write-btn:hover {
+.community-main-wrap .write-btn:hover {
   cursor: pointer;
   color: var(--main1);
   background-color: #ccc;

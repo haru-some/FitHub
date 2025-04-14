@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value="/chat")
 @Slf4j
-@Tag(name = "05. 문의 채팅 API", description = "문의 채팅 기능")
+@Tag(name = "문의 채팅 API 💬", description = "문의 채팅 기능")
 public class ChatController {
 	@Autowired
 	private ChatService chatService;

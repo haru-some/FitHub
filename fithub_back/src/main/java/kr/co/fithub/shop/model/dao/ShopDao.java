@@ -43,4 +43,10 @@ public interface ShopDao {
 
 	int insertAllSell(List<Sell> sells);
 
+	int modifyGoods(Goods goods);	
+
+	int clearCart(int cartNo);
+
+	int deleteMyReview(int reNo);
+
 }

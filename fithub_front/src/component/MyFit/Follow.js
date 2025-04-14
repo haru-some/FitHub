@@ -192,6 +192,7 @@ const Follow = (props) => {
                       <div className="username">{member.memberName}</div>
                     </div>
                     {(loginMember && member.memberNo !== loginMemberNo) &&  (
+                      <>
                       <button
                         className={`follow-button ${
                           member.isFollow === 1 ? "following" : ""
@@ -226,6 +227,19 @@ const Follow = (props) => {
                       >
                         {member.isFollow === 1 ? "팔로잉" : "팔로우"}
                       </button>
+                      <span
+                      className="material-icons chat-btn"
+                      onClick={(e) => {
+                        // 보낸사람/받은사람
+                        navigate(
+                          `/myfit/chat/${loginMember.memberNo}/${member.memberNo}`
+                        );
+                        e.stopPropagation();
+                      }}
+                    >
+                      send
+                    </span>
+                      </>
                     )}
                   </div>
                 </li>
