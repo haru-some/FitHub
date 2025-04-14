@@ -264,13 +264,6 @@ const ShopDetail = () => {
           state: { quantity },
         });
       } else {
-        Swal.fire({
-          icon: "info",
-          title: "구매가 취소되었습니다.",
-          showConfirmButton: false,
-          cancelButtonColor: "#8CCC8F",
-          timer: 2000,
-        });
       }
     });
   };

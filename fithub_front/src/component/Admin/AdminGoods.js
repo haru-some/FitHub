@@ -11,7 +11,7 @@ const AdminGoods = () => {
 
   const { goodsNo } = useParams(); // Image에서 goodsNo 가져오기
   const [activeTab, setActiveTab] = useState("상품정보");
-  const [selectedFile, setSelectedFile] = useState(null);
+
   const fileInputRef = useRef();
   const navigate = useNavigate();
 

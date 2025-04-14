@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Swal from "sweetalert2";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { data, Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
 import { Category } from "@mui/icons-material";
@@ -47,8 +47,13 @@ const ShopModify = () => {
   const { detailImg, setDetailImg } = useState();
   const [goodsCategory, setGoodsCategory] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageDetail, setSelectedImageDetail] = useState(null);
+  const [existingGoodsImage, setExistingGoodsImage] = useState("");
+  const [existingGoodsDetailImg, setExistingGoodsDetailImg] = useState("");
 
   const submit = () => {
+    console.log(goodsImage);
+    console.log(goodsDetailImg);
     /////////////////////////////////////////FORM////////////////////////////////////////////
     const form = new FormData();
     form.append("goodsNo", goodsNo);
@@ -59,10 +64,15 @@ const ShopModify = () => {
     form.append("goodsCategory", goodsCategory);
 
     if (goodsImage) {
-      form.append("goodsImg", goodsImage);
+      form.append("goodsImg", goodsImage); // 새 상품 이미지가 있을 경우 추가
+    } else {
+      form.append("goodsImg", existingGoodsImage); // 기존 상품 이미지 사용
     }
+
     if (goodsDetailImg) {
-      form.append("detailImg", goodsDetailImg);
+      form.append("detailImg", goodsDetailImg); // 새 상세 이미지가 있을 경우 추가
+    } else {
+      form.append("detailImg", existingGoodsDetailImg); // 기존 상세 이미지 사용
     }
 
     if (goodsInfo1) {
@@ -104,11 +114,11 @@ const ShopModify = () => {
         console.log(res);
         Swal.fire({
           icon: "success",
-          title: "상품이 등록되었습니다!",
+          title: "상품이 수정되었습니다!",
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/admin");
+        navigate("/shop/*");
       })
       .catch((err) => {
         console.error("상품 등록 실패:", err);
@@ -263,16 +273,12 @@ const ShopModify = () => {
               onClick={() => imageDetailRef.current.click()}
               style={{ cursor: "pointer" }}
             >
-              {goodsDetailImg ? (
+              {selectedImageDetail ? (
+                <img src={selectedImageDetail} />
+              ) : goods.goodsDetailImg ? (
                 <img
-                  src={
-                    goods.goodsDetailImg
-                      ? `${backServer}/shop/detail/${goods.goodsDetailImg}`
-                      : "" // 기본 이미지 처리
-                  }
+                  src={`${backServer}/shop/detail/${goods.goodsDetailImg}`}
                 />
-              ) : showDetailImage ? (
-                <img src={showDetailImage} alt="미리보기" />
               ) : (
                 <img src="/image/befor-detail-img.png" alt="기본 썸네일" />
               )}
@@ -288,11 +294,11 @@ const ShopModify = () => {
         );
 
       case "리뷰":
-        return <div>(예시)리뷰 정보 탭입니다.</div>;
+        return <div>리뷰 정보 탭입니다.</div>;
       case "배송/결제":
-        return <div>(예시)배송 정보 탭입니다.</div>;
+        return <div>배송 정보 탭입니다.</div>;
       case "반품/교환":
-        return <div>(예시)반품 정보 탭입니다.</div>;
+        return <div>반품 정보 탭입니다.</div>;
       default:
         return null;
     }
@@ -336,6 +342,7 @@ const ShopModify = () => {
       setShowImage(null);
       setSelectedImage(null); // 초기화
     }
+    console.log(goodsDetailImg);
   };
 
   const changeDeImg = (e) => {
@@ -348,11 +355,14 @@ const ShopModify = () => {
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         setShowDetailImage(reader.result); // 미리보기 상태 설정
+        setSelectedImageDetail(reader.result);
       };
     } else {
       setGoodsDetailImg(null);
       setShowDetailImage(null);
+      setSelectedImageDetail(null);
     }
+    console.log(goodsImage);
   };
 
   useEffect(() => {
@@ -361,6 +371,9 @@ const ShopModify = () => {
       .then((res) => {
         const data = res.data;
         setGoods(data);
+
+        setExistingGoodsImage(data.goodsImage); // 기존 상품 이미지 URL 설정
+        setExistingGoodsDetailImg(data.goodsDetailImg); // 기존 상세 이미지 URL 설정
 
         setGoodsName(data.goodsName);
         setGoodsPrice(data.goodsPrice);
@@ -379,8 +392,8 @@ const ShopModify = () => {
         setGoodsDetail4(data.goodsDetail4);
         setGoodsDetail5(data.goodsDetail5);
         setGoodsDetail6(data.goodsDetail6);
-        setGoodsImage(data.goodsImage);
-        setGoodsDetailImg(data.goodsDetailImg);
+        // setGoodsImage(data.goodsImage);
+        // setGoodsDetailImg(data.goodsDetailImg);
         console.log(data);
       })
       .catch((err) => {
@@ -397,7 +410,7 @@ const ShopModify = () => {
             onClick={handleImageClick} // 클릭 시파일 선택기 실행
             style={{ cursor: "pointer" }}
           >
-            {selectedImage ? ( // selectedImage가 존재하면 미리보기 이미지 표시
+            {selectedImage ? (
               <img src={selectedImage} alt="미리보기" />
             ) : goods.goodsImage ? ( // 기본 이미지 표시
               <img

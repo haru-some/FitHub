@@ -262,6 +262,8 @@ public class ShopController {
 											   @ModelAttribute MultipartFile goodsImg, 
 											   @ModelAttribute MultipartFile detailImg,
 											   @ModelAttribute MultipartFile[] goodsFile){
+    	System.out.println(goodsImg);
+    	System.out.println(detailImg);
     	if(goodsImg != null) {
 			String savepath = root +"/goods/url/";
 			String filepath = fileUtils.upload(savepath, goodsImg);

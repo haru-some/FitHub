@@ -111,20 +111,7 @@ const GoodsList = () => {
 
   //관리자 상품 수정페이지
   const adminModify = (goodsNo) => {
-    Swal.fire({
-      title: "수정하시겠습니까?",
-      text: "수정 페이지로 이동합니다..",
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonColor: "#45a049",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "예, 수정합니다!",
-      cancelButtonText: "아니요, 취소합니다.",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`/shop/modify/${goodsNo}`);
-      }
-    });
+    navigate(`/shop/modify/${goodsNo}`);
   };
 
   //카테고리
@@ -242,7 +229,11 @@ const GoodsList = () => {
           </button>
         ))}
       </div>
-      <select value={sort} onChange={(e) => setSort(e.target.value)}>
+      <select
+        className="order-by"
+        value={sort}
+        onChange={(e) => setSort(e.target.value)}
+      >
         <option value="최신순">최신순</option>
         <option value="가격높은순">가격높은순</option>
         <option value="가격낮은순">가격낮은순</option>

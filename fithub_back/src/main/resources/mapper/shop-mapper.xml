@@ -64,7 +64,7 @@
   	</select>
   	
   	<select id="goodsReviews" resultType="review">
-  		select re_no, goods_no, member_id, re_content, to_char(re_date, 'mm-dd hh:mi') as re_date
+  		select re_no, goods_no, member_id, re_content, to_char(re_date, 'mm-dd / hh:mi') as re_date
   		, re_star from review where goods_no= #{goodsNo} order by 1 desc 
   	</select>
   	
@@ -76,7 +76,7 @@
   	
 	<insert id="insertReview">
 		insert into review values 
-  		(#{reNo}, #{goodsNo}, #{memberId}, #{reContent}, to_char(re_date, 'yy-mm-dd'), #{reStar}, #{goodsName})
+  		(#{reNo}, #{goodsNo}, #{memberId}, #{reContent}, sysdate, #{reStar}, #{goodsName})
  		<selectKey order="BEFORE" resultType="int" keyProperty="reNo">
  			select review_seq.nextval from dual
  		</selectKey>
