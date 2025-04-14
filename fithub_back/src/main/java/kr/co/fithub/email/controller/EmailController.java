@@ -31,7 +31,7 @@ import kr.co.fithub.util.EmailSender;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/email")
-@Tag(name = "03. 이메일 인증 API", description = "이메일 인증번호 전송 및 확인 기능")
+@Tag(name = "이메일 인증 API 📧", description = "이메일 인증번호 전송 및 확인 기능")
 public class EmailController {
     @Autowired
     private EmailService emailService;
