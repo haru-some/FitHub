@@ -89,10 +89,15 @@ const CommunityList = () => {
                     setShowInput(false);
 
                     const myNo = String(member.memberNo); // 내 회원 번호 문자열
+                    const currentNo = memberNo; // 현재 보고 있는 게시물 주인 번호
 
+                    // 현재 다른 사람 게시물을 보고 있는 경우
                     if (memberNo) {
-                      navigate("/community/list");
-                    } else {
+                      navigate("/community/list"); // 전체 게시물로 이동
+                    }
+
+                    // 전체 게시물 보고 있을 때 → 내 게시물로 이동
+                    else {
                       navigate(`/community/list/${myNo}`);
                     }
                   }}
