@@ -37,7 +37,6 @@ const CommunityView = () => {
         }`
       )
       .then((res) => {
-        console.log(res);
         setCommunity(res.data);
       });
   }, [isUpdate]);
@@ -134,7 +133,10 @@ const CommunityView = () => {
     axios
       .patch(`${process.env.REACT_APP_BACK_SERVER}/community/list`, obj)
       .then((res) => {
-        navigate("/community/list");
+        setCommunity({
+          ...community,
+          communityStatus: communityStatus,
+        });
       });
     e.stopPropagation();
     handleMenuClose(e);

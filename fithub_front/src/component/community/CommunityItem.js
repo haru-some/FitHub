@@ -76,7 +76,7 @@ const CommunityItem = (props) => {
   const handleBlock = (e) => {
     Swal.fire({
       title: "게시글 삭제",
-      text: "ㄹㅇ 지울거임?",
+      text: "게시글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "삭제",
