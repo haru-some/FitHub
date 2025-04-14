@@ -12,8 +12,8 @@ const slides = [
     image: "/image/calendar.png",
   },
   {
-    ETitle: "Log completed workouts",
-    EDescription: "Log the time and details of your completed workouts.",
+    ETitle: "Simple Routine & Workout Logging",
+    EDescription: "Log your custom routines and completed exercises.",
     KTitle: "간편한 루틴&기록 등록",
     KDescription: "나만의 루틴과 완료한 운동을 기록해보세요.",
     image: "/image/final_combined_vertical.png",
