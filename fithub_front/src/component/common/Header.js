@@ -18,12 +18,37 @@ import ChatIcon from "@mui/icons-material/Chat";
 import Swal from "sweetalert2";
 
 const Header = () => {
-  const [chatAlarm, setChatAlarm] = useState(0); // 기본값 'N'
+  const [chatAlarm, setChatAlarm] = useState(0);
   const [refresh, setRefresh] = useRecoilState(refreshState);
-  const backServer = process.env.REACT_APP_BACK_SERVER;
   const [alarmWs, setAlarmWs] = useRecoilState(alarmWsState);
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.3:8888
+  const socketServer = process.env.REACT_APP_BACK_SERVER.replace(
+    "http://",
+    "ws://"
+  );
   const loginMember = useRecoilValue(memberState);
+  const navigate = useNavigate();
+  const setMemberInfo = useSetRecoilState(memberState);
+
+  const logOut = () => {
+    if (loginMember?.loginType === "kakao") {
+      const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${kakaoClientId}&logout_redirect_uri=${redirectUri}`;
+      return;
+    }
+
+    if (loginMember?.loginType === "google") {
+      const redirectUri = `${window.location.origin}/logout/callback`;
+      const logoutUrl = `https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue=${redirectUri}`;
+      window.location.href = logoutUrl;
+      return;
+    }
+
+    setMemberInfo(null);
+    delete axios.defaults.headers.common["Authorization"];
+    window.localStorage.removeItem("refreshToken");
+    navigate("/");
+  };
 
   useEffect(() => {
     if (loginMember) {
@@ -41,35 +66,19 @@ const Header = () => {
 
   useEffect(() => {
     if (alarmWs) {
-      alarmWs.onopen = start;
-      alarmWs.onmessage = receive;
-      alarmWs.onclose = end;
+      alarmWs.onopen = () => {};
+      alarmWs.onmessage = (receiveData) => {
+        const data = JSON.parse(receiveData.data);
+        const readYetCount = data.readYetCount;
+        const refreshString = data.refreshRequest;
+        setChatAlarm(readYetCount);
+        if (refreshString === "refresh") {
+          setRefresh((prev) => prev + 1);
+        }
+      };
+      alarmWs.onclose = () => {};
     }
   }, [alarmWs]);
-
-  const start = () => {
-    //console.log("알람소켓 오픈");
-  };
-  const receive = (receiveData) => {
-    const data = JSON.parse(receiveData.data);
-    //console.log("안읽은 메시지: " + data.readYetCount);
-    //console.log("알람소켓 데이터 받음");
-    const readYetCount = data.readYetCount;
-    const refreshString = data.refreshRequest;
-    //console.log(refreshString);
-    setChatAlarm(readYetCount);
-
-    if (refreshString === "refresh") {
-      setRefresh((prev) => prev + 1);
-    }
-  };
-  const end = () => {
-    //console.log("알람소켓 닫힘");
-  };
-
-  // useEffect(() => {
-  //   alarmWs.onmessage = receive;
-  // }, [chatAlarm, refresh]);
 
   return (
     <header className="header">
@@ -85,7 +94,7 @@ const Header = () => {
           </Link>
         </div>
         <MainNavi />
-        <HeaderLink chatAlarm={chatAlarm} />
+        <HeaderLink chatAlarm={chatAlarm} logOut={logOut} />
       </div>
     </header>
   );
@@ -112,43 +121,19 @@ const MainNavi = () => {
   );
 };
 
-const HeaderLink = (props) => {
+const HeaderLink = ({ chatAlarm, logOut }) => {
   const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
-  const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  const chatAlarm = props.chatAlarm;
 
-  if (memberInfo) {
-    if (memberInfo.warningLevel === 3) {
-      Swal.fire("블랙당한 시끼", "어딜 오려고 다시 돌아가", "warning");
+  useEffect(() => {
+    if (memberInfo?.warningLevel === 3) {
       setLogoutST(true);
       logOut();
+      Swal.fire("블랙당한 시끼", "어딜 오려고 다시 돌아가", "warning");
     }
-  }
-
-  const logOut = () => {
-    if (memberInfo?.loginType === "kakao") {
-      const kakaoClientId = process.env.REACT_APP_KAKAO_API_KEY;
-      const redirectUri = `${window.location.origin}/logout/callback`;
-      window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${kakaoClientId}&logout_redirect_uri=${redirectUri}`;
-      return;
-    }
-    if (memberInfo?.loginType === "google") {
-      const redirectUri = `${window.location.origin}/logout/callback`;
-      const logoutUrl = `https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue=${redirectUri}`;
-      window.location.href = logoutUrl;
-      return;
-    }
-    setMemberInfo(null);
-    delete axios.defaults.headers.common["Authorization"];
-    window.localStorage.removeItem("refreshToken");
-    navigate("/");
-  };
-  const logo = (a) => {
-    a();
-  };
+  }, [memberInfo]);
 
   return (
     <ul className="member-menu">

@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsiveLine } from "@nivo/line";
-import { ResponsiveCalendar } from "@nivo/calendar";
 import axios from "axios";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // 메인 대시보드
 const AdminStat = () => {
@@ -196,8 +194,8 @@ const MemberStatChart = () => {
   useEffect(() => {
     if (chartData?.metricHeaders?.length) {
       setType([
-        chartData.metricHeaders[0].name,
-        chartData.metricHeaders[1].name,
+        chartData.metricHeaders[0].name && "당일 방문자",
+        chartData.metricHeaders[1].name && "재 방문자",
       ]);
     }
   }, [chartData]);
@@ -208,16 +206,13 @@ const MemberStatChart = () => {
     setActiveIndex(click);
     switch (click) {
       case 0:
-        setType([
-          chartData.metricHeaders[0].name,
-          chartData.metricHeaders[1].name,
-        ]);
+        setType(["당일 방문자", "재 방문자"]);
         break;
       case 1:
-        setType([chartData.metricHeaders[0].name]);
+        setType(["당일 방문자"]);
         break;
       case 2:
-        setType([chartData.metricHeaders[1].name]);
+        setType(["재 방문자"]);
         break;
     }
   };
@@ -343,7 +338,9 @@ const SalesStatChart = () => {
       });
   }, []);
   const totalCount = totalSell.reduce((acc, cur) => acc + cur.value, 0);
-
+  const [daySales, setDaySales] = useState([]);
+  const [type, setType] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   /*------------------------------------ 절대 건들지마 ------------------*/
   useEffect(() => {
     axios
@@ -353,10 +350,9 @@ const SalesStatChart = () => {
         setWeekPrice(
           res.data.map((item) => ({
             country: item.saleDate,
-            "주간 매출": item.totalWeekPrice,
+            "일 매출": item.totalDayPrice,
           }))
         );
-        setType(["주간 매출", "월간 매출"]);
       })
       .catch((err) => {
         console.log(err);
@@ -369,11 +365,10 @@ const SalesStatChart = () => {
       .then((res) => {
         setMonthPrice(
           res.data.map((item) => ({
-            country: item.saleDate,
-            "월간 매출": item.totalMonthPrice,
+            country: item.weekNo + "주차",
+            "주간 매출": item.totalWeekPrice,
           }))
         );
-        setType(["주간 매출", "월간 매출"]);
       })
       .catch((err) => {
         console.log(err);
@@ -384,12 +379,10 @@ const SalesStatChart = () => {
     // 초기값으로 주간 매출 세팅
     if (weekPrice.length > 0) {
       setDaySales(weekPrice);
+      setType(["일 매출", "주간 매출"]);
     }
   }, [weekPrice]);
 
-  const [daySales, setDaySales] = useState([]);
-  const [type, setType] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const changeType = (click) => {
     setActiveIndex(click);
     switch (click) {
@@ -452,18 +445,29 @@ const MyResponsiveBar = (props) => {
   useEffect(() => {
     const newData = Array.from(
       { length: chartData.rows.length },
-      (_, index) => ({
-        date: chartData.rows[index]?.dimensionValues[0]?.value,
-        activeUsers: chartData.rows[index]?.metricValues[0].value,
-        sessions: chartData.rows[index]?.metricValues[1].value,
-      })
+      (_, index) => {
+        const rawDate = chartData.rows[index]?.dimensionValues[0]?.value;
+        const formattedDate = rawDate
+          ? `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(
+              6,
+              8
+            )}`
+          : "";
+
+        return {
+          date: formattedDate,
+          "당일 방문자": chartData.rows[index]?.metricValues[0].value,
+          "재 방문자": chartData.rows[index]?.metricValues[1].value,
+        };
+      }
     );
 
     setData(newData);
   }, []);
+
   const colorMap = {
-    activeUsers: "hsl(348, 58.30%, 58.60%)",
-    sessions: "hsl(221, 70.20%, 50.00%)",
+    "당일 방문자": "hsl(348, 58.30%, 58.60%)",
+    "재 방문자": "hsl(221, 70.20%, 50.00%)",
   };
   return (
     <ResponsiveBar
@@ -658,13 +662,21 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         const sessionData = [];
 
         rows.forEach((row) => {
-          const date = row.dimensionValues[0].value;
+          const rawDate = row.dimensionValues[0].value;
+          const formattedDate = rawDate
+            ? `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(
+                6,
+                8
+              )}`
+            : "";
+
           const pageViews = parseInt(row.metricValues[0].value, 10);
           const sessionDuration = parseFloat(row.metricValues[1].value);
 
-          viewsData.push({ x: date, y: pageViews });
-          sessionData.push({ x: date, y: sessionDuration });
+          viewsData.push({ x: formattedDate, y: pageViews });
+          sessionData.push({ x: formattedDate, y: sessionDuration });
         });
+
         console.log("📊 변환된 데이터:", viewsData, sessionData);
         setLineChartData([
           { id: "페이지뷰", color: "hsl(220, 70%, 50%)", data: viewsData },

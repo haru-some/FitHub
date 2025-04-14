@@ -25,6 +25,8 @@ public interface ChatDao {
 	int inputChatMessage(ChatMessageDTO message);
 
 	int alarmChatRoom(ChatMessageDTO message);
-	
+
+	ChatRoomDTO selectChatRoom(int roomNo);
+
 	
 }

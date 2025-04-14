@@ -31,4 +31,6 @@ public class ChatMessageDTO {
     private int memberLevel;
 	@Schema(description = "회원 경고", example = "1")
     private int warningLevel;
+	@Schema(description = "상대방 회원 아이디", example = "kingnyange")
+    private String chatReceiverId;
 }

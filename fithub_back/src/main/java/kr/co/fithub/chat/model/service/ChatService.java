@@ -52,4 +52,7 @@ public class ChatService {
 		int r = chatDao.inputChatMessage(message);
 		return r;
 	}
+	
+
+
 }

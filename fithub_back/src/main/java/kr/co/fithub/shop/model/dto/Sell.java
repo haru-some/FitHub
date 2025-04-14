@@ -34,7 +34,8 @@ public class Sell {
 	private int categoryTotalPrice;
 	private int goodsCategory;
 	private int totalSell;
+	private int totalDayPrice;
 	private int totalWeekPrice;
-	private int totalMonthPrice;
 	private String saleDate;
+	private int weekNo;
 }

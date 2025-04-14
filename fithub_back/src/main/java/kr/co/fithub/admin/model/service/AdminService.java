@@ -23,7 +23,7 @@ public class AdminService {
 	private PageInfoUtil pageInfoUtil;
 
 	public Map memberList(int memberPage) {
-		int numPerPage = 6;
+		int numPerPage = 5;
 		int pageNaviSize = 5;
 		int memberTotalCount = adminDao.memberTotalCount();
 		
@@ -38,7 +38,7 @@ public class AdminService {
 	}
 	
 	public Map delMemberList(int delMemberPage) {
-		int numPerPage = 6;
+		int numPerPage = 5;
 		int pageNaviSize = 5;
 		int delMemberTotalCount = adminDao.delMemberTotalCount();
 		
@@ -71,7 +71,7 @@ public class AdminService {
 	}
 
 	public Map communityList(int communityPage) {
-		int numPerPage = 6;
+		int numPerPage = 5;
 		int pageNaviSize = 5;
 		int communityTotalCount = adminDao.communityTotalCount();
 		
@@ -86,7 +86,7 @@ public class AdminService {
 	}
 
 	public Map commentList(int commentPage) {
-		int numPerPage = 6;
+		int numPerPage = 5;
 		int pageNaviSize = 5;
 		int commentTotalCount = adminDao.commnetTotalCount();
 		
@@ -140,7 +140,4 @@ public class AdminService {
 		return list;
 	}
 
-	
-	
-	
 }

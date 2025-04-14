@@ -1,33 +1,35 @@
 package kr.co.fithub.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import kr.co.fithub.chat.model.service.WebSocketSessionManager;
+
 @Component
 public class WebSocketEventListener {
-	
-	private Map<String, Integer> sessions = new HashMap<>();
-	
-	@EventListener(SessionConnectEvent.class)
-    public void onConnect(SessionConnectEvent event){
-        String sessionId = event.getMessage().getHeaders().get("simpSessionId").toString();
-        String userNo = event.getMessage().getHeaders().get("nativeHeaders").toString().split("\\[")[4].split("]")[0];
-        if (userNo != null) {
-            // 세션에 사용자 정보를 저장
-            sessions.put(sessionId, Integer.parseInt(userNo));
-            System.out.println("Session connected: " + sessionId + ", User No: " + userNo);
+
+    @Autowired
+    private WebSocketSessionManager sessionManager;
+
+    @EventListener
+    public void handleWebSocketConnectListener(SessionConnectEvent event) {
+        StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
+        String sessionId = sha.getSessionId();
+        String memberId = sha.getFirstNativeHeader("memberId");
+        String roomId = sha.getFirstNativeHeader("roomId");
+        
+        if (sessionId != null && memberId != null && roomId != null) {
+            sessionManager.addSession(sessionId, roomId, memberId);
         }
     }
-	
-	@EventListener(SessionDisconnectEvent.class)
-    public void onDisconnect(SessionDisconnectEvent event) {
-		sessions.remove(event.getSessionId());
-        System.out.println("Session disconnected: " + event.getSessionId());
+
+    @EventListener
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        String sessionId = event.getSessionId();
+        sessionManager.removeSession(sessionId);
     }
 }
