@@ -204,14 +204,15 @@
   overflow: hidden;
 }
 
-.record-ai-summary{
+.record-ai-summary {
   width: 830px;
   margin-bottom: 50px;
 }
-.record-ai-summary>h1{
+.record-ai-summary > h1 {
 }
 
-.ai-wrap{
+.ai-wrap {
+  width: 830px;
   box-sizing: border-box;
   margin-top: 20px;
   background-color: #222;
@@ -220,7 +221,7 @@
   border: 2px solid #258830;
 }
 
-.ai-summary-content{
+.ai-summary-content {
   min-height: 120px;
   font-size: 18px;
   text-align: left;

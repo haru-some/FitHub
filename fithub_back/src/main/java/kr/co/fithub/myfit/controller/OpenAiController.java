@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/openai")
+@Tag(name = "08. openAI 운동요약 API", description = "운동기록 AI가 요약해주는 기능")
 public class OpenAiController {
 
     @Value("${openai.api.key}")
@@ -24,9 +30,11 @@ public class OpenAiController {
     
     public String stripAllHtmlTags(String input) {
         if (input == null) return "";
-        return input.replaceAll("<[^>]*>", ""); // 모든 HTML 태그 제거
+        return input.replaceAll("<[^>]*>", "");
     }
-
+    
+    @Operation(summary = "운동 기록 요약", description = "해당 운동 기록을 AI가 요약해줍니다.")
+    @ApiResponses({ @ApiResponse(responseCode = "200", description = "조회 성공") })
     @PostMapping("/calories")
     public ResponseEntity<String> getCalories(@RequestBody Map<String, String> body) throws Exception {
         String content = body.get("content");

@@ -111,16 +111,16 @@
   line-height: 19px;
 }
 
-.myfit-follow-wrap .chat-btn{
+.myfit-follow-wrap .chat-btn {
   margin-left: 20px;
   color: #aaa;
 }
-.myfit-follow-wrap .chat-btn:hover{
+.myfit-follow-wrap .chat-btn:hover {
   color: #fff;
 }
 
-
 .myfit-follow-wrap .follow-button {
+  width: 59px;
   height: 30px;
   background-color: #007bff;
   color: white;

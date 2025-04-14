@@ -40,6 +40,7 @@ public class MyfitController {
 	@Autowired
 	private DmService dmService;
 	
+	
 	@Operation(summary = "운동 기록 조회", description = "회원 번호와 날짜로 해당 날짜의 운동 기록을 조회합니다.")
     @ApiResponses({ @ApiResponse(responseCode = "200", description = "조회 성공") })
     @GetMapping("/record/{memberNo}")
