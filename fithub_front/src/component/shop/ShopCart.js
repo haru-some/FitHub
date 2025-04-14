@@ -108,8 +108,8 @@ const ShopCart = () => {
     console.log(itemsToPurchase);
     axios
       .post(`${backServer}/goods/sell/payAll/`, itemsToPurchase)
+
       .then((res) => {
-        // 결제 성공 시 행동 (예: 결제 완료 페이지로 이동)
         Swal.fire({
           title: "결제 성공!",
           text: "감사합니다. 결제가 완료되었습니다.",

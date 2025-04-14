@@ -43,17 +43,14 @@ const ShopModify = () => {
   const imageRef = useRef(null);
   const imageDetailRef = useRef(null);
   const [goodsImage, setGoodsImage] = useState(null); //상품이미지
-  const { goodsImg, setGoodsImg } = useState("");
-  const { detailImg, setDetailImg } = useState();
   const [goodsCategory, setGoodsCategory] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageDetail, setSelectedImageDetail] = useState(null);
   const [existingGoodsImage, setExistingGoodsImage] = useState("");
   const [existingGoodsDetailImg, setExistingGoodsDetailImg] = useState("");
+  const [infoArr, setInfoArr] = useState([]);
 
   const submit = () => {
-    console.log(goodsImage);
-    console.log(goodsDetailImg);
     /////////////////////////////////////////FORM////////////////////////////////////////////
     const form = new FormData();
     form.append("goodsNo", goodsNo);
@@ -63,46 +60,25 @@ const ShopModify = () => {
     form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
 
-    if (goodsImage) {
-      form.append("goodsImg", goodsImage); // 새 상품 이미지가 있을 경우 추가
-    } else {
-      form.append("goodsImg", existingGoodsImage); // 기존 상품 이미지 사용
-    }
-
-    if (goodsDetailImg) {
-      form.append("detailImg", goodsDetailImg); // 새 상세 이미지가 있을 경우 추가
-    } else {
-      form.append("detailImg", existingGoodsDetailImg); // 기존 상세 이미지 사용
-    }
-
-    if (goodsInfo1) {
-      form.append("goodsInfo1", goodsInfo1);
-      form.append("goodsDetail1", goodsDetail1);
-    }
-    if (goodsInfo2) {
-      form.append("goodsInfo2", goodsInfo2);
-      form.append("goodsDetail2", goodsDetail2);
-    }
-    if (goodsInfo3) {
-      form.append("goodsInfo3", goodsInfo3);
-      form.append("goodsDetail3", goodsDetail3);
-    }
-    if (goodsInfo4) {
-      form.append("goodsInfo4", goodsInfo4);
-      form.append("goodsDetail4", goodsDetail4);
-    }
-    if (goodsInfo5) {
-      form.append("goodsInfo5", goodsInfo5);
-      form.append("goodsDetail5", goodsDetail5);
-    }
-    if (goodsInfo6) {
-      form.append("goodsInfo6", goodsInfo6);
-      form.append("goodsDetail6", goodsDetail6);
-    }
-
-    console.log("ㄱㄱ");
+    console.log("이미지가 살아있나..");
     console.log(goodsImage);
     console.log(goodsDetailImg);
+
+    form.append("goodsImg", goodsImage);
+    form.append("detailImg", goodsDetailImg);
+
+    console.log(form);
+
+    const obj = {};
+    if (goodsInfo1?.trim()) obj[goodsInfo1] = goodsDetail1;
+    if (goodsInfo2?.trim()) obj[goodsInfo2] = goodsDetail2;
+    if (goodsInfo3?.trim()) obj[goodsInfo3] = goodsDetail3;
+    if (goodsInfo4?.trim()) obj[goodsInfo4] = goodsDetail4;
+    if (goodsInfo5?.trim()) obj[goodsInfo5] = goodsDetail5;
+    if (goodsInfo6?.trim()) obj[goodsInfo6] = goodsDetail6;
+
+    form.append("goodsInfos", JSON.stringify(obj));
+
     axios
       .patch(`${backServer}/goods`, form, {
         headers: {
@@ -139,132 +115,145 @@ const ShopModify = () => {
             <div className="goods-info-wrap">
               <table className="tbl">
                 <tbody>
-                  <tr>
-                    <th style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsInfo1}
-                          onChange={(e) => setGoodsInfo1(e.target.value)}
-                          placeholder="필수 표기정보(명)"
-                        />
-                      </div>
-                    </th>
-                    <td style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsDetail1}
-                          onChange={(e) => setGoodsDetail1(e.target.value)}
-                          placeholder="표기정보 (상세)"
-                        />
-                      </div>
-                    </td>
-                    <th style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsInfo2}
-                          onChange={(e) => setGoodsInfo2(e.target.value)}
-                          placeholder="필수 표기정보(명)"
-                        />
-                      </div>
-                    </th>
-                    <td style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsDetail2}
-                          onChange={(e) => setGoodsDetail2(e.target.value)}
-                          placeholder="표기정보 (상세)"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsInfo3}
-                          onChange={(e) => setGoodsInfo3(e.target.value)}
-                          placeholder="필수 표기정보(명)"
-                        />
-                      </div>
-                    </th>
-                    <td style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsDetail3}
-                          onChange={(e) => setGoodsDetail3(e.target.value)}
-                          placeholder="표기정보 (상세)"
-                        />
-                      </div>
-                    </td>
-                    <th style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsInfo4}
-                          onChange={(e) => setGoodsInfo4(e.target.value)}
-                          placeholder="필수 표기정보(명)"
-                        />
-                      </div>
-                    </th>
-                    <td style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsDetail4}
-                          onChange={(e) => setGoodsDetail4(e.target.value)}
-                          placeholder="표기정보 (상세)"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsInfo5}
-                          onChange={(e) => setGoodsInfo5(e.target.value)}
-                          placeholder="필수 표기정보(명)"
-                        />
-                      </div>
-                    </th>
-                    <td style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsDetail5}
-                          onChange={(e) => setGoodsDetail5(e.target.value)}
-                          placeholder="표기정보 (상세)"
-                        />
-                      </div>
-                    </td>
-                    <th style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsInfo6}
-                          onChange={(e) => setGoodsInfo6(e.target.value)}
-                          placeholder="필수 표기정보(명)"
-                        />
-                      </div>
-                    </th>
-                    <td style={{ width: "25%" }}>
-                      <div className="input-item">
-                        <input
-                          type="text"
-                          value={goodsDetail6}
-                          onChange={(e) => setGoodsDetail6(e.target.value)}
-                          placeholder="표기정보 (상세)"
-                        />
-                      </div>
-                    </td>
-                  </tr>
+                  {infoArr.length > 0 ? (
+                    <tr>
+                      <th style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsInfo1}
+                            onChange={(e) => setGoodsInfo1(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsDetail1}
+                            onChange={(e) => setGoodsDetail1(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </td>
+                      <th style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsInfo2}
+                            onChange={(e) => setGoodsInfo2(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsDetail2}
+                            onChange={(e) => setGoodsDetail2(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    "1행 안나옴"
+                  )}
+                  {infoArr.length > 2 ? (
+                    <tr>
+                      <th style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsInfo3}
+                            onChange={(e) => setGoodsInfo3(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsDetail3}
+                            onChange={(e) => setGoodsDetail3(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </td>
+                      <th style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsInfo4}
+                            onChange={(e) => setGoodsInfo4(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsDetail4}
+                            onChange={(e) => setGoodsDetail4(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    "2행 안나옴"
+                  )}
+
+                  {infoArr.length > 4 ? (
+                    <tr>
+                      <th style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsInfo5}
+                            onChange={(e) => setGoodsInfo5(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsDetail5}
+                            onChange={(e) => setGoodsDetail5(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </td>
+                      <th style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsInfo6}
+                            onChange={(e) => setGoodsInfo6(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        <div className="input-item">
+                          <input
+                            type="text"
+                            value={goodsDetail6}
+                            onChange={(e) => setGoodsDetail6(e.target.value)}
+                            placeholder="표기정보 (상세)"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    "3행 안나옴"
+                  )}
                 </tbody>
               </table>
             </div>
@@ -322,12 +311,13 @@ const ShopModify = () => {
     });
   };
   const handleImageClick = () => {
-    imageRef.current.click(); // 파일 선택기 클릭
+    imageRef.current.click();
   };
 
   const changeImage = (e) => {
     const files = e.target.files;
     if (files.length !== 0) {
+      setExistingGoodsImage(files[0]);
       setGoodsImage(files[0]); // 썸네일 파일 상태 설정
 
       // 화면 미리보기 설정
@@ -340,7 +330,8 @@ const ShopModify = () => {
     } else {
       setGoodsImage(null);
       setShowImage(null);
-      setSelectedImage(null); // 초기화
+      setSelectedImage(null);
+      setExistingGoodsImage(null);
     }
     console.log(goodsDetailImg);
   };
@@ -370,37 +361,40 @@ const ShopModify = () => {
       .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
         const data = res.data;
+
         setGoods(data);
 
         setExistingGoodsImage(data.goodsImage); // 기존 상품 이미지 URL 설정
         setExistingGoodsDetailImg(data.goodsDetailImg); // 기존 상세 이미지 URL 설정
+
+        const infoArray = data.goodsInfo.split("&");
+        setInfoArr(infoArray);
 
         setGoodsName(data.goodsName);
         setGoodsPrice(data.goodsPrice);
         setGoodsExplain(data.goodsExplain);
         setGoodsStock(data.goodsStock);
         setGoodsCategory(data.goodsCategory);
-        setGoodsInfo1(data.goodsInfo1);
-        setGoodsInfo2(data.goodsInfo2);
-        setGoodsInfo3(data.goodsInfo3);
-        setGoodsInfo4(data.goodsInfo4);
-        setGoodsInfo5(data.goodsInfo5);
-        setGoodsInfo6(data.goodsInfo6);
-        setGoodsDetail1(data.goodsDetail1);
-        setGoodsDetail2(data.goodsDetail2);
-        setGoodsDetail3(data.goodsDetail3);
-        setGoodsDetail4(data.goodsDetail4);
-        setGoodsDetail5(data.goodsDetail5);
-        setGoodsDetail6(data.goodsDetail6);
-        // setGoodsImage(data.goodsImage);
-        // setGoodsDetailImg(data.goodsDetailImg);
-        console.log(data);
+        setGoodsInfo1(infoArray[0] ? infoArray[0].split("=")[0] : "");
+        setGoodsInfo2(infoArray[1] ? infoArray[1].split("=")[0] : "");
+        setGoodsInfo3(infoArray[2] ? infoArray[2].split("=")[0] : "");
+        setGoodsInfo4(infoArray[3] ? infoArray[3].split("=")[0] : "");
+        setGoodsInfo5(infoArray[4] ? infoArray[4].split("=")[0] : "");
+        setGoodsInfo6(infoArray[5] ? infoArray[5].split("=")[0] : "");
+        setGoodsDetail1(infoArray[0] ? infoArray[0].split("=")[1] : "");
+        setGoodsDetail2(infoArray[1] ? infoArray[1].split("=")[1] : "");
+        setGoodsDetail3(infoArray[2] ? infoArray[2].split("=")[1] : "");
+        setGoodsDetail4(infoArray[3] ? infoArray[3].split("=")[1] : "");
+        setGoodsDetail5(infoArray[4] ? infoArray[4].split("=")[1] : "");
+        setGoodsDetail6(infoArray[5] ? infoArray[5].split("=")[1] : "");
+        setGoodsImage(data.goodsImage);
+        setGoodsDetailImg(data.goodsDetailImg);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [goodsNo, backServer, activeTab]);
-  console.log(goods.goodsImage);
+
   return (
     <div className="shop-detail-frm-wrap">
       <div className="main-detail">

@@ -2,7 +2,9 @@ package kr.co.fithub.shop.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.fithub.member.model.dto.MemberDTO;
@@ -29,6 +33,7 @@ import kr.co.fithub.shop.model.dto.Review;
 import kr.co.fithub.shop.model.dto.Sell;
 import kr.co.fithub.shop.model.service.ShopService;
 import kr.co.fithub.util.FileUtils;
+import com.google.gson.reflect.TypeToken;
 
 
 
@@ -220,11 +225,16 @@ public class ShopController {
        }
     @Operation(summary = "상품 등록", description = "상품 정보를 입력하여 등록합니다.")
     @PostMapping
-	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile) {
+	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile, @RequestParam("goodsInfos") String goodsInfosJson) {
     	
-    	System.out.println("보여줘!!!");
-    	System.out.println(detailImg);
-    	System.out.println(goodsImg);
+    	System.out.println(goodsInfosJson);
+    	Gson gson = new Gson();
+        Type type = new TypeToken<HashMap<String, String>>(){}.getType();
+
+        HashMap<String, String> map = gson.fromJson(goodsInfosJson, type);
+        
+
+        System.out.println(map.keySet());
 		if(goodsImg != null) {
 			String savepath = root +"/goods/url/";
 			String filepath = fileUtils.upload(savepath, goodsImg);
@@ -252,18 +262,26 @@ public class ShopController {
 		}
 		
 		
-		int result = shopService.insertgoods(goods, goodsFileList);
+		int result = shopService.insertgoods(goods,map, goodsFileList);
 		
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(null);
 	}
     
+    @Operation(summary = "상품 수정", description = "상품 정보를 입력하여 수정합니다.")
     @PatchMapping
 	public ResponseEntity<Integer> updateGoods(@ModelAttribute Goods goods, 
 											   @ModelAttribute MultipartFile goodsImg, 
 											   @ModelAttribute MultipartFile detailImg,
-											   @ModelAttribute MultipartFile[] goodsFile){
+											   @ModelAttribute MultipartFile[] goodsFile,
+											   @RequestParam("goodsInfos") String goodsInfosJson){
     	System.out.println(goodsImg);
     	System.out.println(detailImg);
+    	
+    	Gson gson = new Gson();
+        Type type = new TypeToken<HashMap<String, String>>(){}.getType();
+
+        HashMap<String, String> map = gson.fromJson(goodsInfosJson, type);
+    	
     	if(goodsImg != null) {
 			String savepath = root +"/goods/url/";
 			String filepath = fileUtils.upload(savepath, goodsImg);
@@ -289,10 +307,22 @@ public class ShopController {
 		}
 		
 		
-		int result = shopService.modifygoods(goods, goodsFileList);
+		int result = shopService.modifygoods(goods, map,goodsFileList);
 		
 		return ResponseEntity.ok(result);
 	}
     
+    
+    
+//    @Operation(summary = "장바구니 상품 삭제", description = "결제가 된 상품 장바구니 정보를 삭제합니다.")
+//    @DeleteMapping(value= "/cart/{cartNo}")
+//	public ResponseEntity<Integer> deleteCartPay(@PathVariable int cartNo){
+//    	System.out.println(cartNo);
+//    	int result =  shopService.deleteCart(cartNo);
+//		
+//			return ResponseEntity.ok(1);
+//		
+//    
+//    }
     
 }

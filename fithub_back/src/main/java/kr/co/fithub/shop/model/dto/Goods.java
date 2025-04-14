@@ -1,5 +1,6 @@
 package kr.co.fithub.shop.model.dto;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.type.Alias;
@@ -32,29 +33,8 @@ public class Goods {
 	@Schema(description = "상품 카테고리 (1:보충제, 2:비타민, 3:트레이닝복(남), 4:트레이닝복(여), 5:운동기구)", example = "4")
 	private int goodsCategory;
 	@Schema(description = "상품 정보1", example = "품명")
-	private String goodsInfo1;
-	@Schema(description = "상품 상세1", example = "프리미엄 여성 헬스복 세트 ")
-	private String goodsDetail1;
-	@Schema(description = "상품 정보2", example = "KC 인증정보")
-	private String goodsInfo2;
-	@Schema(description = "상품 상세2", example = "상세 페이지 참조")
-	private String goodsDetail2;
-	@Schema(description = "상품 정보3", example = "크기")
-	private String goodsInfo3;
-	@Schema(description = "상품 상세3", example = "S")
-	private String goodsDetail3;
-	@Schema(description = "상품 정보4", example = "중량")
-	private String goodsInfo4;
-	@Schema(description = "상품 상세4", example = "상세 페이지 참조")
-	private String goodsDetail4;
-	@Schema(description = "상품 정보5", example = "색상")
-	private String goodsInfo5;
-	@Schema(description = "상품 상세5", example = "브라운")
-	private String goodsDetail5;
-	@Schema(description = "상품 정보5", example = "재질")
-	private String goodsInfo6;
-	@Schema(description = "상품 상세6", example = "상세 페이지 참조")
-	private String goodsDetail6;
+	private String goodsInfo;
+	
 	@Schema(description = "상품 상세 이미지", example = "트레이닝복여상세2.jpeg")
 	private String goodsDetailImg;	
 	
