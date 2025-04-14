@@ -175,7 +175,12 @@ const ProfileCard = (props) => {
                 </div>
                 {actMember && (
                   <div className="myfit-profile-stats">
-                    <div>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        navigate(`/community/list/${actMember.memberNo}`);
+                      }}
+                    >
                       <p>{actMember.communityCount}</p>
                       <p>게시물</p>
                     </div>
@@ -201,6 +206,7 @@ const ProfileCard = (props) => {
                 )}
               </div>
             </div>
+            <div className="user-introduce">{actMember.memberProfile}</div>
             <div className="myfit-profile-actions">
               {loginMember.memberNo === Number(memberNo) ? (
                 <Link to="/mypage">

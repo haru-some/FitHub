@@ -50,4 +50,6 @@ public class ActMember {
 
     @Schema(description = "팔로우 여부 (0: 안함, 1: 팔로우 중)", example = "1")
     private int isFollow;
+    
+    private String memberProfile;
 }

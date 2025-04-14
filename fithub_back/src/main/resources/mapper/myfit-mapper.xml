@@ -67,6 +67,7 @@
 		m.member_name,
 		m.member_thumb,
 		m.member_id,
+		m.member_profile,
 		NVL(f1.following_count, 0) AS following_count,
 		NVL(f2.follower_count, 0) AS follower_count,
 		NVL(c.community_count, 0) AS community_count,
