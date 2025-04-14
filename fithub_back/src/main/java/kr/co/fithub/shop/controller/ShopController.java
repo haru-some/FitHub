@@ -36,6 +36,7 @@ import kr.co.fithub.util.FileUtils;
 
 
 
+
 @SpringBootApplication
 @CrossOrigin("*")
 @RestController
@@ -73,44 +74,7 @@ public class ShopController {
 //  		return ResponseEntity.ok(filepath);
 //  	}
   	
-  	@Operation(summary = "상품 등록", description = "상품 정보를 입력하여 등록합니다.")
-    @PostMapping
-	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile) {
-    	
-    	System.out.println("보여줘!!!");
-    	System.out.println(detailImg);
-    	System.out.println(goodsImg);
-		if(goodsImg != null) {
-			String savepath = root +"/goods/url/";
-			String filepath = fileUtils.upload(savepath, goodsImg);
-			goods.setGoodsImage(filepath);			
-		}
-		if(detailImg != null) {
-			String savepath = root +"/goods/detail/";
-			String filepath = fileUtils.upload(savepath, detailImg);
-			goods.setGoodsDetailImg(filepath);			
-		}
-		
-		
-		
-		List<GoodsFile> goodsFileList = new ArrayList<>();
-		if(goodsFile != null) {
-			String savepath = root +"/goods/";
-			for (MultipartFile file : goodsFile) {
-				GoodsFile fileDTO = new GoodsFile();
-				String filename = file.getOriginalFilename();
-				String filepath = fileUtils.upload(savepath, file);
-				fileDTO.setFileName(filename);
-				fileDTO.setFilePath(filepath);
-				goodsFileList.add(fileDTO);
-			}
-		}
-		
-		
-		int result = shopService.insertgoods(goods, goodsFileList);
-		
-		return ResponseEntity.ok(result);
-	}
+  	
     
     @GetMapping(value="/file/{filePath}")
 	public ResponseEntity<Resource> filedown(@PathVariable String filePath) throws FileNotFoundException{
@@ -207,13 +171,6 @@ public class ShopController {
     	return ResponseEntity.ok(result);	
        }   
        
-    
-    
-    	
-    	
-    
-    
-   
    
     //구매한 목록에서 리뷰 출력
     @Operation(summary = "(내 정보)리뷰 가능한 상품", description = "내 정보에서 리뷰 가능한 상품 목록을 출력합니다.")
@@ -244,8 +201,6 @@ public class ShopController {
     @Operation(summary = "상품 리뷰", description = "상품 상세 페이지에서 [리뷰 텝] 리뷰 목록을 출력합니다.")
     @GetMapping(value="/review/read/{goodsNo}")
     public ResponseEntity<List<Review>> goodsReviews(@PathVariable int goodsNo  ) {
-        System.out.println("상품 전체 리뷰 !!!!!!!!!!!!!");        
-        System.out.println(goodsNo);
         
         List<Review> List = shopService.goodsReviews(goodsNo);        
         return ResponseEntity.ok(List);
@@ -263,7 +218,79 @@ public class ShopController {
     	System.out.println(review);
     	return ResponseEntity.ok(result);	
        }
+    @Operation(summary = "상품 등록", description = "상품 정보를 입력하여 등록합니다.")
+    @PostMapping
+	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile) {
+    	
+    	System.out.println("보여줘!!!");
+    	System.out.println(detailImg);
+    	System.out.println(goodsImg);
+		if(goodsImg != null) {
+			String savepath = root +"/goods/url/";
+			String filepath = fileUtils.upload(savepath, goodsImg);
+			goods.setGoodsImage(filepath);			
+		}
+		if(detailImg != null) {
+			String savepath = root +"/goods/detail/";
+			String filepath = fileUtils.upload(savepath, detailImg);
+			goods.setGoodsDetailImg(filepath);			
+		}
+		
+		
+		
+		List<GoodsFile> goodsFileList = new ArrayList<>();
+		if(goodsFile != null) {
+			String savepath = root +"/goods/";
+			for (MultipartFile file : goodsFile) {
+				GoodsFile fileDTO = new GoodsFile();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtils.upload(savepath, file);
+				fileDTO.setFileName(filename);
+				fileDTO.setFilePath(filepath);
+				goodsFileList.add(fileDTO);
+			}
+		}
+		
+		
+		int result = shopService.insertgoods(goods, goodsFileList);
+		
+		return ResponseEntity.ok(result);
+	}
     
+    @PatchMapping
+	public ResponseEntity<Integer> updateGoods(@ModelAttribute Goods goods, 
+											   @ModelAttribute MultipartFile goodsImg, 
+											   @ModelAttribute MultipartFile detailImg,
+											   @ModelAttribute MultipartFile[] goodsFile){
+    	if(goodsImg != null) {
+			String savepath = root +"/goods/url/";
+			String filepath = fileUtils.upload(savepath, goodsImg);
+			goods.setGoodsImage(filepath);			
+		}
+		if(detailImg != null) {
+			String savepath = root +"/goods/detail/";
+			String filepath = fileUtils.upload(savepath, detailImg);
+			goods.setGoodsDetailImg(filepath);			
+		}
+		
+		List<GoodsFile> goodsFileList = new ArrayList<>();
+		if(goodsFile != null) {
+			String savepath = root +"/goods/";
+			for (MultipartFile file : goodsFile) {
+				GoodsFile fileDTO = new GoodsFile();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtils.upload(savepath, file);
+				fileDTO.setFileName(filename);
+				fileDTO.setFilePath(filepath);
+				goodsFileList.add(fileDTO);
+			}
+		}
+		
+		
+		int result = shopService.modifygoods(goods, goodsFileList);
+		
+		return ResponseEntity.ok(result);
+	}
     
     
 }

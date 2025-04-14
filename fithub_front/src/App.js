@@ -34,6 +34,7 @@ import ShopPay from "./component/shop/ShopPay";
 import ShopReview from "./component/shop/ShopReview";
 import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoinGuard from "./component/member/SocialJoinGuard";
+import ShopModify from "./component/shop/ShopModify";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -114,6 +115,7 @@ function App() {
           <Route path="/admin/*" element={<AdminMain />} />
           <Route path="/shop/*" element={<ShopList />} />
           <Route path="/shop/detail/:goodsNo" element={<ShopDetail />} />
+          <Route path="/shop/modify/:goodsNo" element={<ShopModify />} />
           <Route path="/cart" element={<ShopCart />} />
           <Route path="/shop/pay/:goodsNo" element={<ShopPay />} />
           <Route path="/chat" element={<MemberChat />} />

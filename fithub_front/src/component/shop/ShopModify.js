@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 
-const ShopEnroll = () => {
+import Swal from "sweetalert2";
+import { Form, useNavigate, useParams } from "react-router-dom";
+import TextEditor from "../utils/TextEditor";
+import axios from "axios";
+import { Category } from "@mui/icons-material";
+
+const ShopModify = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
 
   const { goodsNo } = useParams(); // Image에서 goodsNo 가져오기
@@ -20,7 +25,6 @@ const ShopEnroll = () => {
   const [goodsPrice, setGoodsPrice] = useState("");
   const [goodsStock, setGoodsStock] = useState("");
 
-  const [goodsImage, setGoodsImage] = useState(null); //상품이미지
   const [goodsDetailImg, setGoodsDetailImg] = useState(null); //상품 상세이미지
 
   const [goodsInfo1, setGoodsInfo1] = useState(""); //사용자가 입력할 필수 정보
@@ -38,13 +42,16 @@ const ShopEnroll = () => {
 
   const imageRef = useRef(null);
   const imageDetailRef = useRef(null);
-  const { goodsImg, setGoodsImg } = useState();
+  const [goodsImage, setGoodsImage] = useState(null); //상품이미지
+  const { goodsImg, setGoodsImg } = useState("");
   const { detailImg, setDetailImg } = useState();
   const [goodsCategory, setGoodsCategory] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const submit = () => {
     /////////////////////////////////////////FORM////////////////////////////////////////////
     const form = new FormData();
+    form.append("goodsNo", goodsNo);
     form.append("goodsName", goodsName);
     form.append("goodsPrice", goodsPrice);
     form.append("goodsExplain", goodsExplain);
@@ -87,7 +94,7 @@ const ShopEnroll = () => {
     console.log(goodsImage);
     console.log(goodsDetailImg);
     axios
-      .post(`${backServer}/goods`, form, {
+      .patch(`${backServer}/goods`, form, {
         headers: {
           contentType: "multipart/form-data",
           processData: false,
@@ -256,10 +263,13 @@ const ShopEnroll = () => {
               onClick={() => imageDetailRef.current.click()}
               style={{ cursor: "pointer" }}
             >
-              {detailImg ? (
+              {goodsDetailImg ? (
                 <img
-                  src={`${backServer}/goods/image/${detailImg}`}
-                  alt="썸네일"
+                  src={
+                    goods.goodsDetailImg
+                      ? `${backServer}/shop/detail/${goods.goodsDetailImg}`
+                      : "" // 기본 이미지 처리
+                  }
                 />
               ) : showDetailImage ? (
                 <img src={showDetailImage} alt="미리보기" />
@@ -305,6 +315,10 @@ const ShopEnroll = () => {
       timer: 1000,
     });
   };
+  const handleImageClick = () => {
+    imageRef.current.click(); // 파일 선택기 클릭
+  };
+
   const changeImage = (e) => {
     const files = e.target.files;
     if (files.length !== 0) {
@@ -315,10 +329,12 @@ const ShopEnroll = () => {
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         setShowImage(reader.result); // 미리보기 상태 설정
+        setSelectedImage(reader.result); // 선택된 이미지 업데이트
       };
     } else {
       setGoodsImage(null);
       setShowImage(null);
+      setSelectedImage(null); // 초기화
     }
   };
 
@@ -339,19 +355,55 @@ const ShopEnroll = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get(`${backServer}/goods/${goodsNo}`)
+      .then((res) => {
+        const data = res.data;
+        setGoods(data);
+
+        setGoodsName(data.goodsName);
+        setGoodsPrice(data.goodsPrice);
+        setGoodsExplain(data.goodsExplain);
+        setGoodsStock(data.goodsStock);
+        setGoodsCategory(data.goodsCategory);
+        setGoodsInfo1(data.goodsInfo1);
+        setGoodsInfo2(data.goodsInfo2);
+        setGoodsInfo3(data.goodsInfo3);
+        setGoodsInfo4(data.goodsInfo4);
+        setGoodsInfo5(data.goodsInfo5);
+        setGoodsInfo6(data.goodsInfo6);
+        setGoodsDetail1(data.goodsDetail1);
+        setGoodsDetail2(data.goodsDetail2);
+        setGoodsDetail3(data.goodsDetail3);
+        setGoodsDetail4(data.goodsDetail4);
+        setGoodsDetail5(data.goodsDetail5);
+        setGoodsDetail6(data.goodsDetail6);
+        setGoodsImage(data.goodsImage);
+        setGoodsDetailImg(data.goodsDetailImg);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [goodsNo, backServer, activeTab]);
+  console.log(goods.goodsImage);
   return (
     <div className="shop-detail-frm-wrap">
       <div className="main-detail">
         <div className="goods-image">
           <div
             className="goods-thumb-wrap"
-            onClick={() => imageRef.current.click()}
+            onClick={handleImageClick} // 클릭 시파일 선택기 실행
             style={{ cursor: "pointer" }}
           >
-            {goodsImg ? (
-              <img src={`${backServer}/goods/image/${goodsImg}`} alt="썸네일" />
-            ) : showImage ? (
-              <img src={showImage} alt="미리보기" />
+            {selectedImage ? ( // selectedImage가 존재하면 미리보기 이미지 표시
+              <img src={selectedImage} alt="미리보기" />
+            ) : goods.goodsImage ? ( // 기본 이미지 표시
+              <img
+                src={`${backServer}/shop/thumb/${goods.goodsImage}`}
+                alt="썸네일"
+              />
             ) : (
               <img src="/image/default_img.png" alt="기본 썸네일" />
             )}
@@ -449,9 +501,9 @@ const ShopEnroll = () => {
       </div>
       <div className="tab-content">{renderContent()}</div>
       <button type="button" className="button" onClick={submit}>
-        상품 등록하기
+        상품 수정하기
       </button>
     </div>
   );
 };
-export default ShopEnroll;
+export default ShopModify;

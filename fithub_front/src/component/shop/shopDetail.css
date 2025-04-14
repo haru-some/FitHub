@@ -456,3 +456,145 @@ select {
 .shop-detail-wrap .goods-image {
   margin-top: 25px;
 }
+
+.order-list {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.order-list-wrap .order-item {
+  display: flex;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+.order-list-wrap .item-image img {
+  width: 100px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.order-list-wrap .item-details {
+  flex: 1;
+}
+
+.order-list-wrap .item-details h3 {
+  margin: 0 0 10px;
+}
+
+.order-list-wrap .item-details p {
+  margin: 5px 0;
+}
+
+.order-list-wrap .order-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.order-list-wrap .order-actions button {
+  position: relative;
+  top: 30px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  height: 50px;
+  margin-right: 15px;
+}
+
+.order-list-wrap .order-actions button:hover {
+  background-color: #45a049; /* 호버 효과 */
+}
+
+.shipping-modal-wrap .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+.shipping-modal-wrap .modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.shipping-modal-wrap .modal-content h2 {
+  margin-top: 0;
+}
+
+.shipping-modal-wrap .modal-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shipping-modal-wrap .modal-content th,
+.modal-content td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.shipping-modal-wrap .modal-content th {
+  background-color: #f2f2f2;
+}
+
+.shipping-modal-wrap .check-button {
+  position: relative;
+  top: 10px;
+  right: -230px;
+  background-color: #4caf50; /* 버튼 색상 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 15px; /* 패딩 조정 */
+  font-size: 16px; /* 글씨 크기 */
+  transition: background-color 0.3s; /* 호버 효과를 위한 전환 */
+}
+
+.shipping-modal-wrap .check-button:hover {
+  background-color: #45a049; /* 호버 시 색상 */
+}
+
+.shop-detail-wrap .faq-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.shop-detail-wrap .faq-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.shop-detail-wrap .faq-section h3 {
+  margin-top: 0;
+}
+
+.shop-detail-wrap .faq-section p {
+  margin: 5px 0;
+}
+
+.shop-detail-wrap .faq-section ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}

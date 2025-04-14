@@ -156,11 +156,23 @@ public class ShopService {
 	    System.out.println("저장된 Sell 객체 수: " + insertCount);
 	    return insertCount; // 실질적으로 저장된 Sell의 개수를 반환
 	}
-	
+	@Transactional
+	public int modifygoods(Goods goods, List<GoodsFile> goodsFileList) {
+		System.out.println(goods);
+		int result = shopDao.modifyGoods(goods);
+		System.out.println(goods);
+		
+		
+		for(GoodsFile goodsFile : goodsFileList) {
+			goodsFile.setGoodsNo(goods.getGoodsNo());
+			result += shopDao.insertGoodsFile(goodsFile);
+		}
+		
+		return result;
+	}
 	    
 	    	    
 	
-
 	
 
 	

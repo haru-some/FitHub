@@ -1,82 +1,64 @@
-const ReviewsComponent = ({ reviews }) => {
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
+import "./shopDetail.css";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
+
+const ShopOrder = () => {
+  const [orders, setOrders] = useState([]);
+  const [shippingData, setShippingData] = useState(null); // 배송 데이터 상태
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
   const navigate = useNavigate();
-  const reviewsPerPage = 5; // 페이지당 리뷰 수
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
+  const [memberInfo] = useRecoilState(memberState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
 
-  // 현재 페이지에 해당하는 리뷰 계산
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  useEffect(() => {
+    // 구매한 상품 get
+    axios
+      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setOrders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [memberInfo, backServer]);
 
-  // 'reviews'가 유효할 경우에만 슬라이싱 수행
-  const currentReviews = Array.isArray(reviews)
-    ? reviews.slice(indexOfFirstReview, indexOfLastReview)
-    : [];
+  const yymmDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`; // 'YYYY-MM-DD' 형식으로 반환
+  };
 
-  // 페이지 수 계산
-  const pageCount = Math.ceil(
-    (Array.isArray(reviews) ? reviews.length : 0) / reviewsPerPage
-  );
+  const handleTracking = (order) => {
+    setShippingData(order.shippingData); // 모달에 사용할 배송 정보 설정
+    setIsModalOpen(true); // 모달 열기
+  };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const closeModal = () => {
+    setIsModalOpen(false); // 모달 닫기
   };
 
   return (
-    <div>
-      {currentReviews.length > 0 ? (
-        <ul>
-          {currentReviews.map((review, index) => (
-            <li
-              key={"review-" + index}
-              onClick={() => navigate(`/shop/detail/${review.goodsNo}`)}
-            >
-              <div>{review.goodsName}</div>
-              <div className="review-flex">
-                <div className="my-star-point">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <span key={star}>
-                      {star <= review.reStar ? (
-                        <StarIcon />
-                      ) : (
-                        <StarBorderIcon />
-                      )}
-                    </span>
-                  ))}
-                </div>
-                <div className="review-date">{review.reDate}</div>
-              </div>
-              <div>{review.reContent}</div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>작성된 리뷰가 없습니다.</p>
-      )}
-      <div className="pagination">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-        >
-          이전
-        </button>
-        {Array.from({ length: pageCount }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? "active" : ""}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button
-          disabled={currentPage === pageCount}
-          onClick={() => handlePageChange(currentPage + 1)}
-        >
-          다음
-        </button>
-      </div>
-    </div>
-  );
-};
+    <div className="order-list-wrap">
+      <h2>주문/배송 리스트</h2>
 
-export default ReviewsComponent;
+      {orders.map((order) => (
+        <div className="order-item" key={order.sellNo}>
+          <div className="item-details">
+            <h3>{order.goodsName}</h3>
+            <p>가격 : {order.goodsPrice.toLocaleString()}원</p>
+            <p>수량 : {order.goodsEa}</p>
+            <p>구매일 : {yymmDate(order.sellDate)}</p>
+            <button onClick={() => handleTracking(order)}>배송 조회</button> {/* 버튼 클릭 시 배송 조회 */}
+          </div>
+        </div>
+      ))}
+
+      <ShippingModal isOpen={isModalOpen} onClose={closeModal} shippingData={shippingData} />
+    </div

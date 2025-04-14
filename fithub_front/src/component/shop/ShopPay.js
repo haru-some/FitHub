@@ -221,7 +221,7 @@ function ShopPay() {
         <div className="pay-info">
           <h4>
             결제 정보
-            <span className="accountForShip">(3만 이상 구입 무료)</span>
+            <span className="accountForShip">(3만(원) 이상 구입 무료)</span>
           </h4>
           <table>
             <tbody>
