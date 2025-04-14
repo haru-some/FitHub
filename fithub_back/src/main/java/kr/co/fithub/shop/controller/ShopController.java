@@ -119,13 +119,22 @@ public class ShopController {
     @Operation(summary = "장바구니 상품 삭제", description = "단일 상품 장바구니 정보를 삭제합니다.")
     @DeleteMapping(value= "/cart/{cartNo}")
 	public ResponseEntity<Integer> deleteCart(@PathVariable int cartNo){
-    	System.out.println(cartNo);
+    	
     	int result =  shopService.deleteCart(cartNo);
 		
 			return ResponseEntity.ok(1);
-		
-    
     }
+    // 나의리뷰에서 삭제
+    @Operation(summary = "(내 정보)나의 리뷰 삭제", description = "내 정보에서 나의 리뷰의 기록을 지웁니다..")
+    @DeleteMapping(value="/myReview/delete/{reNo}")
+    public ResponseEntity<Integer> deleteMyReview(@PathVariable int reNo) {
+        
+    	int result =  shopService.deleteMyReview(reNo);
+		
+		return ResponseEntity.ok(1);
+       
+    }
+    
     
     
     //장바구니 클릭 to DB
@@ -199,8 +208,8 @@ public class ShopController {
         
         return ResponseEntity.ok(reviewList);
     }
-    
-    
+  
+   
     
     
     @Operation(summary = "상품 리뷰", description = "상품 상세 페이지에서 [리뷰 텝] 리뷰 목록을 출력합니다.")
@@ -311,18 +320,8 @@ public class ShopController {
 		
 		return ResponseEntity.ok(result);
 	}
+      
     
-    
-    
-//    @Operation(summary = "장바구니 상품 삭제", description = "결제가 된 상품 장바구니 정보를 삭제합니다.")
-//    @DeleteMapping(value= "/cart/{cartNo}")
-//	public ResponseEntity<Integer> deleteCartPay(@PathVariable int cartNo){
-//    	System.out.println(cartNo);
-//    	int result =  shopService.deleteCart(cartNo);
-//		
-//			return ResponseEntity.ok(1);
-//		
-//    
-//    }
+
     
 }

@@ -47,4 +47,6 @@ public interface ShopDao {
 
 	int clearCart(int cartNo);
 
+	int deleteMyReview(int reNo);
+
 }

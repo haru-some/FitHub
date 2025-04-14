@@ -53,7 +53,7 @@ const ShopCart = () => {
     });
   };
 
-  const handleDeleteItem = (cartNo) => {
+  const DeleteCart = (cartNo) => {
     axios
       .post(`${backServer}/goods/cart/delete`, { cartNos: [cartNo] })
       .then((res) => {
@@ -92,14 +92,14 @@ const ShopCart = () => {
           .reduce((acc, item) => acc + item.goodsPrice * item.goodsEa, 0)
       : cart.reduce((acc, item) => acc + item.goodsPrice * item.goodsEa, 0);
 
-  // 결제하기 버튼 클릭 시 호출되는 함수
+  // 결제하기 버튼 클릭 시
   const handlePayAll = () => {
     if (selectedItems.length === 0) {
       alert("결제할 항목을 선택하세요.");
       return;
     }
-    //////////////////////////////////////////////////////////////////////////////////////////결제
-    // 결제 요청 데이터 준비
+    //////////////////////////////////////////////////////////////결제
+    // 결제 요청 데이터
     const itemsToPurchase = cart.filter((item) =>
       selectedItems.includes(item.cartNo)
     );
@@ -184,7 +184,7 @@ const ShopCart = () => {
                       className="delete-button-item"
                       onClick={(e) => {
                         e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
-                        handleDeleteItem(item.cartNo);
+                        DeleteCart(item.cartNo);
                         cartDelete(item.cartNo);
                       }}
                     >

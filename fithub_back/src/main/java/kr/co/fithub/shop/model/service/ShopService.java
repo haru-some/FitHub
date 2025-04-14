@@ -156,7 +156,7 @@ public class ShopService {
 	    // Sell 객체를 DAO를 통해 데이터베이스에 저장
 	    int insertCount = 0;
 	    for (Sell sell : sells) {
-	        insertCount += shopDao.insertSell(sell); // insertSell 메서드가 저장한 레코드 수를 반환한다고 가정
+	        insertCount += shopDao.insertSell(sell); 
 	    }
 	    
 	    for (Cart cart : carts) {
@@ -184,6 +184,11 @@ public class ShopService {
 			result += shopDao.insertGoodsFile(goodsFile);
 		}
 		
+		return result;
+	}
+
+	public int deleteMyReview(int reNo) {
+		int result = shopDao.deleteMyReview(reNo);		
 		return result;
 	}
 	    

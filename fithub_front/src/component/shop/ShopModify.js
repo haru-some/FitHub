@@ -313,7 +313,7 @@ const ShopModify = () => {
   const handleImageClick = () => {
     imageRef.current.click();
   };
-
+  ////////////////////////////////////////////////////////////////      CHANGE IMAGE      ////////////////
   const changeImage = (e) => {
     const files = e.target.files;
     if (files.length !== 0) {
@@ -394,6 +394,10 @@ const ShopModify = () => {
         console.log(err);
       });
   }, [goodsNo, backServer, activeTab]);
+
+  console.log(goodsImage);
+  console.log("여기");
+  console.log(existingGoodsImage);
 
   return (
     <div className="shop-detail-frm-wrap">

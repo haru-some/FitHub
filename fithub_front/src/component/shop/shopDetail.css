@@ -359,6 +359,7 @@ select {
   color: #ffd700;
 }
 .Myreview-wrap li {
+  position: relative;
   list-style: none;
   margin-bottom: 16px;
   padding: 12px;
@@ -393,15 +394,28 @@ select {
 }
 .Myreview-wrap .review-flex {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
 .Myreview-wrap li div:nth-child(2) {
   display: flex;
-  justify-content: space-between;
   font-size: 16px;
   color: #666;
   align-items: center;
+}
+.Myreview-wrap .review-date {
+  position: relative;
+  left: 170px;
+  top: -20px;
+}
+
+.Myreview-wrap .delete-review {
+  position: relative;
+  top: -55px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .shop-detail-wrap .tbl {

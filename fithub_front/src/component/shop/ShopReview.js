@@ -8,6 +8,8 @@ import "./shopDetail.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PageNavigation from "../utils/PageNavigation";
+import ClearIcon from "@mui/icons-material/Clear";
+import Swal from "sweetalert2";
 
 const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo, goodsName }) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -109,6 +111,29 @@ const ShopReview = () => {
     setReviews([...reviews, newReview]); // 새로운 리뷰 추가
   };
 
+  const reviewDelete = (reNo) => {
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#45a049",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "예, 삭제합니다!",
+      cancelButtonText: "아니요, 취소합니다.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${backServer}/goods/myReview/delete/${reNo}`)
+          .then((res) => {
+            console.log(res);
+            // 성공적으로 삭제된 후 상태 업데이트
+            setReview(review.filter((review) => review.reNo !== reNo));
+          });
+      }
+    });
+  };
+
   useEffect(() => {
     axios
       .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
@@ -198,6 +223,17 @@ const ShopReview = () => {
                         ))}
                       </div>
                       <div className="review-date">{review.reDate}</div>
+                      <div>
+                        <button
+                          className="delete-review"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            reviewDelete(review.reNo);
+                          }}
+                        >
+                          <ClearIcon />
+                        </button>
+                      </div>
                     </div>
                     <div>{review.reContent}</div>
                   </li>

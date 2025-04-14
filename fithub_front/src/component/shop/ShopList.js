@@ -115,7 +115,7 @@ const GoodsList = () => {
   };
 
   //카테고리
-  const handleCategoryChange = (category) => {
+  const categoryChange = (category) => {
     setSelectedCategory(category); // 카테고리 변경 시 상태 업데이트
     setCurrentPage(1); // 카테고리 변경 시 첫 페이지로 돌아가기
     setClickedButton(category); // 선택된 버튼명을 상태로 저장
@@ -217,7 +217,7 @@ const GoodsList = () => {
         {categories.map((category) => (
           <button
             key={category}
-            onClick={() => handleCategoryChange(category)}
+            onClick={() => categoryChange(category)}
             style={{
               backgroundColor:
                 clickedButton === category ? "#245329" : "#589c5f",

@@ -95,5 +95,8 @@
   	<delete id="clearCart">
   		delete from cart where cart_no= #{cartNo}
   	</delete>
+  	<delete id="deleteMyReview">
+  		delete from review where re_no= #{reNo}
+  	</delete>
   	
 </mapper>
