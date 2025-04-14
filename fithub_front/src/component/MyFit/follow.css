@@ -100,12 +100,16 @@
 }
 
 .myfit-follow-wrap .name {
+  max-width: 250px;
+  overflow: hidden;
   font-weight: bold;
   font-size: 16px;
   line-height: 19px;
 }
 
 .myfit-follow-wrap .username {
+  max-width: 120px;
+  overflow: hidden;
   font-size: 14px;
   color: #aaa;
   line-height: 19px;
