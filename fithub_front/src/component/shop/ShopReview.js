@@ -7,6 +7,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import "./shopDetail.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PageNavigation from "../utils/PageNavigation";
 
 const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo, goodsName }) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -166,6 +167,7 @@ const ShopReview = () => {
             ) : (
               <p>구매한 상품이 없습니다.</p>
             )}
+            <div>{/* <PageNavigation /> */}</div>
           </div>
         );
       case "내가 작성한 리뷰":
