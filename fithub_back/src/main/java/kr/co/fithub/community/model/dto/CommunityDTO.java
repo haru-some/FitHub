@@ -42,6 +42,7 @@ public class CommunityDTO {
 	    example = "[{\"commentNo\":1,\"communityNo\":10,\"memberNo\":3,\"commentContent\":\"몸이 좋으세요!\",\"commentDate\":\"2024-04-09\",\"memberId\":\"Allright24\",\"memberThumb\":\"profile1.png\"}]"
 	)
 	private List<CommentDTO> commentList;
+	@Schema(description = "페이지 번호", example = "1")
 	private int page;
 	
 }
