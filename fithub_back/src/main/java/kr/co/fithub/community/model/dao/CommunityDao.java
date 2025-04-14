@@ -48,5 +48,7 @@ public interface CommunityDao {
 	int selectCommunityNo();
 
 	CommentDTO selectOneComment(int commentNo);
+
+	int changeStatus(CommunityDTO community);
 	
 }
