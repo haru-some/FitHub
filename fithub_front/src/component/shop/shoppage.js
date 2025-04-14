@@ -1,48 +1,64 @@
-const [selectedImage, setSelectedImage] = useState(null); // 선택된 이미지 상태 추가
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
+import "./shopDetail.css";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 
-const handleImageClick = () => {
-  imageRef.current.click(); // 파일 선택기 클릭
-};
+const ShopOrder = () => {
+  const [orders, setOrders] = useState([]);
+  const [shippingData, setShippingData] = useState(null); // 배송 데이터 상태
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
+  const navigate = useNavigate();
+  const [memberInfo] = useRecoilState(memberState);
+  const backServer = process.env.REACT_APP_BACK_SERVER;
 
-const changeImage = (e) => {
-  const files = e.target.files;
-  if (files.length !== 0) {
-    setGoodsImage(files[0]); // 썸네일 파일 상태 설정
+  useEffect(() => {
+    // 구매한 상품 get
+    axios
+      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .then((res) => {
+        console.log(res.data);
+        setOrders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [memberInfo, backServer]);
 
-    // 화면 미리보기 설정
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onloadend = () => {
-      setShowImage(reader.result); // 미리보기 상태 설정
-      setSelectedImage(reader.result); // 선택된 이미지 업데이트
-    };
-  } else {
-    setGoodsImage(null);
-    setShowImage(null);
-    setSelectedImage(null); // 초기화
-  }
-};
+  const yymmDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`; // 'YYYY-MM-DD' 형식으로 반환
+  };
 
-// JSX 부분
-<div className="goods-image">
-  <div
-    className="goods-thumb-wrap"
-    onClick={handleImageClick} // 클릭 시파일 선택기 실행
-    style={{ cursor: "pointer" }}
-  >
-    {selectedImage ? ( // selectedImage가 존재하면 미리보기 이미지 표시
-      <img src={selectedImage} alt="미리보기" />
-    ) : goods.goodsImage ? ( // 기본 이미지 표시
-      <img src={`${backServer}/shop/thumb/${goods.goodsImage}`} alt="썸네일" />
-    ) : (
-      <img src="/image/default_img.png" alt="기본 썸네일" />
-    )}
-    <input
-      ref={imageRef}
-      type="file"
-      accept="image/*"
-      style={{ display: "none" }} // 파일 입력 요소 숨김
-      onChange={changeImage} // 파일 선택 시 변화 처리
-    />
-  </div>
-</div>;
+  const handleTracking = (order) => {
+    setShippingData(order.shippingData); // 모달에 사용할 배송 정보 설정
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // 모달 닫기
+  };
+
+  return (
+    <div className="order-list-wrap">
+      <h2>주문/배송 리스트</h2>
+
+      {orders.map((order) => (
+        <div className="order-item" key={order.sellNo}>
+          <div className="item-details">
+            <h3>{order.goodsName}</h3>
+            <p>가격 : {order.goodsPrice.toLocaleString()}원</p>
+            <p>수량 : {order.goodsEa}</p>
+            <p>구매일 : {yymmDate(order.sellDate)}</p>
+            <button onClick={() => handleTracking(order)}>배송 조회</button> {/* 버튼 클릭 시 배송 조회 */}
+          </div>
+        </div>
+      ))}
+
+      <ShippingModal isOpen={isModalOpen} onClose={closeModal} shippingData={shippingData} />
+    </div
