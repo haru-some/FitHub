@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.fithub.admin.model.dao.AdminDao">
 	<select id="memberList" resultType="member">
-		select * from (select rownum as rnum, m.* from (select * from member order by 1 desc) m) where rnum between #{start} and #{end}
+		select * from (select rownum as rnum, m.* from (select * from member order by 1 desc) m) where rnum between #{start} and #{end} order by 1 desc
 	</select>
 	<select id="delMemberList" resultType="delMember">
-		select * from (select rownum as rnum, d.* from (select * from del_member order by 1 desc) d) where rnum between #{start} and #{end}
+		select * from (select rownum as rnum, d.* from (select * from del_member order by 1 desc) d) where rnum between #{start} and #{end} order by 1 desc
 	</select>
 	<select id="communityList" resultType="community">
 		select * from (select rownum as rnum, r.* from (select c.*, (select m.member_id from member m where m.member_no = c.member_no) as member_id from community c order by 1 desc) r) where rnum between #{start} and #{end}
@@ -66,7 +66,7 @@ FROM dual
     </select>
     
     <insert id="adminDelMemberInsert">
-    	insert into del_member values(#{memberNo}, #{memberId}, #{memberEmail}, #{joinDate}, to_char(sysdate, 'yyyy-mm-dd'), null, #{adminId})
+    	insert into del_member values(#{m.memberNo}, #{m.memberId}, #{m.memberEmail}, #{m.joinDate}, to_char(sysdate, 'yyyy-mm-dd'), null, #{adminId})
     </insert>
     
     <delete id="adminMemberDelete">
@@ -145,6 +145,10 @@ SELECT
 FROM date_range dr
 ORDER BY dr.week_start_date
 </select>
+
+	<update id="updateMemberKickId">
+		update member set member_id = #{newMemberId}, del_status = 'Y' where member_no = #{memberNo}
+	</update>
 
 	
 </mapper>

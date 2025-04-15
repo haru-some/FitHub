@@ -1,7 +1,4 @@
 .top-button {
-  position: fixed;
-  bottom: 120px;
-  right: 40px;
   padding: 12px;
   background-color: var(--main1);
   border: 1px solid #545454;
@@ -27,9 +24,6 @@
   fill: white;
 }
 .middle-bottom {
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
   padding: 12px;
   background-color: var(--main1);
   border: 1px solid #545454;
@@ -53,4 +47,19 @@
 .middle-bottom svg {
   font-size: 24px;
   fill: white;
+}
+.middle-bottom.bottom {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+}
+.top-button.bottom {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+}
+.top-button.top {
+  position: fixed;
+  bottom: 120px;
+  right: 40px;
 }

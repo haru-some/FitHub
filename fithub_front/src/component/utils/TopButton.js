@@ -34,14 +34,18 @@ const TopButton = () => {
     <>
       {memberInfo && memberInfo.memberLevel !== 1 && (
         <button
-          className="middle-bottom visible"
+          className={`middle-bottom visible ${
+            memberInfo.memberLevel === 2 ? "bottom" : ""
+          }`}
           onClick={(e) => navigate("/chat")}
         >
           <ContactSupportIcon />
         </button>
       )}
       <button
-        className={`top-button ${isVisible ? "visible" : ""}`}
+        className={`top-button ${isVisible ? "visible" : ""} ${
+          memberInfo?.memberLevel === 1 ? "bottom" : "top"
+        }`}
         onClick={scrollToTop}
         aria-label="Scroll to top"
       >
