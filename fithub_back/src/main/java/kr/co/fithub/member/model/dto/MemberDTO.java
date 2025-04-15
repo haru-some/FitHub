@@ -34,7 +34,7 @@ public class MemberDTO {
     private String memberProfile;
     @Schema(description = "회원 등급 (1: 관리자, 2: 일반회원)", example = "2")
     private int memberLevel;
-    @Schema(description = "경고 등급", example = "0")
+    @Schema(description = "경고 등급", example = "1")
     private int warningLevel;
     @Schema(description = "탈퇴 여부 (Y/N)", example = "N")
     private String delStatus;

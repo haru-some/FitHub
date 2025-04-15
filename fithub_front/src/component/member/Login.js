@@ -36,6 +36,14 @@ const Login = () => {
     axios
       .post(`${backServer}/member/auth/login`, member)
       .then((res) => {
+        if (res.data.warningLevel === 3) {
+          Swal.fire(
+            "로그인 제한",
+            "블랙회원으로 로그인이 제한됩니다. 관리자에게 문의하세요.",
+            "error"
+          );
+          return;
+        }
         const redirectTo = location.state?.from || "/";
         localStorage.removeItem("joinStage");
         setMemberInfo(res.data);
