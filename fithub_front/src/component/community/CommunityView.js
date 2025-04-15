@@ -154,9 +154,10 @@ const CommunityView = () => {
   const handleBlock = (e) => {
     Swal.fire({
       title: "게시글 삭제",
-      text: "ㄹㅇ 지울거임?",
+      text: "게시글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "삭제",
       cancelButtonText: "취소",
     }).then((res) => {
@@ -459,8 +460,7 @@ const Comment = (props) => {
       text: "댓글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "예",
       cancelButtonText: "아니오",
     }).then((result) => {
@@ -503,17 +503,11 @@ const Comment = (props) => {
     const now = dayjs();
     const past = dayjs(timeString);
 
-    const diffInSeconds = now.diff(past, "second");
-    const diffInMinutes = now.diff(past, "minute");
     const diffInHours = now.diff(past, "hour");
     const diffInDays = now.diff(past, "day");
 
-    if (diffInSeconds < 60) {
-      return `${diffInSeconds}초 전`;
-    } else if (diffInMinutes < 60) {
-      return `${diffInMinutes}분 전`;
-    } else if (diffInHours < 24) {
-      return `${diffInHours}시간 전`;
+    if (diffInHours < 24) {
+      return `${comment.commentDate.substring(11, 16)}`;
     } else {
       return `${diffInDays}일 전`;
     }
@@ -542,7 +536,7 @@ const Comment = (props) => {
             }}
           >
             <span>{comment.memberId}</span>
-            <span style={{ marginLeft: "10px" }}>
+            <span style={{ marginLeft: "10px", color: "#ccc" }}>
               {formatTimeAgo(comment.commentDate)}
             </span>
           </p>
