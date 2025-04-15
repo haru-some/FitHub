@@ -31,11 +31,18 @@ public class Sell {
 	private int goodsEa;	
 	@Schema(description = "구매 날짜", example = "sysdate")
 	private Date sellDate;
+	@Schema(description = "카테고리별 매출", example = "10000")
 	private int categoryTotalPrice;
+	@Schema(description = "카테고리명", example = "보충제")
 	private int goodsCategory;
+	@Schema(description = "판매 개수", example = "25")
 	private int totalSell;
+	@Schema(description = "당일 매출", example = "10000")
 	private int totalDayPrice;
+	@Schema(description = "주간 매출", example = "100000")
 	private int totalWeekPrice;
+	@Schema(description = "판매 날짜", example = "2025-04-11")
 	private String saleDate;
+	@Schema(description = "주간 날짜", example = "1주차")
 	private int weekNo;
 }
