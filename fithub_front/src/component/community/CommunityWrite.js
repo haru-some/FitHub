@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { logoutState, memberState } from "../utils/RecoilData";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import axios from "axios";
@@ -44,6 +44,12 @@ const CommunityWrite = () => {
         });
     }
   };
+
+  useEffect(() => {
+    if (!member) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>
