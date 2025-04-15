@@ -125,6 +125,8 @@
 }
 
 .shop-pay-wrap {
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
@@ -191,7 +193,9 @@ select {
   display: none;
 }
 
-/* 마이리뷰 페이지 */
+.Myreview-wrap {
+  position: relative;
+}
 
 .Myreview-wrap .review-tabs {
   border-bottom: 1px solid #ccc;
@@ -223,7 +227,9 @@ select {
   padding: 20px;
 }
 
-/* review-item을 가로로 배치하기 위한 스타일 */
+.Myreview-wrap .before-review-wrap {
+  min-height: 600px;
+}
 .Myreview-wrap .review-item {
   display: flex;
   align-items: center; /* 세로 정렬 */
@@ -415,7 +421,7 @@ select {
 
 .Myreview-wrap .delete-review {
   position: relative;
-  top: -55px;
+  top: -45px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -474,10 +480,12 @@ select {
   margin-top: 25px;
 }
 
-.order-list {
+.order-list-wrap {
+  position: relative;
   padding: 20px;
   max-width: 800px;
   margin: auto;
+  min-height: 850px;
 }
 
 .order-list-wrap .order-item {
@@ -528,6 +536,37 @@ select {
 
 .order-list-wrap .order-actions button:hover {
   background-color: #45a049; /* 호버 효과 */
+}
+.order-list-wrap .pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-left: 270px;
+  transform: translateX(-50%); /* 중앙 정렬을 위한 오프셋 */
+  background-color: transparent;
+}
+.order-list-wrap .pagination-controls button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-self: end;
+}
+.order-list-wrap .css-1umw9bq-MuiSvgIcon-root {
+  margin-top: 0px;
+}
+
+.order-list-wrap .pagination-controls button:hover {
+  background-color: #45a049;
+}
+
+.order-list-wrap .pagination-controls button:disabled {
+  background-color: #245329;
 }
 
 .shipping-modal-wrap .modal-overlay {
@@ -614,4 +653,39 @@ select {
 .shop-detail-wrap .faq-section ul {
   list-style-type: disc;
   padding-left: 20px;
+}
+
+.Myreview-wrap .pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-left: 290px;
+  transform: translateX(-50%); /* 중앙 정렬을 위한 오프셋 */
+  background-color: transparent;
+}
+.Myreview-wrap .pagination-controls button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  height: 40px;
+
+  cursor: pointer;
+}
+.Myreview-wrap .css-1umw9bq-MuiSvgIcon-root {
+  margin-top: 0px;
+}
+
+.Myreview-wrap .pagination-controls button:hover {
+  background-color: #45a049;
+}
+
+.Myreview-wrap .pagination-controls button:disabled {
+  background-color: #245329;
+}
+
+.Myreview-wrap .tab-content {
+  min-height: 657px;
 }

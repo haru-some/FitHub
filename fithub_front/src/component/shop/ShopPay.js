@@ -82,54 +82,53 @@ function ShopPay() {
 
     console.log("결제 데이터:", paymentData);
 
-    axios
-      .post(`${backServer}/goods/sell/add/`, paymentData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .post(`${backServer}/goods/sell/add/`, paymentData)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    // 결제 API 호출
+    const IMP = window.IMP; // iamport
+    if (!IMP) {
+      alert("Iamport 라이브러리가 로드되지 않았습니다.");
+      return;
+    }
+
+    IMP.request_pay(
+      {
+        channelKey: "channel-key-d2893ebf-5998-4ab3-93e2-1847d2f13c8b",
+        pay_method: "card",
+        merchant_uid: "order_no_" + Date.now(), // Unique order number
+        name: `주문: ${goods.goodsName}`,
+        amount: paymentData.goodsTotalPrice, // Payment amount
+        buyer_email: "test@portone.io",
+        buyer_name: formData.takerName,
+        buyer_tel: formData.takerPhone,
+        buyer_addr: formData.takerAddr,
+        buyer_postcode: "120-120", // 필요시 수정
+      },
+      (rsp) => {
+        if (rsp.success) {
+          console.log("Payment Success:", rsp);
+
+          axios
+            .post(`${backServer}/goods/sell/add/`, paymentData)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          console.log("Payment Failed:", rsp);
+        }
+      }
+    );
   };
-
-  //   // 결제 API 호출
-  //   const IMP = window.IMP; // iamport
-  //   if (!IMP) {
-  //     alert("Iamport 라이브러리가 로드되지 않았습니다.");
-  //     return;
-  //   }
-
-  //   IMP.request_pay(
-  //     {
-  //       channelKey: "channel-key-d2893ebf-5998-4ab3-93e2-1847d2f13c8b",
-  //       pay_method: "card",
-  //       merchant_uid: "order_no_" + Date.now(), // Unique order number
-  //       name: `주문: ${goods.goodsName}`,
-  //       amount: paymentData.goodsTotalPrice, // Payment amount
-  //       buyer_email: "test@portone.io",
-  //       buyer_name: formData.takerName,
-  //       buyer_tel: formData.takerPhone,
-  //       buyer_addr: formData.takerAddr,
-  //       buyer_postcode: "120-120", // 필요시 수정
-  //     },
-  //     (rsp) => {
-  //       if (rsp.success) {
-  //         console.log("Payment Success:", rsp);
-
-  //         axios
-  //           .post(`${backServer}/goods/sell/add/`, paymentData)
-  //           .then((res) => {
-  //             console.log(res);
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //           });
-  //       } else {
-  //         console.log("Payment Failed:", rsp);
-  //       }
-  //     }
-  //   );
-  // };
 
   if (!goods) {
     return <div>로딩 중...</div>; // 상품 데이터가 로드되지 않았을 경우
@@ -245,12 +244,12 @@ function ShopPay() {
           </table>
         </div>
 
-        <div>
+        {/* <div>
           <label>
             <input type="checkbox" name="agreement" />
             약관에 동의합니다.
           </label>
-        </div>
+        </div> */}
 
         <button type="submit">결제하기</button>
       </form>

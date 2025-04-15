@@ -1,54 +1,68 @@
-return (
-  <div>
-    <h2>내가 작성한 리뷰</h2>
-    {review.length > 0 ? (
-      <ul>
-        {review.map((review, index) => (
-          <li
-            key={"review-" + index}
-            onClick={() => {
-              navigate(`/shop/detail/${review.goodsNo}`);
-            }}
-            style={{ position: "relative" }} // 추가: li의 position을 relative로 설정하세요
-          >
-            <div>{review.goodsName}</div>
+import React, { useState } from "react";
+import ShippingModal from "./ShippingModal"; // ShippingModal 컴포넌트 임포트
 
-            <div
-              className="review-flex"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div className="my-star-point">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span key={star}>
-                    {star <= review.reStar ? <StarIcon /> : <StarBorderIcon />}
-                  </span>
-                ))}
-              </div>
-              <div className="review-date">{review.reDate}</div>
-              <div style={{ marginLeft: "auto" }}>
-                {" "}
-                {/* 추가: 이 div를 이용해 오른쪽 정렬 */}
-                <button
-                  className="delete-review"
-                  onClick={(e) => {
-                    e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
-                    reviewDelete(review.reNo);
-                  }}
-                >
-                  <ClearIcon />
-                </button>
-              </div>
-            </div>
-            <div>{review.reContent}</div>
-          </li>
+const OrderList = ({ orders }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5;
+
+  // 현재 페이지에 표시될 주문 계산
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  // 페이지 변경 핸들러
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // 배송 조회 버튼 핸들러
+  const handleTracking = (order) => {
+    setShippingData(order.shippingInfo); // 실제 배송 정보를 설정하는 로직
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  return (
+    <div className="order-list-wrap">
+      <h2>주문/배송 리스트</h2>
+
+      {currentOrders.map((order) => (
+        <div className="order-item" key={order.sellNo}>
+          <div className="item-details">
+            <h3>{order.goodsName}</h3>
+            <p>가격 : {order.goodsPrice.toLocaleString()}원</p>
+            <p>수량 : {order.goodsEa}</p>
+            <p>구매일 : {yymmDate(order.sellDate)}</p>
+          </div>
+          <div className="order-actions">
+            <button onClick={() => handleTracking(order)}>배송 조회</button>
+          </div>
+        </div>
+      ))}
+
+      <div className="pagination-controls">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => goToPage(index + 1)}
+            disabled={currentPage === index + 1}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </button>
         ))}
-      </ul>
-    ) : (
-      <p>작성된 리뷰가 없습니다.</p>
-    )}
-  </div>
-);
+      </div>
+
+      <ShippingModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        shippingData={shippingData}
+        setShippingData={setShippingData}
+      />
+    </div>
+  );
+};
+
+export default OrderList;
