@@ -154,9 +154,10 @@ const CommunityView = () => {
   const handleBlock = (e) => {
     Swal.fire({
       title: "게시글 삭제",
-      text: "ㄹㅇ 지울거임?",
+      text: "게시글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "삭제",
       cancelButtonText: "취소",
     }).then((res) => {
@@ -459,8 +460,7 @@ const Comment = (props) => {
       text: "댓글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "예",
       cancelButtonText: "아니오",
     }).then((result) => {
