@@ -18,11 +18,11 @@
 }
 
 .member-chat-section .chat-box {
-  background-color: #1d2917;
+  background-color: #222;
   border-radius: 20px;
   height: 540px;
   overflow-y: auto;
-  border: 1px solid white;
+  border: 1px solid #7c7c7c;
   box-sizing: border-box;
 }
 

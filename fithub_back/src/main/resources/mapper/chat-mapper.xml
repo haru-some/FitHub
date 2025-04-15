@@ -136,5 +136,6 @@ ORDER BY
     <insert id="inputChatMessage">
     	insert into chat_message values(chat_message_seq.nextval, #{chatRoomNo}, #{chatMemberId}, #{messageContent}, TO_DATE(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'), 1)
     </insert>
+
     
 </mapper>

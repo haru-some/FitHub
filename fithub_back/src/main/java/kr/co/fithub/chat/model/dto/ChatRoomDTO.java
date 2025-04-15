@@ -27,5 +27,7 @@ public class ChatRoomDTO {
 	private String memberThumb;
 	@Schema(description = "채팅방 안읽은 채팅 갯수", example = "1")
 	private int unreadCount;
+	@Schema(description = "채팅방에 들어온 인원 수", example = "1")
+	private int chatInRoom;
 }
 

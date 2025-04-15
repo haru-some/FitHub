@@ -293,6 +293,11 @@ const CommunityListTBL = ({ tabChange }) => {
       });
   }, [tabChange, communityPage]);
 
+  const stripHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
   console.log(communityPagNavi);
   return (
     <div>
@@ -300,8 +305,9 @@ const CommunityListTBL = ({ tabChange }) => {
         <thead className="admin-thead community-thead">
           <tr>
             <th style={{ width: "20%" }}>아이디</th>
-            <th style={{ width: "50%" }}>내용</th>
-            <th style={{ width: "30%" }}>작성일</th>
+            <th style={{ width: "40%" }}>내용</th>
+            <th style={{ width: "20%" }}>작성일</th>
+            <th style={{ width: "20%" }}>공개 처리</th>
           </tr>
         </thead>
         <tbody className="admin-tbody">
@@ -315,9 +321,10 @@ const CommunityListTBL = ({ tabChange }) => {
                       navigate(`/community/view/${community.communityNo}`);
                     }}
                   >
-                    {community.communityContent}
+                    {stripHtml(community.communityContent)}
                   </td>
                   <td>{community.communityDate}</td>
+                  <td>{community.communityStatus === 1 ? "공개" : "비공개"}</td>
                 </tr>
               );
             })}

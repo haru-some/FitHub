@@ -37,9 +37,14 @@ const AdminChat = () => {
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
+
       connectHeaders: {
+        // 기존 Authorization 외에 memberId, roomId를 추가
         Authorization: memberInfo.memberNo,
+        memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
+        roomId: selectedChatRoom, // 현재 입장한 채팅방 ID
       },
+
       onConnect: () => {
         console.log("Connected to WebSocket");
 
@@ -53,14 +58,14 @@ const AdminChat = () => {
         );
 
         client.subscribe("/queue/notifications", (message) => {
-          // 받은 메시지가 "1"일 경우 알림을 처리
           const receivedMessage = parseInt(message.body, 10);
           if (receivedMessage === 1) {
             console.log("New message in another room!");
-            setAlarm((prev) => prev + 1); // 알림 숫자 증가 (예시로 알림 숫자 카운트)
+            setAlarm((prev) => prev + 1);
           }
         });
       },
+
       onDisconnect: () => {
         console.log("Disconnected from WebSocket");
       },
@@ -176,26 +181,11 @@ const AdminChatView = ({
     axios
       .get(`${backServer}/chat/loadChatMessage?chatRoomNo=${selectedChatRoom}`)
       .then((res) => {
-        // const newArr = res.data.map((item) => {
-        //   item.isRead = 2;
-        //   return item;
-        // });
-        // setMessages([...newArr]);
         setMessages(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    if (selectedChatRoom !== null) {
-      axios
-        .patch(
-          `${backServer}/chat/viewOk?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo.memberId}`
-        )
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   }, [selectedChatRoom]);
 
   const sendMessage = () => {
@@ -213,7 +203,6 @@ const AdminChatView = ({
       pad(date.getMinutes()) +
       ":" +
       pad(date.getSeconds());
-    console.log(today);
     if (stompClient && chatInput.trim() !== "") {
       const chatMessage = {
         chatMemberId: memberInfo.memberId,
@@ -246,9 +235,9 @@ const AdminChatView = ({
             <div
               key={index}
               className={
-                msg.memberLevel === 1 // 관리자 여부를 member_level로 판단
-                  ? "left-chat-line"
-                  : "right-chat-line"
+                msg.chatMemberId !== memberInfo.memberId
+                  ? "right-chat-line"
+                  : "left-chat-line"
               }
             >
               {memberInfo.memberId !== msg.chatMemberId ? (
@@ -267,14 +256,16 @@ const AdminChatView = ({
                         .slice(0, 2)
                         .join(":")}
                     </div>
-                    <div className="chat-text">{msg.messageContent}</div>
+                    <div className="chat-text-box">
+                      <div className="chat-text">{msg.messageContent}</div>
+                    </div>
                   </div>
                 </>
               ) : (
                 <>
                   <div className="chat-content">
                     <div className="chat-id">
-                      {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
+                      {/* {msg.isRead === 1 ? <VisibilityOffIcon /> : ""} */}
                       {msg.messageDate
                         ?.split(" ")[1]
                         ?.split(":")
@@ -282,7 +273,9 @@ const AdminChatView = ({
                         .join(":")}{" "}
                       - {memberInfo.memberId}
                     </div>
-                    <div className="chat-text">{msg.messageContent}</div>
+                    <div className="chat-text-box">
+                      <div className="chat-text">{msg.messageContent}</div>
+                    </div>
                   </div>
                   <div className="left-chat-profile">
                     <img

@@ -107,13 +107,28 @@ const ChatMain = (props) => {
     }
   }, [ws]);
 
+  function convertNewlinesToBr(input) {
+    if (!input) return "";
+    return input.replace(/(\r\n|\n|\r)/g, "<br/>");
+  }
+
   //메세지 보내는 함수
   const sendMessage = () => {
-    const data = JSON.stringify(chatMsg);
+    const obj = {...chatMsg, message : convertNewlinesToBr(chatMsg.message)}
+    const data = JSON.stringify(obj);
 
     ws.send(data);
     setChatMsg({ ...chatMsg, message: "" });
   };
+
+  const areaRef = useRef(null);
+
+  useEffect(() => {
+    if (areaRef.current) {
+      areaRef.current.style.height = 32 + "px";
+    }
+  }, []);
+
 
   return (
     <section className="section chat-wrap">
@@ -203,7 +218,10 @@ const ChatMain = (props) => {
                     )}
 
                     <div className="chat-content-box">
-                      <div className="chat-message">{chat.dmContent}</div>
+                    <div
+                      className="chat-message"
+                      dangerouslySetInnerHTML={{ __html: chat.dmContent }}
+                    ></div>
                       {isLastOfGroup && (
                         <div className="chat-time">
                           {chat.sentAt.substring(11, 16)}
@@ -223,20 +241,38 @@ const ChatMain = (props) => {
           <div className="message-input-box">
             <div className="input-item">
               <div className="write-box">
-                <input
-                  id="chat-message"
-                  value={chatMsg.message}
-                  onChange={(e) => {
-                    setChatMsg({ ...chatMsg, message: e.target.value });
-                  }}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter" && chatMsg.message !== "") {
+              <textarea
+                id="chat-message"
+                ref={areaRef}
+                value={chatMsg.message}
+                onChange={(e) => {
+                  const textarea = e.target;
+                  setChatMsg({ ...chatMsg, message: textarea.value });
+
+                  // 높이 초기화 후 스크롤 높이만큼 다시 설정
+                  textarea.style.height = "20px";
+                  textarea.style.height = Math.min(textarea.scrollHeight, 100) + "px";
+
+                  if (textarea.scrollHeight > 100) {
+                    textarea.scrollTop = textarea.scrollHeight;
+                  }
+                }}
+                onKeyDown={(e) => {
+                  const textarea = e.target;
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (chatMsg.message.trim() !== ""){
                       sendMessage();
-                    }
-                  }}
-                  autoComplete="off"
-                ></input>
-                <button className="btn-primary" onClick={sendMessage}>
+                      textarea.style.height = "32px";
+                    } 
+                  }
+                }}
+                autoComplete="off"
+              />
+                <button className="btn-primary" onClick={()=>{
+                  sendMessage();
+                  areaRef.current.style.height = "32px";
+                }}>
                   전송
                 </button>
               </div>

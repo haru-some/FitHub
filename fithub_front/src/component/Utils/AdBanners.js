@@ -8,12 +8,11 @@ const AdBanners = ({ adsType }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/getAds?adsType=${adsType}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/getAdsType?adsType=${adsType}`
       )
       .then((res) => {
         console.log(res.data);
         const adsArray = res.data;
-
         if (adsArray.length > 0) {
           const randomIndex = Math.floor(Math.random() * adsArray.length);
           setAd(adsArray[randomIndex]);

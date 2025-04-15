@@ -44,7 +44,7 @@
   margin: 20px auto;
   text-align: center;
   color: white;
-  font-size: 32px;
+  font-size: 24px;
 }
 
 /*---------- AdminMember / 관리자 회원, 게시글 관리 ----------*/
@@ -52,7 +52,7 @@
 .admin-member-section {
   background-color: var(--main1);
   padding: 20px;
-  border-radius: 30px;
+  border-radius: 10px;
 }
 .admin-member-tab {
   display: flex;
@@ -60,22 +60,17 @@
   padding: 10px;
 }
 .admin-member-tab > .page-title {
-  border-bottom: 2px solid white;
   width: calc(100% / 2);
   padding: 10px;
   margin: 10px;
   cursor: pointer;
-  transition: 0.3s;
-  border-radius: 6px;
 }
 .admin-member-tab > .page-title:hover {
   color: var(--main3);
-  text-shadow: 0px 0px 8px #0ff;
 }
 .admin-member-tab > .active-tab {
-  background: var(--main1);
-  box-shadow: 0px 0px 8px #0ff;
   color: var(--main3);
+  border-bottom: 2px solid var(--main3);
 }
 
 .admin-member-navi {
@@ -107,6 +102,8 @@
   background-color: var(--main3);
   text-align: center;
   display: block;
+  width: 15px;
+  padding: 0 5px;
 }
 
 .admin-tbl {
@@ -124,8 +121,11 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  font-size: 12px;
 }
-
+.admin-tbl td {
+  height: 40px;
+}
 .admin-section select {
   background-color: var(--main1);
 }
@@ -134,14 +134,13 @@
 .admin-stat-section {
   background-color: var(--main1);
   padding: 20px;
-  border-radius: 30px;
+  border-radius: 10px;
 }
 
 .admin-stat-section text {
   fill: #fff !important;
 }
-.admin-stat-section .chart-div {
-}
+
 .admin-stat-section .chart-div > div > div > div * {
   fill: #000 !important;
   color: #000 !important;
@@ -157,24 +156,26 @@
 }
 .admin-stat-section .chart-filter > .filter {
   width: 100px;
+  padding: 5px;
   background-color: #2f3e2f;
+  border-radius: 3px;
   text-align: center;
+  cursor: pointer;
 }
 .admin-stat-section .chart-filter > .filter.active-filter {
-  background-color: #4caf50;
+  background-color: var(--main3);
 }
 
 /*---------- AdminChat / 관리자 문의 게시판 ----------*/
 .admin-section .admin-chat-section {
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 20px;
 }
 
 .admin-section .admin-chat-box {
   margin: 0 auto;
   width: 100%;
-  background-color: var(--main1);
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -190,23 +191,23 @@
 /*admin chat list*/
 .admin-section .chat-list {
   margin: 0 auto;
-  background-color: #1d2917;
+  background-color: #222;
   height: 600px;
   overflow-y: overlay;
-  border-radius: 20px;
-  border: 1px solid white;
+  border-radius: 10px;
+  border: 1px solid #7c7c7c;
   box-sizing: border-box;
 }
 .admin-section .chat-room {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--gray2);
+  border-bottom: 2px solid #7c7c7c;
   padding: 10px;
   gap: 10px;
 }
 .admin-section .chat-room.active-room {
-  background-color: #6fb779;
+  background-color: #2f3e2f;
 }
 .chat-list .member-chat-profile {
   width: 60px;
@@ -216,6 +217,7 @@
   background-color: white;
 }
 .chat-list .member-chat-profile > img {
+  object-fit: cover;
   width: 100%;
   height: 100%;
 }
@@ -259,18 +261,18 @@
 }
 /*chat*/
 .admin-section .chat-box {
-  background-color: #1d2917;
-  border-radius: 20px;
+  background-color: #222;
+  border-radius: 10px;
   height: 540px;
   overflow-y: auto;
-  border: 1px solid white;
+  border: 1px solid #7c7c7c;
   box-sizing: border-box;
 }
 .admin-section .chat-box::-webkit-scrollbar {
   display: none;
 }
 .chat-box .chat-content {
-  width: 400px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -312,14 +314,14 @@
   color: var(--main3);
 }
 .right-chat-line .chat-content {
-  width: 400px;
+  max-width: 400px;
   display: flex;
   justify-content: flex-start;
 }
 .right-chat-line .chat-content .chat-text {
   padding: 9px;
   border-radius: 10px;
-  background-color: #a3b3a2;
+  background-color: var(--gray2);
   text-align: start;
 }
 
@@ -357,14 +359,14 @@
   color: var(--main3);
 }
 .left-chat-line .chat-content {
-  width: 400px;
+  max-width: 400px;
   display: flex;
   justify-content: flex-end;
 }
 .left-chat-line .chat-content .chat-text {
   padding: 9px;
   border-radius: 10px;
-  background-color: #6fb779;
+  background-color: var(--main3);
   text-align: end;
 }
 
@@ -383,7 +385,7 @@
   padding: 10px;
   text-indent: 5px;
   margin-right: 10px;
-  background-color: #272b24;
+  background-color: var(--gray1);
 }
 .chat-input-box > button {
   width: 100px;
@@ -396,24 +398,30 @@
 }
 .chat-input-box > button:hover {
   cursor: pointer;
-  color: var(--main1);
+  background-color: var(--main3);
+  color: #2f3e2f;
 }
 /*---------- ads ----------*/
 .ads-section {
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 20px;
 }
 .ads-list {
   margin: 0 auto;
   width: 80%;
+  margin-top: 30px;
   margin-bottom: 30px;
+}
+.ads-list > div:first-child {
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 .list-box {
   width: 100%;
-  border: 3px ridge white;
-  border-radius: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 2px 5px;
   height: 200px;
   overflow-y: auto;
   margin-top: 5px;
@@ -436,6 +444,7 @@
   align-items: center;
   margin: 0 auto;
   width: 80%;
+  margin-bottom: 10px;
 }
 .ads-title-box {
   display: flex;
@@ -445,57 +454,73 @@
 .ads-title-box > div {
   width: 100%;
   margin: 0 auto;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+.input-flex {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 .ads-name-input-box {
-  margin: 0 auto;
   text-align: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  width: 100%;
+  margin-bottom: 10px;
+  width: 78%;
 }
 .ads-name-input-box > input {
   margin: 0 auto;
+  padding: 10px;
   width: 100%;
-  height: 24px;
-  border-radius: 10px;
-  text-indent: 10px;
-  background-color: var(--main1);
+  border-radius: 5px;
+  text-indent: 5px;
+  background-color: transparent;
   color: #fff;
-  border: 3px double white;
+  border: 1px solid white;
   box-sizing: border-box;
+}
+.ads-size-input-box {
+  display: flex;
+  justify-content: end;
+  width: 20%;
+}
+.ads-size-input-box > select {
+  width: 100%;
+  border: 1px solid white;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: transparent;
 }
 .ads-link-input-box {
   margin: 0 auto;
   text-align: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   width: 100%;
 }
 .ads-link-input-box > input {
   margin: 0 auto;
+  padding: 10px;
   width: 100%;
-  height: 24px;
-  border-radius: 10px;
-  text-indent: 10px;
-  background-color: var(--main1);
+  border-radius: 5px;
+  text-indent: 5px;
+  background-color: transparent;
   color: #fff;
-  border: 3px double white;
+  border: 1px solid white;
   box-sizing: border-box;
 }
 .ads-input {
   cursor: pointer;
 }
 .ads-img-input-box {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   width: 100%;
 }
 .ads-img-box {
   margin: 0 auto;
   padding: 20px;
   min-height: 200px;
-  border-radius: 10px;
-  border: 3px ridge white;
+  border-radius: 5px;
+  border: 1px solid white;
   box-sizing: border-box;
   text-align: center;
   display: flex;
@@ -512,34 +537,24 @@
   object-fit: contain;
 }
 
-.ads-size-input-box {
-  display: flex;
-  justify-content: end;
-  width: 100%;
-}
-.ads-size-input-box > select {
-  width: 20%;
-  border: 3px solid white;
-  border-radius: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
 .ads-button {
   margin-top: 5px;
   margin-bottom: 5px;
   margin: 0 auto;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
 }
 .ads-button > button {
+  width: 30%;
+  font-size: 16px;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: var(--main3);
+  cursor: pointer;
 }
-/* shop frm  */
 
+/* shop frm  */
 .shop-detail-frm-wrap {
   margin: 0 auto;
   margin-top: 30px;
@@ -777,7 +792,6 @@
 
 .ad-banner {
   width: 85%;
-  height: 300px;
   overflow: hidden;
 }
 

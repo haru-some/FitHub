@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, memberState } from "../utils/RecoilData";
 import AdminGoods from "./AdminGoods";
+import Swal from "sweetalert2";
 
 const AdminMain = () => {
   const isLogin = useRecoilValue(isLoginState);
@@ -16,26 +17,39 @@ const AdminMain = () => {
   // 관리자(member_level === 1)만 접근 가능하도록 설정
   useEffect(() => {
     if (!isLogin || memberInfo?.memberLevel !== 1) {
-      alert("관리자만 접근 가능합니다.");
-      navigate("/");
+      Swal.fire({
+        title: "입장 불가",
+        text: "관리자만 입장 가능합니다.",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "확인",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
     }
   }, [isLogin, memberInfo, navigate]);
 
   return (
-    <section className="section admin-section">
-      <div className="navi-bar">
-        <Sidebar />
-      </div>
-      <div className="section-page">
-        <Routes>
-          <Route path="member" element={<AdminMember />} />
-          <Route path="stat" element={<AdminStat />} />
-          <Route path="chat" element={<AdminChat />} />
-          <Route path="Ads" element={<AdminAds />} />
-          <Route path="goods" element={<AdminGoods />} />
-        </Routes>
-      </div>
-    </section>
+    <>
+      {isLogin && memberInfo?.memberLevel === 1 ? (
+        <section className="section admin-section">
+          <div className="navi-bar">
+            <Sidebar />
+          </div>
+          <div className="section-page">
+            <Routes>
+              <Route path="member" element={<AdminMember />} />
+              <Route path="stat" element={<AdminStat />} />
+              <Route path="chat" element={<AdminChat />} />
+              <Route path="Ads" element={<AdminAds />} />
+              <Route path="goods" element={<AdminGoods />} />
+            </Routes>
+          </div>
+        </section>
+      ) : null}
+    </>
   );
 };
 
