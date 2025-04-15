@@ -168,4 +168,9 @@ public class MemberService {
 	    }
 	    return false;
 	}
+	public String selectLoginType(String memberId) {
+		MemberDTO m = memberDao.selectOneMember(memberId);
+		String loginType = m.getLoginType();
+		return loginType;
+	}
 }

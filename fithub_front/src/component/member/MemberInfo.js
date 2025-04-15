@@ -16,6 +16,7 @@ const MemberInfo = () => {
 
   useEffect(() => {
     if (!isLogin) {
+      navigate("/login");
       Swal.fire({
         title: "로그인 필요",
         text: "로그인 후 이용할 수 있는 페이지입니다.",
