@@ -6,17 +6,20 @@ import AdminStat from "./AdminStat";
 import AdminChat from "./AdminChat";
 import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { isLoginState, memberState } from "../utils/RecoilData";
+import { isLoginState, logoutState, memberState } from "../utils/RecoilData";
 import AdminGoods from "./AdminGoods";
 import Swal from "sweetalert2";
 
 const AdminMain = () => {
-  const isLogin = useRecoilValue(isLoginState);
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const navigate = useNavigate();
   // 관리자(member_level === 1)만 접근 가능하도록 설정
-  useEffect(() => {
-    if (!isLogin || memberInfo?.memberLevel !== 1) {
+  if (logoutST) {
+    navigate("/");
+    setLogoutST(false);
+  } else {
+    if (!memberInfo) {
       Swal.fire({
         title: "입장 불가",
         text: "관리자만 입장 가능합니다.",
@@ -29,11 +32,11 @@ const AdminMain = () => {
         }
       });
     }
-  }, [isLogin, memberInfo, navigate]);
+  }
 
   return (
     <>
-      {isLogin && memberInfo?.memberLevel === 1 ? (
+      {memberInfo && memberInfo?.memberLevel === 1 ? (
         <section className="section admin-section">
           <div className="navi-bar">
             <Sidebar />
