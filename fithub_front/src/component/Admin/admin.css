@@ -3,8 +3,8 @@
   margin: 0 auto;
   width: 1400px;
   gap: 50px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .admin-section * {
@@ -413,7 +413,7 @@
   margin-bottom: 30px;
 }
 .ads-list > div:first-child {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-size: 18px;
 }
 .list-box {
@@ -444,7 +444,7 @@
   align-items: center;
   margin: 0 auto;
   width: 80%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .ads-title-box {
   display: flex;
@@ -454,7 +454,7 @@
 .ads-title-box > div {
   width: 100%;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-size: 18px;
 }
 .input-flex {
@@ -464,7 +464,7 @@
 }
 .ads-name-input-box {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   width: 78%;
 }
 .ads-name-input-box > input {
@@ -487,14 +487,14 @@
   width: 100%;
   border: 1px solid white;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   cursor: pointer;
-  background-color: transparent;
+  background-color: #222;
 }
 .ads-link-input-box {
   margin: 0 auto;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   width: 100%;
 }
 .ads-link-input-box > input {
@@ -512,7 +512,7 @@
   cursor: pointer;
 }
 .ads-img-input-box {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   width: 100%;
 }
 .ads-img-box {
@@ -547,7 +547,7 @@
 }
 .ads-button > button {
   width: 30%;
-  font-size: 16px;
+  font-size: 18px;
   padding: 10px;
   border-radius: 5px;
   background-color: var(--main3);
@@ -783,7 +783,6 @@
 }
 
 .ad-banner {
-  width: 85%;
   overflow: hidden;
 }
 

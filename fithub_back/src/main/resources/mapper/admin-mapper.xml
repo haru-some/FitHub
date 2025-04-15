@@ -78,7 +78,13 @@ FROM dual
     </select>
     
     <select id="totalSell" resultType="sell">
-    	select count(*) as total_sell, goods_name from sell group by goods_name order by total_sell desc
+    	SELECT * FROM (
+    SELECT COUNT(*) AS total_sell, goods_name
+    FROM sell
+    GROUP BY goods_name
+    ORDER BY total_sell DESC
+)
+WHERE ROWNUM &lt;= 10
     </select>
     
     <select id="weekSales" resultType="sell">

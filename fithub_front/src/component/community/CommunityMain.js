@@ -32,7 +32,7 @@ const CommunityMain = () => {
   }
   return (
     <div className="community-main-wrap">
-      <div className="ads ads-set1">
+      <div className="ads ads-set">
         <AdBanners adsType={"h"} />
       </div>
       <div className="community-main">
@@ -43,7 +43,7 @@ const CommunityMain = () => {
           <Route path="update/:communityNo" element={<CommunityUpdate />} />
         </Routes>
       </div>
-      <div className="ads ads-set2">
+      <div className="ads ads-set">
         <AdBanners adsType={"h"} />
       </div>
     </div>

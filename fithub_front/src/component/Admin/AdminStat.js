@@ -470,147 +470,155 @@ const MyResponsiveBar = (props) => {
     "재 방문자": "hsl(221, 70.20%, 50.00%)",
   };
   return (
-    <ResponsiveBar
-      data={data}
-      keys={type}
-      indexBy="date"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.3}
-      valueScale={{ type: "linear" }}
-      indexScale={{ type: "band", round: true }}
-      colors={({ id }) => colorMap[id]}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 1.6]],
-      }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "date",
-        legendPosition: "middle",
-        legendOffset: 32,
-        truncateTickAt: 0,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "Count",
-        legendPosition: "middle",
-        legendOffset: -40,
-        truncateTickAt: 0,
-      }}
-      enableTotals={true}
-      totalsOffset={6}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
-      labelTextColor="white"
-      legends={[
-        {
-          dataFrom: "keys",
-          anchor: "bottom-right",
-          direction: "column",
-          justify: false,
-          translateX: 120,
-          translateY: 0,
-          itemsSpacing: 2,
-          itemWidth: 100,
-          itemHeight: 20,
-          itemDirection: "left-to-right",
-          itemOpacity: 0.85,
-          symbolSize: 20,
-          effects: [
+    <>
+      {data && type && (
+        <ResponsiveBar
+          data={data}
+          keys={type}
+          indexBy="date"
+          margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+          padding={0.3}
+          valueScale={{ type: "linear" }}
+          indexScale={{ type: "band", round: true }}
+          colors={({ id }) => colorMap[id]}
+          borderColor={{
+            from: "color",
+            modifiers: [["darker", 1.6]],
+          }}
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "date",
+            legendPosition: "middle",
+            legendOffset: 32,
+            truncateTickAt: 0,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "Count",
+            legendPosition: "middle",
+            legendOffset: -40,
+            truncateTickAt: 0,
+          }}
+          enableTotals={true}
+          totalsOffset={6}
+          labelSkipWidth={12}
+          labelSkipHeight={12}
+          labelTextColor="white"
+          legends={[
             {
-              on: "hover",
-              style: {
-                itemOpacity: 1,
-              },
+              dataFrom: "keys",
+              anchor: "bottom-right",
+              direction: "column",
+              justify: false,
+              translateX: 120,
+              translateY: 0,
+              itemsSpacing: 2,
+              itemWidth: 100,
+              itemHeight: 20,
+              itemDirection: "left-to-right",
+              itemOpacity: 0.85,
+              symbolSize: 20,
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemOpacity: 1,
+                  },
+                },
+              ],
             },
-          ],
-        },
-      ]}
-      role="application"
-      ariaLabel="Nivo bar chart demo"
-      barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-      }
-    />
+          ]}
+          role="application"
+          ariaLabel="Nivo bar chart demo"
+          barAriaLabel={(e) =>
+            e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+          }
+        />
+      )}
+    </>
   );
 };
 
 const MyResponsiveBar2 = ({ daySales, type }) => (
-  <ResponsiveBar
-    data={daySales}
-    keys={type}
-    indexBy="country"
-    margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-    padding={0.3}
-    valueScale={{ type: "linear" }}
-    indexScale={{ type: "band", round: true }}
-    colors={{ scheme: "nivo" }}
-    borderColor={{
-      from: "color",
-      modifiers: [["darker", 1.6]],
-    }}
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "날짜",
-      legendPosition: "middle",
-      legendOffset: 32,
-      truncateTickAt: 0,
-    }}
-    axisLeft={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "매출",
-      legendPosition: "middle",
-      legendOffset: -40,
-      truncateTickAt: 0,
-    }}
-    labelSkipWidth={12}
-    labelSkipHeight={12}
-    labelTextColor={{
-      from: "color",
-      modifiers: [["darker", 1.6]],
-    }}
-    legends={[
-      {
-        dataFrom: "keys",
-        anchor: "bottom-right",
-        direction: "column",
-        justify: false,
-        translateX: 120,
-        translateY: 0,
-        itemsSpacing: 2,
-        itemWidth: 100,
-        itemHeight: 20,
-        itemDirection: "left-to-right",
-        itemOpacity: 0.85,
-        symbolSize: 20,
-        effects: [
+  <>
+    {daySales && type && (
+      <ResponsiveBar
+        data={daySales}
+        keys={type}
+        indexBy="country"
+        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        padding={0.3}
+        valueScale={{ type: "linear" }}
+        indexScale={{ type: "band", round: true }}
+        colors={{ scheme: "nivo" }}
+        borderColor={{
+          from: "color",
+          modifiers: [["darker", 1.6]],
+        }}
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "날짜",
+          legendPosition: "middle",
+          legendOffset: 32,
+          truncateTickAt: 0,
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "매출",
+          legendPosition: "middle",
+          legendOffset: -40,
+          truncateTickAt: 0,
+        }}
+        labelSkipWidth={12}
+        labelSkipHeight={12}
+        labelTextColor={{
+          from: "color",
+          modifiers: [["darker", 1.6]],
+        }}
+        legends={[
           {
-            on: "hover",
-            style: {
-              itemOpacity: 1,
-            },
+            dataFrom: "keys",
+            anchor: "bottom-right",
+            direction: "column",
+            justify: false,
+            translateX: 120,
+            translateY: 0,
+            itemsSpacing: 2,
+            itemWidth: 100,
+            itemHeight: 20,
+            itemDirection: "left-to-right",
+            itemOpacity: 0.85,
+            symbolSize: 20,
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemOpacity: 1,
+                },
+              },
+            ],
           },
-        ],
-      },
-    ]}
-    role="application"
-    ariaLabel="Nivo bar chart demo"
-    barAriaLabel={(e) =>
-      e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-    }
-  />
+        ]}
+        role="application"
+        ariaLabel="Nivo bar chart demo"
+        barAriaLabel={(e) =>
+          e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+        }
+      />
+    )}
+  </>
 );
 
 /* 회원 이용 통계 */
@@ -692,135 +700,143 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
       });
   }, []);
   return (
-    <ResponsiveLine
-      data={lineChartData}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-      xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
-        reverse: false,
-      }}
-      yFormat=" >-.2f"
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "날짜",
-        legendOffset: 36,
-        legendPosition: "middle",
-        truncateTickAt: 0,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "수치",
-        legendOffset: -40,
-        legendPosition: "middle",
-        truncateTickAt: 0,
-      }}
-      colors={{ scheme: "accent" }}
-      pointSize={10}
-      pointColor={{ theme: "background" }}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabel="data.yFormatted"
-      pointLabelYOffset={-12}
-      enableTouchCrosshair={true}
-      useMesh={true}
-      legends={[
-        {
-          anchor: "bottom-right",
-          direction: "column",
-          justify: false,
-          translateX: 100,
-          translateY: 0,
-          itemsSpacing: 0,
-          itemDirection: "left-to-right",
-          itemWidth: 80,
-          itemHeight: 20,
-          itemOpacity: 0.75,
-          symbolSize: 12,
-          symbolShape: "circle",
-          symbolBorderColor: "rgba(0, 0, 0, .5)",
-          effects: [
+    <>
+      {lineChartData && (
+        <ResponsiveLine
+          data={lineChartData}
+          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+          xScale={{ type: "point" }}
+          yScale={{
+            type: "linear",
+            min: "auto",
+            max: "auto",
+            stacked: true,
+            reverse: false,
+          }}
+          yFormat=" >-.2f"
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "날짜",
+            legendOffset: 36,
+            legendPosition: "middle",
+            truncateTickAt: 0,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "수치",
+            legendOffset: -40,
+            legendPosition: "middle",
+            truncateTickAt: 0,
+          }}
+          colors={{ scheme: "accent" }}
+          pointSize={10}
+          pointColor={{ theme: "background" }}
+          pointBorderWidth={2}
+          pointBorderColor={{ from: "serieColor" }}
+          pointLabel="data.yFormatted"
+          pointLabelYOffset={-12}
+          enableTouchCrosshair={true}
+          useMesh={true}
+          legends={[
             {
-              on: "hover",
-              style: {
-                itemBackground: "rgba(0, 0, 0, .03)",
-                itemOpacity: 1,
-              },
+              anchor: "bottom-right",
+              direction: "column",
+              justify: false,
+              translateX: 100,
+              translateY: 0,
+              itemsSpacing: 0,
+              itemDirection: "left-to-right",
+              itemWidth: 80,
+              itemHeight: 20,
+              itemOpacity: 0.75,
+              symbolSize: 12,
+              symbolShape: "circle",
+              symbolBorderColor: "rgba(0, 0, 0, .5)",
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemBackground: "rgba(0, 0, 0, .03)",
+                    itemOpacity: 1,
+                  },
+                },
+              ],
             },
-          ],
-        },
-      ]}
-    />
+          ]}
+        />
+      )}
+    </>
   );
 };
 
 const MyResponsivePie = ({ pieChartData }) => {
   return (
-    <ResponsivePie
-      data={pieChartData}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-      innerRadius={0.5}
-      padAngle={0.7}
-      cornerRadius={3}
-      activeInnerRadiusOffset={20}
-      activeOuterRadiusOffset={20}
-      borderWidth={1}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 0.2]],
-      }}
-      arcLinkLabelsSkipAngle={10}
-      arcLinkLabelsTextColor="#333333"
-      arcLinkLabelsThickness={2}
-      arcLinkLabelsColor={{ from: "color", modifiers: [] }}
-      arcLabelsSkipAngle={10}
-      arcLabelsTextColor={{
-        from: "color",
-        modifiers: [["darker", 2]],
-      }}
-      motionConfig={{
-        mass: 1,
-        tension: 500,
-        friction: 10,
-        clamp: false,
-        precision: 0.01,
-        velocity: 0,
-      }}
-      legends={[
-        {
-          anchor: "right",
-          direction: "column",
-          justify: false,
-          translateX: -20,
-          translateY: 56,
-          itemsSpacing: 1,
-          itemWidth: 100,
-          itemHeight: 18,
-          itemTextColor: "#999",
-          itemDirection: "left-to-right",
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: "circle",
-          effects: [
+    <>
+      {pieChartData && (
+        <ResponsivePie
+          data={pieChartData}
+          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          innerRadius={0.5}
+          padAngle={0.7}
+          cornerRadius={3}
+          activeInnerRadiusOffset={20}
+          activeOuterRadiusOffset={20}
+          borderWidth={1}
+          borderColor={{
+            from: "color",
+            modifiers: [["darker", 0.2]],
+          }}
+          arcLinkLabelsSkipAngle={10}
+          arcLinkLabelsTextColor="#333333"
+          arcLinkLabelsThickness={2}
+          arcLinkLabelsColor={{ from: "color", modifiers: [] }}
+          arcLabelsSkipAngle={10}
+          arcLabelsTextColor={{
+            from: "color",
+            modifiers: [["darker", 2]],
+          }}
+          motionConfig={{
+            mass: 1,
+            tension: 500,
+            friction: 10,
+            clamp: false,
+            precision: 0.01,
+            velocity: 0,
+          }}
+          legends={[
             {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
+              anchor: "right",
+              direction: "column",
+              justify: false,
+              translateX: -20,
+              translateY: 56,
+              itemsSpacing: 1,
+              itemWidth: 100,
+              itemHeight: 18,
+              itemTextColor: "#999",
+              itemDirection: "left-to-right",
+              itemOpacity: 1,
+              symbolSize: 18,
+              symbolShape: "circle",
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemTextColor: "#000",
+                  },
+                },
+              ],
             },
-          ],
-        },
-      ]}
-    />
+          ]}
+        />
+      )}
+    </>
   );
 };
 
