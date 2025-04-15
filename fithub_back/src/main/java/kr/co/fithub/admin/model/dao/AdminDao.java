@@ -52,4 +52,6 @@ public interface AdminDao {
 
 	List monthSales();
 
+	int updateMemberKickId(String newMemberId, int memberNo);
+
 }

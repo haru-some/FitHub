@@ -160,7 +160,7 @@ const MemberStatChart = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getMember`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/memberLevel`)
       .then((res) => {
         console.log(res);
         setPieChartData([

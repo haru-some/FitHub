@@ -9,6 +9,7 @@
   flex-direction: column;
   align-items: center;
   gap: 25px;
+  margin-bottom: 50px;
 }
 
 /*ul*/
@@ -145,6 +146,9 @@
 }
 
 /*chatMain*/
+.myfit-wrap .myfit-content-box > .section.chat-wrap {
+  margin-bottom: 50px;
+}
 .myfit-wrap .chat-wrap .page-title {
   font-size: 20px;
   margin-bottom: 15px;
@@ -282,7 +286,7 @@
   color: #7c7c7c;
 }
 
-.myfit-wrap .write-box{
+.myfit-wrap .write-box {
   display: flex;
   margin-bottom: 5px;
 }
@@ -311,6 +315,7 @@
   border-radius: 7px;
   font-size: 16px;
   cursor: pointer;
+  align-self: center;
 }
 
 .chat-icon-wrap {

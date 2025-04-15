@@ -7,7 +7,6 @@ import axios from "axios";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize-module-react";
-import Swal from "sweetalert2";
 Quill.register("modules/ImageResize", ImageResize);
 
 const CommunityWrite = () => {

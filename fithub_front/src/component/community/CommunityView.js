@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import dayjs from "dayjs";
 
 const CommunityView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -153,9 +154,10 @@ const CommunityView = () => {
   const handleBlock = (e) => {
     Swal.fire({
       title: "게시글 삭제",
-      text: "ㄹㅇ 지울거임?",
+      text: "게시글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "삭제",
       cancelButtonText: "취소",
     }).then((res) => {
@@ -431,7 +433,7 @@ const Comment = (props) => {
   const navigate = useNavigate();
   const comment = props.comment;
   const member = props.member;
-
+  console.log(comment);
   const [updateComment, setUpdateComment] = useState("");
   useEffect(() => {
     setUpdateComment(comment.commentContent);
@@ -458,8 +460,7 @@ const Comment = (props) => {
       text: "댓글을 삭제하시겠습니까?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "예",
       cancelButtonText: "아니오",
     }).then((result) => {
@@ -498,6 +499,19 @@ const Comment = (props) => {
         }
       });
   };
+  const formatTimeAgo = (timeString) => {
+    const now = dayjs();
+    const past = dayjs(timeString);
+
+    const diffInHours = now.diff(past, "hour");
+    const diffInDays = now.diff(past, "day");
+
+    if (diffInHours < 24) {
+      return `${comment.commentDate.substring(11, 16)}`;
+    } else {
+      return `${diffInDays}일 전`;
+    }
+  };
 
   return (
     <li className="comment-list">
@@ -521,8 +535,12 @@ const Comment = (props) => {
               navigate(`/myfit/activity/${comment.memberNo}`);
             }}
           >
-            {comment.memberId}
+            <span>{comment.memberId}</span>
+            <span style={{ marginLeft: "10px", color: "#ccc" }}>
+              {formatTimeAgo(comment.commentDate)}
+            </span>
           </p>
+
           {member && member.memberNo === comment.memberNo && (
             <div className="comment-sub-btn">
               <IconButton

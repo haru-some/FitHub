@@ -22,7 +22,6 @@ const MemberChat = () => {
   const socket = new SockJS(`${backServer}/inMessage`);
   const [roomNo, setRoomNo] = useState(null);
   const [newRoom, setNewRoom] = useState(null);
-  const [visitRoom, setVisitRoom] = useState(false);
 
   if (logoutST) {
     navigate("/");
@@ -42,31 +41,44 @@ const MemberChat = () => {
       });
     }
   }
-
+  console.log(memberInfo.memberId);
   useEffect(() => {
     // 기존 채팅 기록 불러오기
     axios
-      .get(`${backServer}/chat/getRoomId?memberId=${memberInfo.memberId}`)
+      .get(`${backServer}/chat/checkRoom?memberId=${memberInfo.memberId}`)
       .then((res) => {
-        if (res.data.chatRoomNo !== null) {
+        if (res.data.chatRoomNo) {
           setRoomNo(res.data.chatRoomNo);
+          axios
+            .get(
+              `${backServer}/chat/loadChatMember?memberId=${memberInfo.memberId}`
+            )
+            .then((res) => {
+              console.log(res);
+              setMessages(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
-        axios
-          .get(
-            `${backServer}/chat/loadChatMember?memberId=${memberInfo.memberId}`
-          )
-          .then((res) => {
-            console.log(res);
-            setMessages(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [visitRoom]);
+  }, [newRoom]);
+
+  useEffect(() => {
+    axios
+      .patch(
+        `${backServer}/chat/view?roomNo=${roomNo}&chatMemberId=${memberInfo.memberId}`
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [roomNo]);
 
   useEffect(() => {
     // WebSocket 연결
@@ -75,12 +87,12 @@ const MemberChat = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
 
-      // connectHeaders: {
-      //   // 기존 Authorization 외에 memberId, roomId를 추가
-      //   Authorization: memberInfo.memberNo,
-      //   memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
-      //   roomId: roomNo, // 현재 입장한 채팅방 ID
-      // },
+      connectHeaders: {
+        // 기존 Authorization 외에 memberId, roomId를 추가
+        Authorization: memberInfo.memberNo,
+        memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
+        roomId: roomNo, // 현재 입장한 채팅방 ID
+      },
 
       onConnect: () => {
         console.log("Connected to WebSocket");
@@ -103,7 +115,7 @@ const MemberChat = () => {
     return () => {
       client.deactivate();
     };
-  }, [roomNo]);
+  }, [roomNo, newRoom]);
 
   const sendMessage = () => {
     const date = new Date();
@@ -152,7 +164,7 @@ const MemberChat = () => {
 
   const adminChatStart = () => {
     axios
-      .put(`${backServer}/chat/create?memberId=${memberInfo.memberId}`)
+      .post(`${backServer}/chat/create?memberId=${memberInfo.memberId}`)
       .then((res) => {
         console.log(res);
         axios
@@ -169,6 +181,7 @@ const MemberChat = () => {
         console.log(err);
       });
   };
+  console.log(memberInfo);
   return (
     <section className="member-chat-section">
       <div className="page-title">고객센터 문의</div>
@@ -187,9 +200,13 @@ const MemberChat = () => {
                 {memberInfo && memberInfo.memberId !== msg.chatMemberId ? (
                   <>
                     <div className="right-chat-profile">
-                      <img
-                        src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
-                      />
+                      {msg.memberThumb !== null ? (
+                        <img
+                          src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
+                        />
+                      ) : (
+                        <img src="/image/default_img.png" alt="프로필" />
+                      )}
                     </div>
                     <div className="chat-content">
                       <div className="chat-id">
@@ -200,7 +217,9 @@ const MemberChat = () => {
                           .slice(0, 2)
                           .join(":")}
                       </div>
-                      <div className="chat-text">{msg.messageContent}</div>
+                      <div className="chat-text-box">
+                        <div className="chat-text">{msg.messageContent}</div>
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -215,13 +234,18 @@ const MemberChat = () => {
                           .join(":")}{" "}
                         - {msg.chatMemberId}
                       </div>
-                      <div className="chat-text">{msg.messageContent}</div>
+                      <div className="chat-text-box">
+                        <div className="chat-text">{msg.messageContent}</div>
+                      </div>
                     </div>
                     <div className="left-chat-profile">
-                      <img
-                        src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
-                        alt="관리자"
-                      />
+                      {msg.memberThumb !== null ? (
+                        <img
+                          src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
+                        />
+                      ) : (
+                        <img src="/image/default_img.png" alt="프로필" />
+                      )}
                     </div>
                   </>
                 )}
@@ -230,7 +254,7 @@ const MemberChat = () => {
           ) : (
             <div className="member-chat-none">
               <div className="chat-add-icon">
-                <AddCommentIcon />
+                <AddCommentIcon onClick={adminChatStart} />
               </div>
               <div className="chat-notice">관리자 문의 시작하기</div>
             </div>

@@ -22,7 +22,7 @@
                 (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{loginMemberNo}) AS is_follow
             FROM community c
             JOIN member m ON c.member_no = m.member_no
-            where m.member_id||c.community_content  like '%'||#{searchText}||'%'
+            WHERE m.member_id || REGEXP_REPLACE(c.community_content, '&lt;[^>]+>', '') LIKE '%' || #{searchText} || '%'
             <if test="memberNo == 0">          
             and c.community_status = 1
             </if>
