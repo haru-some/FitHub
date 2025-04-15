@@ -16,12 +16,13 @@ import dayjs from "dayjs";
 
 const CommunityItem = (props) => {
   const memberNo = props.memberNo;
+  const index = props.index;
   const page = props.page;
   const communityList = props.communityList;
   const setCommunityList = props.setCommunityList;
   const member = props.member;
   const community = props.community;
-  const [isLike, setIsLike] = useState(community.isLike === 1);
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
@@ -101,24 +102,15 @@ const CommunityItem = (props) => {
 
   const changeLike = (e) => {
     if (member) {
-      if (isLike) {
+      if (community.isLike === 1) {
         axios
           .delete(
             `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberNo}?communityNo=${community.communityNo}`
           )
           .then((res) => {
-            const obj = communityList.filter(
-              (item, i) => item.communityNo === community.communityNo
-            )[0];
-            const idx = communityList.indexOf(
-              communityList.filter(
-                (item, i) => item.communityNo === community.communityNo
-              )[0]
-            );
-            obj["likeCount"] = res.data;
-            communityList[idx] = obj;
+            communityList[index].isLike = 0;
+            communityList[index].likeCount = res.data;
             setCommunityList([...communityList]);
-            setIsLike(false);
           });
       } else {
         axios
@@ -126,19 +118,9 @@ const CommunityItem = (props) => {
             `${process.env.REACT_APP_BACK_SERVER}/community/${member.memberNo}?communityNo=${community.communityNo}`
           )
           .then((res) => {
-            const obj = communityList.filter(
-              (item, i) => item.communityNo === community.communityNo
-            )[0];
-            const idx = communityList.indexOf(
-              communityList.filter(
-                (item, i) => item.communityNo === community.communityNo
-              )[0]
-            );
-            obj["likeCount"] = res.data;
-            communityList[idx] = obj;
-
+            communityList[index].isLike = 1;
+            communityList[index].likeCount = res.data;
             setCommunityList([...communityList]);
-            setIsLike(true);
           });
       }
     }
@@ -380,7 +362,7 @@ const CommunityItem = (props) => {
 
         <div className="community-sub-zone">
           <div className="community-likes" onClick={changeLike}>
-            {isLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {community.isLike === 1 ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             {community.likeCount}
           </div>
           <div className="community-comments">
