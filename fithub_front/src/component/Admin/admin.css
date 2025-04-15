@@ -684,7 +684,7 @@
   padding: 15px; /* 상하 여백 증가 */
   flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
   cursor: pointer;
-  margin-right: 1px;
+  margin-left: 250px;
   border-radius: 5px;
   width: 500px;
 }
@@ -768,6 +768,11 @@
 .shop-detail-frm-wrap .input-item input:focus {
   outline: none;
   background-color: #e0e0e0;
+}
+.shop-detail-frm-wrap .goods-detail-img {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 .ad-banner {

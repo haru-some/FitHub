@@ -1,6 +1,7 @@
 .cart-wrap {
   margin-top: 30px;
   margin-bottom: 30px;
+  margin: 0 auto;
 }
 
 .cart-wrap .cart-container {
