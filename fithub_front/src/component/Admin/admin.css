@@ -762,7 +762,9 @@
   text-align: center;
   font-weight: 800;
 }
-
+.shop-detail-frm-wrap .tbl input {
+  box-sizing: border-box;
+}
 .shop-detail-frm-wrap .goods-info-wrap td {
   text-align: center;
   color: #2f3e2f !important;
