@@ -75,7 +75,7 @@ public class MemberController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "중복 여부 확인 성공")
 	})
-	@GetMapping("/exists/email")
+	@GetMapping(value="/exists/email")
 	public ResponseEntity<Integer> existsEmail(@Parameter(description = "중복 확인할 이메일", example = "user@example.com")
 												@RequestParam String memberEmail) {
 	    int result = memberService.existsEmail(memberEmail);
@@ -100,7 +100,7 @@ public class MemberController {
 	        )
 	    )
 	})
-	@PostMapping(value="/login")
+	@PostMapping(value="/auth/login")
 	public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO member){
 		MemberDTO memberInfo = memberService.login(member);
 		if(memberInfo != null) {
@@ -145,7 +145,7 @@ public class MemberController {
 	        )
 	    )
 	})
-	@GetMapping(value="/refresh")
+	@GetMapping(value="/auth/refresh")
 	public ResponseEntity<MemberDTO> refresh(@Parameter(description = "Refresh Token (Bearer 형식)", example = "Bearer eyJhbGciOiJIUzI1NiIs...")
     										@RequestHeader("Authorization") String refreshToken){
 		MemberDTO loginMember = memberService.refresh(refreshToken);
@@ -169,43 +169,31 @@ public class MemberController {
 	public ResponseEntity<String> updateMember(
 	    @Parameter(description = "회원 정보 (form-data 형식)", required = true, schema = @Schema(implementation = MemberDTO.class))
 	    @ModelAttribute MemberDTO member,
-
 	    @Parameter(description = "새 프로필 이미지 (선택)", required = false)
 	    @RequestParam(required = false) MultipartFile thumbnail) {
-	    
 	    try {
 	        MemberDTO origin = memberService.findByMemberId(member.getMemberId());
-
-	        // 1. 클라이언트에서 삭제 의도 시
 	        if ("null".equals(member.getMemberThumb())) {
-	            // 기존 이미지가 있으면 삭제
 	            if (origin.getMemberThumb() != null && !origin.getMemberThumb().isEmpty()) {
 	                String savepath = root + "/member/profileimg/";
 	                File file = new File(savepath + origin.getMemberThumb());
 	                if (file.exists()) file.delete();
 	            }
-	            member.setMemberThumb(null); // DB에 null로 저장
+	            member.setMemberThumb(null);
 	        }
-
-	        // 2. 새 이미지 업로드 시
 	        else if (thumbnail != null && !thumbnail.isEmpty()) {
-	            // 기존 이미지가 있으면 삭제
 	            if (origin.getMemberThumb() != null && !origin.getMemberThumb().isEmpty()) {
 	                String savepath = root + "/member/profileimg/";
 	                File file = new File(savepath + origin.getMemberThumb());
 	                if (file.exists()) file.delete();
 	            }
-
 	            String savepath = root + "/member/profileimg/";
 	            String filepath = fileUtils.upload(savepath, thumbnail);
-	            member.setMemberThumb(filepath); // DB에 새 이미지 경로 저장
+	            member.setMemberThumb(filepath);
 	        }
-
-	        // 3. 아무것도 안 보내면 기존 이미지 유지 → 현재 DB의 memberThumb 그대로 사용
 	        else {
 	            member.setMemberThumb(origin.getMemberThumb());
 	        }
-
 	        int result = memberService.updateMember(member);
 	        if (result > 0) {
 	            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
@@ -213,7 +201,6 @@ public class MemberController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                                 .body("회원 정보 수정 실패");
 	        }
-
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -264,10 +251,11 @@ public class MemberController {
 	    @ApiResponse(responseCode = "200", description = "비밀번호 일치 여부 확인 성공"),
 	    @ApiResponse(responseCode = "400", description = "요청 데이터 오류")
 	})
-	@PostMapping(value="/check-pw")
-	public ResponseEntity<Integer> checkPw(@RequestBody MemberDTO member){
-		int result = memberService.checkPw(member);
-		return ResponseEntity.ok(result);
+	@PostMapping("/{memberId}/verify-password")
+	public ResponseEntity<Integer> checkPw(@PathVariable String memberId, @RequestBody MemberDTO member) {
+	    member.setMemberId(memberId);
+	    int result = memberService.checkPw(member);
+	    return ResponseEntity.ok(result);
 	}
 	
 	@Operation(
@@ -289,10 +277,11 @@ public class MemberController {
 	        )
 	    )
 	})
-	@PatchMapping(value="/change-pw")
-	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
-		int result = memberService.changePw(member);
-		return ResponseEntity.ok(result);
+	@PatchMapping("/{memberId}/password")
+	public ResponseEntity<Integer> changePw(@PathVariable String memberId, @RequestBody MemberDTO member) {
+	    member.setMemberId(memberId);
+	    int result = memberService.changePw(member);
+	    return ResponseEntity.ok(result);
 	}
 	
 	@Operation(
@@ -313,15 +302,17 @@ public class MemberController {
 	        )
 	    )
 	})
-	@PostMapping(value = "/find-id")
-	public ResponseEntity<?> findId(@RequestBody MemberDTO member) {
-	    String name = member.getMemberName();
-	    String email = member.getMemberEmail();
+	@GetMapping("/recovery/id")
+	public ResponseEntity<?> findIdByQuery(
+	    @RequestParam String name,
+	    @RequestParam String email) {
+	    
 	    List<MemberDTO> members = memberService.findIdsByNameAndEmail(name, email);
 
 	    if (members.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }
+
 	    List<String> memberIds = members.stream()
 	                                    .map(MemberDTO::getMemberId)
 	                                    .toList();
@@ -351,11 +342,14 @@ public class MemberController {
 	        )
 	    )
 	})
-	@PostMapping(value="/find-pw")
-	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
-	    String memberId = member.getMemberId();
+	@PostMapping("/{memberId}/password/reset")
+	public ResponseEntity<String> resetPassword(
+	    @PathVariable String memberId,
+	    @RequestBody MemberDTO member) {
+
 	    String memberEmail = member.getMemberEmail();
 	    String memberLoginType = memberService.selectLoginType(memberId);
+
 	    if (memberLoginType == null) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
 	    }

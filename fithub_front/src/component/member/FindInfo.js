@@ -23,11 +23,12 @@ const FindInfo = () => {
       });
       return;
     }
-
     axios
-      .post(`${backServer}/member/find-id`, {
-        memberName: name,
-        memberEmail: email,
+      .get(`${backServer}/member/recovery/id`, {
+        params: {
+          name: name,
+          email: email,
+        },
       })
       .then((res) => {
         const idList = res.data;
@@ -66,8 +67,10 @@ const FindInfo = () => {
 
   const [pwId, setPwId] = useState("");
   const [pwEmail, setPwEmail] = useState("");
+  const [pwEmailSending, setPwEmailSending] = useState(false);
 
   const handleFindPw = () => {
+    if (pwEmailSending) return;
     if (!pwId.trim() || !pwEmail.trim()) {
       Swal.fire({
         title: "입력 오류",
@@ -78,10 +81,10 @@ const FindInfo = () => {
       });
       return;
     }
+    setPwEmailSending(true);
 
     axios
-      .post(`${backServer}/member/find-pw`, {
-        memberId: pwId,
+      .post(`${backServer}/member/${pwId}/password/reset`, {
         memberEmail: pwEmail,
       })
       .then(() => {
@@ -120,6 +123,9 @@ const FindInfo = () => {
             confirmButtonText: "확인",
           });
         }
+      })
+      .finally(() => {
+        setPwEmailSending(false);
       });
   };
 

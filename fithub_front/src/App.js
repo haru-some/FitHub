@@ -59,7 +59,7 @@ function App() {
     if (refreshToken !== null) {
       axios.defaults.headers.common["Authorization"] = refreshToken;
       axios
-        .get(`${backServer}/member/refresh`)
+        .get(`${backServer}/member/auth/refresh`)
         .then((res) => {
           setMemberInfo(res.data);
           axios.defaults.headers.common["Authorization"] = res.data.accessToken;
