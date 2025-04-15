@@ -148,4 +148,9 @@ public class AdminService {
 		return list;
 	}
 
+	public int deleteAds(int adsNo) {
+		int r = adminDao.deleteAds(adsNo);
+		return r;
+	}
+
 }

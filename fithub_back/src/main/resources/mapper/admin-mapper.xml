@@ -44,6 +44,10 @@
 		insert into ads values(ads_seq.nextval, #{adsName}, #{adsImg}, #{adsLink}, #{adsType}, to_char(sysdate, 'yyyy-mm-dd'))
 	</insert>
 	
+	<delete id="deleteAds">
+		delete from ads where ads_no = #{adsNo}
+	</delete>
+	
 	<select id="getAdsList" resultType="ads">
 		select * from ads order by 1
 	</select>
