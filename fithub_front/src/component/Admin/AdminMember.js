@@ -320,6 +320,7 @@ const CommunityListTBL = ({ tabChange }) => {
                     onClick={(e) => {
                       navigate(`/community/view/${community.communityNo}`);
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     {stripHtml(community.communityContent)}
                   </td>
