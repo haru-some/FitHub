@@ -3,10 +3,13 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import "./topbutton.css";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { memberState } from "./RecoilData";
 
 const TopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+  const memberInfo = useRecoilValue(memberState);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,12 +32,14 @@ const TopButton = () => {
 
   return (
     <>
-      <button
-        className="middle-bottom visible"
-        onClick={(e) => navigate("/chat")}
-      >
-        <ContactSupportIcon />
-      </button>
+      {memberInfo && memberInfo.memberLevel !== 1 && (
+        <button
+          className="middle-bottom visible"
+          onClick={(e) => navigate("/chat")}
+        >
+          <ContactSupportIcon />
+        </button>
+      )}
       <button
         className={`top-button ${isVisible ? "visible" : ""}`}
         onClick={scrollToTop}

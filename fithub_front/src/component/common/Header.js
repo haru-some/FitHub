@@ -160,7 +160,7 @@ const HeaderLink = ({ chatAlarm, logOut }) => {
           </li>
           <li>
             {memberInfo?.memberLevel === 1 ? (
-              <Link to="/admin/today">
+              <Link to="/admin/member">
                 <SettingsIcon />
               </Link>
             ) : (

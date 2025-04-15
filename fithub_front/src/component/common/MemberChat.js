@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from "react";
-import { useRecoilValue } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { logoutState, memberState } from "../utils/RecoilData";
 import "./chat.css";
 import axios from "axios";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const MemberChat = () => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
-  const memberInfo = useRecoilValue(memberState); // 현재 로그인한 회원 정보 가져오기
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const navigate = useNavigate();
   const [stompClient, setStompClient] = useState(null);
   const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.34:9999
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
@@ -19,6 +23,25 @@ const MemberChat = () => {
   const [roomNo, setRoomNo] = useState(null);
   const [newRoom, setNewRoom] = useState(null);
   const [visitRoom, setVisitRoom] = useState(false);
+
+  if (logoutST) {
+    navigate("/");
+    setLogoutST(false);
+  } else {
+    if (!memberInfo) {
+      Swal.fire({
+        title: "로그인 필요",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "확인",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    }
+  }
 
   useEffect(() => {
     // 기존 채팅 기록 불러오기
@@ -52,12 +75,12 @@ const MemberChat = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
 
-      connectHeaders: {
-        // 기존 Authorization 외에 memberId, roomId를 추가
-        Authorization: memberInfo.memberNo,
-        memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
-        roomId: roomNo, // 현재 입장한 채팅방 ID
-      },
+      // connectHeaders: {
+      //   // 기존 Authorization 외에 memberId, roomId를 추가
+      //   Authorization: memberInfo.memberNo,
+      //   memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
+      //   roomId: roomNo, // 현재 입장한 채팅방 ID
+      // },
 
       onConnect: () => {
         console.log("Connected to WebSocket");
@@ -156,12 +179,12 @@ const MemberChat = () => {
               <div
                 key={index}
                 className={
-                  msg.chatMemberId !== memberInfo.memberId
+                  memberInfo && msg.chatMemberId !== memberInfo.memberId
                     ? "right-chat-line"
                     : "left-chat-line"
                 }
               >
-                {memberInfo.memberId !== msg.chatMemberId ? (
+                {memberInfo && memberInfo.memberId !== msg.chatMemberId ? (
                   <>
                     <div className="right-chat-profile">
                       <img

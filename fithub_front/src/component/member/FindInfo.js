@@ -95,16 +95,31 @@ const FindInfo = () => {
         navigate("/login");
       })
       .catch((err) => {
-        Swal.fire({
-          title: "전송 실패",
-          text:
-            err.response?.status === 404
-              ? "입력하신 정보와 일치하는 회원이 없습니다."
-              : "잠시 후 다시 시도해주세요.",
-          icon: "error",
-          confirmButtonColor: "#2f3e2f",
-          confirmButtonText: "확인",
-        });
+        const status = err.response?.status;
+        const message = err.response?.data;
+
+        if (status === 404) {
+          let alertMsg = "입력하신 정보와 일치하는 회원이 없습니다.";
+          if (message.includes("소셜")) {
+            alertMsg = "소셜 로그인 회원은 비밀번호 찾기가 불가능합니다.";
+          }
+
+          Swal.fire({
+            title: "전송 실패",
+            text: alertMsg,
+            icon: "error",
+            confirmButtonColor: "#2f3e2f",
+            confirmButtonText: "확인",
+          });
+        } else {
+          Swal.fire({
+            title: "오류 발생",
+            text: "잠시 후 다시 시도해주세요.",
+            icon: "error",
+            confirmButtonColor: "#2f3e2f",
+            confirmButtonText: "확인",
+          });
+        }
       });
   };
 

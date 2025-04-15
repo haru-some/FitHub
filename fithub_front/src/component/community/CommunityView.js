@@ -82,7 +82,10 @@ const CommunityView = () => {
       )
       .then((res) => {
         community.commentList.unshift(res.data);
-        setCommunity({ ...community });
+        setCommunity({
+          ...community,
+          commentCount: community.commentCount + 1,
+        });
         setNewComment("");
       });
   };
