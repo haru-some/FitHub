@@ -34,7 +34,7 @@ const Login = () => {
       return;
     }
     axios
-      .post(`${backServer}/member/login`, member)
+      .post(`${backServer}/member/auth/login`, member)
       .then((res) => {
         const redirectTo = location.state?.from || "/";
         localStorage.removeItem("joinStage");

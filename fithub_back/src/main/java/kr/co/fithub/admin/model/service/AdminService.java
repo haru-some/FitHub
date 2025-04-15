@@ -1,8 +1,11 @@
 package kr.co.fithub.admin.model.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,13 +64,18 @@ public class AdminService {
 	@Transactional
 	public int adminMemberDelete(int memberNo, String adminId) {
 		MemberDTO m = adminDao.selectOneMember(memberNo);
+		System.out.println(m);
+		int result = 0;
 		if(m != null) {			
-			int result = adminDao.adminDelMemberInsert(m, adminId);
-			result += adminDao.adminMemberDelete(memberNo);
-			return result;
-		}else {
-			return 0;
+			result += adminDao.adminDelMemberInsert(m, adminId);
+			String uuidSuffix = UUID.randomUUID().toString().substring(0, 8);
+		    String newMemberId = m.getMemberId() + "_deleted_" +
+		        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) +
+		        "_" + uuidSuffix;
+		    System.out.println(newMemberId);
+		    result += adminDao.updateMemberKickId(newMemberId, memberNo);
 		}
+		return result;
 	}
 
 	public Map communityList(int communityPage) {
@@ -138,6 +146,11 @@ public class AdminService {
 	public List monthSales() {
 		List list = adminDao.monthSales();
 		return list;
+	}
+
+	public int deleteAds(int adsNo) {
+		int r = adminDao.deleteAds(adsNo);
+		return r;
 	}
 
 }

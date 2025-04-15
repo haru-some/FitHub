@@ -23,11 +23,12 @@ const FindInfo = () => {
       });
       return;
     }
-
     axios
-      .post(`${backServer}/member/find-id`, {
-        memberName: name,
-        memberEmail: email,
+      .get(`${backServer}/member/recovery/id`, {
+        params: {
+          name: name,
+          email: email,
+        },
       })
       .then((res) => {
         const idList = res.data;
@@ -66,8 +67,10 @@ const FindInfo = () => {
 
   const [pwId, setPwId] = useState("");
   const [pwEmail, setPwEmail] = useState("");
+  const [pwEmailSending, setPwEmailSending] = useState(false);
 
   const handleFindPw = () => {
+    if (pwEmailSending) return;
     if (!pwId.trim() || !pwEmail.trim()) {
       Swal.fire({
         title: "입력 오류",
@@ -78,10 +81,10 @@ const FindInfo = () => {
       });
       return;
     }
+    setPwEmailSending(true);
 
     axios
-      .post(`${backServer}/member/find-pw`, {
-        memberId: pwId,
+      .post(`${backServer}/member/${pwId}/password/reset`, {
         memberEmail: pwEmail,
       })
       .then(() => {
@@ -95,16 +98,34 @@ const FindInfo = () => {
         navigate("/login");
       })
       .catch((err) => {
-        Swal.fire({
-          title: "전송 실패",
-          text:
-            err.response?.status === 404
-              ? "입력하신 정보와 일치하는 회원이 없습니다."
-              : "잠시 후 다시 시도해주세요.",
-          icon: "error",
-          confirmButtonColor: "#2f3e2f",
-          confirmButtonText: "확인",
-        });
+        const status = err.response?.status;
+        const message = err.response?.data;
+
+        if (status === 404) {
+          let alertMsg = "입력하신 정보와 일치하는 회원이 없습니다.";
+          if (message.includes("소셜")) {
+            alertMsg = "소셜 로그인 회원은 비밀번호 찾기가 불가능합니다.";
+          }
+
+          Swal.fire({
+            title: "전송 실패",
+            text: alertMsg,
+            icon: "error",
+            confirmButtonColor: "#2f3e2f",
+            confirmButtonText: "확인",
+          });
+        } else {
+          Swal.fire({
+            title: "오류 발생",
+            text: "잠시 후 다시 시도해주세요.",
+            icon: "error",
+            confirmButtonColor: "#2f3e2f",
+            confirmButtonText: "확인",
+          });
+        }
+      })
+      .finally(() => {
+        setPwEmailSending(false);
       });
   };
 

@@ -46,7 +46,7 @@ import com.google.gson.reflect.TypeToken;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/goods")
-@Tag(name = "상품 API 🛒", description = "상품 관련 기능")
+@Tag(name = "마켓 API 🛒", description = "상품 관련 기능")
 public class ShopController {	
 	@Autowired
 	private ShopService shopService;

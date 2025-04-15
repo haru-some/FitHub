@@ -160,7 +160,7 @@ const MemberStatChart = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getMember`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/member`)
       .then((res) => {
         console.log(res);
         setPieChartData([
@@ -283,7 +283,7 @@ const SalesStatChart = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/totalPrice`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/price`)
       .then((res) => {
         console.log(res);
         setTotalPrice([
@@ -328,7 +328,7 @@ const SalesStatChart = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/totalSell`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/sell`)
       .then((res) => {
         console.log(res);
         setTotalSell(
@@ -350,7 +350,7 @@ const SalesStatChart = () => {
   /*------------------------------------ 절대 건들지마 ------------------*/
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/weekSales`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/weekSales`)
       .then((res) => {
         console.log(res.data);
         setWeekPrice(
@@ -367,7 +367,7 @@ const SalesStatChart = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/monthSales`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/monthSales`)
       .then((res) => {
         setMonthPrice(
           res.data.map((item) => ({

@@ -11,12 +11,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.WebSocketSession;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,7 +45,7 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@PutMapping("/create")
+	@PostMapping("/room")
 	public ResponseEntity<Integer> createChatRoom(@RequestParam String memberId) {
 		int r = chatService.createChatRoom(memberId);
 		return ResponseEntity.ok(r);
@@ -57,7 +55,7 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/getRoomId")
+	@GetMapping("/check/room")
 	public ResponseEntity<ChatRoomDTO> getRoomId(@RequestParam String memberId) {
 		ChatRoomDTO cr = chatService.getRoomId(memberId);
 		return ResponseEntity.ok(cr);
@@ -67,7 +65,7 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/list")
+	@GetMapping("/rooms")
 	public ResponseEntity<List> chatRoomList() {
 		List list = chatService.chatRoomList();
 		return ResponseEntity.ok(list);
@@ -77,7 +75,7 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/loadChatMessage")
+	@GetMapping("/room/admin/message")
 	public ResponseEntity<List> loadChatMessage(@RequestParam int chatRoomNo) {
 		List list = chatService.loadChatMessage(chatRoomNo);
 		return ResponseEntity.ok(list);
@@ -87,7 +85,7 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/loadChatMember")
+	@GetMapping("/room/member/message")
 	public ResponseEntity<List> loadChatMember(@RequestParam String memberId) {
 		List list = chatService.loadChatMember(memberId);
 		return ResponseEntity.ok(list);
@@ -97,7 +95,7 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@PatchMapping("/viewOk")
+	@PatchMapping("/view")
 	public ResponseEntity<Integer> viewOk(@RequestParam int roomNo, @RequestParam String chatMemberId) {
 		int result = chatService.viewOk(roomNo, chatMemberId);
 		return ResponseEntity.ok(result);
@@ -112,7 +110,6 @@ public class ChatController {
 		message.setChatRoomNo(roomNo);
 	    // 메시지 저장
 	    int result = chatService.inputChatMessage(message);
-	    
 	    messagingTemplate.convertAndSend("/topic/chat/messages/" + roomNo, message);
 	} 
 	
@@ -125,5 +122,4 @@ public class ChatController {
         messagingTemplate.convertAndSend("/queue/notifications", notificationMessage);
     }
 	
-
 }

@@ -198,8 +198,7 @@ const ChangePw = () => {
       return;
     }
     axios
-      .post(`${backServer}/member/check-pw`, {
-        memberId: loginMember.memberId,
+      .post(`${backServer}/member/${loginMember.memberId}/verify-password`, {
         memberPw: currentPw,
       })
       .then((res) => {
@@ -252,8 +251,7 @@ const ChangePw = () => {
       return;
     }
     axios
-      .patch(`${backServer}/member/change-pw`, {
-        memberId: loginMember.memberId,
+      .patch(`${backServer}/member/${loginMember.memberId}/password`, {
         memberPw: memberPw,
       })
       .then((res) => {

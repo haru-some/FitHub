@@ -18,7 +18,7 @@ const AdminAds = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getAdsList`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/ads`)
       .then((res) => {
         console.log(res);
         setAdsList(res.data);
@@ -34,7 +34,7 @@ const AdminAds = () => {
     formData.append("adsType", ads.adsType);
 
     axios
-      .post(`${process.env.REACT_APP_BACK_SERVER}/admin/writeAds`, formData, {
+      .post(`${process.env.REACT_APP_BACK_SERVER}/admin/ads`, formData, {
         headers: {
           contentType: "multipart/form-data",
           processData: false,
@@ -55,7 +55,7 @@ const AdminAds = () => {
 
   const deleteAds = (adsNo) => {
     axios
-      .delete(`${process.env.REACT_APP_BACK_SERVER}/admin/deleteAds/${adsNo}`)
+      .delete(`${process.env.REACT_APP_BACK_SERVER}/admin/ads/${adsNo}`)
       .then((res) => {
         alert("삭제되었습니다");
         setReload((prev) => !prev);

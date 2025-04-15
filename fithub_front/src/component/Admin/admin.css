@@ -59,7 +59,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin: auto;
-  width: 70%;
+  width: 90%;
   padding: 20px;
   box-sizing: border-box;
   margin-bottom: 20px;
@@ -86,8 +86,7 @@
 .admin-member-navi {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 20px 0;
 }
 
 .admin-member-navi .pagination {
@@ -137,7 +136,17 @@
   height: 40px;
 }
 .admin-section select {
-  background-color: var(--main1);
+  background-color: #222;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-section .warning-div,
+.admin-section .level-div {
+  border: 1px solid white;
+  width: 90%;
+  margin: 0 auto;
+  padding: 7px 0;
 }
 
 /*---------- AdminStat / 관리자 회원 활동, 매출 통계 관리 ----------*/
@@ -282,10 +291,11 @@
   display: none;
 }
 .chat-box .chat-content {
-  max-width: 400px;
+  max-width: 240px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  word-break: break-all;
 }
 .chat-id {
   margin-bottom: 5px;
@@ -322,10 +332,11 @@
   color: var(--main3);
 }
 .right-chat-line .chat-content {
-  max-width: 400px;
+  max-width: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  word-break: break-all;
 }
 .right-chat-line .chat-content .chat-text-box {
   display: flex;
@@ -372,10 +383,11 @@
   color: var(--main3);
 }
 .left-chat-line .chat-content {
-  max-width: 400px;
+  max-width: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  word-break: break-all;
 }
 .left-chat-line .chat-content .chat-text-box {
   display: flex;
@@ -385,7 +397,6 @@
   padding: 9px;
   border-radius: 10px;
   background-color: var(--main3);
-  text-align: end;
 }
 
 /*input box*/
@@ -506,12 +517,16 @@
   display: flex;
   justify-content: end;
   width: 20%;
+  border: 1px solid white;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 .ads-size-input-box > select {
   width: 100%;
-  border: 1px solid white;
-  border-radius: 5px;
-  margin-bottom: 15px;
+  border: none;
+
   cursor: pointer;
   background-color: #222;
 }

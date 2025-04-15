@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import PageNavigation from "../utils/PageNavigation";
 import { useNavigate } from "react-router-dom";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState } from "../utils/RecoilData";
 
 const AdminMember = () => {
@@ -68,11 +68,12 @@ const MemberListTBL = ({ tabChange }, props) => {
   const [memberList, setMemberList] = useState([]);
   const [memberPage, setMemberPage] = useState(1);
   const [memberPagNavi, setMemberPagNavi] = useState(null);
-  const memberInfo = useRecoilState(memberState);
+  const memberInfo = useRecoilValue(memberState);
+  const [updateData, setUpdateData] = useState(false);
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/memberList?memberPage=${memberPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/member?memberPage=${memberPage}`
       )
       .then((res) => {
         setMemberList(res.data.memberList);
@@ -107,6 +108,7 @@ const MemberListTBL = ({ tabChange }, props) => {
       )
       .then((res) => {
         console.log("업데이트 성공:", res.data);
+        setUpdateData((prev) => !prev);
       })
       .catch((err) => {
         console.error("업데이트 실패:", err);
@@ -115,16 +117,17 @@ const MemberListTBL = ({ tabChange }, props) => {
   const deleteMember = (memberNo) => {
     axios
       .delete(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberNo}`,
-        memberInfo.memberId
+        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberInfo.memberId}?memberNo=${memberNo}`
       )
       .then((res) => {
         console.log(res);
+        setUpdateData((prev) => !prev);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <div>
       <table className="admin-tbl">
@@ -163,27 +166,31 @@ const MemberListTBL = ({ tabChange }, props) => {
                   <td style={{ width: "20%" }}>{member.memberEmail}</td>
                   <td style={{ width: "15%" }}>{member.memberPhone}</td>
                   <td style={{ width: "10%" }}>
-                    <select
-                      className="warning-select"
-                      name="warningLevel"
-                      value={member.warningLevel}
-                      onChange={(e) => selectChange(e, index)}
-                    >
-                      <option value={1}>일반</option>
-                      <option value={2}>경고</option>
-                      <option value={3}>블랙</option>
-                    </select>
+                    <div className="warning-div">
+                      <select
+                        className="warning-select"
+                        name="warningLevel"
+                        value={member.warningLevel}
+                        onChange={(e) => selectChange(e, index)}
+                      >
+                        <option value={1}>일반</option>
+                        <option value={2}>경고</option>
+                        <option value={3}>블랙</option>
+                      </select>
+                    </div>
                   </td>
                   <td style={{ width: "10%" }}>
-                    <select
-                      className="type-select"
-                      name="memberLevel"
-                      value={member.memberLevel}
-                      onChange={(e) => selectChange(e, index)}
-                    >
-                      <option value={1}>관리자</option>
-                      <option value={2}>정회원</option>
-                    </select>
+                    <div className="level-div">
+                      <select
+                        className="type-select"
+                        name="memberLevel"
+                        value={member.memberLevel}
+                        onChange={(e) => selectChange(e, index)}
+                      >
+                        <option value={1}>관리자</option>
+                        <option value={2}>정회원</option>
+                      </select>
+                    </div>
                   </td>
                   <td
                     style={{ width: "5%" }}
@@ -219,7 +226,7 @@ const DelMemberListTBL = ({ tabChange }, props) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/delMemberList?delMemberPage=${delMemberPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/delMember?delMemberPage=${delMemberPage}`
       )
       .then((res) => {
         console.log(res);
@@ -284,7 +291,7 @@ const CommunityListTBL = ({ tabChange }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/communityList?communityPage=${communityPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/community?communityPage=${communityPage}`
       )
       .then((res) => {
         console.log(res);
@@ -359,7 +366,7 @@ const CommentListTBL = ({ tabChange }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/commentList?commentPage=${commentPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/comment?commentPage=${commentPage}`
       )
       .then((res) => {
         console.log(res.data.commentList);
@@ -391,6 +398,7 @@ const CommentListTBL = ({ tabChange }) => {
                     onClick={(e) => {
                       navigate(`/community/view/${comment.communityNo}`);
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     {comment.commentContent}
                   </td>
