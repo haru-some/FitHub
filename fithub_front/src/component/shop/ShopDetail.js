@@ -94,7 +94,7 @@ const ShopDetail = () => {
                       </td>
                     </tr>
                   ) : (
-                    "1행 안나옴"
+                    ""
                   )}
                   {infoArr.length > 2 ? (
                     <tr>
@@ -112,7 +112,7 @@ const ShopDetail = () => {
                       </td>
                     </tr>
                   ) : (
-                    "2행 안나옴"
+                    ""
                   )}
 
                   {infoArr.length > 4 ? (
@@ -131,7 +131,7 @@ const ShopDetail = () => {
                       </td>
                     </tr>
                   ) : (
-                    "3행 안나옴"
+                    ""
                   )}
                 </tbody>
               </table>

@@ -282,15 +282,25 @@
   color: #7c7c7c;
 }
 
+.myfit-wrap .write-box{
+  display: flex;
+  margin-bottom: 5px;
+}
+
 .myfit-wrap .write-box #chat-message {
+  box-sizing: border-box;
   width: 400px;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 6px 10px;
+  min-height: 20px;
   margin-right: 10px;
-  height: 32px;
   color: #fff;
   background-color: #505050;
   border: none;
   border-radius: 7px;
-  padding: 0px 10px;
+  resize: none;
+  overflow: auto;
 }
 .myfit-wrap .write-box .btn-primary {
   width: 80px;

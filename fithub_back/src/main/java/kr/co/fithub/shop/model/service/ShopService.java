@@ -167,14 +167,26 @@ public class ShopService {
 	}
 	@Transactional
 	public int modifygoods(Goods goods,HashMap<String, String> map, List<GoodsFile> goodsFileList) {
-		System.out.println(goods);
+		
+		
+		
 		String goodsInfo = "";
 		for(Map.Entry<String,String> entry : map.entrySet()) {
 			goodsInfo += "&"+entry.getKey() + "=" + entry.getValue();
 		}
-		goodsInfo = goodsInfo.substring(1, goodsInfo.length());
-		
+		goodsInfo = goodsInfo.substring(1, goodsInfo.length());		
 		goods.setGoodsInfo(goodsInfo);
+		
+		if(goods.getGoodsImage() ==null) {
+			String existingImage = shopDao.getGoodsImage(goods.getGoodsNo());
+			goods.setGoodsImage(existingImage);
+		}
+		if(goods.getGoodsDetailImg() ==null) {
+			String existingDetailImg = shopDao.getGoodsDetailImg(goods.getGoodsNo());
+			goods.setGoodsDetailImg(existingDetailImg);
+		}
+		
+		
 		int result = shopDao.modifyGoods(goods);
 		System.out.println(goods);
 		
