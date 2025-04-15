@@ -165,6 +165,7 @@ const MyFitMain = () => {
     setLogoutST(false);
   } else {
     if (!member) {
+      navigate("/");
       Swal.fire({
         title: "로그인 필요",
         text: "로그인이 필요한 서비스입니다.",
@@ -180,6 +181,12 @@ const MyFitMain = () => {
   }
 
   const [list, setList] = useState([]);
+
+  useEffect(() => {
+    if (!member) {
+      navigate("/");
+    }
+  }, []);
 
   if (!member) return null;
   return (

@@ -329,20 +329,25 @@ public class MemberController {
 	}
 	
 	@Operation(
-	    summary = "비밀번호 찾기",
-	    description = "회원 ID와 이메일을 입력받아 임시 비밀번호를 전송합니다.",
-	    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-	        description = "비밀번호 찾기 요청 바디 (회원 ID, 이메일)",
-	        required = true,
-	        content = @Content(schema = @Schema(implementation = MemberDTO.class))
-	    )
-	)
+		    summary = "비밀번호 찾기",
+		    description = "회원 ID와 이메일을 입력받아 임시 비밀번호를 전송합니다.",
+		    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+		        description = "비밀번호 찾기 요청 바디 (회원 ID, 이메일)",
+		        required = true,
+		        content = @Content(schema = @Schema(implementation = MemberDTO.class))
+		    )
+		)
 	@ApiResponses({
-	    @ApiResponse(responseCode = "200", description = "임시 비밀번호 전송 성공"),
-	    @ApiResponse(responseCode = "404", description = "일치하는 회원 없음",
+	    @ApiResponse(responseCode = "200", description = "임시 비밀번호 전송 성공",
 	        content = @Content(
 	            mediaType = "text/plain",
-	            examples = @ExampleObject(value = "일치하는 회원이 없습니다.")
+	            examples = @ExampleObject(value = "임시 비밀번호가 전송되었습니다.")
+	        )
+	    ),
+	    @ApiResponse(responseCode = "404", description = "일치하는 회원 없음 또는 소셜 회원 비밀번호 찾기 불가",
+	        content = @Content(
+	            mediaType = "text/plain",
+	            examples = @ExampleObject(value = "일치하는 회원이 없습니다.\n또는 소셜 회원은 비밀번호 찾기가 불가능합니다.")
 	        )
 	    )
 	})
@@ -350,6 +355,14 @@ public class MemberController {
 	public ResponseEntity<String> findPw(@RequestBody MemberDTO member) {
 	    String memberId = member.getMemberId();
 	    String memberEmail = member.getMemberEmail();
+	    String memberLoginType = memberService.selectLoginType(memberId);
+	    if (memberLoginType == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("일치하는 회원이 없습니다.");
+	    }
+	    if ("google".equalsIgnoreCase(memberLoginType) || "kakao".equalsIgnoreCase(memberLoginType)) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("소셜 회원은 비밀번호 찾기가 불가능합니다.");
+	    }
+
 	    boolean result = memberService.sendTempPasswordByIdAndEmail(memberId, memberEmail);
 	    if (result) {
 	        return ResponseEntity.ok("임시 비밀번호가 전송되었습니다.");

@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import dayjs from "dayjs";
 
 const CommunityView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -82,7 +83,10 @@ const CommunityView = () => {
       )
       .then((res) => {
         community.commentList.unshift(res.data);
-        setCommunity({ ...community });
+        setCommunity({
+          ...community,
+          commentCount: community.commentCount + 1,
+        });
         setNewComment("");
       });
   };
@@ -428,7 +432,7 @@ const Comment = (props) => {
   const navigate = useNavigate();
   const comment = props.comment;
   const member = props.member;
-
+  console.log(comment);
   const [updateComment, setUpdateComment] = useState("");
   useEffect(() => {
     setUpdateComment(comment.commentContent);
@@ -495,6 +499,25 @@ const Comment = (props) => {
         }
       });
   };
+  const formatTimeAgo = (timeString) => {
+    const now = dayjs();
+    const past = dayjs(timeString);
+
+    const diffInSeconds = now.diff(past, "second");
+    const diffInMinutes = now.diff(past, "minute");
+    const diffInHours = now.diff(past, "hour");
+    const diffInDays = now.diff(past, "day");
+
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds}초 전`;
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes}분 전`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours}시간 전`;
+    } else {
+      return `${diffInDays}일 전`;
+    }
+  };
 
   return (
     <li className="comment-list">
@@ -518,8 +541,12 @@ const Comment = (props) => {
               navigate(`/myfit/activity/${comment.memberNo}`);
             }}
           >
-            {comment.memberId}
+            <span>{comment.memberId}</span>
+            <span style={{ marginLeft: "10px" }}>
+              {formatTimeAgo(comment.commentDate)}
+            </span>
           </p>
+
           {member && member.memberNo === comment.memberNo && (
             <div className="comment-sub-btn">
               <IconButton
