@@ -7,6 +7,9 @@ import { memberState, isLoginState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
 import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
 
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+
 const ShopOrder = () => {
   const [orders, setOrders] = useState([]);
   const [shippingData, setShippingData] = useState(null); // 배송 데이터 상태
@@ -16,6 +19,33 @@ const ShopOrder = () => {
   const isLogin = useRecoilValue(isLoginState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5;
+
+  // 현재 페이지에 표시될 주문 계산
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  // 페이지 변경 핸들러
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(orders.length / ordersPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
   useEffect(() => {
     // 구매한 상품 가져오기
     axios
@@ -50,7 +80,7 @@ const ShopOrder = () => {
     <div className="order-list-wrap">
       <h2>주문/배송 리스트</h2>
 
-      {orders.map((order) => (
+      {currentOrders.map((order) => (
         <div className="order-item" key={order.sellNo}>
           <div className="item-details">
             <h3>{order.goodsName}</h3>
@@ -63,6 +93,27 @@ const ShopOrder = () => {
           </div>
         </div>
       ))}
+      <div className="pagination-controls">
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          <NavigateBeforeIcon />
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => goToPage(index + 1)}
+            disabled={currentPage === index + 1}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === Math.ceil(orders.length / ordersPerPage)}
+        >
+          <NavigateNextIcon />
+        </button>
+      </div>
       <ShippingModal
         isOpen={isModalOpen}
         onClose={closeModal}
