@@ -100,27 +100,31 @@
 }
 
 .myfit-follow-wrap .name {
+  max-width: 250px;
+  overflow: hidden;
   font-weight: bold;
   font-size: 16px;
   line-height: 19px;
 }
 
 .myfit-follow-wrap .username {
+  max-width: 120px;
+  overflow: hidden;
   font-size: 14px;
   color: #aaa;
   line-height: 19px;
 }
 
-.myfit-follow-wrap .chat-btn{
+.myfit-follow-wrap .chat-btn {
   margin-left: 20px;
   color: #aaa;
 }
-.myfit-follow-wrap .chat-btn:hover{
+.myfit-follow-wrap .chat-btn:hover {
   color: #fff;
 }
 
-
 .myfit-follow-wrap .follow-button {
+  width: 59px;
   height: 30px;
   background-color: #007bff;
   color: white;

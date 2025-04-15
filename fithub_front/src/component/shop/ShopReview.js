@@ -7,6 +7,12 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import "./shopDetail.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PageNavigation from "../utils/PageNavigation";
+import ClearIcon from "@mui/icons-material/Clear";
+import Swal from "sweetalert2";
+
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo, goodsName }) => {
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -104,8 +110,58 @@ const ShopReview = () => {
   const [goodsNo, setGoodsNo] = useState(null);
   const [goodsName, setGoodsName] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = sell.slice(indexOfFirstReview, indexOfLastReview);
+
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(sell.length / reviewsPerPage);
+
+  // 페이지 번호 배열 생성
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  // 페이지 변경을 위한 함수
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   const recordReview = (newReview) => {
     setReviews([...reviews, newReview]); // 새로운 리뷰 추가
+  };
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(sell.length / reviewsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const reviewDelete = (reNo) => {
+    Swal.fire({
+      title: "삭제하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#45a049",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "예, 삭제합니다!",
+      cancelButtonText: "아니요, 취소합니다.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${backServer}/goods/myReview/delete/${reNo}`)
+          .then((res) => {
+            console.log(res);
+            // 성공적으로 삭제된 후 상태 업데이트
+            setReview(review.filter((review) => review.reNo !== reNo));
+          });
+      }
+    });
   };
 
   useEffect(() => {
@@ -137,11 +193,14 @@ const ShopReview = () => {
     switch (activeTab) {
       case "작성가능한 리뷰":
         return (
-          <div>
+          <div className="before-review-wrap">
             <h2>작성 가능한 리뷰</h2>
-            {sell && sell.length > 0 ? (
-              sell.map((item, index) => (
-                <div className="review-item" key={"sell-" + index}>
+            {currentReviews && currentReviews.length > 0 ? (
+              currentReviews.map((item, index) => (
+                <div
+                  className="review-item"
+                  key={`sell-${indexOfFirstReview + index}`}
+                >
                   <div className="product-info">
                     <div>상품명: {item.goodsName}</div>
                     <div>상품번호 :{item.sellNo}</div>
@@ -166,6 +225,29 @@ const ShopReview = () => {
             ) : (
               <p>구매한 상품이 없습니다.</p>
             )}
+            <div className="pagination-controls">
+              <button onClick={handlePrevPage} disabled={currentPage === 1}>
+                <NavigateBeforeIcon />
+              </button>
+              {pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => goToPage(number)}
+                  disabled={currentPage === number}
+                  className={currentPage === number ? "active" : ""}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={handleNextPage}
+                disabled={
+                  currentPage === Math.ceil(sell.length / reviewsPerPage)
+                }
+              >
+                <NavigateNextIcon />
+              </button>
+            </div>
           </div>
         );
       case "내가 작성한 리뷰":
@@ -196,6 +278,17 @@ const ShopReview = () => {
                         ))}
                       </div>
                       <div className="review-date">{review.reDate}</div>
+                      <div>
+                        <button
+                          className="delete-review"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            reviewDelete(review.reNo);
+                          }}
+                        >
+                          <ClearIcon />
+                        </button>
+                      </div>
                     </div>
                     <div>{review.reContent}</div>
                   </li>

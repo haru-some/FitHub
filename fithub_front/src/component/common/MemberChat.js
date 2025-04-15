@@ -1,31 +1,53 @@
 import { useState, useEffect, useRef } from "react";
-import { useRecoilValue } from "recoil";
-import { memberState } from "../utils/RecoilData";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { logoutState, memberState } from "../utils/RecoilData";
 import "./chat.css";
 import axios from "axios";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const MemberChat = () => {
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
-  const memberInfo = useRecoilValue(memberState); // 현재 로그인한 회원 정보 가져오기
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const navigate = useNavigate();
   const [stompClient, setStompClient] = useState(null);
   const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.34:9999
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
   const socket = new SockJS(`${backServer}/inMessage`);
   const [roomNo, setRoomNo] = useState(null);
   const [newRoom, setNewRoom] = useState(null);
+  const [visitRoom, setVisitRoom] = useState(false);
+
+  if (logoutST) {
+    navigate("/");
+    setLogoutST(false);
+  } else {
+    if (!memberInfo) {
+      Swal.fire({
+        title: "로그인 필요",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "확인",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    }
+  }
 
   useEffect(() => {
     // 기존 채팅 기록 불러오기
-    console.log(memberInfo.memberId);
     axios
       .get(`${backServer}/chat/getRoomId?memberId=${memberInfo.memberId}`)
       .then((res) => {
-        console.log(res.data.chatRoomNo);
         if (res.data.chatRoomNo !== null) {
           setRoomNo(res.data.chatRoomNo);
         }
@@ -44,20 +66,7 @@ const MemberChat = () => {
       .catch((err) => {
         console.log(err);
       });
-
-    if (roomNo !== null) {
-      axios
-        .patch(
-          `${backServer}/chat/viewOk?roomNo=${roomNo}&chatMemberId=${memberInfo.memberId}`
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+  }, [visitRoom]);
 
   useEffect(() => {
     // WebSocket 연결
@@ -65,9 +74,14 @@ const MemberChat = () => {
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
-      connectHeaders: {
-        Authorization: memberInfo.memberNo,
-      },
+
+      // connectHeaders: {
+      //   // 기존 Authorization 외에 memberId, roomId를 추가
+      //   Authorization: memberInfo.memberNo,
+      //   memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
+      //   roomId: roomNo, // 현재 입장한 채팅방 ID
+      // },
+
       onConnect: () => {
         console.log("Connected to WebSocket");
 
@@ -75,13 +89,17 @@ const MemberChat = () => {
         client.subscribe(`/topic/chat/messages/${roomNo}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+          console.log(messages);
         });
       },
-      onDisconnect: () => console.log("Disconnected from WebSocket"),
+      onDisconnect: () => {
+        console.log("Disconnected from WebSocket");
+      },
     });
 
     client.activate();
     setStompClient(client);
+
     return () => {
       client.deactivate();
     };
@@ -89,25 +107,26 @@ const MemberChat = () => {
 
   const sendMessage = () => {
     const date = new Date();
+    const pad = (n) => (n < 10 ? "0" + n : n);
     const today =
       date.getFullYear() +
       "-" +
-      date.getMonth() +
+      pad(date.getMonth() + 1) +
       "-" +
-      date.getDate() +
-      "-" +
-      date.getHours() +
-      "-" +
-      date.getMinutes() +
-      "-" +
-      date.getSeconds();
+      pad(date.getDate()) +
+      " " +
+      pad(date.getHours()) +
+      ":" +
+      pad(date.getMinutes()) +
+      ":" +
+      pad(date.getSeconds());
     if (stompClient && chatInput.trim() !== "") {
       const chatMessage = {
         chatMemberId: memberInfo.memberId,
         messageContent: chatInput,
         memberLevel: memberInfo.memberLevel,
         messageDate: today,
-        isRead: 2,
+        isRead: 1,
         memberThumb: memberInfo.memberThumb,
       };
       stompClient.publish({
@@ -160,12 +179,12 @@ const MemberChat = () => {
               <div
                 key={index}
                 className={
-                  msg.chatMemberId !== memberInfo.memberId // 관리자 여부를 member_level로 판단
+                  memberInfo && msg.chatMemberId !== memberInfo.memberId
                     ? "right-chat-line"
                     : "left-chat-line"
                 }
               >
-                {memberInfo.memberId !== msg.chatMemberId ? (
+                {memberInfo && memberInfo.memberId !== msg.chatMemberId ? (
                   <>
                     <div className="right-chat-profile">
                       <img
@@ -188,7 +207,7 @@ const MemberChat = () => {
                   <>
                     <div className="chat-content">
                       <div className="chat-id">
-                        {msg.isRead === 1 ? <VisibilityOffIcon /> : ""}
+                        {/* {msg.isRead === 1 ? <VisibilityOffIcon /> : ""} */}
                         {msg.messageDate
                           ?.split(" ")[1]
                           ?.split(":")

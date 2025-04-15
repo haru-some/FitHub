@@ -53,7 +53,7 @@ const ShopCart = () => {
     });
   };
 
-  const handleDeleteItem = (cartNo) => {
+  const DeleteCart = (cartNo) => {
     axios
       .post(`${backServer}/goods/cart/delete`, { cartNos: [cartNo] })
       .then((res) => {
@@ -92,41 +92,101 @@ const ShopCart = () => {
           .reduce((acc, item) => acc + item.goodsPrice * item.goodsEa, 0)
       : cart.reduce((acc, item) => acc + item.goodsPrice * item.goodsEa, 0);
 
-  // 결제하기 버튼 클릭 시 호출되는 함수
-  const handlePayAll = () => {
-    if (selectedItems.length === 0) {
-      alert("결제할 항목을 선택하세요.");
-      return;
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////결제
-    // 결제 요청 데이터 준비
-    const itemsToPurchase = cart.filter((item) =>
-      selectedItems.includes(item.cartNo)
-    );
+  // 결제하기 버튼 클릭 시
+  const handlePayAll = () => {};
+  //   if (selectedItems.length === 0) {
+  //     alert("결제할 항목을 선택하세요.");
+  //     return;
+  //   }
+  //   //////////////////////////////////////////////////////////////결제
+  //   // 결제 요청 데이터
+  //   const itemsToPurchase = cart.filter((item) =>
+  //     selectedItems.includes(item.cartNo)
+  //   );
+  //   const paymentData = {
+  //     memberNo: memberInfo.memberNo,
+  //     items: itemsToPurchase.map((item) => ({
+  //       goodsNo: item.goodsNo,
+  //       goodsName: item.goodsName,
+  //       goodsPrice: item.goodsPrice,
+  //       goodsEa: item.goodsEa,
+  //       goodsTotalPrice:
+  //         item.goodsPrice * item.goodsEa +
+  //         (item.goodsPrice * item.goodsEa >= 30000 ? 0 : 3000), // 배송비 조건
+  //     })),
+  //     totalPrice: totalAmount, // 전체 결제 금액
+  //   };
+  //   const IMP = window.IMP; // iamport
+  //   if (!IMP) {
+  //     alert("Iamport 라이브러리가 로드되지 않았습니다.");
+  //     return;
+  //   }
+  //   IMP.request_pay(
+  //     {
+  //       channelKey: "channel-key-d2893ebf-5998-4ab3-93e2-1847d2f13c8b", // 실제 채널 키로 변경
+  //       pay_method: "card",
+  //       merchant_uid: "order_no_" + Date.now(), // 고유 주문 번호
+  //       name: `주문: ${itemsToPurchase
+  //         .map((item) => item.goodsName)
+  //         .join(", ")}`, // 주문 상품명
+  //       amount: paymentData.totalPrice, // 결제 금액
+  //       buyer_email: "test@portone.io",
+  //       buyer_name: formData.takerName,
+  //       buyer_tel: formData.takerPhone,
+  //       buyer_addr: formData.takerAddr,
+  //       buyer_postcode: "120-120", // 필요시 수정
+  //     },
+  //     (rsp) => {
+  //       if (rsp.success) {
+  //         console.log("Payment Success:", rsp);
 
-    console.log("go자바!!");
-    console.log(itemsToPurchase);
-    axios
-      .post(`${backServer}/goods/sell/payAll/`, itemsToPurchase)
-      .then((res) => {
-        // 결제 성공 시 행동 (예: 결제 완료 페이지로 이동)
-        Swal.fire({
-          title: "결제 성공!",
-          text: "감사합니다. 결제가 완료되었습니다.",
-          icon: "success",
-        }).then(() => {
-          navigate(`/shop/cart/`); // 결제 완료 후 정보 페이지로 이동
-        });
-      })
-      .catch((err) => {
-        console.error("Error during checkout:", err);
-        Swal.fire({
-          title: "결제 실패",
-          text: "결제 중 오류가 발생했습니다. 다시 시도해주세요.",
-          icon: "error",
-        });
-      });
-  };
+  //         axios
+  //           .post(`${backServer}/goods/sell/payAll/`, itemsToPurchase)
+
+  //           .then((res) => {
+  //             Swal.fire({
+  //               title: "결제 성공!",
+  //               text: "감사합니다. 결제가 완료되었습니다.",
+  //               icon: "success",
+  //             }).then(() => {
+  //               navigate(`/shop/cart/`); // 결제 완료 후 정보 페이지로 이동
+  //             });
+  //           })
+  //           .catch((err) => {
+  //             console.error("Error during checkout:", err);
+  //             Swal.fire({
+  //               title: "결제 실패",
+  //               text: "결제 중 오류가 발생했습니다. 다시 시도해주세요.",
+  //               icon: "error",
+  //             });
+  //           });
+  //       } else {
+  //         console.log("Payment Failed:", rsp);
+  //       }
+  //     }
+  //   );
+  // };
+
+  // axios
+  //   .post(`${backServer}/goods/sell/payAll/`, itemsToPurchase)
+
+  //   .then((res) => {
+  //     Swal.fire({
+  //       title: "결제 성공!",
+  //       text: "감사합니다. 결제가 완료되었습니다.",
+  //       icon: "success",
+  //     }).then(() => {
+  //       navigate(`/shop/cart/`); // 결제 완료 후 정보 페이지로 이동
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.error("Error during checkout:", err);
+  //     Swal.fire({
+  //       title: "결제 실패",
+  //       text: "결제 중 오류가 발생했습니다. 다시 시도해주세요.",
+  //       icon: "error",
+  //     });
+  //   });
 
   return (
     <div className="cart-wrap">
@@ -184,7 +244,7 @@ const ShopCart = () => {
                       className="delete-button-item"
                       onClick={(e) => {
                         e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
-                        handleDeleteItem(item.cartNo);
+                        DeleteCart(item.cartNo);
                         cartDelete(item.cartNo);
                       }}
                     >

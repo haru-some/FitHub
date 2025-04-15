@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Swal from "sweetalert2";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { data, Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
 import { Category } from "@mui/icons-material";
@@ -43,10 +43,12 @@ const ShopModify = () => {
   const imageRef = useRef(null);
   const imageDetailRef = useRef(null);
   const [goodsImage, setGoodsImage] = useState(null); //상품이미지
-  const { goodsImg, setGoodsImg } = useState("");
-  const { detailImg, setDetailImg } = useState();
   const [goodsCategory, setGoodsCategory] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageDetail, setSelectedImageDetail] = useState(null);
+  const [existingGoodsImage, setExistingGoodsImage] = useState("");
+  const [existingGoodsDetailImg, setExistingGoodsDetailImg] = useState("");
+  const [infoArr, setInfoArr] = useState([]);
 
   const submit = () => {
     /////////////////////////////////////////FORM////////////////////////////////////////////
@@ -58,41 +60,25 @@ const ShopModify = () => {
     form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
 
-    if (goodsImage) {
-      form.append("goodsImg", goodsImage);
-    }
-    if (goodsDetailImg) {
-      form.append("detailImg", goodsDetailImg);
-    }
-
-    if (goodsInfo1) {
-      form.append("goodsInfo1", goodsInfo1);
-      form.append("goodsDetail1", goodsDetail1);
-    }
-    if (goodsInfo2) {
-      form.append("goodsInfo2", goodsInfo2);
-      form.append("goodsDetail2", goodsDetail2);
-    }
-    if (goodsInfo3) {
-      form.append("goodsInfo3", goodsInfo3);
-      form.append("goodsDetail3", goodsDetail3);
-    }
-    if (goodsInfo4) {
-      form.append("goodsInfo4", goodsInfo4);
-      form.append("goodsDetail4", goodsDetail4);
-    }
-    if (goodsInfo5) {
-      form.append("goodsInfo5", goodsInfo5);
-      form.append("goodsDetail5", goodsDetail5);
-    }
-    if (goodsInfo6) {
-      form.append("goodsInfo6", goodsInfo6);
-      form.append("goodsDetail6", goodsDetail6);
-    }
-
-    console.log("ㄱㄱ");
+    console.log("이미지가 살아있나..");
     console.log(goodsImage);
     console.log(goodsDetailImg);
+
+    form.append("goodsImg", goodsImage);
+    form.append("detailImg", goodsDetailImg);
+
+    console.log(form);
+
+    const obj = {};
+    if (goodsInfo1?.trim()) obj[goodsInfo1] = goodsDetail1;
+    if (goodsInfo2?.trim()) obj[goodsInfo2] = goodsDetail2;
+    if (goodsInfo3?.trim()) obj[goodsInfo3] = goodsDetail3;
+    if (goodsInfo4?.trim()) obj[goodsInfo4] = goodsDetail4;
+    if (goodsInfo5?.trim()) obj[goodsInfo5] = goodsDetail5;
+    if (goodsInfo6?.trim()) obj[goodsInfo6] = goodsDetail6;
+
+    form.append("goodsInfos", JSON.stringify(obj));
+
     axios
       .patch(`${backServer}/goods`, form, {
         headers: {
@@ -104,11 +90,11 @@ const ShopModify = () => {
         console.log(res);
         Swal.fire({
           icon: "success",
-          title: "상품이 등록되었습니다!",
+          title: "상품이 수정되었습니다!",
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/admin");
+        navigate("/shop/*");
       })
       .catch((err) => {
         console.error("상품 등록 실패:", err);
@@ -136,7 +122,7 @@ const ShopModify = () => {
                           type="text"
                           value={goodsInfo1}
                           onChange={(e) => setGoodsInfo1(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="표기정보 (속성)"
                         />
                       </div>
                     </th>
@@ -156,7 +142,7 @@ const ShopModify = () => {
                           type="text"
                           value={goodsInfo2}
                           onChange={(e) => setGoodsInfo2(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="표기정보 (속성)"
                         />
                       </div>
                     </th>
@@ -171,6 +157,7 @@ const ShopModify = () => {
                       </div>
                     </td>
                   </tr>
+
                   <tr>
                     <th style={{ width: "25%" }}>
                       <div className="input-item">
@@ -178,7 +165,7 @@ const ShopModify = () => {
                           type="text"
                           value={goodsInfo3}
                           onChange={(e) => setGoodsInfo3(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="표기정보 (속성)"
                         />
                       </div>
                     </th>
@@ -198,7 +185,7 @@ const ShopModify = () => {
                           type="text"
                           value={goodsInfo4}
                           onChange={(e) => setGoodsInfo4(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="표기정보 (속성)"
                         />
                       </div>
                     </th>
@@ -220,7 +207,7 @@ const ShopModify = () => {
                           type="text"
                           value={goodsInfo5}
                           onChange={(e) => setGoodsInfo5(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="표기정보 (속성)"
                         />
                       </div>
                     </th>
@@ -240,7 +227,7 @@ const ShopModify = () => {
                           type="text"
                           value={goodsInfo6}
                           onChange={(e) => setGoodsInfo6(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="표기정보 (속성)"
                         />
                       </div>
                     </th>
@@ -263,16 +250,12 @@ const ShopModify = () => {
               onClick={() => imageDetailRef.current.click()}
               style={{ cursor: "pointer" }}
             >
-              {goodsDetailImg ? (
+              {selectedImageDetail ? (
+                <img src={selectedImageDetail} />
+              ) : goods.goodsDetailImg ? (
                 <img
-                  src={
-                    goods.goodsDetailImg
-                      ? `${backServer}/shop/detail/${goods.goodsDetailImg}`
-                      : "" // 기본 이미지 처리
-                  }
+                  src={`${backServer}/shop/detail/${goods.goodsDetailImg}`}
                 />
-              ) : showDetailImage ? (
-                <img src={showDetailImage} alt="미리보기" />
               ) : (
                 <img src="/image/befor-detail-img.png" alt="기본 썸네일" />
               )}
@@ -288,11 +271,11 @@ const ShopModify = () => {
         );
 
       case "리뷰":
-        return <div>(예시)리뷰 정보 탭입니다.</div>;
+        return <div>리뷰 정보 탭입니다.</div>;
       case "배송/결제":
-        return <div>(예시)배송 정보 탭입니다.</div>;
+        return <div>배송 정보 탭입니다.</div>;
       case "반품/교환":
-        return <div>(예시)반품 정보 탭입니다.</div>;
+        return <div>반품 정보 탭입니다.</div>;
       default:
         return null;
     }
@@ -316,12 +299,13 @@ const ShopModify = () => {
     });
   };
   const handleImageClick = () => {
-    imageRef.current.click(); // 파일 선택기 클릭
+    imageRef.current.click();
   };
-
+  ////////////////////////////////////////////////////////////////      CHANGE IMAGE      ////////////////
   const changeImage = (e) => {
     const files = e.target.files;
     if (files.length !== 0) {
+      setExistingGoodsImage(files[0]);
       setGoodsImage(files[0]); // 썸네일 파일 상태 설정
 
       // 화면 미리보기 설정
@@ -334,8 +318,10 @@ const ShopModify = () => {
     } else {
       setGoodsImage(null);
       setShowImage(null);
-      setSelectedImage(null); // 초기화
+      setSelectedImage(null);
+      setExistingGoodsImage(null);
     }
+    console.log(goodsDetailImg);
   };
 
   const changeDeImg = (e) => {
@@ -348,11 +334,14 @@ const ShopModify = () => {
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         setShowDetailImage(reader.result); // 미리보기 상태 설정
+        setSelectedImageDetail(reader.result);
       };
     } else {
       setGoodsDetailImg(null);
       setShowDetailImage(null);
+      setSelectedImageDetail(null);
     }
+    console.log(goodsImage);
   };
 
   useEffect(() => {
@@ -360,34 +349,44 @@ const ShopModify = () => {
       .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
         const data = res.data;
+
         setGoods(data);
+
+        setExistingGoodsImage(data.goodsImage); // 기존 상품 이미지 URL 설정
+        setExistingGoodsDetailImg(data.goodsDetailImg); // 기존 상세 이미지 URL 설정
+
+        const infoArray = data.goodsInfo.split("&");
+        setInfoArr(infoArray);
 
         setGoodsName(data.goodsName);
         setGoodsPrice(data.goodsPrice);
         setGoodsExplain(data.goodsExplain);
         setGoodsStock(data.goodsStock);
         setGoodsCategory(data.goodsCategory);
-        setGoodsInfo1(data.goodsInfo1);
-        setGoodsInfo2(data.goodsInfo2);
-        setGoodsInfo3(data.goodsInfo3);
-        setGoodsInfo4(data.goodsInfo4);
-        setGoodsInfo5(data.goodsInfo5);
-        setGoodsInfo6(data.goodsInfo6);
-        setGoodsDetail1(data.goodsDetail1);
-        setGoodsDetail2(data.goodsDetail2);
-        setGoodsDetail3(data.goodsDetail3);
-        setGoodsDetail4(data.goodsDetail4);
-        setGoodsDetail5(data.goodsDetail5);
-        setGoodsDetail6(data.goodsDetail6);
+        setGoodsInfo1(infoArray[0] ? infoArray[0].split("=")[0] : "");
+        setGoodsInfo2(infoArray[1] ? infoArray[1].split("=")[0] : "");
+        setGoodsInfo3(infoArray[2] ? infoArray[2].split("=")[0] : "");
+        setGoodsInfo4(infoArray[3] ? infoArray[3].split("=")[0] : "");
+        setGoodsInfo5(infoArray[4] ? infoArray[4].split("=")[0] : "");
+        setGoodsInfo6(infoArray[5] ? infoArray[5].split("=")[0] : "");
+        setGoodsDetail1(infoArray[0] ? infoArray[0].split("=")[1] : "");
+        setGoodsDetail2(infoArray[1] ? infoArray[1].split("=")[1] : "");
+        setGoodsDetail3(infoArray[2] ? infoArray[2].split("=")[1] : "");
+        setGoodsDetail4(infoArray[3] ? infoArray[3].split("=")[1] : "");
+        setGoodsDetail5(infoArray[4] ? infoArray[4].split("=")[1] : "");
+        setGoodsDetail6(infoArray[5] ? infoArray[5].split("=")[1] : "");
         setGoodsImage(data.goodsImage);
         setGoodsDetailImg(data.goodsDetailImg);
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [goodsNo, backServer, activeTab]);
-  console.log(goods.goodsImage);
+
+  console.log(goodsImage);
+  console.log("여기");
+  console.log(existingGoodsImage);
+
   return (
     <div className="shop-detail-frm-wrap">
       <div className="main-detail">
@@ -397,7 +396,7 @@ const ShopModify = () => {
             onClick={handleImageClick} // 클릭 시파일 선택기 실행
             style={{ cursor: "pointer" }}
           >
-            {selectedImage ? ( // selectedImage가 존재하면 미리보기 이미지 표시
+            {selectedImage ? (
               <img src={selectedImage} alt="미리보기" />
             ) : goods.goodsImage ? ( // 기본 이미지 표시
               <img

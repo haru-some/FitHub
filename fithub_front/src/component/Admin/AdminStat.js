@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsiveLine } from "@nivo/line";
-import { ResponsiveCalendar } from "@nivo/calendar";
 import axios from "axios";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // 메인 대시보드
 const AdminStat = () => {
@@ -61,19 +59,23 @@ const AdminStat = () => {
   return (
     <section className="admin-stat-section">
       <div className="admin-member-tab">
-        <div
-          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
-          id="member"
-          onClick={changeTab}
-        >
-          회원 활동 통계
+        <div className="tab-div">
+          <div
+            className={tabChange === 1 ? "page-title active-tab" : "page-title"}
+            id="member"
+            onClick={changeTab}
+          >
+            회원 활동 통계
+          </div>
         </div>
-        <div
-          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
-          id="board"
-          onClick={changeTab}
-        >
-          상품 통계
+        <div className="tab-div">
+          <div
+            className={tabChange === 2 ? "page-title active-tab" : "page-title"}
+            id="board"
+            onClick={changeTab}
+          >
+            상품 통계
+          </div>
         </div>
       </div>
       <div className="admin-stat-tab-content">
@@ -196,8 +198,8 @@ const MemberStatChart = () => {
   useEffect(() => {
     if (chartData?.metricHeaders?.length) {
       setType([
-        chartData.metricHeaders[0].name,
-        chartData.metricHeaders[1].name,
+        chartData.metricHeaders[0].name && "당일 방문자",
+        chartData.metricHeaders[1].name && "재 방문자",
       ]);
     }
   }, [chartData]);
@@ -208,16 +210,13 @@ const MemberStatChart = () => {
     setActiveIndex(click);
     switch (click) {
       case 0:
-        setType([
-          chartData.metricHeaders[0].name,
-          chartData.metricHeaders[1].name,
-        ]);
+        setType(["당일 방문자", "재 방문자"]);
         break;
       case 1:
-        setType([chartData.metricHeaders[0].name]);
+        setType(["당일 방문자"]);
         break;
       case 2:
-        setType([chartData.metricHeaders[1].name]);
+        setType(["재 방문자"]);
         break;
     }
   };
@@ -252,16 +251,18 @@ const MemberStatChart = () => {
       <div>
         <div>회원 이용 통계</div>
         <div className="chart-div" style={{ height: "400px" }}>
-          <MyResponsiveLine
-            lineChartData={lineChartData}
-            setLineChartData={setLineChartData}
-          />
+          {lineChartData && setLineChartData && (
+            <MyResponsiveLine
+              lineChartData={lineChartData}
+              setLineChartData={setLineChartData}
+            />
+          )}
         </div>
       </div>
       <div>
         <div>회원 수</div>
         <div className="chart-div" style={{ height: "300px" }}>
-          <MyResponsivePie pieChartData={pieChartData} />
+          {pieChartData && <MyResponsivePie pieChartData={pieChartData} />}
         </div>
       </div>
     </div>
@@ -343,7 +344,9 @@ const SalesStatChart = () => {
       });
   }, []);
   const totalCount = totalSell.reduce((acc, cur) => acc + cur.value, 0);
-
+  const [daySales, setDaySales] = useState([]);
+  const [type, setType] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   /*------------------------------------ 절대 건들지마 ------------------*/
   useEffect(() => {
     axios
@@ -353,10 +356,9 @@ const SalesStatChart = () => {
         setWeekPrice(
           res.data.map((item) => ({
             country: item.saleDate,
-            "주간 매출": item.totalWeekPrice,
+            "일 매출": item.totalDayPrice,
           }))
         );
-        setType(["주간 매출", "월간 매출"]);
       })
       .catch((err) => {
         console.log(err);
@@ -369,11 +371,10 @@ const SalesStatChart = () => {
       .then((res) => {
         setMonthPrice(
           res.data.map((item) => ({
-            country: item.saleDate,
-            "월간 매출": item.totalMonthPrice,
+            country: item.weekNo + "주차",
+            "주간 매출": item.totalWeekPrice,
           }))
         );
-        setType(["주간 매출", "월간 매출"]);
       })
       .catch((err) => {
         console.log(err);
@@ -384,12 +385,10 @@ const SalesStatChart = () => {
     // 초기값으로 주간 매출 세팅
     if (weekPrice.length > 0) {
       setDaySales(weekPrice);
+      setType(["일 매출", "주간 매출"]);
     }
   }, [weekPrice]);
 
-  const [daySales, setDaySales] = useState([]);
-  const [type, setType] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const changeType = (click) => {
     setActiveIndex(click);
     switch (click) {
@@ -408,13 +407,13 @@ const SalesStatChart = () => {
         <div className="chart-day-member">
           <h3>카테고리별 매출 통계 - 총 {formattedSum}원</h3>
           <div className="chart-div" style={{ height: "300px" }}>
-            <MyResponsivePie pieChartData={totalPrice} />
+            {totalPrice && <MyResponsivePie pieChartData={totalPrice} />}
           </div>
         </div>
         <div className="chart-day-visit">
           <h3>상품별 판매 갯수 - 총 {totalCount}개</h3>
           <div className="chart-div" style={{ height: "300px" }}>
-            <MyResponsivePie pieChartData={totalSell} />
+            {totalSell && <MyResponsivePie pieChartData={totalSell} />}
           </div>
         </div>
       </div>
@@ -422,7 +421,9 @@ const SalesStatChart = () => {
         <div className="chart-day-sales">
           <h3>매출 통계</h3>
           <div className="chart-div" style={{ height: "300px" }}>
-            <MyResponsiveBar2 daySales={daySales} type={type} />
+            {daySales && type && (
+              <MyResponsiveBar2 daySales={daySales} type={type} />
+            )}
           </div>
           <div className="chart-filter">
             <div
@@ -452,161 +453,180 @@ const MyResponsiveBar = (props) => {
   useEffect(() => {
     const newData = Array.from(
       { length: chartData.rows.length },
-      (_, index) => ({
-        date: chartData.rows[index]?.dimensionValues[0]?.value,
-        activeUsers: chartData.rows[index]?.metricValues[0].value,
-        sessions: chartData.rows[index]?.metricValues[1].value,
-      })
+      (_, index) => {
+        const rawDate = chartData.rows[index]?.dimensionValues[0]?.value;
+        const formattedDate = rawDate
+          ? `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(
+              6,
+              8
+            )}`
+          : "";
+
+        return {
+          date: formattedDate,
+          "당일 방문자": chartData.rows[index]?.metricValues[0].value,
+          "재 방문자": chartData.rows[index]?.metricValues[1].value,
+        };
+      }
     );
 
     setData(newData);
   }, []);
+
   const colorMap = {
-    activeUsers: "hsl(348, 58.30%, 58.60%)",
-    sessions: "hsl(221, 70.20%, 50.00%)",
+    "당일 방문자": "hsl(348, 58.30%, 58.60%)",
+    "재 방문자": "hsl(221, 70.20%, 50.00%)",
   };
   return (
-    <ResponsiveBar
-      data={data}
-      keys={type}
-      indexBy="date"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.3}
-      valueScale={{ type: "linear" }}
-      indexScale={{ type: "band", round: true }}
-      colors={({ id }) => colorMap[id]}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 1.6]],
-      }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "date",
-        legendPosition: "middle",
-        legendOffset: 32,
-        truncateTickAt: 0,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "Count",
-        legendPosition: "middle",
-        legendOffset: -40,
-        truncateTickAt: 0,
-      }}
-      enableTotals={true}
-      totalsOffset={6}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
-      labelTextColor="white"
-      legends={[
-        {
-          dataFrom: "keys",
-          anchor: "bottom-right",
-          direction: "column",
-          justify: false,
-          translateX: 120,
-          translateY: 0,
-          itemsSpacing: 2,
-          itemWidth: 100,
-          itemHeight: 20,
-          itemDirection: "left-to-right",
-          itemOpacity: 0.85,
-          symbolSize: 20,
-          effects: [
+    <>
+      {data && type && (
+        <ResponsiveBar
+          data={data}
+          keys={type}
+          indexBy="date"
+          margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+          padding={0.3}
+          valueScale={{ type: "linear" }}
+          indexScale={{ type: "band", round: true }}
+          colors={({ id }) => colorMap[id]}
+          borderColor={{
+            from: "color",
+            modifiers: [["darker", 1.6]],
+          }}
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "date",
+            legendPosition: "middle",
+            legendOffset: 32,
+            truncateTickAt: 0,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "Count",
+            legendPosition: "middle",
+            legendOffset: -40,
+            truncateTickAt: 0,
+          }}
+          enableTotals={true}
+          totalsOffset={6}
+          labelSkipWidth={12}
+          labelSkipHeight={12}
+          labelTextColor="white"
+          legends={[
             {
-              on: "hover",
-              style: {
-                itemOpacity: 1,
-              },
+              dataFrom: "keys",
+              anchor: "bottom-right",
+              direction: "column",
+              justify: false,
+              translateX: 120,
+              translateY: 0,
+              itemsSpacing: 2,
+              itemWidth: 100,
+              itemHeight: 20,
+              itemDirection: "left-to-right",
+              itemOpacity: 0.85,
+              symbolSize: 20,
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemOpacity: 1,
+                  },
+                },
+              ],
             },
-          ],
-        },
-      ]}
-      role="application"
-      ariaLabel="Nivo bar chart demo"
-      barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-      }
-    />
+          ]}
+          role="application"
+          ariaLabel="Nivo bar chart demo"
+          barAriaLabel={(e) =>
+            e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+          }
+        />
+      )}
+    </>
   );
 };
 
 const MyResponsiveBar2 = ({ daySales, type }) => (
-  <ResponsiveBar
-    data={daySales}
-    keys={type}
-    indexBy="country"
-    margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-    padding={0.3}
-    valueScale={{ type: "linear" }}
-    indexScale={{ type: "band", round: true }}
-    colors={{ scheme: "nivo" }}
-    borderColor={{
-      from: "color",
-      modifiers: [["darker", 1.6]],
-    }}
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "날짜",
-      legendPosition: "middle",
-      legendOffset: 32,
-      truncateTickAt: 0,
-    }}
-    axisLeft={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "매출",
-      legendPosition: "middle",
-      legendOffset: -40,
-      truncateTickAt: 0,
-    }}
-    labelSkipWidth={12}
-    labelSkipHeight={12}
-    labelTextColor={{
-      from: "color",
-      modifiers: [["darker", 1.6]],
-    }}
-    legends={[
-      {
-        dataFrom: "keys",
-        anchor: "bottom-right",
-        direction: "column",
-        justify: false,
-        translateX: 120,
-        translateY: 0,
-        itemsSpacing: 2,
-        itemWidth: 100,
-        itemHeight: 20,
-        itemDirection: "left-to-right",
-        itemOpacity: 0.85,
-        symbolSize: 20,
-        effects: [
+  <>
+    {daySales && type && (
+      <ResponsiveBar
+        data={daySales}
+        keys={type}
+        indexBy="country"
+        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        padding={0.3}
+        valueScale={{ type: "linear" }}
+        indexScale={{ type: "band", round: true }}
+        colors={{ scheme: "nivo" }}
+        borderColor={{
+          from: "color",
+          modifiers: [["darker", 1.6]],
+        }}
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "날짜",
+          legendPosition: "middle",
+          legendOffset: 32,
+          truncateTickAt: 0,
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "매출",
+          legendPosition: "middle",
+          legendOffset: -40,
+          truncateTickAt: 0,
+        }}
+        labelSkipWidth={12}
+        labelSkipHeight={12}
+        labelTextColor={{
+          from: "color",
+          modifiers: [["darker", 1.6]],
+        }}
+        legends={[
           {
-            on: "hover",
-            style: {
-              itemOpacity: 1,
-            },
+            dataFrom: "keys",
+            anchor: "bottom-right",
+            direction: "column",
+            justify: false,
+            translateX: 120,
+            translateY: 0,
+            itemsSpacing: 2,
+            itemWidth: 100,
+            itemHeight: 20,
+            itemDirection: "left-to-right",
+            itemOpacity: 0.85,
+            symbolSize: 20,
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemOpacity: 1,
+                },
+              },
+            ],
           },
-        ],
-      },
-    ]}
-    role="application"
-    ariaLabel="Nivo bar chart demo"
-    barAriaLabel={(e) =>
-      e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-    }
-  />
+        ]}
+        role="application"
+        ariaLabel="Nivo bar chart demo"
+        barAriaLabel={(e) =>
+          e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+        }
+      />
+    )}
+  </>
 );
 
 /* 회원 이용 통계 */
@@ -658,13 +678,21 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         const sessionData = [];
 
         rows.forEach((row) => {
-          const date = row.dimensionValues[0].value;
+          const rawDate = row.dimensionValues[0].value;
+          const formattedDate = rawDate
+            ? `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(
+                6,
+                8
+              )}`
+            : "";
+
           const pageViews = parseInt(row.metricValues[0].value, 10);
           const sessionDuration = parseFloat(row.metricValues[1].value);
 
-          viewsData.push({ x: date, y: pageViews });
-          sessionData.push({ x: date, y: sessionDuration });
+          viewsData.push({ x: formattedDate, y: pageViews });
+          sessionData.push({ x: formattedDate, y: sessionDuration });
         });
+
         console.log("📊 변환된 데이터:", viewsData, sessionData);
         setLineChartData([
           { id: "페이지뷰", color: "hsl(220, 70%, 50%)", data: viewsData },
@@ -679,136 +707,149 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         console.error("GA4 API 호출 실패:", error);
       });
   }, []);
+
   return (
-    <ResponsiveLine
-      data={lineChartData}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-      xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
-        reverse: false,
-      }}
-      yFormat=" >-.2f"
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "날짜",
-        legendOffset: 36,
-        legendPosition: "middle",
-        truncateTickAt: 0,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "수치",
-        legendOffset: -40,
-        legendPosition: "middle",
-        truncateTickAt: 0,
-      }}
-      colors={{ scheme: "accent" }}
-      pointSize={10}
-      pointColor={{ theme: "background" }}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabel="data.yFormatted"
-      pointLabelYOffset={-12}
-      enableTouchCrosshair={true}
-      useMesh={true}
-      legends={[
-        {
-          anchor: "bottom-right",
-          direction: "column",
-          justify: false,
-          translateX: 100,
-          translateY: 0,
-          itemsSpacing: 0,
-          itemDirection: "left-to-right",
-          itemWidth: 80,
-          itemHeight: 20,
-          itemOpacity: 0.75,
-          symbolSize: 12,
-          symbolShape: "circle",
-          symbolBorderColor: "rgba(0, 0, 0, .5)",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemBackground: "rgba(0, 0, 0, .03)",
-                itemOpacity: 1,
+    <>
+      {Array.isArray(lineChartData) &&
+        lineChartData.length > 0 &&
+        lineChartData.some(
+          (serie) => Array.isArray(serie.data) && serie.data.length > 0
+        ) && (
+          <ResponsiveLine
+            data={lineChartData}
+            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            xScale={{ type: "point" }}
+            yScale={{
+              type: "linear",
+              min: "auto",
+              max: "auto",
+              stacked: true,
+              reverse: false,
+            }}
+            yFormat=" >-.2f"
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: "날짜",
+              legendOffset: 36,
+              legendPosition: "middle",
+              truncateTickAt: 0,
+            }}
+            axisLeft={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: "수치",
+              legendOffset: -40,
+              legendPosition: "middle",
+              truncateTickAt: 0,
+            }}
+            colors={{ scheme: "accent" }}
+            pointSize={10}
+            pointColor={{ theme: "background" }}
+            pointBorderWidth={2}
+            pointBorderColor={{ from: "serieColor" }}
+            pointLabel="data.yFormatted"
+            pointLabelYOffset={-12}
+            enableTouchCrosshair={true}
+            useMesh={true}
+            legends={[
+              {
+                anchor: "bottom-right",
+                direction: "column",
+                justify: false,
+                translateX: 100,
+                translateY: 0,
+                itemsSpacing: 0,
+                itemDirection: "left-to-right",
+                itemWidth: 80,
+                itemHeight: 20,
+                itemOpacity: 0.75,
+                symbolSize: 12,
+                symbolShape: "circle",
+                symbolBorderColor: "rgba(0, 0, 0, .5)",
+                effects: [
+                  {
+                    on: "hover",
+                    style: {
+                      itemBackground: "rgba(0, 0, 0, .03)",
+                      itemOpacity: 1,
+                    },
+                  },
+                ],
               },
-            },
-          ],
-        },
-      ]}
-    />
+            ]}
+          />
+        )}
+    </>
   );
 };
 
 const MyResponsivePie = ({ pieChartData }) => {
   return (
-    <ResponsivePie
-      data={pieChartData}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-      innerRadius={0.5}
-      padAngle={0.7}
-      cornerRadius={3}
-      activeInnerRadiusOffset={20}
-      activeOuterRadiusOffset={20}
-      borderWidth={1}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 0.2]],
-      }}
-      arcLinkLabelsSkipAngle={10}
-      arcLinkLabelsTextColor="#333333"
-      arcLinkLabelsThickness={2}
-      arcLinkLabelsColor={{ from: "color", modifiers: [] }}
-      arcLabelsSkipAngle={10}
-      arcLabelsTextColor={{
-        from: "color",
-        modifiers: [["darker", 2]],
-      }}
-      motionConfig={{
-        mass: 1,
-        tension: 500,
-        friction: 10,
-        clamp: false,
-        precision: 0.01,
-        velocity: 0,
-      }}
-      legends={[
-        {
-          anchor: "right",
-          direction: "column",
-          justify: false,
-          translateX: -20,
-          translateY: 56,
-          itemsSpacing: 1,
-          itemWidth: 100,
-          itemHeight: 18,
-          itemTextColor: "#999",
-          itemDirection: "left-to-right",
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: "circle",
-          effects: [
+    <>
+      {pieChartData && (
+        <ResponsivePie
+          data={pieChartData}
+          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          innerRadius={0.5}
+          padAngle={0.7}
+          cornerRadius={3}
+          activeInnerRadiusOffset={20}
+          activeOuterRadiusOffset={20}
+          borderWidth={1}
+          borderColor={{
+            from: "color",
+            modifiers: [["darker", 0.2]],
+          }}
+          arcLinkLabelsSkipAngle={10}
+          arcLinkLabelsTextColor="#333333"
+          arcLinkLabelsThickness={2}
+          arcLinkLabelsColor={{ from: "color", modifiers: [] }}
+          arcLabelsSkipAngle={10}
+          arcLabelsTextColor={{
+            from: "color",
+            modifiers: [["darker", 2]],
+          }}
+          motionConfig={{
+            mass: 1,
+            tension: 500,
+            friction: 10,
+            clamp: false,
+            precision: 0.01,
+            velocity: 0,
+          }}
+          legends={[
             {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
+              anchor: "right",
+              direction: "column",
+              justify: false,
+              translateX: -20,
+              translateY: 56,
+              itemsSpacing: 1,
+              itemWidth: 100,
+              itemHeight: 18,
+              itemTextColor: "#999",
+              itemDirection: "left-to-right",
+              itemOpacity: 1,
+              symbolSize: 18,
+              symbolShape: "circle",
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemTextColor: "#000",
+                  },
+                },
+              ],
             },
-          ],
-        },
-      ]}
-    />
+          ]}
+        />
+      )}
+    </>
   );
 };
 

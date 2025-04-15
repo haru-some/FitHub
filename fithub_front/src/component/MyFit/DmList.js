@@ -54,7 +54,7 @@ const DmList = (props) => {
                   </div>
                   <div className="bot-wrap">
                     <div className="dm-item-content">
-                      {dm.lastMessageContent}
+                      {dm.lastMessageContent.replaceAll("<br/>"," ")}
                     </div>
                     <div
                       className={`unread-count ${

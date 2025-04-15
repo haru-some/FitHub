@@ -65,6 +65,8 @@ const ShopDetail = () => {
   }, [setReview]);
 
   const renderContent = () => {
+    const infoArr = goods.goodsInfo.split("&");
+    console.log(infoArr.length);
     switch (activeTab) {
       case "상품정보":
         return (
@@ -76,33 +78,57 @@ const ShopDetail = () => {
                 style={{ width: "100%", marginTop: "8px" }}
               >
                 <tbody>
-                  {goods.goodsInfo1 ? (
+                  {infoArr.length > 0 ? (
                     <tr>
-                      <th style={{ width: "25%" }}>{goods.goodsInfo1}</th>
-                      <td style={{ width: "25%" }}>{goods.goodsDetail1}</td>
-                      <th style={{ width: "25%" }}>{goods.goodsInfo2}</th>
-                      <td style={{ width: "25%" }}>{goods.goodsDetail2}</td>
+                      <th style={{ width: "25%" }}>
+                        {infoArr[0] ? infoArr[0].split("=")[0] : ""}
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        {infoArr[0] ? infoArr[0].split("=")[1] : ""}
+                      </td>
+                      <th style={{ width: "25%" }}>
+                        {infoArr[1] ? infoArr[1].split("=")[0] : ""}
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        {infoArr[1] ? infoArr[1].split("=")[1] : ""}
+                      </td>
                     </tr>
                   ) : (
                     ""
                   )}
-                  {goods.goodsInfo3 ? (
+                  {infoArr.length > 2 ? (
                     <tr>
-                      <th style={{ width: "25%" }}>{goods.goodsInfo3}</th>
-                      <td style={{ width: "25%" }}>{goods.goodsDetail3}</td>
-                      <th style={{ width: "25%" }}>{goods.goodsInfo4}</th>
-                      <td style={{ width: "25%" }}>{goods.goodsDetail4}</td>
+                      <th style={{ width: "25%" }}>
+                        {infoArr[2] ? infoArr[2].split("=")[0] : ""}
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        {infoArr[2] ? infoArr[2].split("=")[1] : ""}
+                      </td>
+                      <th style={{ width: "25%" }}>
+                        {infoArr[3] ? infoArr[3].split("=")[0] : ""}
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        {infoArr[3] ? infoArr[3].split("=")[1] : ""}
+                      </td>
                     </tr>
                   ) : (
                     ""
                   )}
 
-                  {goods.goodsInfo5 ? (
+                  {infoArr.length > 4 ? (
                     <tr>
-                      <th style={{ width: "25%" }}>{goods.goodsInfo5}</th>
-                      <td style={{ width: "25%" }}>{goods.goodsDetail5}</td>
-                      <th style={{ width: "25%" }}>{goods.goodsInfo6}</th>
-                      <td style={{ width: "25%" }}>{goods.goodsDetail6}</td>
+                      <th style={{ width: "25%" }}>
+                        {infoArr[4] ? infoArr[4].split("=")[0] : ""}
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        {infoArr[4] ? infoArr[4].split("=")[1] : ""}
+                      </td>
+                      <th style={{ width: "25%" }}>
+                        {infoArr[5] ? infoArr[5].split("=")[0] : ""}
+                      </th>
+                      <td style={{ width: "25%" }}>
+                        {infoArr[5] ? infoArr[5].split("=")[1] : ""}
+                      </td>
                     </tr>
                   ) : (
                     ""
@@ -264,13 +290,6 @@ const ShopDetail = () => {
           state: { quantity },
         });
       } else {
-        Swal.fire({
-          icon: "info",
-          title: "구매가 취소되었습니다.",
-          showConfirmButton: false,
-          cancelButtonColor: "#8CCC8F",
-          timer: 2000,
-        });
       }
     });
   };

@@ -8,8 +8,10 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
 import CommunityItem from "./CommunityItem";
+import { useLocation } from "react-router-dom";
 
 const CommunityList = () => {
+  const location = useLocation();
   const params = useParams();
   const memberNo = params["*"];
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -35,7 +37,6 @@ const CommunityList = () => {
         setCommunityList([...communityList, ...res.data]);
       });
   }, [page, searchText, memberNo]);
-
   const loadMoreCommunities = useCallback(() => {
     if (communityList && hasMore) setPage((prevPage) => prevPage + 1);
   }, [hasMore]);
@@ -62,7 +63,7 @@ const CommunityList = () => {
         <div className="community-head">
           <div className="community-head-title">
             <p className="community-title">
-              {showMyList === 0 ? "커뮤니티" : "내 게시물"}
+              {memberNo ? "내 게시물" : "커뮤니티"}
             </p>
             <div className="community-menu">
               <SearchIcon
@@ -88,13 +89,20 @@ const CommunityList = () => {
                     setSearchText("");
                     setShowInput(false);
 
-                    navigate(
-                      memberNo === String(member.memberNo)
-                        ? "/community/list"
-                        : `/community/list/${member.memberNo}`
-                    );
+                    const myNo = String(member.memberNo);
+
+                    if (memberNo) {
+                      navigate("/community/list");
+                    } else {
+                      navigate(`/community/list/${myNo}`);
+                    }
                   }}
-                  style={showMyList === 1 ? { fill: "#6fff87" } : {}}
+                  style={
+                    location.pathname ===
+                    `/community/list/${String(member?.memberNo)}`
+                      ? { fill: "#6fff87" }
+                      : {}
+                  }
                 />
               )}
             </div>
@@ -124,7 +132,7 @@ const CommunityList = () => {
               return (
                 <div
                   ref={isLast ? lastElementRef : null}
-                  key={`community-${index}`}
+                  key={`community-${JSON.stringify(community)}` + index}
                 >
                   <CommunityItem
                     community={community}
@@ -132,6 +140,8 @@ const CommunityList = () => {
                     setCommunityList={setCommunityList}
                     member={member}
                     page={page}
+                    memberNo={memberNo}
+                    index={index}
                   />
                 </div>
               );

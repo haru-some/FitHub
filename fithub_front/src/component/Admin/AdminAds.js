@@ -89,13 +89,12 @@ const AdminAds = () => {
   console.log(adsList);
   return (
     <section className="ads-section">
-      <h1 className="page-title">광고 추가</h1>
       <div className="ads-list">
         <div>현재 진행 중인 광고</div>
         <div className="list-box">
           <div className="one-list">
-            <div style={{ width: "20%", textAlign: "center" }}>이름</div>
-            <div style={{ width: "23%", textAlign: "center" }}>이미지</div>
+            <div style={{ width: "18%", textAlign: "center" }}>이름</div>
+            <div style={{ width: "20%", textAlign: "center" }}>이미지</div>
             <div style={{ width: "34%", textAlign: "center" }}>주소 리스트</div>
             <div style={{ width: "13%", textAlign: "center" }}>게시일</div>
             <div style={{ width: "5%", textAlign: "center" }}>타입</div>
@@ -105,10 +104,10 @@ const AdminAds = () => {
             adsList.map((ad, index) => {
               return (
                 <div key={"ad-" + index} className="one-list">
-                  <div style={{ width: "20%", textAlign: "center" }}>
+                  <div style={{ width: "18%", textAlign: "center" }}>
                     {ad.adsName}
                   </div>
-                  <div style={{ width: "23%", textAlign: "center" }}>
+                  <div style={{ width: "20%", textAlign: "center" }}>
                     {ad.adsImg}
                   </div>
                   <div style={{ width: "34%", textAlign: "center" }}>
@@ -133,16 +132,29 @@ const AdminAds = () => {
       </div>
       <form className="ads-form">
         <div className="ads-title-box">
-          <div>광고 추가하기</div>
+          <div>광고 추가</div>
         </div>
-        <div className="ads-name-input-box">
-          <input
-            type="text"
-            placeholder="광고 제목"
-            value={ads.adsName}
-            onChange={inputAds}
-            name="adsName"
-          />
+        <div className="input-flex">
+          <div className="ads-name-input-box">
+            <input
+              type="text"
+              placeholder="광고 제목"
+              value={ads.adsName}
+              onChange={inputAds}
+              name="adsName"
+            />
+          </div>
+          <div className="ads-size-input-box">
+            <select
+              name="adsType"
+              value={ads.adsType || ""}
+              onChange={inputAds}
+            >
+              <option value="">배너 방향 선택</option>
+              <option value="w">가로 (width)</option>
+              <option value="h">세로 (height)</option>
+            </select>
+          </div>
         </div>
         <div className="ads-link-input-box">
           <input
@@ -174,13 +186,6 @@ const AdminAds = () => {
             name="adsImg"
             hidden
           />
-        </div>
-        <div className="ads-size-input-box">
-          <select name="adsType" value={ads.adsType || ""} onChange={inputAds}>
-            <option value="">배너 방향 선택</option>
-            <option value="w">가로 (width)</option>
-            <option value="h">세로 (height)</option>
-          </select>
         </div>
         <div className="ads-button">
           <button type="button" onClick={writeAds}>

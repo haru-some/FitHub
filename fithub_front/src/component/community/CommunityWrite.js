@@ -11,9 +11,7 @@ import Swal from "sweetalert2";
 Quill.register("modules/ImageResize", ImageResize);
 
 const CommunityWrite = () => {
-  const [logoutSt, setLogoutSt] = useRecoilState(logoutState);
   const [member, setMember] = useRecoilState(memberState);
-  const memberNo = member.memberNo;
   const [communityContent, setCommunityContent] = useState("");
   const navigate = useNavigate();
 
@@ -32,7 +30,7 @@ const CommunityWrite = () => {
     ) {
       const form = new FormData();
       form.append("communityContent", communityContent);
-      form.append("memberNo", memberNo);
+      form.append("memberNo", member?.memberNo);
 
       axios
         .post(`${process.env.REACT_APP_BACK_SERVER}/community`, form, {
@@ -46,59 +44,48 @@ const CommunityWrite = () => {
         });
     }
   };
-  // if (logoutSt) {
-  //   navigate("/");
-  //   setLogoutSt(false);
-  // } else {
-  //   if (!member) {
-  //     Swal.fire({
-  //       title: "로그인 필요",
-  //       text: "로그인이 필요한 서비스입니다.",
-  //       icon: "warning",
-  //       confirmButtonColor: "#589c5f",
-  //       confirmButtonText: "확인",
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         navigate("/login");
-  //       }
-  //     });
-  //   }
-  // }
 
   return (
-    <div className="community-write">
-      <div className="community-write-wrap">
-        <div className="community-head-title">
-          <p className="community-title">커뮤니티 작성</p>
-          <ExitToAppIcon
-            onClick={() => {
-              navigate("/community/list");
-            }}
-          />
-        </div>
-        <div className="community-write-info">
-          <div className="member-img">
-            <img
-              src={
-                member && member.memberThumb
-                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                  : "/image/default_img.png"
-              }
-            />
+    <>
+      {member && (
+        <div className="community-write">
+          <div className="community-write-wrap">
+            <div className="community-head-title">
+              <p className="community-title">커뮤니티 작성</p>
+              <ExitToAppIcon
+                onClick={() => {
+                  navigate("/community/list");
+                }}
+              />
+            </div>
+            <div className="community-write-info">
+              <div className="member-img">
+                <img
+                  src={
+                    member && member.memberThumb
+                      ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                      : "/image/default_img.png"
+                  }
+                />
+              </div>
+              <div className="write-member-id">{member?.memberId}</div>
+              <div className="write-date"></div>
+            </div>
+            <div className="community-content">
+              <TextEditor
+                data={communityContent}
+                setData={setCommunityContent}
+              />
+            </div>
+            <div className="write-btn-zone">
+              <button className="write-btn" type="button" onClick={write}>
+                등록
+              </button>
+            </div>
           </div>
-          <div className="write-member-id">{member.memberId}</div>
-          <div className="write-date"></div>
         </div>
-        <div className="community-content">
-          <TextEditor data={communityContent} setData={setCommunityContent} />
-        </div>
-        <div className="write-btn-zone">
-          <button className="write-btn" type="button" onClick={write}>
-            등록
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -132,5 +132,16 @@ public class CommunityService {
 		return result;
 	}
 
+	@Transactional
+	public CommunityDTO changeStatus(CommunityDTO community) {
+		int result = communityDao.changeStatus(community);
+		int endRow = community.getPage() * 10;
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("endRow", endRow);
+		map.put("memberNo", community.getMemberNo());
+		CommunityDTO c = communityDao.selectCommunity(map);
+		return c;
+	}
+
 	
 }

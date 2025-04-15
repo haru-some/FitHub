@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.fithub.chat.model.dto.ChatMessageDTO;
 import kr.co.fithub.chat.model.dto.ChatRoomDTO;
 import kr.co.fithub.chat.model.service.ChatService;
+import kr.co.fithub.chat.model.service.WebSocketSessionManager;
 import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin("*")
@@ -37,6 +39,9 @@ public class ChatController {
 	
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
+	
+	@Autowired
+	private WebSocketSessionManager sessionManager;
 	
 	@Operation(summary = "회원의 문의 채팅방 생성", description = "관리자와의 문의 채팅방을 생성합니다.")
 	@ApiResponses({
@@ -102,14 +107,16 @@ public class ChatController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@MessageMapping("/chat/sendMessage/{roomId}")
-	public void sendMessage(@DestinationVariable("roomId") int roomId, @Payload ChatMessageDTO message) {
-	    message.setChatRoomNo(roomId);
-	    int r = chatService.inputChatMessage(message);
-	    messagingTemplate.convertAndSend("/topic/chat/messages/" + roomId, message);
+	@MessageMapping("/chat/sendMessage/{roomNo}")
+	public void sendMessage(@DestinationVariable("roomNo") int roomNo, @Payload ChatMessageDTO message) {
+		message.setChatRoomNo(roomNo);
+	    // 메시지 저장
+	    int result = chatService.inputChatMessage(message);
+	    
+	    messagingTemplate.convertAndSend("/topic/chat/messages/" + roomNo, message);
 	} 
 	
-	@Operation(summary = "채팅 알람", description = "채팅 중이지 않은 채팅이 왔을 때 알림을 날립니다.")
+	@Operation(summary = "채팅 알람", description = "채팅 중이지 않은 채팅방에 채팅이 왔을 때 알림을 날립니다.")
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
@@ -118,5 +125,5 @@ public class ChatController {
         messagingTemplate.convertAndSend("/queue/notifications", notificationMessage);
     }
 	
-	
+
 }

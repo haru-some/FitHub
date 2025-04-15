@@ -1,64 +1,68 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
-import "./shopDetail.css";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import React, { useState } from "react";
+import ShippingModal from "./ShippingModal"; // ShippingModal 컴포넌트 임포트
 
-const ShopOrder = () => {
-  const [orders, setOrders] = useState([]);
-  const [shippingData, setShippingData] = useState(null); // 배송 데이터 상태
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
-  const navigate = useNavigate();
-  const [memberInfo] = useRecoilState(memberState);
-  const backServer = process.env.REACT_APP_BACK_SERVER;
+const OrderList = ({ orders }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5;
 
-  useEffect(() => {
-    // 구매한 상품 get
-    axios
-      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
-      .then((res) => {
-        console.log(res.data);
-        setOrders(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [memberInfo, backServer]);
+  // 현재 페이지에 표시될 주문 계산
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
-  const yymmDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`; // 'YYYY-MM-DD' 형식으로 반환
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  // 페이지 변경 핸들러
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
+  // 배송 조회 버튼 핸들러
   const handleTracking = (order) => {
-    setShippingData(order.shippingData); // 모달에 사용할 배송 정보 설정
+    setShippingData(order.shippingInfo); // 실제 배송 정보를 설정하는 로직
     setIsModalOpen(true); // 모달 열기
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false); // 모달 닫기
   };
 
   return (
     <div className="order-list-wrap">
       <h2>주문/배송 리스트</h2>
 
-      {orders.map((order) => (
+      {currentOrders.map((order) => (
         <div className="order-item" key={order.sellNo}>
           <div className="item-details">
             <h3>{order.goodsName}</h3>
             <p>가격 : {order.goodsPrice.toLocaleString()}원</p>
             <p>수량 : {order.goodsEa}</p>
             <p>구매일 : {yymmDate(order.sellDate)}</p>
-            <button onClick={() => handleTracking(order)}>배송 조회</button> {/* 버튼 클릭 시 배송 조회 */}
+          </div>
+          <div className="order-actions">
+            <button onClick={() => handleTracking(order)}>배송 조회</button>
           </div>
         </div>
       ))}
 
-      <ShippingModal isOpen={isModalOpen} onClose={closeModal} shippingData={shippingData} />
-    </div
+      <div className="pagination-controls">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => goToPage(index + 1)}
+            disabled={currentPage === index + 1}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
+      <ShippingModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        shippingData={shippingData}
+        setShippingData={setShippingData}
+      />
+    </div>
+  );
+};
+
+export default OrderList;

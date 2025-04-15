@@ -111,24 +111,11 @@ const GoodsList = () => {
 
   //관리자 상품 수정페이지
   const adminModify = (goodsNo) => {
-    Swal.fire({
-      title: "수정하시겠습니까?",
-      text: "수정 페이지로 이동합니다..",
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonColor: "#45a049",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "예, 수정합니다!",
-      cancelButtonText: "아니요, 취소합니다.",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`/shop/modify/${goodsNo}`);
-      }
-    });
+    navigate(`/shop/modify/${goodsNo}`);
   };
 
   //카테고리
-  const handleCategoryChange = (category) => {
+  const categoryChange = (category) => {
     setSelectedCategory(category); // 카테고리 변경 시 상태 업데이트
     setCurrentPage(1); // 카테고리 변경 시 첫 페이지로 돌아가기
     setClickedButton(category); // 선택된 버튼명을 상태로 저장
@@ -230,7 +217,7 @@ const GoodsList = () => {
         {categories.map((category) => (
           <button
             key={category}
-            onClick={() => handleCategoryChange(category)}
+            onClick={() => categoryChange(category)}
             style={{
               backgroundColor:
                 clickedButton === category ? "#245329" : "#589c5f",
@@ -242,7 +229,11 @@ const GoodsList = () => {
           </button>
         ))}
       </div>
-      <select value={sort} onChange={(e) => setSort(e.target.value)}>
+      <select
+        className="order-by"
+        value={sort}
+        onChange={(e) => setSort(e.target.value)}
+      >
         <option value="최신순">최신순</option>
         <option value="가격높은순">가격높은순</option>
         <option value="가격낮은순">가격낮은순</option>

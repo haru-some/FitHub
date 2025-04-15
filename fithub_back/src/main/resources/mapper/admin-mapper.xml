@@ -41,15 +41,15 @@
 	</update>
 	
 	<insert id="writeAds">
-		insert into ads_tbl values(ads_seq.nextval, #{adsName}, #{adsImg}, #{adsLink}, #{adsType}, to_char(sysdate, 'yyyy-mm-dd'))
+		insert into ads values(ads_seq.nextval, #{adsName}, #{adsImg}, #{adsLink}, #{adsType}, to_char(sysdate, 'yyyy-mm-dd'))
 	</insert>
 	
 	<select id="getAdsList" resultType="ads">
-		select * from ads_tbl order by 1
+		select * from ads order by 1
 	</select>
 	
 	<select id="getAdsType" resultType="ads">
-		select * from ads_tbl where ads_type = #{adsType} order by 1
+		select * from ads where ads_type = #{adsType} order by 1
 	</select>
 	
 	<select id="getMember" resultType="admin">
@@ -78,7 +78,13 @@ FROM dual
     </select>
     
     <select id="totalSell" resultType="sell">
-    	select count(*) as total_sell, goods_name from sell group by goods_name order by total_sell desc
+    	SELECT * FROM (
+    SELECT COUNT(*) AS total_sell, goods_name
+    FROM sell
+    GROUP BY goods_name
+    ORDER BY total_sell DESC
+)
+WHERE ROWNUM &lt;= 10
     </select>
     
     <select id="weekSales" resultType="sell">
@@ -89,14 +95,14 @@ FROM dual
 ),
 sales_data AS (
   SELECT TO_CHAR(sell_date, 'YYYY-MM-DD') AS sale_date,
-         SUM(goods_total_price) AS total_week_price
+         SUM(goods_total_price) AS total_day_price
   FROM sell
   WHERE sell_date >= TRUNC(SYSDATE) - 6 AND sell_date &lt; TRUNC(SYSDATE) + 1
   GROUP BY TO_CHAR(sell_date, 'YYYY-MM-DD')
 )
 SELECT
   d.sale_date,
-  NVL(s.total_week_price, 0) AS total_week_price
+  NVL(s.total_day_price, 0) AS total_day_price
 FROM
   date_range d
 LEFT JOIN
@@ -106,27 +112,38 @@ ORDER BY
 </select>
     
     <select id="monthSales" resultType="sell">
-  WITH date_range AS (
-  SELECT TRUNC(SYSDATE, 'MM') + LEVEL - 1 AS sale_date
+  WITH base_date AS (
+  SELECT 
+    TRUNC(SYSDATE, 'MM') AS month_start,
+    LAST_DAY(SYSDATE) AS month_end
   FROM dual
-  CONNECT BY TRUNC(SYSDATE, 'MM') + LEVEL - 1 &lt;= TRUNC(SYSDATE)
+),
+date_range AS (
+  SELECT 
+    GREATEST(NEXT_DAY(TRUNC(SYSDATE, 'MM') - 7, '월') + (LEVEL - 1) * 7, (SELECT month_start FROM base_date)) AS week_start_date,
+    LEAST(NEXT_DAY(TRUNC(SYSDATE, 'MM') - 7, '월') + (LEVEL - 1) * 7 + 6, (SELECT month_end FROM base_date)) AS week_end_date
+  FROM dual
+  CONNECT BY NEXT_DAY(TRUNC(SYSDATE, 'MM') - 7, '월') + (LEVEL - 1) * 7 &lt;= (SELECT month_end FROM base_date)
 ),
 sales_data AS (
-  SELECT TRUNC(sell_date) AS sale_date,
-         SUM(goods_total_price) AS total_month_price
+  SELECT 
+    TRUNC(sell_date) AS sell_day,
+    SUM(goods_total_price) AS daily_price
   FROM sell
-  WHERE sell_date >= TRUNC(SYSDATE, 'MM') AND sell_date &lt; TRUNC(SYSDATE) + 1
+  WHERE sell_date BETWEEN (SELECT month_start FROM base_date) AND (SELECT month_end FROM base_date)
   GROUP BY TRUNC(sell_date)
 )
-SELECT
-  TO_CHAR(d.sale_date, 'YYYY-MM-DD') AS sale_date,
-  NVL(s.total_month_price, 0) AS total_month_price
-FROM
-  date_range d
-LEFT JOIN
-  sales_data s ON d.sale_date = s.sale_date
-ORDER BY
-  d.sale_date
+SELECT 
+  ROW_NUMBER() OVER (ORDER BY dr.week_start_date) AS week_no,
+  TO_CHAR(dr.week_start_date, 'YYYY-MM-DD') AS week_start,
+  TO_CHAR(dr.week_end_date, 'YYYY-MM-DD') AS week_end,
+  NVL((
+    SELECT SUM(sd.daily_price)
+    FROM sales_data sd
+    WHERE sd.sell_day BETWEEN dr.week_start_date AND dr.week_end_date
+  ), 0) AS total_week_price
+FROM date_range dr
+ORDER BY dr.week_start_date
 </select>
 
 	

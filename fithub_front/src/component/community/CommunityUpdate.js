@@ -11,7 +11,6 @@ import Swal from "sweetalert2";
 Quill.register("modules/ImageResize", ImageResize);
 
 const CommunityUpdate = () => {
-  const [logoutSt, setLogoutSt] = useRecoilState(logoutState);
   const params = useParams();
   const communityNo = params.communityNo;
   const [member, setMember] = useRecoilState(memberState);
@@ -47,58 +46,43 @@ const CommunityUpdate = () => {
       });
   };
 
-  // if (logoutSt) {
-  //   navigate("/");
-  //   setLogoutSt(false);
-  // } else {
-  //   if (!member) {
-  //     Swal.fire({
-  //       title: "로그인 필요",
-  //       text: "로그인이 필요한 서비스입니다.",
-  //       icon: "warning",
-  //       confirmButtonColor: "#589c5f",
-  //       confirmButtonText: "확인",
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         navigate("/login");
-  //       }
-  //     });
-  //   }
-  // }
-
   return (
-    <div className="community-write">
-      <div className="community-write-wrap">
-        <div className="community-head-title">
-          <p className="community-title">커뮤니티 수정</p>
-          <ExitToAppIcon
-            onClick={() => {
-              navigate("/community/list");
-            }}
-          />
-        </div>
-        <div className="community-write-info">
-          <div className="member-img">
-            <img
-              src={
-                member && member.memberThumb
-                  ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                  : "/image/default_img.png"
-              }
-            />
+    <>
+      {member && (
+        <div className="community-write">
+          <div className="community-write-wrap">
+            <div className="community-head-title">
+              <p className="community-title">커뮤니티 수정</p>
+              <ExitToAppIcon
+                onClick={() => {
+                  navigate("/community/list");
+                }}
+              />
+            </div>
+            <div className="community-write-info">
+              <div className="member-img">
+                <img
+                  src={
+                    member && member.memberThumb
+                      ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
+                      : "/image/default_img.png"
+                  }
+                />
+              </div>
+              <div className="write-memberId">{member?.memberId}</div>
+            </div>
+            <div className="community-content">
+              <TextEditor data={text} setData={setText} />
+            </div>
+            <div className="write-btn-zone">
+              <button className="write-btn" type="button" onClick={update}>
+                수정
+              </button>
+            </div>
           </div>
-          <div className="write-memberId">{member.memberId}</div>
         </div>
-        <div className="community-content">
-          <TextEditor data={text} setData={setText} />
-        </div>
-        <div className="write-btn-zone">
-          <button className="write-btn" type="button" onClick={update}>
-            수정
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

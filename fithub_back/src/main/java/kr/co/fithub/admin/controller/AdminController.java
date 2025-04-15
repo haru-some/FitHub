@@ -157,25 +157,50 @@ public class AdminController {
 		return ResponseEntity.ok(admin);
 	}
 	
+	@Operation(summary = "총 매출 조회", description = "총 매출을 조회합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	})
 	@GetMapping("/totalPrice")
 	public ResponseEntity<List> categoryTotalPrice() {
 		List list = adminService.categoryTotalPrice();
 		return ResponseEntity.ok(list);
 	}
+	
+	@Operation(summary = "판매 개수 조회", description = "얼마나 팔았는지 조회합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	})
 	@GetMapping("/totalSell")
 	public ResponseEntity<List> totalSell() {
 		List list = adminService.totalSell();
 		return ResponseEntity.ok(list);
 	}
+	
+	@Operation(summary = "주 매출 조회", description = "한 주동안 얼마를 벌었는지 조회합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	})
 	@GetMapping("/weekSales")
 	public ResponseEntity<List> weekSales() {
 		List list = adminService.weekSales();
 		return ResponseEntity.ok(list);
 	}
+	
+	@Operation(summary = "월 매출 조회", description = "이번 달 얼마를 벌었는지 조회합니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	})
 	@GetMapping("/monthSales")
 	public ResponseEntity<List> monthSales() {
 		List list = adminService.monthSales();
+		System.out.println(list);
 		return ResponseEntity.ok(list);
 	}
+	
 	
 }

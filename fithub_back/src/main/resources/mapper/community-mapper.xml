@@ -12,6 +12,7 @@
                 m.member_id,
                 m.member_no,
                 m.member_thumb,
+                c.community_status,
                 c.community_content,
                 c.community_date,
                 c.community_no,
@@ -21,8 +22,11 @@
                 (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{loginMemberNo}) AS is_follow
             FROM community c
             JOIN member m ON c.member_no = m.member_no
-            where m.member_id||c.community_content  like '%'||#{searchText}||'%' 
-            <if test="memberNo != 0">
+            where m.member_id||c.community_content  like '%'||#{searchText}||'%'
+            <if test="memberNo == 0">          
+            and c.community_status = 1
+            </if>
+            <if test="memberNo != 0">            
             and c.member_no = #{memberNo} and c.community_content  like '%'||#{searchText}||'%' 
             </if>
             ORDER BY community_no DESC
@@ -40,6 +44,7 @@
 		m.member_id,
 		m.member_thumb,
 		m.member_no,
+		c.community_status,
 		c.community_content,
 		c.community_no,
 		to_char(sysdate, 'yyyy-mm-dd') as community_date,
@@ -163,5 +168,9 @@
 	
 	<update id="updateComment">
 		update comment_tbl set comment_content = #{commentContent} where comment_no = #{commentNo}
+	</update>
+	
+	<update id="changeStatus">
+		update community set community_status = #{communityStatus} where community_no = #{communityNo}
 	</update>
 </mapper>
