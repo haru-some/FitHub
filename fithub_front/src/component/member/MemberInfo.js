@@ -13,7 +13,6 @@ const MemberInfo = () => {
   const location = useLocation();
   const [loginMember, setLoginMember] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
-
   useEffect(() => {
     if (!isLogin) {
       navigate("/login");
@@ -410,7 +409,7 @@ const MemberInfo = () => {
         <div className="info-form-field">
           <TextField
             label="회원등급"
-            value={member.memberLevel === "1" ? "관리자" : "일반회원"}
+            value={member.memberLevel === 1 ? "관리자" : "일반회원"}
             disabled
             fullWidth
           />
