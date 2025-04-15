@@ -73,9 +73,7 @@ const AdminGoods = () => {
 
     form.append("goodsInfos", JSON.stringify(obj));
     console.log(JSON.stringify(obj));
-    console.log("ㄱㄱ");
-    console.log(goodsImage);
-    console.log(goodsDetailImg);
+
     axios
       .post(`${backServer}/goods`, form, {
         headers: {
@@ -369,8 +367,10 @@ const AdminGoods = () => {
               }}
             />
             <div>
-              <h2>상품 설명</h2>
-              <TextEditor data={goodsExplain} setData={setGoodsExplain} />
+              <h4>상품 설명</h4>
+              <div className="textarea-detail">
+                <TextEditor data={goodsExplain} setData={setGoodsExplain} />
+              </div>
             </div>
           </div>
           <div className="options-and-price">

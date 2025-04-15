@@ -601,6 +601,8 @@
   width: 1000px;
   background-color: var(--gray3);
   padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .shop-detail-frm-wrap .main-detail {
   display: flex;
@@ -618,6 +620,7 @@
   width: 100%; /* 가로 길이에 맞게 조정 */
   object-fit: contain;
   height: auto;
+  border-radius: 8px;
 }
 
 .shop-detail-frm-wrap .goods-info {
@@ -638,19 +641,27 @@
   font-weight: 700;
 }
 .shop-detail-frm-wrap .goods-info p {
-  margin: 20px; /* 단락 간격 추가 */
+  margin: 20px;
 }
 
 .shop-detail-frm-wrap .price-box {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border-radius: 2px;
+}
+.shop-detail-frm-wrap .price-box h2 {
+  margin: 0;
 }
 .shop-detail-frm-wrap .price-box input {
   color: black;
   text-align: right;
-  width: 80px;
-  height: 25px;
-  border: none;
+  width: 100px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
 }
 
 .shop-detail-frm-wrap .quantity-controls {
@@ -660,26 +671,27 @@
 }
 
 .shop-detail-frm-wrap .quantity-controls button {
-  width: 25px;
-  height: 20px;
-  font-size: small;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
   background-color: #4caf50;
   color: white;
-
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .shop-detail-frm-wrap .quantity-controls span {
   margin: 0 10px;
-  width: 20px;
-  height: 20px;
-  text-align: center;
   font-size: 18px;
 }
-.shop-detail-frm-wrap .goods-info h2 {
-  margin-right: 50px;
-  margin-top: 30px;
+.shop-detail-frm-wrap .goods-info h4 {
+  margin-right: 400px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.shop-detail-frm-wrap .textarea-detail {
+  margin-top: 10px;
 }
 .shop-detail-frm-wrap .goods-buy {
   margin-top: 20px;
@@ -691,11 +703,14 @@
   font-size: 20px;
   font-weight: 900;
   border: none;
-  padding: 15px; /* 상하 여백 증가 */
-  flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
+  padding: 10px 15px;
+  flex: 1;
   cursor: pointer;
-  margin-right: 1px;
   border-radius: 5px;
+  transition: background-color 0.3s; /* 호버 효과 */
+}
+.shop-detail-frm-wrap .goods-buy button:hover {
+  background-color: #45a049;
 }
 
 .shop-detail-frm-wrap .tabs {
@@ -708,13 +723,21 @@
   background-color: #f1f1f1;
   color: #aaa;
   border: none;
-  padding: 15px; /* 상하 여백 증가 */
-  flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
+  padding: 15px;
+  flex: 1;
   cursor: pointer;
-  margin-right: 10px; /* 오른쪽 여백 추가 */
+  margin-right: 10px;
   border-radius: 5px;
 }
 
+.shop-detail-frm-wrap
+  .tabs
+  button:last
+  .shop-detail-frm-wrap
+  .tabs
+  button:last-child {
+  margin-right: 0;
+}
 .shop-detail-frm-wrap .tabs button:last-child {
   margin-right: 0; /* 마지막 버튼은 오른쪽 여백 없음 */
 }
@@ -735,12 +758,16 @@
   font-size: 20px;
   font-weight: 900;
   border: none;
-  padding: 15px; /* 상하 여백 증가 */
+  padding: 15px;
   flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
   cursor: pointer;
   margin-left: 250px;
   border-radius: 5px;
   width: 500px;
+  transition: background-color 0.3s;
+}
+.shop-detail-frm-wrap .button:hover {
+  background-color: #45a049; /* 호버 시 색상 변경 */
 }
 
 .shop-detail-frm-wrap .ql-editor {
@@ -749,13 +776,33 @@
   height: 250px;
   resize: none;
 }
-.shop-detail-frm-wrap input[type="number"] {
-  width: 70px;
-  height: 30px;
-  border: none;
+
+.shop-detail-frm-wrap input[type="text"] {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ccc;
+  color: black;
+  outline: none;
+  text-align: left;
+  padding: 5px;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.shop-detail-frm-wrap .price-box input[type="text"] {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ccc;
   color: black;
   outline: none;
   text-align: right;
+  padding: 5px;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.shop-detail-frm-wrap input[type="text"]:focus {
+  border-color: #4caf50; /* 포커스 시 테두리 색상 변경 */
 }
 
 .shop-detail-frm-wrap .options-and-price {
@@ -770,6 +817,7 @@
 }
 
 .shop-detail-frm-wrap .options-select {
+  margin-top: 10px;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -779,12 +827,12 @@
 }
 
 .shop-detail-frm-wrap .price-box {
+  margin-top: 20px;
   text-align: right;
 }
 
 .shop-detail-frm-wrap .price-input {
   margin: 0 5px;
-  width: 100px;
   padding: 5px;
   font-size: 16px;
   border: 1px solid #ccc;

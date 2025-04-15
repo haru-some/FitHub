@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./shopDetail.css";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ShopPay() {
+  const navigate = useNavigate();
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const { goodsNo } = useParams(); // URL에서 goodsNo 가져오기
@@ -86,6 +87,7 @@ function ShopPay() {
     //   .post(`${backServer}/goods/sell/add/`, paymentData)
     //   .then((res) => {
     //     console.log(res);
+    //     navigate(`/shop/`);
     //   })
     //   .catch((err) => {
     //     console.log(err);
@@ -102,9 +104,9 @@ function ShopPay() {
       {
         channelKey: "channel-key-d2893ebf-5998-4ab3-93e2-1847d2f13c8b",
         pay_method: "card",
-        merchant_uid: "order_no_" + Date.now(), // Unique order number
+        merchant_uid: "order_no_" + Date.now(),
         name: `주문: ${goods.goodsName}`,
-        amount: paymentData.goodsTotalPrice, // Payment amount
+        amount: paymentData.goodsTotalPrice,
         buyer_email: "test@portone.io",
         buyer_name: formData.takerName,
         buyer_tel: formData.takerPhone,
@@ -119,6 +121,7 @@ function ShopPay() {
             .post(`${backServer}/goods/sell/add/`, paymentData)
             .then((res) => {
               console.log(res);
+              navigate(`/shop/`);
             })
             .catch((err) => {
               console.log(err);

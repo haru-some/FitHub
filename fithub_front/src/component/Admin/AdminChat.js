@@ -191,7 +191,9 @@ const AdminChatView = ({
   useEffect(() => {
     // 기존 채팅 기록 불러오기
     axios
-      .get(`${backServer}/chat/loadMessage?chatRoomNo=${selectedChatRoom}`)
+      .get(
+        `${backServer}/chat/room/admin/message?chatRoomNo=${selectedChatRoom}`
+      )
       .then((res) => {
         setMessages(res.data);
       })

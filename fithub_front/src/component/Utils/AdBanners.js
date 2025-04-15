@@ -8,7 +8,7 @@ const AdBanners = ({ adsType }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/adsType?adsType=${adsType}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/ads/type?adsType=${adsType}`
       )
       .then((res) => {
         const adsArray = res.data;

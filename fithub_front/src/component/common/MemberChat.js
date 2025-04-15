@@ -45,13 +45,13 @@ const MemberChat = () => {
   useEffect(() => {
     // 기존 채팅 기록 불러오기
     axios
-      .get(`${backServer}/chat/checkRoom?memberId=${memberInfo.memberId}`)
+      .get(`${backServer}/chat/check/room?memberId=${memberInfo.memberId}`)
       .then((res) => {
         if (res.data.chatRoomNo) {
           setRoomNo(res.data.chatRoomNo);
           axios
             .get(
-              `${backServer}/chat/loadChatMember?memberId=${memberInfo.memberId}`
+              `${backServer}/chat/room/member/message?memberId=${memberInfo.memberId}`
             )
             .then((res) => {
               console.log(res);
@@ -164,18 +164,9 @@ const MemberChat = () => {
 
   const adminChatStart = () => {
     axios
-      .post(`${backServer}/chat/create?memberId=${memberInfo.memberId}`)
+      .post(`${backServer}/chat/room?memberId=${memberInfo.memberId}`)
       .then((res) => {
         console.log(res);
-        axios
-          .get(`${backServer}/chat/getRoomId?memberId=${memberInfo.memberId}`)
-          .then((res) => {
-            console.log(res);
-            setNewRoom(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
       })
       .catch((err) => {
         console.log(err);

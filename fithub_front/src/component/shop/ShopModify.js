@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { useRecoilState, useRecoilValue } from "recoil";
+import { memberState, isLoginState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
 import { data, Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
@@ -8,6 +10,8 @@ import { Category } from "@mui/icons-material";
 
 const ShopModify = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const isLogin = useRecoilValue(isLoginState);
 
   const { goodsNo } = useParams(); // Image에서 goodsNo 가져오기
   const [activeTab, setActiveTab] = useState("상품정보");
@@ -24,7 +28,6 @@ const ShopModify = () => {
   const [goodsExplain, setGoodsExplain] = useState(""); // 사용자가 입력 할 제목
   const [goodsPrice, setGoodsPrice] = useState("");
   const [goodsStock, setGoodsStock] = useState("");
-
   const [goodsDetailImg, setGoodsDetailImg] = useState(null); //상품 상세이미지
 
   const [goodsInfo1, setGoodsInfo1] = useState(""); //사용자가 입력할 필수 정보
@@ -48,7 +51,24 @@ const ShopModify = () => {
   const [selectedImageDetail, setSelectedImageDetail] = useState(null);
   const [existingGoodsImage, setExistingGoodsImage] = useState("");
   const [existingGoodsDetailImg, setExistingGoodsDetailImg] = useState("");
+
   const [infoArr, setInfoArr] = useState([]);
+
+  useEffect(() => {
+    // 로그인 여부를 확인
+    if (!isLogin) {
+      Swal.fire({
+        title: "관리자 페이지입니다..",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#589c5f",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/login/`);
+        }
+      });
+    }
+  }, [isLogin, navigate]);
 
   const submit = () => {
     /////////////////////////////////////////FORM////////////////////////////////////////////
@@ -66,8 +86,6 @@ const ShopModify = () => {
 
     form.append("goodsImg", goodsImage);
     form.append("detailImg", goodsDetailImg);
-
-    console.log(form);
 
     const obj = {};
     if (goodsInfo1?.trim()) obj[goodsInfo1] = goodsDetail1;

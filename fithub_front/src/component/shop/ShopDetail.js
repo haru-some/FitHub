@@ -66,7 +66,7 @@ const ShopDetail = () => {
 
   const renderContent = () => {
     const infoArr = goods.goodsInfo.split("&");
-    console.log(infoArr.length);
+
     switch (activeTab) {
       case "상품정보":
         return (
@@ -244,6 +244,20 @@ const ShopDetail = () => {
   };
 
   const plusCart = () => {
+    if (!isLogin) {
+      Swal.fire({
+        title: "회원이 아닙니다.",
+        text: "회원 가입 후 장바구니 기능을 이용해 주세요.",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#589c5f",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/login/`);
+        }
+      });
+      return;
+    }
     const cartItem = {
       goodsNo: goods.goodsNo,
       memberNo: memberInfo.memberNo,
@@ -252,8 +266,6 @@ const ShopDetail = () => {
       goodsPrice: goods.goodsPrice,
       goodsEa: quantity,
     };
-
-    console.log(cartItem);
 
     axios.post(`${backServer}/goods/cart/add/`, cartItem).then((res) => {
       Swal.fire({
@@ -277,6 +289,20 @@ const ShopDetail = () => {
   };
 
   const doBuy = () => {
+    if (!isLogin) {
+      Swal.fire({
+        title: "회원이 아닙니다.",
+        text: "회원 가입 후 상품을 구매 해 주세요.",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#589c5f",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/login/`);
+        }
+      });
+      return;
+    }
     Swal.fire({
       title: "구매할까요?",
       showCancelButton: true,
