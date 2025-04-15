@@ -503,17 +503,11 @@ const Comment = (props) => {
     const now = dayjs();
     const past = dayjs(timeString);
 
-    const diffInSeconds = now.diff(past, "second");
-    const diffInMinutes = now.diff(past, "minute");
     const diffInHours = now.diff(past, "hour");
     const diffInDays = now.diff(past, "day");
 
-    if (diffInSeconds < 60) {
-      return `${diffInSeconds}초 전`;
-    } else if (diffInMinutes < 60) {
-      return `${diffInMinutes}분 전`;
-    } else if (diffInHours < 24) {
-      return `${diffInHours}시간 전`;
+    if (diffInHours < 24) {
+      return `${comment.commentDate.substring(11, 16)}`;
     } else {
       return `${diffInDays}일 전`;
     }
@@ -542,7 +536,7 @@ const Comment = (props) => {
             }}
           >
             <span>{comment.memberId}</span>
-            <span style={{ marginLeft: "10px" }}>
+            <span style={{ marginLeft: "10px", color: "#ccc" }}>
               {formatTimeAgo(comment.commentDate)}
             </span>
           </p>

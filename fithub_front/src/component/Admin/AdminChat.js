@@ -226,7 +226,7 @@ const AdminChatView = ({
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
-
+  console.log(memberInfo);
   return (
     <>
       <div className="chat-box" ref={chatBoxRef}>

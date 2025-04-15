@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +26,6 @@ import kr.co.fithub.admin.model.dto.AdminDTO;
 import kr.co.fithub.admin.model.dto.AdsDTO;
 import kr.co.fithub.admin.model.service.AdminService;
 import kr.co.fithub.member.model.dto.MemberDTO;
-import kr.co.fithub.shop.model.dto.Sell;
 import kr.co.fithub.util.FileUtils;
 
 @CrossOrigin("*")
@@ -96,8 +94,8 @@ public class AdminController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "삭제 성공")
 	})
-	@DeleteMapping("/member/{memberNo}")
-	public ResponseEntity<Integer> adminMemberDelete(@PathVariable int memberNo, @RequestBody String adminId) {
+	@DeleteMapping("/member/{adminId}")
+	public ResponseEntity<Integer> adminMemberDelete(@PathVariable String adminId, @RequestParam int memberNo) {
 		int result = adminService.adminMemberDelete(memberNo, adminId);
 		return ResponseEntity.ok(result);
 	}
