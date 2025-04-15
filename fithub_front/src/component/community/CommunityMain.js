@@ -13,7 +13,7 @@ const CommunityMain = () => {
   const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const [member, setMember] = useRecoilState(memberState);
   const navigate = useNavigate();
-  console.log(params["*"]);
+
   if (logoutST) {
     navigate("/");
     setLogoutST(false);

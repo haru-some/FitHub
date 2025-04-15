@@ -46,6 +46,12 @@ const CommunityUpdate = () => {
       });
   };
 
+  useEffect(() => {
+    if (!member) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <>
       {member && (
