@@ -56,19 +56,29 @@
 }
 .admin-member-tab {
   display: flex;
-  width: 100%;
-  padding: 10px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: auto;
+  width: 70%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
 }
-.admin-member-tab > .page-title {
+.admin-member-tab > .tab-div {
   width: calc(100% / 2);
-  padding: 10px;
-  margin: 10px;
-  cursor: pointer;
 }
-.admin-member-tab > .page-title:hover {
+.admin-member-tab > .tab-div > .page-title {
+  cursor: pointer;
+  width: 70%;
+  margin: 0 auto;
+  padding: 10px;
+  padding-bottom: 15px;
+  box-sizing: border-box;
+}
+.admin-member-tab > .tab-div > .page-title:hover {
   color: var(--main3);
 }
-.admin-member-tab > .active-tab {
+.admin-member-tab > .tab-div > .active-tab {
   color: var(--main3);
   border-bottom: 2px solid var(--main3);
 }
@@ -306,8 +316,6 @@
   margin-bottom: 3px;
   color: var(--main3);
   font-weight: 900;
-  display: flex;
-  justify-content: flex-start;
   gap: 10px;
 }
 .right-chat-line .chat-id > div {
@@ -315,6 +323,11 @@
 }
 .right-chat-line .chat-content {
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.right-chat-line .chat-content .chat-text-box {
   display: flex;
   justify-content: flex-start;
 }
@@ -360,6 +373,11 @@
 }
 .left-chat-line .chat-content {
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.left-chat-line .chat-content .chat-text-box {
   display: flex;
   justify-content: flex-end;
 }
@@ -436,6 +454,12 @@
   margin: 5px;
   padding: 5px;
   border-bottom: 1px solid white;
+}
+
+.one-list > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ads-form {

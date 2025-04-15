@@ -93,8 +93,8 @@ const AdminAds = () => {
         <div>현재 진행 중인 광고</div>
         <div className="list-box">
           <div className="one-list">
-            <div style={{ width: "20%", textAlign: "center" }}>이름</div>
-            <div style={{ width: "23%", textAlign: "center" }}>이미지</div>
+            <div style={{ width: "18%", textAlign: "center" }}>이름</div>
+            <div style={{ width: "20%", textAlign: "center" }}>이미지</div>
             <div style={{ width: "34%", textAlign: "center" }}>주소 리스트</div>
             <div style={{ width: "13%", textAlign: "center" }}>게시일</div>
             <div style={{ width: "5%", textAlign: "center" }}>타입</div>
@@ -104,10 +104,10 @@ const AdminAds = () => {
             adsList.map((ad, index) => {
               return (
                 <div key={"ad-" + index} className="one-list">
-                  <div style={{ width: "20%", textAlign: "center" }}>
+                  <div style={{ width: "18%", textAlign: "center" }}>
                     {ad.adsName}
                   </div>
-                  <div style={{ width: "23%", textAlign: "center" }}>
+                  <div style={{ width: "20%", textAlign: "center" }}>
                     {ad.adsImg}
                   </div>
                   <div style={{ width: "34%", textAlign: "center" }}>

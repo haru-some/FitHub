@@ -59,19 +59,23 @@ const AdminStat = () => {
   return (
     <section className="admin-stat-section">
       <div className="admin-member-tab">
-        <div
-          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
-          id="member"
-          onClick={changeTab}
-        >
-          회원 활동 통계
+        <div className="tab-div">
+          <div
+            className={tabChange === 1 ? "page-title active-tab" : "page-title"}
+            id="member"
+            onClick={changeTab}
+          >
+            회원 활동 통계
+          </div>
         </div>
-        <div
-          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
-          id="board"
-          onClick={changeTab}
-        >
-          상품 통계
+        <div className="tab-div">
+          <div
+            className={tabChange === 2 ? "page-title active-tab" : "page-title"}
+            id="board"
+            onClick={changeTab}
+          >
+            상품 통계
+          </div>
         </div>
       </div>
       <div className="admin-stat-tab-content">
@@ -247,16 +251,18 @@ const MemberStatChart = () => {
       <div>
         <div>회원 이용 통계</div>
         <div className="chart-div" style={{ height: "400px" }}>
-          <MyResponsiveLine
-            lineChartData={lineChartData}
-            setLineChartData={setLineChartData}
-          />
+          {lineChartData && setLineChartData && (
+            <MyResponsiveLine
+              lineChartData={lineChartData}
+              setLineChartData={setLineChartData}
+            />
+          )}
         </div>
       </div>
       <div>
         <div>회원 수</div>
         <div className="chart-div" style={{ height: "300px" }}>
-          <MyResponsivePie pieChartData={pieChartData} />
+          {pieChartData && <MyResponsivePie pieChartData={pieChartData} />}
         </div>
       </div>
     </div>
@@ -401,13 +407,13 @@ const SalesStatChart = () => {
         <div className="chart-day-member">
           <h3>카테고리별 매출 통계 - 총 {formattedSum}원</h3>
           <div className="chart-div" style={{ height: "300px" }}>
-            <MyResponsivePie pieChartData={totalPrice} />
+            {totalPrice && <MyResponsivePie pieChartData={totalPrice} />}
           </div>
         </div>
         <div className="chart-day-visit">
           <h3>상품별 판매 갯수 - 총 {totalCount}개</h3>
           <div className="chart-div" style={{ height: "300px" }}>
-            <MyResponsivePie pieChartData={totalSell} />
+            {totalSell && <MyResponsivePie pieChartData={totalSell} />}
           </div>
         </div>
       </div>
@@ -415,7 +421,9 @@ const SalesStatChart = () => {
         <div className="chart-day-sales">
           <h3>매출 통계</h3>
           <div className="chart-div" style={{ height: "300px" }}>
-            <MyResponsiveBar2 daySales={daySales} type={type} />
+            {daySales && type && (
+              <MyResponsiveBar2 daySales={daySales} type={type} />
+            )}
           </div>
           <div className="chart-filter">
             <div
@@ -699,78 +707,83 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         console.error("GA4 API 호출 실패:", error);
       });
   }, []);
+
   return (
     <>
-      {lineChartData && (
-        <ResponsiveLine
-          data={lineChartData}
-          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-          xScale={{ type: "point" }}
-          yScale={{
-            type: "linear",
-            min: "auto",
-            max: "auto",
-            stacked: true,
-            reverse: false,
-          }}
-          yFormat=" >-.2f"
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: "날짜",
-            legendOffset: 36,
-            legendPosition: "middle",
-            truncateTickAt: 0,
-          }}
-          axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: "수치",
-            legendOffset: -40,
-            legendPosition: "middle",
-            truncateTickAt: 0,
-          }}
-          colors={{ scheme: "accent" }}
-          pointSize={10}
-          pointColor={{ theme: "background" }}
-          pointBorderWidth={2}
-          pointBorderColor={{ from: "serieColor" }}
-          pointLabel="data.yFormatted"
-          pointLabelYOffset={-12}
-          enableTouchCrosshair={true}
-          useMesh={true}
-          legends={[
-            {
-              anchor: "bottom-right",
-              direction: "column",
-              justify: false,
-              translateX: 100,
-              translateY: 0,
-              itemsSpacing: 0,
-              itemDirection: "left-to-right",
-              itemWidth: 80,
-              itemHeight: 20,
-              itemOpacity: 0.75,
-              symbolSize: 12,
-              symbolShape: "circle",
-              symbolBorderColor: "rgba(0, 0, 0, .5)",
-              effects: [
-                {
-                  on: "hover",
-                  style: {
-                    itemBackground: "rgba(0, 0, 0, .03)",
-                    itemOpacity: 1,
+      {Array.isArray(lineChartData) &&
+        lineChartData.length > 0 &&
+        lineChartData.some(
+          (serie) => Array.isArray(serie.data) && serie.data.length > 0
+        ) && (
+          <ResponsiveLine
+            data={lineChartData}
+            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            xScale={{ type: "point" }}
+            yScale={{
+              type: "linear",
+              min: "auto",
+              max: "auto",
+              stacked: true,
+              reverse: false,
+            }}
+            yFormat=" >-.2f"
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: "날짜",
+              legendOffset: 36,
+              legendPosition: "middle",
+              truncateTickAt: 0,
+            }}
+            axisLeft={{
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: "수치",
+              legendOffset: -40,
+              legendPosition: "middle",
+              truncateTickAt: 0,
+            }}
+            colors={{ scheme: "accent" }}
+            pointSize={10}
+            pointColor={{ theme: "background" }}
+            pointBorderWidth={2}
+            pointBorderColor={{ from: "serieColor" }}
+            pointLabel="data.yFormatted"
+            pointLabelYOffset={-12}
+            enableTouchCrosshair={true}
+            useMesh={true}
+            legends={[
+              {
+                anchor: "bottom-right",
+                direction: "column",
+                justify: false,
+                translateX: 100,
+                translateY: 0,
+                itemsSpacing: 0,
+                itemDirection: "left-to-right",
+                itemWidth: 80,
+                itemHeight: 20,
+                itemOpacity: 0.75,
+                symbolSize: 12,
+                symbolShape: "circle",
+                symbolBorderColor: "rgba(0, 0, 0, .5)",
+                effects: [
+                  {
+                    on: "hover",
+                    style: {
+                      itemBackground: "rgba(0, 0, 0, .03)",
+                      itemOpacity: 1,
+                    },
                   },
-                },
-              ],
-            },
-          ]}
-        />
-      )}
+                ],
+              },
+            ]}
+          />
+        )}
     </>
   );
 };

@@ -20,19 +20,23 @@ const AdminMember = () => {
   return (
     <section className="admin-member-section">
       <div className="admin-member-tab">
-        <div
-          className={tabChange === 1 ? "page-title active-tab" : "page-title"}
-          id="member"
-          onClick={changeTab}
-        >
-          회원 관리
+        <div className="tab-div">
+          <div
+            className={tabChange === 1 ? "page-title active-tab" : "page-title"}
+            id="member"
+            onClick={changeTab}
+          >
+            회원 관리
+          </div>
         </div>
-        <div
-          className={tabChange === 2 ? "page-title active-tab" : "page-title"}
-          id="board"
-          onClick={changeTab}
-        >
-          게시글 관리
+        <div className="tab-div">
+          <div
+            className={tabChange === 2 ? "page-title active-tab" : "page-title"}
+            id="board"
+            onClick={changeTab}
+          >
+            게시글 관리
+          </div>
         </div>
       </div>
       <div className="admin-member-tab-content">
