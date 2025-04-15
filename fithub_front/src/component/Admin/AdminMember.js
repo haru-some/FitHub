@@ -163,27 +163,31 @@ const MemberListTBL = ({ tabChange }, props) => {
                   <td style={{ width: "20%" }}>{member.memberEmail}</td>
                   <td style={{ width: "15%" }}>{member.memberPhone}</td>
                   <td style={{ width: "10%" }}>
-                    <select
-                      className="warning-select"
-                      name="warningLevel"
-                      value={member.warningLevel}
-                      onChange={(e) => selectChange(e, index)}
-                    >
-                      <option value={1}>일반</option>
-                      <option value={2}>경고</option>
-                      <option value={3}>블랙</option>
-                    </select>
+                    <div className="warning-div">
+                      <select
+                        className="warning-select"
+                        name="warningLevel"
+                        value={member.warningLevel}
+                        onChange={(e) => selectChange(e, index)}
+                      >
+                        <option value={1}>일반</option>
+                        <option value={2}>경고</option>
+                        <option value={3}>블랙</option>
+                      </select>
+                    </div>
                   </td>
                   <td style={{ width: "10%" }}>
-                    <select
-                      className="type-select"
-                      name="memberLevel"
-                      value={member.memberLevel}
-                      onChange={(e) => selectChange(e, index)}
-                    >
-                      <option value={1}>관리자</option>
-                      <option value={2}>정회원</option>
-                    </select>
+                    <div className="level-div">
+                      <select
+                        className="type-select"
+                        name="memberLevel"
+                        value={member.memberLevel}
+                        onChange={(e) => selectChange(e, index)}
+                      >
+                        <option value={1}>관리자</option>
+                        <option value={2}>정회원</option>
+                      </select>
+                    </div>
                   </td>
                   <td
                     style={{ width: "5%" }}

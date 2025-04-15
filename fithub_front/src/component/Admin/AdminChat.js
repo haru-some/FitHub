@@ -38,12 +38,12 @@ const AdminChat = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
 
-      connectHeaders: {
-        // 기존 Authorization 외에 memberId, roomId를 추가
-        Authorization: memberInfo.memberNo,
-        memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
-        roomId: selectedChatRoom, // 현재 입장한 채팅방 ID
-      },
+      // connectHeaders: {
+      //   // 기존 Authorization 외에 memberId, roomId를 추가
+      //   Authorization: memberInfo.memberNo,
+      //   memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
+      //   roomId: selectedChatRoom, // 현재 입장한 채팅방 ID
+      // },
 
       onConnect: () => {
         console.log("Connected to WebSocket");
