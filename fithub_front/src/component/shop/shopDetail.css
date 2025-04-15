@@ -157,7 +157,7 @@ h4 {
 
 /* input */
 .shop-pay-wrap input[type="text"],
-select {
+.shop-pay-wrap select {
   width: calc(100% - 20px);
   padding: 10px;
   border: 1px solid #ccc;
@@ -540,7 +540,7 @@ select {
 .order-list-wrap .pagination-controls {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 20px;
   margin-left: 270px;
   transform: translateX(-50%); /* 중앙 정렬을 위한 오프셋 */
   background-color: transparent;
@@ -554,8 +554,6 @@ select {
   border-radius: 5px;
   height: 40px;
   cursor: pointer;
-  display: flex;
-  justify-self: end;
 }
 .order-list-wrap .css-1umw9bq-MuiSvgIcon-root {
   margin-top: 0px;
