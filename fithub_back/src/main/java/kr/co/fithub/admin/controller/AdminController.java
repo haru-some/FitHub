@@ -44,7 +44,7 @@ public class AdminController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/memberList")
+	@GetMapping("/member")
 	public ResponseEntity<Map> memberList(@RequestParam int memberPage) {
 		Map map = adminService.memberList(memberPage);
 		return ResponseEntity.ok(map);
@@ -54,7 +54,7 @@ public class AdminController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/delMemberList")
+	@GetMapping("/delMember")
 	public ResponseEntity<Map> delMemberList(@RequestParam int delMemberPage) {
 		Map map = adminService.delMemberList(delMemberPage);
 		return ResponseEntity.ok(map);
@@ -64,7 +64,7 @@ public class AdminController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/communityList")
+	@GetMapping("/community")
 	public ResponseEntity<Map> communityList(@RequestParam int communityPage) {
 		Map map = adminService.communityList(communityPage);
 		return ResponseEntity.ok(map);
@@ -74,7 +74,7 @@ public class AdminController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	@GetMapping("/commentList")
+	@GetMapping("/comment")
 	public ResponseEntity<Map> commentList(@RequestParam int commentPage) {
 		Map map = adminService.commentList(commentPage);
 		return ResponseEntity.ok(map);
@@ -122,23 +122,23 @@ public class AdminController {
         return ResponseEntity.ok(result);
 	}
 	
-	@Operation(summary = "광고 조회", description = "광고를 조회합니다.")
+	@Operation(summary = "광고 전체 조회", description = "모든 광고를 조회합니다.")
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
 	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
 	})
-	@GetMapping("/getAdsList")
+	@GetMapping("/ads")
 	public ResponseEntity<List> getAdsList() {
 		List list = adminService.getAdsList();
 		return ResponseEntity.ok(list);
 	}
 	
-	@Operation(summary = "광고 조회", description = "광고를 조회합니다.")
+	@Operation(summary = "광고 타입 조회", description = "광고를 타입별로 조회합니다.")
 	@ApiResponses({
 	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
 	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
 	})
-	@GetMapping("/getAdsType")
+	@GetMapping("/adsType")
 	public ResponseEntity<List> getAdsType(@RequestParam String adsType) {
 		List list = adminService.getAdsType(adsType);
 		return ResponseEntity.ok(list);
@@ -149,7 +149,7 @@ public class AdminController {
 	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
 	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
 	})
-	@GetMapping("/getMember")
+	@GetMapping("/memberLevel")
 	public ResponseEntity<AdminDTO> getMember() {
 		AdminDTO admin = adminService.getMember();
 		return ResponseEntity.ok(admin);

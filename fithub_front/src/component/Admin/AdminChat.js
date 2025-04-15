@@ -21,7 +21,7 @@ const AdminChat = () => {
 
   useEffect(() => {
     axios
-      .get(`${backServer}/chat/list`)
+      .get(`${backServer}/chat/rooms`)
       .then((res) => {
         console.log(res);
         setChatRooms(res.data);
@@ -32,18 +32,30 @@ const AdminChat = () => {
   }, [alarm]);
 
   useEffect(() => {
+    axios
+      .patch(
+        `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo.memberId}`
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [selectedChatRoom]);
+
+  useEffect(() => {
     // WebSocket 연결
     const client = new Client({
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
 
-      // connectHeaders: {
-      //   // 기존 Authorization 외에 memberId, roomId를 추가
-      //   Authorization: memberInfo.memberNo,
-      //   memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
-      //   roomId: selectedChatRoom, // 현재 입장한 채팅방 ID
-      // },
+      connectHeaders: {
+        Authorization: memberInfo.memberNo,
+        memberId: memberInfo.memberId,
+        roomId: selectedChatRoom,
+      },
 
       onConnect: () => {
         console.log("Connected to WebSocket");
@@ -179,7 +191,7 @@ const AdminChatView = ({
   useEffect(() => {
     // 기존 채팅 기록 불러오기
     axios
-      .get(`${backServer}/chat/loadChatMessage?chatRoomNo=${selectedChatRoom}`)
+      .get(`${backServer}/chat/loadMessage?chatRoomNo=${selectedChatRoom}`)
       .then((res) => {
         setMessages(res.data);
       })

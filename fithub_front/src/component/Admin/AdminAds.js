@@ -18,7 +18,7 @@ const AdminAds = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/getAdsList`)
+      .get(`${process.env.REACT_APP_BACK_SERVER}/admin/ads`)
       .then((res) => {
         console.log(res);
         setAdsList(res.data);

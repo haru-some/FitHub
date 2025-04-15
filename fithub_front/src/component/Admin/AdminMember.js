@@ -73,7 +73,7 @@ const MemberListTBL = ({ tabChange }, props) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/memberList?memberPage=${memberPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/member?memberPage=${memberPage}`
       )
       .then((res) => {
         setMemberList(res.data.memberList);
@@ -226,7 +226,7 @@ const DelMemberListTBL = ({ tabChange }, props) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/delMemberList?delMemberPage=${delMemberPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/delMember?delMemberPage=${delMemberPage}`
       )
       .then((res) => {
         console.log(res);
@@ -291,7 +291,7 @@ const CommunityListTBL = ({ tabChange }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/communityList?communityPage=${communityPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/community?communityPage=${communityPage}`
       )
       .then((res) => {
         console.log(res);
@@ -366,7 +366,7 @@ const CommentListTBL = ({ tabChange }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/commentList?commentPage=${commentPage}`
+        `${process.env.REACT_APP_BACK_SERVER}/admin/comment?commentPage=${commentPage}`
       )
       .then((res) => {
         console.log(res.data.commentList);
