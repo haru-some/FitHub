@@ -12,7 +12,6 @@ import ExerciseLog from "./ExerciseLog";
 import RoutineSetting from "./RoutineSetting";
 import ProfileCard from "./ProfileCard ";
 import { useEffect, useRef, useState } from "react";
-import { selectClasses } from "@mui/material";
 import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한글 locale 추가
 import axios from "axios";
@@ -167,11 +166,11 @@ const MyFitMain = () => {
     if (!member) {
       navigate("/");
       Swal.fire({
-        title: "로그인 필요",
+        title: "이용 불가",
         text: "로그인이 필요한 서비스입니다.",
         icon: "warning",
         confirmButtonColor: "#589c5f",
-        confirmButtonText: "확인",
+        confirmButtonText: "로그인",
       }).then((result) => {
         if (result.isConfirmed) {
           navigate("/login");
@@ -179,8 +178,6 @@ const MyFitMain = () => {
       });
     }
   }
-
-  const [list, setList] = useState([]);
 
   useEffect(() => {
     if (!member) {
