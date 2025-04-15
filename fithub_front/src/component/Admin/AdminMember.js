@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import PageNavigation from "../utils/PageNavigation";
 import { useNavigate } from "react-router-dom";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState } from "../utils/RecoilData";
 
 const AdminMember = () => {
@@ -68,7 +68,8 @@ const MemberListTBL = ({ tabChange }, props) => {
   const [memberList, setMemberList] = useState([]);
   const [memberPage, setMemberPage] = useState(1);
   const [memberPagNavi, setMemberPagNavi] = useState(null);
-  const memberInfo = useRecoilState(memberState);
+  const memberInfo = useRecoilValue(memberState);
+  const [updateData, setUpdateData] = useState(false);
   useEffect(() => {
     axios
       .get(
@@ -107,6 +108,7 @@ const MemberListTBL = ({ tabChange }, props) => {
       )
       .then((res) => {
         console.log("업데이트 성공:", res.data);
+        setUpdateData((prev) => !prev);
       })
       .catch((err) => {
         console.error("업데이트 실패:", err);
@@ -115,16 +117,17 @@ const MemberListTBL = ({ tabChange }, props) => {
   const deleteMember = (memberNo) => {
     axios
       .delete(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberNo}`,
-        memberInfo.memberId
+        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberInfo.memberId}?memberNo=${memberNo}`
       )
       .then((res) => {
         console.log(res);
+        setUpdateData((prev) => !prev);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <div>
       <table className="admin-tbl">
@@ -395,6 +398,7 @@ const CommentListTBL = ({ tabChange }) => {
                     onClick={(e) => {
                       navigate(`/community/view/${comment.communityNo}`);
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     {comment.commentContent}
                   </td>

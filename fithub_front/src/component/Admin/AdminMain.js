@@ -19,7 +19,8 @@ const AdminMain = () => {
     navigate("/");
     setLogoutST(false);
   } else {
-    if (!memberInfo) {
+    if (!memberInfo || memberInfo.memberLevel !== 1) {
+      navigate("/");
       Swal.fire({
         title: "입장 불가",
         text: "관리자만 입장 가능합니다.",
@@ -28,11 +29,21 @@ const AdminMain = () => {
         confirmButtonText: "확인",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/login");
+          if (memberInfo) {
+            navigate("/");
+          } else {
+            navigate("/login");
+          }
         }
       });
     }
   }
+
+  useEffect(() => {
+    if (!memberInfo) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>

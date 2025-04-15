@@ -169,6 +169,7 @@ const MemberChat = () => {
         console.log(err);
       });
   };
+  console.log(memberInfo);
   return (
     <section className="member-chat-section">
       <div className="page-title">고객센터 문의</div>
@@ -200,7 +201,9 @@ const MemberChat = () => {
                           .slice(0, 2)
                           .join(":")}
                       </div>
-                      <div className="chat-text">{msg.messageContent}</div>
+                      <div className="chat-text-box">
+                        <div className="chat-text">{msg.messageContent}</div>
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -215,7 +218,9 @@ const MemberChat = () => {
                           .join(":")}{" "}
                         - {msg.chatMemberId}
                       </div>
-                      <div className="chat-text">{msg.messageContent}</div>
+                      <div className="chat-text-box">
+                        <div className="chat-text">{msg.messageContent}</div>
+                      </div>
                     </div>
                     <div className="left-chat-profile">
                       <img
