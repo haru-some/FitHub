@@ -50,8 +50,12 @@
   margin: 5px 0;
 }
 .cart-wrap .hidden-detail {
-  /* display: none; */
+  display: none;
 }
+.cart-wrap .member-info {
+  display: none;
+}
+
 .cart-wrap .cart-summary {
   display: flex;
   justify-content: space-between;
@@ -62,7 +66,9 @@
 .cart-wrap .cart-summary h3 {
   margin: 0;
 }
-
+.cart-wrap .cart-summary span {
+  margin-right: 260px;
+}
 .cart-wrap .pay-all-button {
   background-color: #4caf50;
   color: white;
