@@ -85,12 +85,14 @@ const ShopCart = () => {
     });
   };
   // 총 결제 금액 계산 (체크된 아이템
-  const totalAmount =
+  const finalAmount =
     selectedItems.length > 0
       ? cart
           .filter((item) => selectedItems.includes(item.cartNo))
           .reduce((acc, item) => acc + item.goodsPrice * item.goodsEa, 0)
       : cart.reduce((acc, item) => acc + item.goodsPrice * item.goodsEa, 0);
+  const shippingFee = finalAmount <= 30000 ? 3000 : 0; // 30,000원 이하 -> 배송비 3,000원 추가
+  const totalAmount = finalAmount + shippingFee; // 최종 결제 금액
 
   const [formData, setFormData] = useState({
     memberName: memberInfo.memberName,
@@ -298,6 +300,7 @@ const ShopCart = () => {
         </div>
         <div className="cart-summary">
           <h3>총 결제금액: {totalAmount.toLocaleString()} 원</h3>
+          <span>30000원 이하 배송비 3000원</span>
           <button className="pay-all-button" onClick={handlePayAll}>
             결제하기
           </button>

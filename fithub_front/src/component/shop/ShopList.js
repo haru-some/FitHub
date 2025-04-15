@@ -213,7 +213,7 @@ const GoodsList = () => {
   return (
     <div>
       {/* 카테고리 버튼 구현 */}
-      <div>
+      <div className="category-button">
         {categories.map((category) => (
           <button
             key={category}

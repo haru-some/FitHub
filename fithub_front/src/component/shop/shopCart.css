@@ -1,6 +1,6 @@
 .cart-wrap {
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 50px !important;
+  margin-bottom: 50px !important;
   margin: 0 auto;
 }
 
@@ -79,8 +79,8 @@
   margin-right: 55px;
 }
 
-.cart-wrap .pay-all-button-button:hover {
-  background-color: #45a049;
+.cart-wrap .pay-all-button:hover {
+  background-color: #218838;
 }
 
 input[type="checkbox"] {
