@@ -86,7 +86,7 @@ const CommunityView = () => {
         community.commentList.unshift(res.data);
         setCommunity({
           ...community,
-          commentCount: community.commentCount + 1,
+          commentCount: community.commentCount,
         });
         setNewComment("");
       });
@@ -517,10 +517,6 @@ const Comment = (props) => {
       return `${diffInDays}일 전`;
     }
   };
-  //페이지 입장 시 스크롤 상단으로 이동
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   return (
     <li className="comment-list">

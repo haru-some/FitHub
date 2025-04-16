@@ -3,48 +3,60 @@
 <mapper namespace="kr.co.fithub.community.model.dao.CommunityDao">
 
 	<select id="selectCommunityList" resultType="community">
-		SELECT * FROM (
-    SELECT 
-        A.*, 
-        rownum AS rnum
-    FROM (
-        SELECT
-            m.member_id,
-            m.member_no,
-            m.member_thumb,
-            c.community_status,
-            c.community_content,
-            c.community_date,
-            c.community_no,
-            (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no) AS like_count,
-            (SELECT COUNT(*) FROM community_like WHERE community_no = c.community_no AND member_no = #{loginMemberNo}) AS is_like,
-            (SELECT COUNT(*) FROM comment_tbl WHERE community_no = c.community_no) AS comment_count,
-            (SELECT COUNT(*) FROM follow WHERE follow_member_no = c.member_no AND member_no = #{loginMemberNo}) AS is_follow
-        FROM community c
-        JOIN member m ON c.member_no = m.member_no
-        WHERE m.del_status != 'Y'
-        AND (
-            m.member_id || REGEXP_REPLACE(c.community_content, '&lt;[^>]+>', '') LIKE '%' || #{searchText} || '%'
-        )
-        <if test="memberNo == 0">          
-        AND c.community_status = 1
-        </if>
-        <if test="memberNo != 0">            
-        AND c.member_no = #{memberNo} 
-        AND c.community_content LIKE '%' || #{searchText} || '%' 
-        </if>
-        ORDER BY community_no DESC
-    ) A 
-) 
-WHERE rnum BETWEEN #{startRow} AND #{endRow}	
-	</select>
+	SELECT * FROM (
+        SELECT 
+            A.*, 
+            rownum AS rnum
+        FROM (
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.member_thumb,
+                c.community_status,
+                c.community_content,
+                c.community_date,
+                c.community_no,
+                (SELECT COUNT(*) 
+                 FROM community_like 
+                 WHERE community_no = c.community_no) AS like_count,
+                (SELECT COUNT(*) 
+                 FROM community_like 
+                 WHERE community_no = c.community_no 
+                   AND member_no = #{loginMemberNo}) AS is_like,
+                (SELECT COUNT(*) 
+                 FROM comment_tbl ct
+                 JOIN member m2 ON ct.member_no = m2.member_no
+                 WHERE ct.community_no = c.community_no
+                   AND m2.del_status != 'Y') AS comment_count,
+                (SELECT COUNT(*) 
+                 FROM follow 
+                 WHERE follow_member_no = c.member_no 
+                   AND member_no = #{loginMemberNo}) AS is_follow
+            FROM community c
+            JOIN member m ON c.member_no = m.member_no
+            WHERE m.del_status != 'Y'
+            AND (
+                m.member_id || REGEXP_REPLACE(c.community_content, '&lt;[^>]+>', '') LIKE '%' || #{searchText} || '%'
+            )
+            <if test="memberNo == 0">          
+                AND c.community_status = 1
+            </if>
+            <if test="memberNo != 0">            
+                AND c.member_no = #{memberNo} 
+                AND c.community_content LIKE '%' || #{searchText} || '%' 
+            </if>
+            ORDER BY community_no DESC
+        ) A 
+    ) 
+    WHERE rnum BETWEEN #{startRow} AND #{endRow}	
+</select>
 	
 	<select id="totalCount" resultType="int">
 		select count(*) from community
 	</select>
 
 	<select id="selectOneCommunity" resultType="community">
-		select
+	select
 		m.member_id,
 		m.member_thumb,
 		m.member_no,
@@ -52,20 +64,28 @@ WHERE rnum BETWEEN #{startRow} AND #{endRow}
 		c.community_content,
 		c.community_no,
 		to_char(sysdate, 'yyyy-mm-dd') as community_date,
-		(select count(*) from community_like where community_no = c.community_no) as
-		like_count,
-		(select count(*) from community_like where community_no = c.community_no and
-		member_no = #{memberNo}) as is_like,
-		(select count(*) from comment_tbl where community_no = c.community_no) as
-		comment_count,
-		(select count(*) from follow where follow_member_no = c.member_no and
-		member_no = #{memberNo}) as is_follow
-		FROM
+		(select count(*) 
+		 from community_like 
+		 where community_no = c.community_no) as like_count,
+		(select count(*) 
+		 from community_like 
+		 where community_no = c.community_no 
+		   and member_no = #{memberNo}) as is_like,
+		(select count(*) 
+		 from comment_tbl ct
+		 join member m2 on ct.member_no = m2.member_no
+		 where ct.community_no = c.community_no 
+		   and m2.del_status != 'Y') as comment_count,
+		(select count(*) 
+		 from follow 
+		 where follow_member_no = c.member_no 
+		   and member_no = #{memberNo}) as is_follow
+	FROM
 		community c
-		join
-		member m on c.member_no = m.member_no
-		where c.community_no = #{communityNo}
-	</select>
+		join member m on c.member_no = m.member_no
+	where c.community_no = #{communityNo}
+</select>
+
 
 	<insert id="insertLike">
 		insert into community_like values(#{communityNo},
