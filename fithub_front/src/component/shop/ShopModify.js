@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import { memberState, isLoginState, logoutState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
 import { data, Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
@@ -12,6 +12,7 @@ const ShopModify = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
 
   const { goodsNo } = useParams(); // Image에서 goodsNo 가져오기
   const [activeTab, setActiveTab] = useState("상품정보");
@@ -54,21 +55,21 @@ const ShopModify = () => {
 
   const [infoArr, setInfoArr] = useState([]);
 
-  useEffect(() => {
-    // 로그인 여부를 확인
-    if (!isLogin) {
+  if (logoutST) {
+    navigate("/");
+    setLogoutST(false);
+  } else {
+    if (!memberInfo || memberInfo.memberLevel !== 1) {
+      navigate("/");
       Swal.fire({
-        title: "관리자 페이지입니다..",
+        title: "이용 불가",
+        text: "관리자만 입장 가능합니다.",
         icon: "warning",
-        confirmButtonText: "확인",
         confirmButtonColor: "#589c5f",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate(`/login/`);
-        }
+        confirmButtonText: "확인",
       });
     }
-  }, [isLogin, navigate]);
+  }
 
   const submit = () => {
     /////////////////////////////////////////FORM////////////////////////////////////////////
@@ -79,10 +80,6 @@ const ShopModify = () => {
     form.append("goodsExplain", goodsExplain);
     form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
-
-    console.log("이미지가 살아있나..");
-    console.log(goodsImage);
-    console.log(goodsDetailImg);
 
     form.append("goodsImg", goodsImage);
     form.append("detailImg", goodsDetailImg);
@@ -339,7 +336,6 @@ const ShopModify = () => {
       setSelectedImage(null);
       setExistingGoodsImage(null);
     }
-    console.log(goodsDetailImg);
   };
 
   const changeDeImg = (e) => {
@@ -359,7 +355,6 @@ const ShopModify = () => {
       setShowDetailImage(null);
       setSelectedImageDetail(null);
     }
-    console.log(goodsImage);
   };
 
   useEffect(() => {
@@ -401,10 +396,6 @@ const ShopModify = () => {
       });
   }, [goodsNo, backServer, activeTab]);
 
-  console.log(goodsImage);
-  console.log("여기");
-  console.log(existingGoodsImage);
-
   return (
     <div className="shop-detail-frm-wrap">
       <div className="main-detail">
@@ -444,10 +435,10 @@ const ShopModify = () => {
                 color: "black",
                 fontSize: "24px",
                 width: "100%",
-                marginBottom: "10px",
+                marginBottom: "20px",
               }}
             />
-            <div>
+            <div className="editor-wrap">
               <h2>상품 설명</h2>
               <TextEditor data={goodsExplain} setData={setGoodsExplain} />
             </div>

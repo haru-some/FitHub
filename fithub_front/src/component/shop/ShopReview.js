@@ -35,8 +35,6 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo, goodsName }) => {
       reStar: rating,
     };
 
-    console.log(reviewData);
-
     axios
       .post(
         `${process.env.REACT_APP_BACK_SERVER}/goods/review/add/`,
@@ -223,7 +221,7 @@ const ShopReview = () => {
                 </div>
               ))
             ) : (
-              <p>구매한 상품이 없습니다.</p>
+              <p style={{ marginTop: "10px" }}>구매한 상품이 없습니다.</p>
             )}
             <div className="pagination-controls">
               <button onClick={handlePrevPage} disabled={currentPage === 1}>

@@ -76,7 +76,8 @@ function ShopPay() {
       goodsEa: quantity,
 
       goodsPrice: goods.goodsPrice,
-      goodsTotalPrice:
+      goodsTotalPrice: goods.goodsPrice * quantity,
+      goodsFinalPrice:
         goods.goodsPrice * quantity +
         (goods.goodsPrice * quantity >= 30000 ? 0 : 3000),
     };
@@ -106,7 +107,7 @@ function ShopPay() {
         pay_method: "card",
         merchant_uid: "order_no_" + Date.now(),
         name: `주문: ${goods.goodsName}`,
-        amount: paymentData.goodsTotalPrice,
+        amount: paymentData.goodsFinalPrice,
         buyer_email: "test@portone.io",
         buyer_name: formData.takerName,
         buyer_tel: formData.takerPhone,

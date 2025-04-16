@@ -188,7 +188,7 @@ public class ShopService {
 		
 		
 		int result = shopDao.modifyGoods(goods);
-		System.out.println(goods);
+		
 		
 		
 		for(GoodsFile goodsFile : goodsFileList) {
