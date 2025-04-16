@@ -37,6 +37,11 @@ const Main = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="main-page-wrap">
       <section className="hero-section">

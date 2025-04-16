@@ -28,15 +28,17 @@ const CommunityList = () => {
 
   useEffect(() => {
     axios
-      .get(
+      .post(
         `${backServer}/community/list/${
           member ? member.memberNo : 0
-        }?memberNo=${memberNo}&page=${page}&size=10&searchText=${searchText}`
+        }?memberNo=${memberNo}&page=${page}&size=10`,
+        { searchText: searchText }
       )
       .then((res) => {
         setCommunityList([...communityList, ...res.data]);
       });
   }, [page, searchText, memberNo]);
+
   const loadMoreCommunities = useCallback(() => {
     if (communityList && hasMore) setPage((prevPage) => prevPage + 1);
   }, [hasMore]);

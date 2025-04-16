@@ -209,7 +209,7 @@ const CommunityView = () => {
               src={
                 community && community.memberThumb
                   ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
-                  : "/image/default_img.png"
+                  : "/image/profile.png"
               }
               alt="프로필"
               style={{
@@ -267,7 +267,7 @@ const CommunityView = () => {
                 src={
                   community && community.memberThumb
                     ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
-                    : "/image/default_img.png"
+                    : "/image/profile.png"
                 }
                 onClick={() => {
                   navigate(`/myfit/activity/${community.memberNo}`);
@@ -375,7 +375,7 @@ const CommunityView = () => {
                   src={
                     member.memberThumb
                       ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${member.memberThumb}`
-                      : "/image/default_img.png"
+                      : "/image/profile.png"
                   }
                   onClick={() => {
                     navigate(`/myfit/activity/${community.memberNo}`);
@@ -527,9 +527,9 @@ const Comment = (props) => {
       <div className="member-img">
         <img
           src={
-            comment.memberThumb
+            member.memberThumb
               ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${comment.memberThumb}`
-              : "/image/default_img.png"
+              : "/image/profile.png"
           }
           onClick={() => {
             navigate(`/myfit/activity/${comment.memberNo}`);

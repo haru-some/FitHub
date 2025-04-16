@@ -286,7 +286,7 @@ const CommunityItem = (props) => {
               src={
                 community && community.memberThumb
                   ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${community.memberThumb}`
-                  : "/image/default_img.png"
+                  : "/image/profile.png"
               }
               onClick={(e) => {
                 navigate(`/myfit/activity/${community.memberNo}`);

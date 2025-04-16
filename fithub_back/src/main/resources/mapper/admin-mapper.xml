@@ -5,7 +5,7 @@
 		select * from (select rownum as rnum, m.* from (select * from member order by 1 desc) m) where rnum between #{start} and #{end} order by 1 desc
 	</select>
 	<select id="delMemberList" resultType="delMember">
-		select * from (select rownum as rnum, d.* from (select * from del_member order by 1 desc) d) where rnum between #{start} and #{end} order by 1 desc
+		select * from (select rownum as rnum, d.* from (select * from del_member order by 1 desc) d) where rnum between #{start} and #{end} order by 5 desc
 	</select>
 	<select id="communityList" resultType="community">
 		select * from (select rownum as rnum, r.* from (select c.*, (select m.member_id from member m where m.member_no = c.member_no) as member_id from community c order by 1 desc) r) where rnum between #{start} and #{end}
