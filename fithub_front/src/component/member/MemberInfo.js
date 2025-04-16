@@ -10,16 +10,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 const MemberInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  const location = useLocation();
   const [loginMember, setLoginMember] = useRecoilState(memberState);
   const isLogin = useRecoilValue(isLoginState);
   useEffect(() => {
     if (!isLogin) {
-      navigate("/login", {
-        state: { from: location.pathname },
-      });
+      navigate("/");
     }
-  }, [isLogin, navigate, location]);
+  }, [isLogin, navigate]);
 
   const [member, setMember] = useState({
     memberId: "",

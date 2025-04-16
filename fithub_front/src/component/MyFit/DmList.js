@@ -40,7 +40,7 @@ const DmList = (props) => {
                 <div className="avatar-wrap">
                   <img
                     src={
-                      dm.otherMemberThumb
+                      dm.otherMemberDelStatus == "N" && dm.otherMemberThumb
                         ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${dm.otherMemberThumb}`
                         : "/image/profile.png"
                     }
@@ -49,12 +49,20 @@ const DmList = (props) => {
                 </div>
                 <div className="user-info">
                   <div className="info-wrap">
-                    <div className="name">{dm.otherMemberId}</div>
-                    <div className="username">{dm.otherMemberName}</div>
+                    <div className="name">
+                      {dm.otherMemberDelStatus === "N"
+                        ? dm.otherMemberId
+                        : "탈퇴한 회원"}
+                    </div>
+                    <div className="username">
+                      {dm.otherMemberDelStatus === "N"
+                        ? dm.otherMemberName
+                        : ""}
+                    </div>
                   </div>
                   <div className="bot-wrap">
                     <div className="dm-item-content">
-                      {dm.lastMessageContent.replaceAll("<br/>"," ")}
+                      {dm.lastMessageContent.replaceAll("<br/>", " ")}
                     </div>
                     <div
                       className={`unread-count ${
