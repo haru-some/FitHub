@@ -84,16 +84,6 @@ function ShopPay() {
 
     console.log("결제 데이터:", paymentData);
 
-    // axios
-    //   .post(`${backServer}/goods/sell/add/`, paymentData)
-    //   .then((res) => {
-    //     console.log(res);
-    //     navigate(`/shop/`);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
     // 결제 API 호출
     const IMP = window.IMP; // iamport
     if (!IMP) {

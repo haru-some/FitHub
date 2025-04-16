@@ -142,7 +142,6 @@ const MemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
       showCancelButton: true,
       confirmButtonColor: "#589c5f",
       confirmButtonText: "강퇴",
-      cancelButtonColor: "red",
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -243,10 +242,12 @@ const MemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
                   <td style={{ width: "5%" }}>
                     {member.delStatus === "N" ? (
                       <DisabledByDefaultIcon
+                        style={{ cursor: "pointer" }}
                         onClick={() => deleteMember(member.memberNo)}
                       />
                     ) : (
                       <ReplayCircleFilledIcon
+                        style={{ cursor: "pointer" }}
                         onClick={() => rollBackMember(member.memberNo)}
                       />
                     )}

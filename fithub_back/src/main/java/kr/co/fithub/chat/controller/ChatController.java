@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.fithub.chat.model.dto.ChatMessageDTO;
 import kr.co.fithub.chat.model.dto.ChatRoomDTO;
 import kr.co.fithub.chat.model.service.ChatService;
-import kr.co.fithub.chat.model.service.WebSocketSessionManager;
+//import kr.co.fithub.chat.model.service.WebSocketSessionManager;
 import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin("*")
@@ -38,8 +38,8 @@ public class ChatController {
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
-	@Autowired
-	private WebSocketSessionManager sessionManager;
+//	@Autowired
+//	private WebSocketSessionManager sessionManager;
 	
 	@Operation(summary = "회원의 문의 채팅방 생성", description = "관리자와의 문의 채팅방을 생성합니다.")
 	@ApiResponses({
@@ -111,7 +111,7 @@ public class ChatController {
 	    // 메시지 저장
 	    int result = chatService.inputChatMessage(message);
 	    messagingTemplate.convertAndSend("/topic/chat/messages/" + roomNo, message);
-	} 
+	}
 	
 	@Operation(summary = "채팅 알람", description = "채팅 중이지 않은 채팅방에 채팅이 왔을 때 알림을 날립니다.")
 	@ApiResponses({

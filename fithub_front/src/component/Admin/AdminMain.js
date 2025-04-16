@@ -71,7 +71,7 @@ const Sidebar = () => {
         to="/admin/member"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        회원 관리
+        사이트 관리
       </NavLink>
       <NavLink
         to="/admin/stat"
@@ -89,7 +89,7 @@ const Sidebar = () => {
         to="/admin/ads"
         className={({ isActive }) => (isActive ? "active-tab" : "")}
       >
-        광고 추가
+        광고 관리
       </NavLink>
       <NavLink
         to="/admin/goods"

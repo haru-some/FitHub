@@ -37,9 +37,9 @@ const Advertisements = () => {
     setCurrentAd((prevAd) => (prevAd + 1) % ads.length);
   };
 
-  const previousAd = () => {
-    setCurrentAd((prevAd) => (prevAd - 1 + ads.length) % ads.length);
-  };
+  // const previousAd = () => {
+  //   setCurrentAd((prevAd) => (prevAd - 1 + ads.length) % ads.length);
+  // };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -51,9 +51,9 @@ const Advertisements = () => {
 
   return (
     <div className="Banner-wrap">
-      <button onClick={previousAd}>←</button>
+      {/* <button onClick={previousAd}>←</button> */}
       <AdBanners adsType={"w"} />
-      <button onClick={nextAd}>→</button>
+      {/* <button onClick={nextAd}>→</button> */}
     </div>
   );
 };
@@ -305,13 +305,6 @@ const GoodsList = () => {
         <div className="pagination">{renderPagination()}</div>
       </div>
     </div>
-  );
-};
-
-const ShopItem = () => {
-  const navigate = useNavigate();
-  return (
-    <div className="goods-card" onClick={() => [navigate(`/shop/view/`)]}></div>
   );
 };
 

@@ -342,7 +342,7 @@ const ShopDetail = () => {
             <h1>{goods.goodsName}</h1>
             <div dangerouslySetInnerHTML={{ __html: goods.goodsExplain }} />
           </div>
-          <h3>{goods.goodsPrice.toLocaleString()}원</h3>
+          <h3>개당 가격 : {goods.goodsPrice.toLocaleString()}원</h3>
 
           <div className="price-box">
             <div className="quantity-controls">

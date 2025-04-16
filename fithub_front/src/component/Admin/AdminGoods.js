@@ -265,12 +265,6 @@ const AdminGoods = () => {
           </div>
         );
 
-      case "리뷰":
-        return <div>(예시)리뷰 정보 탭입니다.</div>;
-      case "배송/결제":
-        return <div>(예시)배송 정보 탭입니다.</div>;
-      case "반품/교환":
-        return <div>(예시)반품 정보 탭입니다.</div>;
       default:
         return null;
     }
@@ -398,17 +392,6 @@ const AdminGoods = () => {
 
           <div className="price-box">
             <h2>
-              수량:
-              <input
-                type="text"
-                value={goodsStock}
-                onChange={(e) => setGoodsStock(Number(e.target.value))}
-                style={{ margin: "0 5px", width: "50px" }}
-              />
-              개
-            </h2>
-
-            <h2>
               총 가격:
               <input
                 type="text"
@@ -427,7 +410,7 @@ const AdminGoods = () => {
       </div>
 
       <div className="tabs">
-        {["상품정보", "리뷰", "배송/결제", "반품/교환"].map((tab) => (
+        {["상품정보"].map((tab) => (
           <button
             key={tab}
             className={activeTab === tab ? "active" : ""}
