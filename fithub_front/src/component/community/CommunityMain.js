@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { logoutState, memberState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
 import AdBanners from "../utils/AdBanners";
+import { useEffect } from "react";
 
 const CommunityMain = () => {
   const params = useParams();
@@ -35,6 +36,10 @@ const CommunityMain = () => {
       });
     }
   }
+  //페이지 입장 시 스크롤 상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [params]);
   return (
     <div className="community-main-wrap">
       <div className="ads ads-set">
