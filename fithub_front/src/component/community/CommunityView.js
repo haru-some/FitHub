@@ -527,7 +527,7 @@ const Comment = (props) => {
       <div className="member-img">
         <img
           src={
-            member.memberThumb
+            comment.memberThumb
               ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${comment.memberThumb}`
               : "/image/profile.png"
           }
