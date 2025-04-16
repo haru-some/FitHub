@@ -101,14 +101,14 @@ const Follow = (props) => {
                       left: "50%",
                       transform: "translate(-50%, -50%)",
                       width: 400,
-                      bgcolor: "transparent", 
+                      bgcolor: "transparent",
                       borderRadius: "12px",
                       overflow: "hidden",
                     }}
                   >
                     <Box
                       sx={{
-                        bgcolor: "#1E1E1E", 
+                        bgcolor: "#1E1E1E",
                         color: "#fff",
                         textAlign: "center",
                         padding: "24px 16px",
@@ -191,54 +191,55 @@ const Follow = (props) => {
                       <div className="name">{member.memberId}</div>
                       <div className="username">{member.memberName}</div>
                     </div>
-                    {(loginMember && member.memberNo !== loginMemberNo) &&  (
+                    {loginMember && member.memberNo !== loginMemberNo && (
                       <>
-                      <button
-                        className={`follow-button ${
-                          member.isFollow === 1 ? "following" : ""
-                        }`}
-                        onClick={(e) => {
-                          if (member.isFollow === 1) {
-                            setOpen(member.memberNo);
-                          } else {
-                            //팔로우
-                            axios
-                              .post(
-                                `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMemberNo}?followMemberNo=${member.memberNo}`
-                              )
-                              .then((res) => {
-                                const obj = memberList.filter(
-                                  (item, i) => item.memberNo === member.memberNo
-                                )[0];
-                                const idx = memberList.indexOf(
-                                  memberList.filter(
+                        <button
+                          className={`follow-button ${
+                            member.isFollow === 1 ? "following" : ""
+                          }`}
+                          onClick={(e) => {
+                            if (member.isFollow === 1) {
+                              setOpen(member.memberNo);
+                            } else {
+                              //팔로우
+                              axios
+                                .post(
+                                  `${process.env.REACT_APP_BACK_SERVER}/community/follow/${loginMemberNo}?followMemberNo=${member.memberNo}`
+                                )
+                                .then((res) => {
+                                  const obj = memberList.filter(
                                     (item, i) =>
                                       item.memberNo === member.memberNo
-                                  )[0]
-                                );
-                                obj["isFollow"] = 1;
-                                memberList[idx] = obj;
+                                  )[0];
+                                  const idx = memberList.indexOf(
+                                    memberList.filter(
+                                      (item, i) =>
+                                        item.memberNo === member.memberNo
+                                    )[0]
+                                  );
+                                  obj["isFollow"] = 1;
+                                  memberList[idx] = obj;
 
-                                setMemberList([...memberList]);
-                              });
-                          }
-                          e.stopPropagation();
-                        }}
-                      >
-                        {member.isFollow === 1 ? "팔로잉" : "팔로우"}
-                      </button>
-                      <span
-                      className="material-icons chat-btn"
-                      onClick={(e) => {
-                        // 보낸사람/받은사람
-                        navigate(
-                          `/myfit/chat/${loginMember.memberNo}/${member.memberNo}`
-                        );
-                        e.stopPropagation();
-                      }}
-                    >
-                      send
-                    </span>
+                                  setMemberList([...memberList]);
+                                });
+                            }
+                            e.stopPropagation();
+                          }}
+                        >
+                          {member.isFollow === 1 ? "팔로잉" : "팔로우"}
+                        </button>
+                        <span
+                          className="material-icons chat-btn"
+                          onClick={(e) => {
+                            // 보낸사람/받은사람
+                            navigate(
+                              `/myfit/chat/${loginMember.memberNo}/${member.memberNo}`
+                            );
+                            e.stopPropagation();
+                          }}
+                        >
+                          send
+                        </span>
                       </>
                     )}
                   </div>
