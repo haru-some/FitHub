@@ -42,6 +42,11 @@ const MemberMain = () => {
       navigate("/mypage");
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   return (
     <section className="mypage-wrap">
       <aside className="mypage-sidebar">
