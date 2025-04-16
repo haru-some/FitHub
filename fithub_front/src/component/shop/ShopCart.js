@@ -267,7 +267,7 @@ const ShopCart = () => {
         </div>
         <div className="cart-summary">
           <h3>총 결제금액: {totalAmount.toLocaleString()} 원</h3>
-          <span>30000원 이하 배송비 3000원</span>
+          <span>(30000원 이하 배송비 3000원)</span>
           <button className="pay-all-button" onClick={handlePayAll}>
             결제하기
           </button>
