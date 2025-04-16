@@ -4,14 +4,14 @@
   margin: 50px 0;
   flex-wrap: wrap;
   width: 1400px;
-  gap: 20px;
+  gap: 60px;
 }
 .community-main-wrap .ads {
   display: flex;
   justify-content: center;
 }
 .community-main-wrap .ads-set {
-  width: 260px;
+  width: 210px;
   object-fit: contain;
   display: flex;
   flex-direction: column;

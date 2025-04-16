@@ -21,7 +21,6 @@ const AdminChat = () => {
     axios
       .get(`${backServer}/chat/rooms`)
       .then((res) => {
-        console.log(res);
         setChatRooms(res.data);
       })
       .catch((err) => {
@@ -277,12 +276,10 @@ const AdminChatView = ({
             <div
               key={index}
               className={
-                msg.chatMemberId !== memberInfo.memberId
-                  ? "right-chat-line"
-                  : "left-chat-line"
+                msg.memberLevel === 2 ? "right-chat-line" : "left-chat-line"
               }
             >
-              {memberInfo.memberId !== msg.chatMemberId ? (
+              {msg.memberLevel === 2 ? (
                 <>
                   <div className="right-chat-profile">
                     <img
@@ -314,7 +311,7 @@ const AdminChatView = ({
                         ?.split(":")
                         .slice(0, 2)
                         .join(":")}{" "}
-                      - {memberInfo.memberId}
+                      - {msg.chatMemberId}
                     </div>
                     <div className="chat-text-box">
                       <div className="chat-text">{msg.messageContent}</div>
@@ -322,7 +319,7 @@ const AdminChatView = ({
                   </div>
                   <div className="left-chat-profile">
                     <img
-                      src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${memberInfo.memberThumb}`}
+                      src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
                       alt="관리자"
                     />
                   </div>

@@ -71,9 +71,7 @@ const MemberChat = () => {
       .patch(
         `${backServer}/chat/view?roomNo=${roomNo}&chatMemberId=${memberInfo.memberId}`
       )
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
