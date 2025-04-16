@@ -223,6 +223,9 @@
   border: 1px solid #7c7c7c;
   box-sizing: border-box;
 }
+.admin-section .chat-list::-webkit-scrollbar {
+  display: none;
+}
 .admin-section .chat-room {
   display: flex;
   justify-content: space-between;

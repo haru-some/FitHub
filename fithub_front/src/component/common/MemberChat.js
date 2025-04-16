@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { logoutState, memberState } from "../utils/RecoilData";
 import "./chat.css";
 import axios from "axios";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import AddCommentIcon from "@mui/icons-material/AddComment";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
@@ -16,9 +14,9 @@ const MemberChat = () => {
   const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
   const navigate = useNavigate();
+
   const [stompClient, setStompClient] = useState(null);
   const backServer = process.env.REACT_APP_BACK_SERVER; //http://192.168.10.34:9999
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
   const socket = new SockJS(`${backServer}/inMessage`);
   const [roomNo, setRoomNo] = useState(null);
   const [newRoom, setNewRoom] = useState(false);
@@ -92,17 +90,13 @@ const MemberChat = () => {
       // },
 
       onConnect: () => {
-        console.log("Connected to WebSocket");
-
         // 채팅 메시지 구독
         client.subscribe(`/topic/chat/messages/${roomNo}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
         });
       },
-      onDisconnect: () => {
-        console.log("Disconnected from WebSocket");
-      },
+      onDisconnect: () => {},
     });
 
     client.activate();
