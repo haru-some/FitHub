@@ -117,7 +117,7 @@ const AdminGoods = () => {
                           type="text"
                           value={goodsInfo1}
                           onChange={(e) => setGoodsInfo1(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="필수 표기정보(이름)"
                         />
                       </div>
                     </th>
@@ -137,7 +137,7 @@ const AdminGoods = () => {
                           type="text"
                           value={goodsInfo2}
                           onChange={(e) => setGoodsInfo2(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="필수 표기정보(이름)"
                         />
                       </div>
                     </th>
@@ -159,7 +159,7 @@ const AdminGoods = () => {
                           type="text"
                           value={goodsInfo3}
                           onChange={(e) => setGoodsInfo3(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="필수 표기정보(이름)"
                         />
                       </div>
                     </th>
@@ -179,7 +179,7 @@ const AdminGoods = () => {
                           type="text"
                           value={goodsInfo4}
                           onChange={(e) => setGoodsInfo4(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="필수 표기정보(이름)"
                         />
                       </div>
                     </th>
@@ -201,7 +201,7 @@ const AdminGoods = () => {
                           type="text"
                           value={goodsInfo5}
                           onChange={(e) => setGoodsInfo5(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="필수 표기정보(이름)"
                         />
                       </div>
                     </th>
@@ -221,7 +221,7 @@ const AdminGoods = () => {
                           type="text"
                           value={goodsInfo6}
                           onChange={(e) => setGoodsInfo6(e.target.value)}
-                          placeholder="필수 표기정보(명)"
+                          placeholder="필수 표기정보(이름)"
                         />
                       </div>
                     </th>

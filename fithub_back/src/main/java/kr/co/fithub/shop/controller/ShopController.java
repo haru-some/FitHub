@@ -141,8 +141,7 @@ public class ShopController {
     @Operation(summary = "장바구니 버튼", description = "버튼을 누르면 상품 목록 리스트에 저장됩니다.")
     @PostMapping(value="/cart/add/")
    	public ResponseEntity<Integer> CartInsert(@RequestBody Cart cart ){
-    	System.out.println("들어올래???");
-    	System.out.println(cart);
+    	
     	int result = shopService.insertCart(cart);
    				
     	return ResponseEntity.ok(result);	
@@ -165,11 +164,8 @@ public class ShopController {
     @Operation(summary = "구매 버튼", description = "버튼을 누르면 상품을 구매하고 Sell 테이블에 저장됩니다.")
     @PostMapping(value="/sell/add/")
    	public ResponseEntity<Integer> SellInsert(@RequestBody Sell sell ){
-    	System.out.println("돈벌자!!!!");    	
-    	System.out.println(sell);
-    	
     	int result = shopService.insertSell(sell);
-    	System.out.println(sell);	
+    	
     	return ResponseEntity.ok(result);	
        }   
    
@@ -177,9 +173,7 @@ public class ShopController {
     @Operation(summary = "장바구니 구매 버튼", description = "버튼을 누르면 상품을 구매하고 Sell 테이블에 저장됩니다.")
     @PostMapping(value="/sell/payAll/")
    	public ResponseEntity<Integer> SellAllInsert(@RequestBody List<Cart> carts ){
-    	System.out.println("전체 구매!!!!");    	
-    	System.out.println(carts);
-    	
+    	    	
     	int result = shopService.SellAllInsert(carts);
     		
     	return ResponseEntity.ok(result);	
@@ -190,9 +184,7 @@ public class ShopController {
     @Operation(summary = "(내 정보)리뷰 가능한 상품", description = "내 정보에서 리뷰 가능한 상품 목록을 출력합니다.")
     @GetMapping(value="/sell/review/{memberNo}")
     public ResponseEntity<List<Sell>> selectReviews(@PathVariable int memberNo) {
-        System.out.println("리뷰 목록 출력!!!");
-        System.out.println(memberNo);
-        
+                
         List<Sell> reviewList = shopService.selectReviews(memberNo); // 여러 개의 Sell 객체 반환
         return ResponseEntity.ok(reviewList);
     }
@@ -201,8 +193,7 @@ public class ShopController {
     @Operation(summary = "(내 정보)나의 리뷰", description = "내 정보에서 내가 리뷰 기록한 목록을 출력합니다.")
     @GetMapping(value="/sell/myreview/{memberId}")
     public ResponseEntity<List<Review>> selectMyReviews(@PathVariable String memberId) {
-        System.out.println("나의! 리뷰 목록 출력!!!");
-        System.out.println(memberId);
+        
         
         List<Review> reviewList = shopService.selectMyReviews(memberId); // 여러 개의 Sell 객체 반환
         
@@ -225,25 +216,21 @@ public class ShopController {
     @Operation(summary = "리뷰 등록", description = "내 정보에서 상품 리뷰 기록하면 review 테이블에 저장합니다.")
     @PostMapping(value="/review/add/")
    	public ResponseEntity<Integer> InsertReview(@RequestBody Review review ){
-    	System.out.println("나의 코멘트!!!!");    	
-    	System.out.println(review);
-    	
-    	int result = shopService.insertReview(review);
-    	System.out.println(review);
+    	    	
+    	int result = shopService.insertReview(review);    	
     	return ResponseEntity.ok(result);	
        }
     @Operation(summary = "상품 등록", description = "상품 정보를 입력하여 등록합니다.")
     @PostMapping
 	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile, @RequestParam("goodsInfos") String goodsInfosJson) {
-    	
-    	System.out.println(goodsInfosJson);
+    	    	
     	Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String, String>>(){}.getType();
 
         HashMap<String, String> map = gson.fromJson(goodsInfosJson, type);
         
 
-        System.out.println(map.keySet());
+        
 		if(goodsImg != null) {
 			String savepath = root +"/goods/url/";
 			String filepath = fileUtils.upload(savepath, goodsImg);
@@ -283,8 +270,6 @@ public class ShopController {
 											   @ModelAttribute MultipartFile detailImg,
 											   @ModelAttribute MultipartFile[] goodsFile,
 											   @RequestParam("goodsInfos") String goodsInfosJson){
-    	System.out.println(goodsImg);
-    	System.out.println(detailImg);
     	
     	Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String, String>>(){}.getType();

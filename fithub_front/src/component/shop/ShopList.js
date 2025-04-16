@@ -64,7 +64,7 @@ const GoodsList = () => {
   const [sort, setSort] = useState("최신순");
   const [currentPage, setCurrentPage] = useState(1);
   const GoodsPerPage = 8;
-  const [clickedButton, setClickedButton] = useState(null);
+  const [clickedButton, setClickedButton] = useState("모두");
   const [reqPage, setReqPage] = useState(1);
 
   const backServer = process.env.REACT_APP_BACK_SERVER;
