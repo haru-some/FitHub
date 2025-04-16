@@ -57,7 +57,7 @@ function App() {
   const refreshLogin = () => {
     const refreshToken = window.localStorage.getItem("refreshToken");
     if (refreshToken !== null) {
-      axios.defaults.headers.common["Authorization"] = refreshToken;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${refreshToken}`;
       axios
         .get(`${backServer}/member/auth/refresh`)
         .then((res) => {
