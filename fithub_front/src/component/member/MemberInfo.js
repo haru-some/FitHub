@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, memberState } from "../utils/RecoilData";
 import axios from "axios";
 import "./member.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const MemberInfo = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;

@@ -27,7 +27,7 @@ import {
   LockReset as LockResetIcon,
   CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./member.css";
 
 const iconMap = {

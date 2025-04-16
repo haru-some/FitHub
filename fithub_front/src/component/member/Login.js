@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
 import { memberState } from "../utils/RecoilData";
@@ -16,7 +16,6 @@ import { useGoogleLogin } from "@react-oauth/google";
 const Login = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
-  const location = useLocation();
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
@@ -44,12 +43,11 @@ const Login = () => {
           );
           return;
         }
-        const redirectTo = location.state?.from || "/";
         localStorage.removeItem("joinStage");
         setMemberInfo(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.accessToken;
         localStorage.setItem("refreshToken", res.data.refreshToken);
-        navigate(redirectTo, { replace: true });
+        navigate("/");
       })
       .catch(() => {
         Swal.fire(
