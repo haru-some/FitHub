@@ -30,10 +30,12 @@ const ShopCart = () => {
     }
   }, []);
 
-  if (logoutST) {
-    navigate("/");
-    setLogoutST(false);
-  }
+  useEffect(() => {
+    if (logoutST) {
+      navigate("/");
+      setLogoutST(false);
+    }
+  }, [logoutST]);
 
   // 장바구니 데이터 로드
   useEffect(() => {
