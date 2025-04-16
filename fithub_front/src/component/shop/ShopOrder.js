@@ -64,6 +64,7 @@ const ShopOrder = () => {
 
   if (logoutST) {
     navigate("/");
+    setLogoutST(false);
   }
 
   useEffect(() => {

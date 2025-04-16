@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./shopCart.css";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import { memberState, isLoginState, logoutState } from "../utils/RecoilData";
 import ClearIcon from "@mui/icons-material/Clear";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -15,12 +15,31 @@ const ShopCart = () => {
   const [cart, setCart] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 항목 ID 관리
   const [selectAll, setSelectAll] = useState(false); // 전체 선택 상태 관리
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
+
+  useEffect(() => {
+    if (!memberInfo) {
+      navigate("/");
+      Swal.fire({
+        title: "이용 불가",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "로그인",
+      });
+    }
+  }, []);
+
+  if (logoutST) {
+    navigate("/");
+    setLogoutST(false);
+  }
 
   // 장바구니 데이터 로드
   useEffect(() => {
     if (isLogin) {
       axios
-        .get(`${backServer}/goods/cart/read/${memberInfo.memberNo}`)
+        .get(`${backServer}/goods/cart/read/${memberInfo?.memberNo}`)
         .then((res) => {
           console.log(res.data);
           setCart(res.data);
@@ -29,7 +48,7 @@ const ShopCart = () => {
           console.error(err);
         });
     }
-  }, [isLogin, backServer, memberInfo.memberNo]);
+  }, []);
 
   const handleCheckboxChange = (cartNo) => {
     setSelectedItems(
@@ -94,9 +113,9 @@ const ShopCart = () => {
   const totalAmount = finalAmount + shippingFee; // 최종 결제 금액
 
   const [formData, setFormData] = useState({
-    memberName: memberInfo.memberName,
-    memberPhone: memberInfo.memberPhone,
-    memberAddr: memberInfo.memberAddr,
+    memberName: memberInfo?.memberName,
+    memberPhone: memberInfo?.memberPhone,
+    memberAddr: memberInfo?.memberAddr,
   });
 
   const handleChange = (e) => {
@@ -131,9 +150,9 @@ const ShopCart = () => {
         item.goodsPrice * item.goodsEa +
         (item.goodsPrice * item.goodsEa >= 30000 ? 0 : 3000), // 배송비 조건
       totalPrice: totalAmount,
-      memberName: memberInfo.memberName,
-      memberPhone: memberInfo.memberPhone,
-      memberAddr: memberInfo.memberAddr,
+      memberName: memberInfo?.memberName,
+      memberPhone: memberInfo?.memberPhone,
+      memberAddr: memberInfo?.memberAddr,
     }));
 
     //결제 호출
@@ -152,9 +171,9 @@ const ShopCart = () => {
           .join(", ")}`, // 주문 상품명
         amount: totalAmount, // 결제 금액
         buyer_email: "test@portone.io",
-        buyer_name: memberInfo.memberNo,
-        buyer_tel: memberInfo.memberPhone,
-        buyer_addr: memberInfo.memberAddr,
+        buyer_name: memberInfo?.memberNo,
+        buyer_tel: memberInfo?.memberPhone,
+        buyer_addr: memberInfo?.memberAddr,
         buyer_postcode: "120-120", // 필요시 수정
       },
       (rsp) => {
@@ -256,9 +275,9 @@ const ShopCart = () => {
                     </button>
                   </div>
                   <div className="member-info">
-                    <div>{memberInfo.memberName}</div>
-                    <div>{memberInfo.memberPhone}</div>
-                    <div>{memberInfo.memberAddr}</div>
+                    <div>{memberInfo?.memberName}</div>
+                    <div>{memberInfo?.memberPhone}</div>
+                    <div>{memberInfo?.memberAddr}</div>
                   </div>
                 </div>
               </div>
@@ -273,7 +292,7 @@ const ShopCart = () => {
               : 0}{" "}
             원
           </h3>
-          <span>(30000원 이하 배송비 3000원)</span>
+          <span>(30000원 이상 배송비 무료)</span>
           <button className="pay-all-button" onClick={handlePayAll}>
             결제하기
           </button>

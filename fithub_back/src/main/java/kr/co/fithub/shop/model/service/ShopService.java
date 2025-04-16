@@ -43,11 +43,15 @@ public class ShopService {
 	}
 	@Transactional
 	public int insertgoods(Goods goods, HashMap<String, String> map ,List<GoodsFile> goodsFileList) {
-		String goodsInfo = "";
-		for(Map.Entry<String,String> entry : map.entrySet()) {
-			goodsInfo += "&"+entry.getKey() + "=" + entry.getValue();
+		String goodsInfo = null;
+		if(map.keySet().size() > 0) {
+			goodsInfo = "";
+			for(Map.Entry<String,String> entry : map.entrySet()) {
+				goodsInfo += "&"+entry.getKey() + "=" + entry.getValue();
+			}
+			
+			goodsInfo = goodsInfo.substring(1, goodsInfo.length());
 		}
-		goodsInfo = goodsInfo.substring(1, goodsInfo.length());
 		
 		goods.setGoodsInfo(goodsInfo);
 		int result = shopDao.insertGoods(goods);
@@ -83,10 +87,17 @@ public class ShopService {
 	
 	@Transactional
 	public int insertCart(Cart cart) {
-		
-		int result = shopDao.insertCart(cart);	
+		int exist = shopDao.existCart(cart);
+		int result = 0;
+		if(exist > 0) {
+			result += shopDao.updateCartAmount(cart);
+		}else {
+			result += shopDao.insertCart(cart);	
+		}
 		return result;
 	}
+	
+	
 	public List<Cart> selectCart(int memberNo) {
 		List<Cart> reviews = shopDao.selectCart(memberNo);		 
 		return reviews;

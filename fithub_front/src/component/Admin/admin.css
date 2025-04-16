@@ -603,6 +603,7 @@
 /* shop frm  */
 .shop-detail-frm-wrap {
   margin: 0 auto;
+
   margin-top: 30px;
   margin-bottom: 30px;
   width: 1000px;
@@ -779,9 +780,7 @@
   font-weight: 900;
   border: none;
   padding: 15px;
-  flex: 1; /* 각 버튼이 동일한 크기를 가짐 */
   cursor: pointer;
-  margin-left: 250px;
   border-radius: 5px;
   width: 500px;
   transition: background-color 0.3s;

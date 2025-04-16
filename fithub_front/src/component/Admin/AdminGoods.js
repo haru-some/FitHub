@@ -53,7 +53,6 @@ const AdminGoods = () => {
     form.append("goodsName", goodsName);
     form.append("goodsPrice", goodsPrice);
     form.append("goodsExplain", goodsExplain);
-    form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
 
     if (goodsImage) {
@@ -75,7 +74,7 @@ const AdminGoods = () => {
     console.log(JSON.stringify(obj));
 
     axios
-      .post(`${backServer}/goods`, form, {
+      .post(`${backServer}/goods/add`, form, {
         headers: {
           contentType: "multipart/form-data",
           processData: false,
@@ -403,8 +402,9 @@ const AdminGoods = () => {
             </h2>
           </div>
           <div className="goods-buy">
-            <button onClick={plusCart}>장바구니</button>
-            <button onClick={doBuy}>구매하기</button>
+            <button type="button" className="button" onClick={submit}>
+              상품 등록하기
+            </button>
           </div>
         </div>
       </div>
@@ -421,9 +421,6 @@ const AdminGoods = () => {
         ))}
       </div>
       <div className="tab-content">{renderContent()}</div>
-      <button type="button" className="button" onClick={submit}>
-        상품 등록하기
-      </button>
     </div>
   );
 };

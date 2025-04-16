@@ -125,7 +125,7 @@ public class ShopController {
     
     //장바구니 클릭 to DB
     @Operation(summary = "장바구니 버튼", description = "버튼을 누르면 상품 목록 리스트에 저장됩니다.")
-    @PostMapping(value="/cart/add/")
+    @PutMapping(value="/cart/add")
    	public ResponseEntity<Integer> CartInsert(@RequestBody Cart cart ){
     	
     	int result = shopService.insertCart(cart);
@@ -207,16 +207,18 @@ public class ShopController {
     	return ResponseEntity.ok(result);	
        }
     @Operation(summary = "상품 등록", description = "상품 정보를 입력하여 등록합니다.")
-    @PostMapping
+    @PostMapping(value="/add")
 	public ResponseEntity<Integer> insertGoods(@ModelAttribute Goods goods, @ModelAttribute MultipartFile goodsImg, @ModelAttribute MultipartFile detailImg, @ModelAttribute MultipartFile[] goodsFile, @RequestParam("goodsInfos") String goodsInfosJson) {
-    	    	
+    	System.out.println(goods);
+    	
+    	
     	Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String, String>>(){}.getType();
 
         HashMap<String, String> map = gson.fromJson(goodsInfosJson, type);
         
 
-        
+        System.out.println(map);
 		if(goodsImg != null) {
 			String savepath = root +"/goods/url/";
 			String filepath = fileUtils.upload(savepath, goodsImg);

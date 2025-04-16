@@ -6,6 +6,7 @@ import axios from "axios";
 import { Info } from "@mui/icons-material";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 // import { ShopCart } from "./ShopCart";
 
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -65,7 +66,7 @@ const ShopDetail = () => {
   }, [setReview]);
 
   const renderContent = () => {
-    const infoArr = goods.goodsInfo.split("&");
+    const infoArr = goods.goodsInfo ? goods.goodsInfo.split("&") : [];
 
     switch (activeTab) {
       case "상품정보":
@@ -267,7 +268,7 @@ const ShopDetail = () => {
       goodsEa: quantity,
     };
 
-    axios.post(`${backServer}/goods/cart/add/`, cartItem).then((res) => {
+    axios.put(`${backServer}/goods/cart/add`, cartItem).then((res) => {
       Swal.fire({
         icon: "success",
         title: "장바구니에 보관하였습니다.",
@@ -326,6 +327,13 @@ const ShopDetail = () => {
   }
   return (
     <div className="shop-detail-wrap">
+      <div className="back-button">
+        <ExitToAppIcon
+          onClick={() => {
+            navigate("/shop/list");
+          }}
+        />
+      </div>
       <div className="main-detail">
         <div className="goods-image">
           <img

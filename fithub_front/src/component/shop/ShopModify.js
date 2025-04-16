@@ -478,10 +478,9 @@ const ShopModify = () => {
               원
             </h2>
           </div>
-          <div className="goods-buy">
-            <button onClick={plusCart}>장바구니</button>
-            <button onClick={doBuy}>구매하기</button>
-          </div>
+          <button type="button" className="button" onClick={submit}>
+            상품 수정하기
+          </button>
         </div>
       </div>
 
@@ -497,9 +496,6 @@ const ShopModify = () => {
         ))}
       </div>
       <div className="tab-content">{renderContent()}</div>
-      <button type="button" className="button" onClick={submit}>
-        상품 수정하기
-      </button>
     </div>
   );
 };
