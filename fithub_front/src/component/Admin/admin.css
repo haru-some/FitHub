@@ -599,10 +599,14 @@
   margin-top: 30px;
   margin-bottom: 30px;
   width: 1000px;
-  background-color: var(--gray3);
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+.shop-detail-frm-wrap * {
+  color: #000;
 }
 .shop-detail-frm-wrap .main-detail {
   display: flex;
@@ -624,7 +628,9 @@
 }
 
 .shop-detail-frm-wrap .goods-info {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 .shop-detail-frm-wrap .ex-box {
   min-height: 200px;
@@ -694,8 +700,12 @@
   margin-top: 10px;
 }
 .shop-detail-frm-wrap .goods-buy {
-  margin-top: 20px;
   display: flex;
+  gap: 10px;
+}
+
+.shop-detail-frm-wrap .editor-wrap > h2 {
+  margin-bottom: 10px;
 }
 .shop-detail-frm-wrap .goods-buy button {
   background-color: #4caf50;
@@ -771,10 +781,19 @@
 }
 
 .shop-detail-frm-wrap .ql-editor {
-  background-color: var(--gray3);
   width: 459px;
   height: 250px;
   resize: none;
+  color: #000;
+}
+.shop-detail-frm-wrap .ql-editor * {
+  color: #000;
+}
+.shop-detail-frm-wrap .ql-editor p {
+  margin: 0;
+}
+.shop-detail-frm-wrap .ql-picker-label::before {
+  color: #000;
 }
 
 .shop-detail-frm-wrap input[type="text"] {
@@ -809,7 +828,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
 }
 
 .shop-detail-frm-wrap .options {
@@ -817,17 +835,15 @@
 }
 
 .shop-detail-frm-wrap .options-select {
-  margin-top: 10px;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 100%;
-  background-color: var(--gray3);
+  background-color: #fff;
 }
 
 .shop-detail-frm-wrap .price-box {
-  margin-top: 20px;
   text-align: right;
 }
 
@@ -848,6 +864,7 @@
 .shop-detail-frm-wrap .tbl th {
   text-align: center;
   font-weight: 800;
+  padding: 2px 5px;
 }
 .shop-detail-frm-wrap .tbl input {
   box-sizing: border-box;
@@ -855,6 +872,7 @@
 .shop-detail-frm-wrap .goods-info-wrap td {
   text-align: center;
   color: #2f3e2f !important;
+  padding: 2px 5px;
 }
 .shop-detail-frm-wrap .input-item {
   margin: 5px 0;
@@ -864,14 +882,16 @@
   width: 100%;
   padding: 8px;
 
-  background-color: #f9f9f9;
+  background-color: transparent;
   color: black;
   font-size: 14px;
+  border: none;
+  outline: none;
 }
 
 .shop-detail-frm-wrap .input-item input:focus {
   outline: none;
-  background-color: #e0e0e0;
+  background-color: transparent;
 }
 .shop-detail-frm-wrap .goods-detail-img {
   margin-top: 20px;

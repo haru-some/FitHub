@@ -9,6 +9,7 @@ import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
 
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import { Margin } from "@mui/icons-material";
 
 const ShopOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -79,20 +80,23 @@ const ShopOrder = () => {
   return (
     <div className="order-list-wrap">
       <h2>주문/배송 리스트</h2>
-
-      {currentOrders.map((order) => (
-        <div className="order-item" key={order.sellNo}>
-          <div className="item-details">
-            <h3>{order.goodsName}</h3>
-            <p>가격 : {order.goodsPrice.toLocaleString()}원</p>
-            <p>수량 : {order.goodsEa}</p>
-            <p>구매일 : {yymmDate(order.sellDate)}</p>
+      {currentOrders.length === 0 ? (
+        <p style={{ marginTop: "10px" }}>주문/배송한 상품이 없습니다.</p>
+      ) : (
+        currentOrders.map((order) => (
+          <div className="order-item" key={order.sellNo}>
+            <div className="item-details">
+              <h3>{order.goodsName}</h3>
+              <p>가격 : {order.goodsPrice.toLocaleString()}원</p>
+              <p>수량 : {order.goodsEa}</p>
+              <p>구매일 : {yymmDate(order.sellDate)}</p>
+            </div>
+            <div className="order-actions">
+              <button onClick={handleTracking}>배송 조회</button>
+            </div>
           </div>
-          <div className="order-actions">
-            <button onClick={handleTracking}>배송 조회</button>
-          </div>
-        </div>
-      ))}
+        ))
+      )}
       <div className="pagination-controls">
         <button onClick={handlePrevPage} disabled={currentPage === 1}>
           <NavigateBeforeIcon />

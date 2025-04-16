@@ -29,11 +29,7 @@ const AdminMain = () => {
         confirmButtonText: "확인",
       }).then((result) => {
         if (result.isConfirmed) {
-          if (memberInfo) {
-            navigate("/");
-          } else {
-            navigate("/login");
-          }
+          navigate("/");
         }
       });
     }
