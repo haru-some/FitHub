@@ -54,7 +54,7 @@
   width: 30px;
   height: 30px;
   font-size: 30px;
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   border-radius: 2px;
@@ -78,7 +78,7 @@
   gap: 10px;
 }
 .shop-detail-wrap .goods-buy button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   font-size: 20px;
   font-weight: 900;
@@ -111,7 +111,7 @@
 }
 
 .shop-detail-wrap .tabs button.active {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
 }
 
@@ -167,7 +167,7 @@ h4 {
 
 .shop-pay-wrap input[type="text"]:focus,
 .shop-pay-wrap select:focus {
-  border-color: #4caf50; /* 포커스 시 테두리 색상 */
+  border-color: #589c5f;
   outline: none; /* 기본 아웃라인 제거 */
 }
 
@@ -182,7 +182,7 @@ h4 {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   border-radius: 4px;
@@ -190,7 +190,7 @@ h4 {
 }
 
 .shop-pay-wrap button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 .shop-pay-wrap .accountForShip {
   font-size: 12px;
@@ -227,8 +227,8 @@ h4 {
 }
 
 .Myreview-wrap .tabs button.active {
-  border-bottom: 2px solid #4caf50;
-  color: #4caf50;
+  border-bottom: 2px solid #589c5f;
+  color: #589c5f;
 }
 
 .Myreview-wrap .tab-content {
@@ -258,7 +258,7 @@ h4 {
 
 .Myreview-wrap .write-review-button {
   padding: 8px 12px;
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   border-radius: 4px;
@@ -267,7 +267,7 @@ h4 {
 }
 
 .Myreview-wrap .write-review-button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 
 .Myreview-wrap .modal-overlay {
@@ -320,7 +320,7 @@ h4 {
   transition: border-color 0.3s;
 }
 .review-modal-wrap textarea:focus {
-  border-color: #4caf50;
+  border-color: #589c5f;
 }
 
 .Myreview-wrap .css-1umw9bq-MuiSvgIcon-root {
@@ -541,7 +541,7 @@ h4 {
 .order-list-wrap .order-actions button {
   position: relative;
   top: 30px;
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   border-radius: 5px;
@@ -552,7 +552,7 @@ h4 {
 }
 
 .order-list-wrap .order-actions button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 .order-list-wrap .pagination-controls {
   display: flex;
@@ -563,7 +563,7 @@ h4 {
   background-color: transparent;
 }
 .order-list-wrap .pagination-controls button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   padding: 10px;
@@ -577,7 +577,7 @@ h4 {
 }
 
 .order-list-wrap .pagination-controls button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 
 .order-list-wrap .pagination-controls button:disabled {
@@ -629,7 +629,7 @@ h4 {
   position: relative;
   top: 10px;
   right: -230px;
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   border-radius: 5px;
@@ -640,7 +640,7 @@ h4 {
 }
 
 .shipping-modal-wrap .check-button:hover {
-  background-color: #45a049; /* 호버 시 색상 */
+  background-color: #589c5f; /* 호버 시 색상 */
 }
 
 .shop-detail-wrap .faq-container {
@@ -679,7 +679,7 @@ h4 {
   background-color: transparent;
 }
 .Myreview-wrap .pagination-controls button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   padding: 10px;
@@ -694,7 +694,7 @@ h4 {
 }
 
 .Myreview-wrap .pagination-controls button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 
 .Myreview-wrap .pagination-controls button:disabled {
