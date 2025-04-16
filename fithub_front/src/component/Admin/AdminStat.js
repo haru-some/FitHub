@@ -132,7 +132,6 @@ const MemberStatChart = () => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/member`)
       .then((res) => {
-        console.log(res);
         setPieChartData([
           {
             id: "관리자",
@@ -255,7 +254,6 @@ const SalesStatChart = () => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/price`)
       .then((res) => {
-        console.log(res);
         setTotalPrice([
           {
             id: res.data[0].goodsCategory === 1 && "보충제",
@@ -296,24 +294,25 @@ const SalesStatChart = () => {
   const totalSum = totalPrice.reduce((acc, cur) => acc + cur.value, 0);
   const formattedSum = totalSum.toLocaleString();
 
+  const [totalSellCount, setTotalSellCount] = useState(0);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/sell`)
       .then((res) => {
-        console.log(res);
         setTotalSell(
           res.data.map((item) => ({
             id: item.goodsName,
             label: item.goodsName,
-            value: item.totalSell,
+            value: item.goodsSell,
           }))
         );
+        setTotalSellCount(res.data[0].totalSellCount);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  const totalCount = totalSell.reduce((acc, cur) => acc + cur.value, 0);
+
   const [daySales, setDaySales] = useState([]);
   const [type, setType] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -322,7 +321,6 @@ const SalesStatChart = () => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/admin/stats/weekSales`)
       .then((res) => {
-        console.log(res.data);
         setWeekPrice(
           res.data.map((item) => ({
             country: item.saleDate,
@@ -381,7 +379,7 @@ const SalesStatChart = () => {
           </div>
         </div>
         <div className="chart-day-visit">
-          <h3>상품별 판매 갯수 - 총 {totalCount}개</h3>
+          <h3>상품별 판매 갯수 - 총 {totalSellCount}개</h3>
           <div className="chart-div" style={{ height: "300px" }}>
             {totalSell && <MyResponsivePie pieChartData={totalSell} />}
           </div>
@@ -454,7 +452,7 @@ const MyResponsiveBar = (props) => {
           data={data}
           keys={type}
           indexBy="date"
-          margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+          margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
           padding={0.3}
           valueScale={{ type: "linear" }}
           indexScale={{ type: "band", round: true }}
@@ -471,7 +469,7 @@ const MyResponsiveBar = (props) => {
             tickRotation: 0,
             legend: "날짜",
             legendPosition: "middle",
-            legendOffset: 32,
+            legendOffset: 40,
             truncateTickAt: 0,
           }}
           axisLeft={{
@@ -480,7 +478,7 @@ const MyResponsiveBar = (props) => {
             tickRotation: 0,
             legend: "(인원 수)명",
             legendPosition: "middle",
-            legendOffset: -40,
+            legendOffset: -60,
             truncateTickAt: 0,
           }}
           enableTotals={true}
@@ -530,7 +528,7 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
         data={daySales}
         keys={type}
         indexBy="country"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        margin={{ top: 50, right: 130, bottom: 50, left: 100 }}
         padding={0.3}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
@@ -547,7 +545,7 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
           tickRotation: 0,
           legend: "날짜",
           legendPosition: "middle",
-          legendOffset: 32,
+          legendOffset: 40,
           truncateTickAt: 0,
         }}
         axisLeft={{
@@ -556,7 +554,7 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
           tickRotation: 0,
           legend: "매출",
           legendPosition: "middle",
-          legendOffset: -40,
+          legendOffset: -90,
           truncateTickAt: 0,
         }}
         labelSkipWidth={12}
@@ -673,7 +671,6 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
           sessionData.push({ x: formattedDate, y: sessionDuration });
         });
 
-        console.log("📊 변환된 데이터:", viewsData, sessionData);
         setLineChartData([
           { id: "페이지뷰", color: "hsl(220, 70%, 50%)", data: viewsData },
           {
@@ -697,7 +694,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         ) && (
           <ResponsiveLine
             data={lineChartData}
-            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            margin={{ top: 50, right: 150, bottom: 50, left: 90 }}
             xScale={{ type: "point" }}
             yScale={{
               type: "linear",
@@ -714,7 +711,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
               tickPadding: 5,
               tickRotation: 0,
               legend: "날짜",
-              legendOffset: 36,
+              legendOffset: 40,
               legendPosition: "middle",
               truncateTickAt: 0,
             }}
@@ -723,7 +720,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
               tickPadding: 5,
               tickRotation: 0,
               legend: "수치",
-              legendOffset: -40,
+              legendOffset: -70,
               legendPosition: "middle",
               truncateTickAt: 0,
             }}
@@ -774,12 +771,12 @@ const MyResponsivePie = ({ pieChartData }) => {
       {pieChartData && (
         <ResponsivePie
           data={pieChartData}
-          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          margin={{ top: 40, right: 150, bottom: 80, left: 0 }}
           innerRadius={0.5}
           padAngle={0.7}
           cornerRadius={3}
-          activeInnerRadiusOffset={2}
-          activeOuterRadiusOffset={2}
+          activeInnerRadiusOffset={5}
+          activeOuterRadiusOffset={5}
           borderWidth={1}
           borderColor={{
             from: "color",
@@ -808,8 +805,8 @@ const MyResponsivePie = ({ pieChartData }) => {
               direction: "column",
               justify: false,
               translateX: -20,
-              translateY: 56,
-              itemsSpacing: 1,
+              translateY: 10,
+              itemsSpacing: 2,
               itemWidth: 100,
               itemHeight: 18,
               itemTextColor: "#999",

@@ -15,6 +15,19 @@ function ShopPay() {
   const { quantity = 1 } = location.state || {}; // 기본값 설정
 
   const backServer = process.env.REACT_APP_BACK_SERVER;
+  console.log(memberInfo.memberName);
+  const [formData, setFormData] = useState({
+    memberName: memberInfo.memberName,
+    goodsNo: "",
+    goodsName: "",
+    goodsImage: "",
+    goodsPrice: "",
+    quantity: "",
+    memberAddr: memberInfo.memberAddr,
+    takerName: memberInfo.memberName,
+    takerPhone: memberInfo.memberPhone,
+    takerAddr: memberInfo.memberAddr,
+  });
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -37,31 +50,24 @@ function ShopPay() {
       .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
         setGoods(res.data);
-        setFormData(res.data);
+        setFormData({
+          ...formData,
+          ["goodsNo"]: res.data.goodsNo,
+          ["goodsName"]: res.data.goodsName,
+          ["goodsImage"]: res.data.goodsImage,
+          ["goodsPrice"]: res.data.goodsPrice,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }, [goodsNo]);
 
-  const [formData, setFormData] = useState({
-    memberName: "",
-    goodsNo: "",
-    goodsName: "",
-    goodsImage: "",
-    goodsPrice: "",
-    quantity: "",
-    memberAddr: "",
-    takerName: "",
-    takerPhone: "",
-    takerAddr: "",
-  });
-
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     });
   };
 
@@ -123,6 +129,7 @@ function ShopPay() {
       }
     );
   };
+  console.log(formData);
 
   if (!goods) {
     return <div>로딩 중...</div>; // 상품 데이터가 로드되지 않았을 경우
@@ -163,8 +170,8 @@ function ShopPay() {
                     name="takerName"
                     value={formData.takerName}
                     onChange={handleChange}
-                    placeholder={memberInfo.memberName}
                     required
+                    autoComplete="off"
                   />
                 </td>
               </tr>
@@ -176,8 +183,8 @@ function ShopPay() {
                     name="takerPhone"
                     value={formData.takerPhone}
                     onChange={handleChange}
-                    placeholder={memberInfo.memberPhone}
                     required
+                    autoComplete="off"
                   />
                 </td>
               </tr>
@@ -189,8 +196,8 @@ function ShopPay() {
                     name="takerAddr"
                     value={formData.takerAddr}
                     onChange={handleChange}
-                    placeholder={memberInfo.memberAddr}
                     required
+                    autoComplete="off"
                   />
                 </td>
               </tr>
@@ -219,7 +226,7 @@ function ShopPay() {
           <table>
             <tbody>
               <tr>
-                <td>총 상품가격:</td>
+                <td>상품가격:</td>
                 <td>{goods.goodsPrice * quantity} 원</td>
               </tr>
               <tr>

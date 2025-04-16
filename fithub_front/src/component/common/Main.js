@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./main.css";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { isLoginState } from "../utils/RecoilData";
+import { isLoginState, memberState } from "../utils/RecoilData";
 import "./intro.css";
 import TypingText from "./TypingText";
 
