@@ -83,13 +83,8 @@ public class ShopService {
 	
 	@Transactional
 	public int insertCart(Cart cart) {
-		System.out.println(cart);
-		int result = shopDao.insertCart(cart);
-		System.out.println(cart);
-//		for(GoodsFile goodsFile : goodsFileList) {
-//			goodsFile.setGoodsNo(goods.getGoodsNo());
-//			result += shopDao.insertGoodsFile(goodsFile);
-//		}
+		
+		int result = shopDao.insertCart(cart);	
 		return result;
 	}
 	public List<Cart> selectCart(int memberNo) {

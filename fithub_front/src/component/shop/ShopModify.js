@@ -466,20 +466,9 @@ const ShopModify = () => {
             </div>
           </div>
 
-          <div className="price-box">
+          <div className="price-box" style={{ marginLeft: "130px" }}>
             <h2>
-              수량:
-              <input
-                type="text"
-                value={goodsStock}
-                onChange={(e) => setGoodsStock(Number(e.target.value))}
-                style={{ margin: "0 5px", width: "50px" }}
-              />
-              개
-            </h2>
-
-            <h2>
-              총 가격:
+              개당 가격 :
               <input
                 type="text"
                 value={goodsPrice}
@@ -497,7 +486,7 @@ const ShopModify = () => {
       </div>
 
       <div className="tabs">
-        {["상품정보", "리뷰", "배송/결제", "반품/교환"].map((tab) => (
+        {["상품정보"].map((tab) => (
           <button
             key={tab}
             className={activeTab === tab ? "active" : ""}
