@@ -53,17 +53,31 @@ public class JwtUtils {
 		return token;
 	}
 	public LoginMemberDTO checkToken(String accessToken) {
-		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
-		Claims claims = (Claims)Jwts.parser()
-									.verifyWith(key)
-									.build()
-									.parse(accessToken)
-									.getPayload();
-		String memberId = (String)claims.get("memberId");
-		int memberType = (int)claims.get("memberType");
-		LoginMemberDTO loginMember = new LoginMemberDTO();
-		loginMember.setMemberId(memberId);
-		loginMember.setMemberLevel(memberType);
-		return loginMember;
+	    try {
+	        if (accessToken.startsWith("Bearer ")) {
+	            accessToken = accessToken.substring(7);
+	        }
+
+	        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+	        Claims claims = (Claims) Jwts.parser()
+	                                     .verifyWith(key)
+	                                     .build()
+	                                     .parse(accessToken)
+	                                     .getPayload();
+
+	        String memberId = claims.get("memberId", String.class);
+	        Integer memberType = claims.get("memberType", Integer.class);
+
+	        if (memberId == null || memberType == null) {
+	            throw new RuntimeException("토큰에 유효한 사용자 정보가 포함되어 있지 않습니다.");
+	        }
+
+	        LoginMemberDTO loginMember = new LoginMemberDTO();
+	        loginMember.setMemberId(memberId);
+	        loginMember.setMemberLevel(memberType);
+	        return loginMember;
+	    } catch (Exception e) {
+	        throw new RuntimeException("리프레시 토큰 검증 중 오류가 발생했습니다: " + e.getMessage());
+	    }
 	}
 }

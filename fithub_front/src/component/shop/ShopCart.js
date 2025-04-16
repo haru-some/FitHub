@@ -137,11 +137,6 @@ const ShopCart = () => {
       memberAddr: memberInfo.memberAddr,
     }));
 
-    console.log(memberInfo.memberAddr);
-    console.log(memberInfo.memberPhone);
-    console.log(memberInfo.memberName);
-    console.log(totalAmount);
-
     //결제 호출
     const IMP = window.IMP; // iamport
     if (!IMP) {
@@ -196,34 +191,6 @@ const ShopCart = () => {
       }
     );
   };
-
-  console.log({
-    merchant_uid: "order_no_" + Date.now(),
-    amount: totalAmount, // 결제 금액
-    buyer_name: memberInfo.memberName,
-    buyer_tel: memberInfo.memberPhone,
-    buyer_addr: memberInfo.memberAddr,
-  });
-  // axios
-  //   .post(`${backServer}/goods/sell/payAll/`, itemsToPurchase)
-
-  //   .then((res) => {
-  //     Swal.fire({
-  //       title: "결제 성공!",
-  //       text: "감사합니다. 결제가 완료되었습니다.",
-  //       icon: "success",
-  //     }).then(() => {
-  //       navigate(`/shop/cart/`); // 결제 완료 후 정보 페이지로 이동
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.error("Error during checkout:", err);
-  //     Swal.fire({
-  //       title: "결제 실패",
-  //       text: "결제 중 오류가 발생했습니다. 다시 시도해주세요.",
-  //       icon: "error",
-  //     });
-  //   });
 
   return (
     <div className="cart-wrap">

@@ -81,10 +81,6 @@ const ShopModify = () => {
     form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
 
-    console.log("이미지가 살아있나..");
-    console.log(goodsImage);
-    console.log(goodsDetailImg);
-
     form.append("goodsImg", goodsImage);
     form.append("detailImg", goodsDetailImg);
 
@@ -340,7 +336,6 @@ const ShopModify = () => {
       setSelectedImage(null);
       setExistingGoodsImage(null);
     }
-    console.log(goodsDetailImg);
   };
 
   const changeDeImg = (e) => {
@@ -360,7 +355,6 @@ const ShopModify = () => {
       setShowDetailImage(null);
       setSelectedImageDetail(null);
     }
-    console.log(goodsImage);
   };
 
   useEffect(() => {
@@ -402,10 +396,6 @@ const ShopModify = () => {
       });
   }, [goodsNo, backServer, activeTab]);
 
-  console.log(goodsImage);
-  console.log("여기");
-  console.log(existingGoodsImage);
-
   return (
     <div className="shop-detail-frm-wrap">
       <div className="main-detail">
@@ -445,10 +435,10 @@ const ShopModify = () => {
                 color: "black",
                 fontSize: "24px",
                 width: "100%",
-                marginBottom: "10px",
+                marginBottom: "20px",
               }}
             />
-            <div>
+            <div className="editor-wrap">
               <h2>상품 설명</h2>
               <TextEditor data={goodsExplain} setData={setGoodsExplain} />
             </div>
