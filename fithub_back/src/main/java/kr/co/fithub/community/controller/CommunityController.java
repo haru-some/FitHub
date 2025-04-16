@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -44,10 +47,13 @@ public class CommunityController {
 
 	@Operation(summary = "커뮤니티 전체 조회", description = "커뮤니티 정보 전체를 반환합니다.")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "조회 성공") })
-	@GetMapping(value="/list/{loginMemberNo}")
-	public ResponseEntity<List> communityList(@RequestParam(required = false) Integer memberNo, @RequestParam int page, @RequestParam int size, @RequestParam String searchText, @PathVariable int loginMemberNo){
+	@PostMapping(value="/list/{loginMemberNo}")
+	public ResponseEntity<List> communityList(@RequestParam(required = false) Integer memberNo, @RequestParam int page, @RequestParam int size, @RequestBody String searchText, @PathVariable int loginMemberNo){
+		Gson gson = new Gson();
+        JsonObject obj = gson.fromJson(searchText, JsonObject.class);
+        String sText = obj.get("searchText").getAsString();
 		int memberNum = memberNo == null ? 0 : memberNo;		
-		List list = communityService.selectCommunityList(memberNum, page, size, searchText, loginMemberNo);
+		List list = communityService.selectCommunityList(memberNum, page, size, sText, loginMemberNo);
 		return ResponseEntity.ok(list);
 	}
 
