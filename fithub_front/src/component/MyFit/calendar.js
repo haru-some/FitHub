@@ -34,7 +34,10 @@ export default function DateCalendarValue(props) {
                 },
               }}
               value={date}
-              onChange={(newValue) => setDate(newValue)}
+              onChange={(newValue) => {
+                setDate(newValue);
+                localStorage.setItem("selectedDate", newValue.toISOString());
+              }}
             />
           </DemoItem>
         </DemoContainer>

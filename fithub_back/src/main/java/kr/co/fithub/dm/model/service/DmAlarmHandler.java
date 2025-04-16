@@ -29,7 +29,6 @@ public class DmAlarmHandler extends TextWebSocketHandler{
 	
 	
 	public void sendReadYetCountTo(int memberNo) {
-		//System.out.println("알림받을 회원번호: " +memberNo);
 	    WebSocketSession session = members.get(memberNo);
 	    if (session != null) {
 	        try {
@@ -78,7 +77,6 @@ public class DmAlarmHandler extends TextWebSocketHandler{
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-    	//System.out.println("알람용 수신");
 
             
             
@@ -87,7 +85,6 @@ public class DmAlarmHandler extends TextWebSocketHandler{
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        //System.out.println("알람용 클라이언트 접속 끊김");
 
         Integer disconnectedMemberNo = null;
         for (Map.Entry<Integer, WebSocketSession> entry : members.entrySet()) {
@@ -99,7 +96,6 @@ public class DmAlarmHandler extends TextWebSocketHandler{
 
         if (disconnectedMemberNo != null) {
             members.remove(disconnectedMemberNo);
-            //System.out.println("알람용 접속 해제: 회원번호 " + disconnectedMemberNo);
 
             // 나간 메시지 알림 (선택 사항)
             DmDto leaveMsg = new DmDto();
