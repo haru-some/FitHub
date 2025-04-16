@@ -7,7 +7,6 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import "./shopDetail.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import PageNavigation from "../utils/PageNavigation";
 import ClearIcon from "@mui/icons-material/Clear";
 import Swal from "sweetalert2";
 

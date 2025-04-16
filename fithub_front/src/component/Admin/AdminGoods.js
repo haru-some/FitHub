@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import { Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
-import { Category } from "@mui/icons-material";
 
 const AdminGoods = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
