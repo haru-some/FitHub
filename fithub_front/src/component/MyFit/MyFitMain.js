@@ -180,7 +180,7 @@ const MyFitMain = () => {
         });
       }
     }
-  }, [logoutST]);
+  }, []);
 
   useEffect(() => {
     if (!member) {

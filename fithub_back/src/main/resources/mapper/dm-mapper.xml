@@ -83,7 +83,7 @@ ORDER BY dr.last_message_at DESC NULLS LAST
 
 	<select id="selectDmContent" resultType="dmMessage">
 		select * from dm_message
-		where dm_room_no = #{dmRoomNo}
+		where dm_room_no = #{dmRoomNo} order by sent_at
 	</select>
 
 	<select id="selectNewMessageNo" resultType="int">
