@@ -61,10 +61,12 @@ const ShopOrder = () => {
     }
   }, []);
 
-  if (logoutST) {
-    navigate("/");
-    setLogoutST(false);
-  }
+  useEffect(() => {
+    if (logoutST) {
+      navigate("/");
+      setLogoutST(false);
+    }
+  }, [logoutST]);
 
   useEffect(() => {
     // 구매한 상품 가져오기
