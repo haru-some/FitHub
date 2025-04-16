@@ -269,7 +269,7 @@ const ShopModify = () => {
                   src={`${backServer}/shop/detail/${goods.goodsDetailImg}`}
                 />
               ) : (
-                <img src="/image/befor-detail-img.png" alt="기본 썸네일" />
+                <img src="/image/before-detail.png" />
               )}
               <input
                 ref={imageDetailRef}

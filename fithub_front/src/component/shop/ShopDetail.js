@@ -3,12 +3,10 @@ import "./shopDetail.css";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Info } from "@mui/icons-material";
+
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-// import { ShopCart } from "./ShopCart";
-
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
 
