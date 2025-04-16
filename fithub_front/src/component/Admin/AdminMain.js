@@ -1,4 +1,11 @@
-import { Link, NavLink, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import AdminAds from "./AdminAds";
 import "./admin.css";
 import AdminMember from "./AdminMember";
@@ -13,6 +20,7 @@ import Swal from "sweetalert2";
 const AdminMain = () => {
   const [logoutST, setLogoutST] = useRecoilState(logoutState);
   const [memberInfo, setMemberInfo] = useRecoilState(memberState);
+  const location = useLocation(); // 현재 경로 정보 가져오기
   const navigate = useNavigate();
   // 관리자(member_level === 1)만 접근 가능하도록 설정
   if (logoutST) {
@@ -40,6 +48,10 @@ const AdminMain = () => {
       navigate("/");
     }
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   return (
     <>
