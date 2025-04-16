@@ -35,6 +35,7 @@ import ShopReview from "./component/shop/ShopReview";
 import LogoutCallback from "./component/common/LogoutCallback";
 import SocialJoinGuard from "./component/member/SocialJoinGuard";
 import ShopModify from "./component/shop/ShopModify";
+import Swal from "sweetalert2";
 
 function App() {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -95,6 +96,25 @@ function App() {
       navigate("/social-join");
     }
   }, []);
+  console.log(loginMember);
+  function checkMemberLevelOnce() {
+    if (loginMember !== null) {
+      const member = loginMember.warningLevel;
+
+      // 경고창을 이미 본 적 있는지 확인
+      const alreadyWarned = localStorage.getItem("warningLevel2Warned");
+
+      if (member === 2 && !alreadyWarned) {
+        Swal.fire("경고", "경고 대상입니다. 조심해주세요.", "warning");
+
+        // 경고창을 본 상태로 기록
+        localStorage.setItem("warningLevel2Warned", "true");
+      }
+    }
+  }
+
+  // 페이지 로드 시 실행
+  checkMemberLevelOnce();
 
   return (
     <div className={`wrap ${isMainPage ? "main-bg" : ""}`}>

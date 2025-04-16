@@ -19,12 +19,11 @@ const AdminAds = () => {
     axios
       .get(`${process.env.REACT_APP_BACK_SERVER}/admin/ads`)
       .then((res) => {
-        console.log(res);
         setAdsList(res.data);
       })
       .catch((err) => {});
   }, [reload]);
-  console.log(ads);
+
   const writeAds = () => {
     const formData = new FormData();
     formData.append("adsName", ads.adsName);
@@ -85,7 +84,7 @@ const AdminAds = () => {
       setPreviewImg(null);
     }
   };
-  console.log(adsList);
+
   return (
     <section className="ads-section">
       <div className="ads-list">

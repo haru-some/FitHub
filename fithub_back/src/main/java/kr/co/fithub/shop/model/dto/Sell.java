@@ -36,7 +36,9 @@ public class Sell {
 	@Schema(description = "카테고리명", example = "보충제")
 	private int goodsCategory;
 	@Schema(description = "판매 개수", example = "25")
-	private int totalSell;
+	private int goodsSell;
+	@Schema(description = "전체 개수", example = "25")
+	private int totalSellCount;
 	@Schema(description = "당일 매출", example = "10000")
 	private int totalDayPrice;
 	@Schema(description = "주간 매출", example = "100000")
