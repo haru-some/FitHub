@@ -153,4 +153,15 @@ public class AdminService {
 		return r;
 	}
 
+	public int memberRollBack(int memberNo) {
+		MemberDTO member = adminDao.selectOneMember(memberNo);
+		String memberName = member.getMemberId().split("_")[0];
+		member.setMemberId(memberName);
+		int r = adminDao.updateMemberId(memberName, memberNo);
+		if(r > 0) {
+			r += adminDao.deleteDelMember(memberName);
+		}
+		return r;
+	}
+
 }

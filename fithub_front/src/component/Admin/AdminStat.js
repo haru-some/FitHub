@@ -7,47 +7,7 @@ import axios from "axios";
 // 메인 대시보드
 const AdminStat = () => {
   const [tabChange, setTabChange] = useState(1);
-  const [week, setWeek] = useState([]);
-  const [month, setMonth] = useState([]);
 
-  useEffect(() => {
-    //이번 달 데이터
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth(); // 0(1월) ~ 11(12월)
-    const day = today.getDate(); // 오늘 날짜 (1~31)
-    const newData = [];
-
-    for (let i = 1; i <= day; i++) {
-      const dateString = new Date(year, month, i + 1)
-        .toISOString()
-        .split("T")[0]; // YYYY-MM-DD 형식
-
-      newData.push({
-        day: dateString,
-      });
-    }
-    setMonth(newData);
-
-    //이번 주 데이터
-    const weekArr = new Array();
-    for (let i = 0; i < 7; i++) {
-      const toDays = new Date();
-      toDays.setDate(toDays.getDate() - i);
-      const days = ["일", "월", "화", "수", "목", "금", "토"];
-      if (i === 0) {
-        weekArr.unshift("오늘(" + days[toDays.getDay()] + ")");
-      } else {
-        weekArr.unshift(days[toDays.getDay()]);
-      }
-    }
-    setWeek((prevData) =>
-      prevData.map((item, index) => ({
-        ...item,
-        country: weekArr[index],
-      }))
-    );
-  }, []);
   const changeTab = (e) => {
     const member = e.target.id;
     if (member === "member") {
@@ -107,6 +67,14 @@ const MemberStatChart = () => {
   ]);
 
   useEffect(() => {
+    // 오늘 날짜 구하기
+    const today = new Date();
+    const formatDate = (date) => date.toISOString().slice(0, 10); // yyyy-mm-dd 형식
+
+    // 7일 전 날짜 계산
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - 6); // 오늘 포함하여 7일치
+
     // 'client_id', 'client_secret', 'refresh_token'을 사용하여 갱신된 'access_token'을 요청한다.
     axios
       .post("https://accounts.google.com/o/oauth2/token", {
@@ -124,7 +92,9 @@ const MemberStatChart = () => {
             {
               dimensions: [{ name: "date" }],
               metrics: [{ name: "activeUsers" }, { name: "sessions" }],
-              dateRanges: [{ startDate: "2025-03-27", endDate: "today" }],
+              dateRanges: [
+                { startDate: formatDate(startDate), endDate: "today" },
+              ],
               keepEmptyRows: true,
               orderBys: [
                 {
@@ -499,7 +469,7 @@ const MyResponsiveBar = (props) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "date",
+            legend: "날짜",
             legendPosition: "middle",
             legendOffset: 32,
             truncateTickAt: 0,
@@ -508,7 +478,7 @@ const MyResponsiveBar = (props) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Count",
+            legend: "(인원 수)명",
             legendPosition: "middle",
             legendOffset: -40,
             truncateTickAt: 0,
@@ -632,6 +602,14 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
 /* 회원 이용 통계 */
 const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
   useEffect(() => {
+    // 오늘 날짜 구하기
+    const today = new Date();
+    const formatDate = (date) => date.toISOString().slice(0, 10); // yyyy-mm-dd 형식
+
+    // 7일 전 날짜 계산
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - 6); // 오늘 포함하여 7일치
+
     // access_token을 발급받은 후 runReport 요청
     axios
       .post("https://accounts.google.com/o/oauth2/token", {
@@ -651,7 +629,9 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
               { name: "screenPageViews" },
               { name: "averageSessionDuration" },
             ],
-            dateRanges: [{ startDate: "2025-03-27", endDate: "today" }],
+            dateRanges: [
+              { startDate: formatDate(startDate), endDate: "today" },
+            ],
             keepEmptyRows: true,
             orderBys: [
               {
