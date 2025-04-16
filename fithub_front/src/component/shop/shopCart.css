@@ -70,7 +70,7 @@
   margin-right: 260px;
 }
 .cart-wrap .pay-all-button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -101,7 +101,7 @@ input[type="checkbox"] {
 }
 
 .cart-wrap .purchase-button {
-  background-color: #28a745; /* 구매 버튼 색상 */
+  background-color: #589c5f; /* 구매 버튼 색상 */
   margin-right: 20px;
   margin-top: 30px;
 }

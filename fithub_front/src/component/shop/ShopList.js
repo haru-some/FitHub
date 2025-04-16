@@ -93,8 +93,7 @@ const GoodsList = () => {
       text: "이 작업은 되돌릴 수 없습니다.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#45a049",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "var(--main3)",
       confirmButtonText: "예, 삭제합니다!",
       cancelButtonText: "아니요, 취소합니다.",
     }).then((result) => {

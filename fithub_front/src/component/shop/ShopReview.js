@@ -146,7 +146,7 @@ const ShopReview = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#45a049",
-      cancelButtonColor: "#d33",
+
       confirmButtonText: "예, 삭제합니다!",
       cancelButtonText: "아니요, 취소합니다.",
     }).then((result) => {
@@ -184,7 +184,7 @@ const ShopReview = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [activeTab]);
 
   ///////////////////////////////////////////////////////////////////////// 리뷰 탭
   const renderContent = () => {

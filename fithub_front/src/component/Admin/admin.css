@@ -688,7 +688,7 @@
   width: 30px;
   height: 30px;
   font-size: 16px;
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   border-radius: 5px;
@@ -716,7 +716,7 @@
   margin-bottom: 10px;
 }
 .shop-detail-frm-wrap .goods-buy button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   font-size: 20px;
   font-weight: 900;
@@ -763,7 +763,7 @@
 }
 
 .shop-detail-frm-wrap .tabs button.active {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
 }
 
@@ -773,7 +773,7 @@
   border-top: 1px solid #ccc;
 }
 .shop-detail-frm-wrap .button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   font-size: 20px;
   font-weight: 900;
@@ -832,7 +832,7 @@
 }
 
 .shop-detail-frm-wrap input[type="text"]:focus {
-  border-color: #4caf50; /* 포커스 시 테두리 색상 변경 */
+  border-color: #589c5f; /* 포커스 시 테두리 색상 변경 */
 }
 
 .shop-detail-frm-wrap .options-and-price {
