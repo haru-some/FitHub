@@ -2,7 +2,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { memberState } from "../utils/RecoilData";
@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import dayjs from "dayjs";
+import CommunityList from "./CommunityList";
 
 const CommunityView = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -516,6 +517,10 @@ const Comment = (props) => {
       return `${diffInDays}일 전`;
     }
   };
+  //페이지 입장 시 스크롤 상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <li className="comment-list">

@@ -62,9 +62,7 @@ const CommunityList = () => {
       <div className="community-list-wrap">
         <div className="community-head">
           <div className="community-head-title">
-            <p className="community-title">
-              {memberNo ? "내 게시물" : "커뮤니티"}
-            </p>
+            <p className="community-title">커뮤니티</p>
             <div className="community-menu">
               <SearchIcon
                 onClick={() => {
