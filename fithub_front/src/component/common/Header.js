@@ -131,7 +131,7 @@ const HeaderLink = ({ chatAlarm, logOut }) => {
     if (memberInfo?.warningLevel === 3) {
       setLogoutST(true);
       logOut();
-      Swal.fire("블랙당한 시끼", "어딜 오려고 다시 돌아가", "warning");
+      Swal.fire("접속 불가", "블랙 회원은 접속할 수 없습니다.", "warning");
     }
   }, [memberInfo]);
 
