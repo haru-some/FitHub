@@ -150,7 +150,6 @@ const MemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
             `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberInfo.memberId}?memberNo=${memberNo}`
           )
           .then((res) => {
-            console.log(res);
             setUpdateData((prev) => !prev);
             Swal.fire("성공", "회원 강퇴에 성공했습니다.", "success");
           })
@@ -283,7 +282,6 @@ const DelMemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
         `${process.env.REACT_APP_BACK_SERVER}/admin/delMember?delMemberPage=${delMemberPage}`
       )
       .then((res) => {
-        console.log(res);
         setDelMemberList(res.data.delMemberList);
         setDelMemberPagNavi(res.data.delMemberPi);
       })
@@ -291,7 +289,7 @@ const DelMemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
         console.log("delMember 에러");
       });
   }, [tabChange, delMemberPage, updateData]);
-  console.log(delMemberList);
+
   return (
     <div>
       <table className="admin-tbl">
@@ -348,7 +346,6 @@ const CommunityListTBL = ({ tabChange, updateData, setUpdateData }) => {
         `${process.env.REACT_APP_BACK_SERVER}/admin/community?communityPage=${communityPage}`
       )
       .then((res) => {
-        console.log(res);
         setCommunityList(res.data.communityList);
         setCommunityPagNavi(res.data.communityPi);
       })
@@ -363,7 +360,6 @@ const CommunityListTBL = ({ tabChange, updateData, setUpdateData }) => {
     return doc.body.textContent || "";
   };
 
-  console.log(communityPagNavi);
   return (
     <div>
       <table className="admin-tbl">
@@ -423,7 +419,6 @@ const CommentListTBL = ({ tabChange, updateData, setUpdateData }) => {
         `${process.env.REACT_APP_BACK_SERVER}/admin/comment?commentPage=${commentPage}`
       )
       .then((res) => {
-        console.log(res.data.commentList);
         setCommentList(res.data.commentList);
         setCommentPagNavi(res.data.commentPi);
       })

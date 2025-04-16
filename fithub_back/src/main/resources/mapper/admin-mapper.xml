@@ -90,13 +90,23 @@ FROM dual
     </select>
     
     <select id="totalSell" resultType="sell">
-    	SELECT * FROM (
-    SELECT COUNT(*) AS total_sell, goods_name
+    	SELECT 
+  top10.goods_name,
+  top10.goods_sell,
+  total.total_sell_count
+FROM (
+  SELECT * FROM (
+    SELECT goods_name, SUM(goods_ea) AS goods_sell
     FROM sell
     GROUP BY goods_name
-    ORDER BY total_sell DESC
-)
-WHERE ROWNUM &lt;= 10
+    ORDER BY goods_sell DESC
+  )
+  WHERE ROWNUM &lt;= 10
+) top10
+CROSS JOIN (
+  SELECT SUM(goods_ea) AS total_sell_count
+  FROM sell
+) total
     </select>
     
     <select id="weekSales" resultType="sell">
