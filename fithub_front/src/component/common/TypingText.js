@@ -16,7 +16,6 @@ const TypingText = ({ text = "", speed = 50, start = false }) => {
           clearInterval(intervalRef.current);
           intervalRef.current = null;
 
-          // 💫 커서 1.5초 후 사라지기
           setTimeout(() => setCursorFadeOut(true), 3000);
 
           return prev;

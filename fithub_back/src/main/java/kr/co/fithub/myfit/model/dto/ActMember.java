@@ -52,4 +52,6 @@ public class ActMember {
     private int isFollow;
     
     private String memberProfile;
+    
+    private String delStatus;
 }

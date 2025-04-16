@@ -3,7 +3,7 @@ import axios from "axios";
 import "./shopDetail.css";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import { memberState, isLoginState, logoutState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
 import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
 
@@ -16,7 +16,7 @@ const ShopOrder = () => {
   const [shippingData, setShippingData] = useState(null); // 배송 데이터 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 상태
   const navigate = useNavigate();
-  const [memberInfo] = useRecoilState(memberState);
+  const memberInfo = useRecoilValue(memberState);
   const isLogin = useRecoilValue(isLoginState);
   const backServer = process.env.REACT_APP_BACK_SERVER;
 
@@ -27,6 +27,7 @@ const ShopOrder = () => {
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
 
   // 총 페이지 수 계산
   const totalPages = Math.ceil(orders.length / ordersPerPage);
@@ -47,10 +48,28 @@ const ShopOrder = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  useEffect(() => {
+    if (!memberInfo) {
+      navigate("/");
+      Swal.fire({
+        title: "이용 불가",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "로그인",
+      });
+    }
+  }, []);
+
+  if (logoutST) {
+    navigate("/");
+  }
+
   useEffect(() => {
     // 구매한 상품 가져오기
     axios
-      .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
+      .get(`${backServer}/goods/sell/review/${memberInfo?.memberNo}`)
       .then((res) => {
         console.log(res.data);
         setOrders(res.data);

@@ -27,7 +27,7 @@ import {
   LockReset as LockResetIcon,
   CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./member.css";
 
 const iconMap = {
@@ -97,7 +97,6 @@ const ChangePw = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const loginMember = useRecoilValue(memberState);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [step, setStep] = useState(1);
   const [currentPw, setCurrentPw] = useState("");
@@ -113,19 +112,9 @@ const ChangePw = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      Swal.fire({
-        title: "로그인 필요",
-        text: "로그인 후 이용할 수 있는 페이지입니다.",
-        icon: "warning",
-        confirmButtonText: "로그인하러 가기",
-        confirmButtonColor: "#2f3e2f",
-      }).then(() => {
-        navigate("/login", {
-          state: { from: location.pathname },
-        });
-      });
+      navigate("/");
     }
-  }, [isLogin, navigate, location]);
+  }, [isLogin, navigate]);
   useEffect(() => {
     if (!loginMember) return;
     if (loginMember.loginType !== "local") {

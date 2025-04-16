@@ -43,6 +43,8 @@ public class DmRoom {
 
     @Schema(description = "마지막 메시지 내용", example = "내일 같이 운동하자")
     private String lastMessageContent;
+    
+    private String otherMemberDelStatus;
 
     @Schema(description = "마지막 메시지 보낸 시간 (yyyy-MM-dd HH:mm:ss)", example = "2025-04-10 21:45:00")
     private String lastMessageSentAt;
