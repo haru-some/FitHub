@@ -51,7 +51,7 @@ function App() {
     if (joinStage !== "waiting") {
       refreshLogin();
       const interval = setInterval(refreshLogin, 60 * 50 * 1000);
-      return () => clearInterval(interval); // 메모리 누수 방지
+      return () => clearInterval(interval);
     }
   }, []);
 
@@ -67,7 +67,6 @@ function App() {
           window.localStorage.setItem("refreshToken", res.data.refreshToken);
         })
         .catch((error) => {
-          console.error(error);
           setMemberInfo(null);
           delete axios.defaults.headers.common["Authorization"];
           window.localStorage.removeItem("refreshToken");
@@ -96,24 +95,16 @@ function App() {
       navigate("/social-join");
     }
   }, []);
-  console.log(loginMember);
   function checkMemberLevelOnce() {
     if (loginMember !== null) {
       const member = loginMember.warningLevel;
-
-      // 경고창을 이미 본 적 있는지 확인
       const alreadyWarned = localStorage.getItem("warningLevel2Warned");
-
       if (member === 2 && !alreadyWarned) {
         Swal.fire("경고", "경고 대상입니다. 조심해주세요.", "warning");
-
-        // 경고창을 본 상태로 기록
         localStorage.setItem("warningLevel2Warned", "true");
       }
     }
   }
-
-  // 페이지 로드 시 실행
   checkMemberLevelOnce();
 
   return (

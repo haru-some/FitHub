@@ -38,10 +38,6 @@ import com.google.gson.reflect.TypeToken;
 
 
 
-
-
-
-
 @SpringBootApplication
 @CrossOrigin("*")
 @RestController
@@ -70,16 +66,6 @@ public class ShopController {
 		return ResponseEntity.ok(goods);
 	}
     
-    
-    //첨부파일이 포함된 post맵핑은 데이터는  @ModelAttribute로 처리한다. 	
-//  	@PostMapping(value="/image")
-//  	public ResponseEntity<String> image(@ModelAttribute MultipartFile image){
-//  		String savepath = root + "/editor/";
-//  		String filepath = fileUtils.upload(savepath, image);
-//  		return ResponseEntity.ok(filepath);
-//  	}
-  	
-  	
     
     @GetMapping(value="/file/{filePath}")
 	public ResponseEntity<Resource> filedown(@PathVariable String filePath) throws FileNotFoundException{

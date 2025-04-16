@@ -135,6 +135,7 @@ const MyFitMain = () => {
   }, [date, isUpdate]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const path = params["*"];
 
     if (path.startsWith("fit")) {

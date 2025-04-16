@@ -68,13 +68,10 @@ const ChatMain = (props) => {
   }, [chatList]);
 
   //소켓 연결시 최초 실행되는 함수
-  const startChat = () => {
-    //console.log("웹소켓 연결이 되면 실행되는 함수");
-  };
+  const startChat = () => {};
 
   //메세지 받는 함수
   const receiveMsg = (receiveData) => {
-    //console.log("서버에서 데이터를 받으면 실행되는 함수");
     const data = JSON.parse(receiveData.data); //문자열을 javascript 객체형식으로 전환
 
     if (data.isRead === "isReadOk") {
@@ -96,9 +93,7 @@ const ChatMain = (props) => {
   };
 
   //챗 끝나면 돌아가는 함수
-  const endChat = () => {
-    //console.log("웹소켓 연결이 끊어지면 실행되는 함수");
-  };
+  const endChat = () => {};
   useEffect(() => {
     if (ws) {
       ws.onopen = startChat;
@@ -114,7 +109,7 @@ const ChatMain = (props) => {
 
   //메세지 보내는 함수
   const sendMessage = () => {
-    const obj = {...chatMsg, message : convertNewlinesToBr(chatMsg.message)}
+    const obj = { ...chatMsg, message: convertNewlinesToBr(chatMsg.message) };
     const data = JSON.stringify(obj);
 
     ws.send(data);
@@ -128,7 +123,6 @@ const ChatMain = (props) => {
       areaRef.current.style.height = 32 + "px";
     }
   }, []);
-
 
   return (
     <section className="section chat-wrap">
@@ -202,6 +196,7 @@ const ChatMain = (props) => {
                           ) : (
                             <img
                               src={
+                                actMember.delStatus === "N" &&
                                 actMember.memberThumb
                                   ? `${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${actMember.memberThumb}`
                                   : "/image/profile.png"
@@ -212,16 +207,18 @@ const ChatMain = (props) => {
                         <span className="chat-id">
                           {chat.senderNo == loginMember.memberNo
                             ? loginMember.memberId
-                            : actMember.memberId}
+                            : actMember.delStatus === "N"
+                            ? actMember.memberId
+                            : "탈퇴한 회원"}
                         </span>
                       </div>
                     )}
 
                     <div className="chat-content-box">
-                    <div
-                      className="chat-message"
-                      dangerouslySetInnerHTML={{ __html: chat.dmContent }}
-                    ></div>
+                      <div
+                        className="chat-message"
+                        dangerouslySetInnerHTML={{ __html: chat.dmContent }}
+                      ></div>
                       {isLastOfGroup && (
                         <div className="chat-time">
                           {chat.sentAt.substring(11, 16)}
@@ -241,38 +238,42 @@ const ChatMain = (props) => {
           <div className="message-input-box">
             <div className="input-item">
               <div className="write-box">
-              <textarea
-                id="chat-message"
-                ref={areaRef}
-                value={chatMsg.message}
-                onChange={(e) => {
-                  const textarea = e.target;
-                  setChatMsg({ ...chatMsg, message: textarea.value });
+                <textarea
+                  id="chat-message"
+                  ref={areaRef}
+                  value={chatMsg.message}
+                  onChange={(e) => {
+                    const textarea = e.target;
+                    setChatMsg({ ...chatMsg, message: textarea.value });
 
-                  // 높이 초기화 후 스크롤 높이만큼 다시 설정
-                  textarea.style.height = "20px";
-                  textarea.style.height = Math.min(textarea.scrollHeight, 100) + "px";
+                    // 높이 초기화 후 스크롤 높이만큼 다시 설정
+                    textarea.style.height = "20px";
+                    textarea.style.height =
+                      Math.min(textarea.scrollHeight, 100) + "px";
 
-                  if (textarea.scrollHeight > 100) {
-                    textarea.scrollTop = textarea.scrollHeight;
-                  }
-                }}
-                onKeyDown={(e) => {
-                  const textarea = e.target;
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    if (chatMsg.message.trim() !== ""){
-                      sendMessage();
-                      textarea.style.height = "32px";
-                    } 
-                  }
-                }}
-                autoComplete="off"
-              />
-                <button className="btn-primary" onClick={()=>{
-                  sendMessage();
-                  areaRef.current.style.height = "32px";
-                }}>
+                    if (textarea.scrollHeight > 100) {
+                      textarea.scrollTop = textarea.scrollHeight;
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    const textarea = e.target;
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      if (chatMsg.message.trim() !== "") {
+                        sendMessage();
+                        textarea.style.height = "32px";
+                      }
+                    }
+                  }}
+                  autoComplete="off"
+                />
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    sendMessage();
+                    areaRef.current.style.height = "32px";
+                  }}
+                >
                   전송
                 </button>
               </div>

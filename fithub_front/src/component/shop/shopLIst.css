@@ -176,7 +176,7 @@
   right: 0;
 }
 .shop-list-wrap .pagination button {
-  background-color: #4caf50;
+  background-color: #589c5f;
   color: white;
   border: none;
   padding: 10px;
@@ -213,7 +213,7 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: #45a049;
+  color: #589c5f;
   font-size: 10px;
   padding: 0px;
   font-weight: bold;

@@ -63,81 +63,94 @@
 
 	<select id="selectActMember" resultType="actMember">
 		SELECT
-		m.member_no,
-		m.member_name,
-		m.member_thumb,
-		m.member_id,
-		m.member_profile,
-		NVL(f1.following_count, 0) AS following_count,
-		NVL(f2.follower_count, 0) AS follower_count,
-		NVL(c.community_count, 0) AS community_count,
-		NVL(r.total_days, 0) AS total_record_days,
-		NVL(r.total_time, 0) AS total_record_time,
-		NVL(rw.week_days, 0) AS week_record_days,
-		NVL(rw.week_time, 0) AS week_record_time,
-		CASE WHEN f3.is_follow IS NOT NULL THEN 1 ELSE 0 END AS is_follow
-		FROM
-		member m
-		LEFT JOIN (
-		SELECT
-		member_no,
-		COUNT(*) AS following_count
-		FROM
-		follow
-		GROUP BY
-		member_no
-		) f1 ON m.member_no = f1.member_no
-		LEFT JOIN (
-		SELECT
-		follow_member_no AS member_no,
-		COUNT(*) AS follower_count
-		FROM
-		follow
-		GROUP BY
-		follow_member_no
-		) f2 ON m.member_no = f2.member_no
-		LEFT JOIN (
-		SELECT
-		member_no,
-		COUNT(*) AS community_count
-		FROM
-		community
-		GROUP BY
-		member_no
-		) c ON m.member_no = c.member_no
-		LEFT JOIN (
-		SELECT
-		member_no,
-		COUNT(DISTINCT record_date) AS total_days,
-		SUM(record_time) AS total_time
-		FROM
-		record
-		GROUP BY
-		member_no
-		) r ON m.member_no = r.member_no
-		LEFT JOIN (
-		SELECT
-		member_no,
-		COUNT(DISTINCT record_date) AS week_days,
-		SUM(record_time) AS week_time
-		FROM
-		record
-		WHERE
-		TO_DATE(record_date, 'YYYY-MM-DD') >= TRUNC(SYSDATE) - 7
-		GROUP BY
-		member_no
-		) rw ON m.member_no = rw.member_no
-		LEFT JOIN (
-		SELECT
-		follow_member_no AS member_no,
-		1 AS is_follow
-		FROM
-		follow
-		WHERE
-		member_no = #{loginMemberNo}
-		) f3 ON m.member_no = f3.member_no
-		WHERE
-		m.member_no = #{memberNo}
+    m.member_no,
+    m.member_name,
+    m.member_thumb,
+    m.member_id,
+    m.member_profile,
+    m.del_status,
+    NVL(f1.following_count, 0) AS following_count,
+    NVL(f2.follower_count, 0) AS follower_count,
+    NVL(c.community_count, 0) AS community_count,
+    NVL(r.total_days, 0) AS total_record_days,
+    NVL(r.total_time, 0) AS total_record_time,
+    NVL(rw.week_days, 0) AS week_record_days,
+    NVL(rw.week_time, 0) AS week_record_time,
+    CASE WHEN f3.is_follow IS NOT NULL THEN 1 ELSE 0 END AS is_follow
+FROM
+    member m
+-- following_count (내가 팔로우한 사람 수)
+LEFT JOIN (
+    SELECT
+        f.member_no,
+        COUNT(*) AS following_count
+    FROM
+        follow f
+        JOIN member m2 ON f.follow_member_no = m2.member_no
+    WHERE
+        m2.del_status != 'Y'
+    GROUP BY
+        f.member_no
+) f1 ON m.member_no = f1.member_no
+-- follower_count (나를 팔로우한 사람 수)
+LEFT JOIN (
+    SELECT
+        f.follow_member_no AS member_no,
+        COUNT(*) AS follower_count
+    FROM
+        follow f
+        JOIN member m1 ON f.member_no = m1.member_no
+    WHERE
+        m1.del_status != 'Y'
+    GROUP BY
+        f.follow_member_no
+) f2 ON m.member_no = f2.member_no
+-- community_count
+LEFT JOIN (
+    SELECT
+        member_no,
+        COUNT(*) AS community_count
+    FROM
+        community
+    GROUP BY
+        member_no
+) c ON m.member_no = c.member_no
+-- total record info
+LEFT JOIN (
+    SELECT
+        member_no,
+        COUNT(DISTINCT record_date) AS total_days,
+        SUM(record_time) AS total_time
+    FROM
+        record
+    GROUP BY
+        member_no
+) r ON m.member_no = r.member_no
+-- last 7 days record
+LEFT JOIN (
+    SELECT
+        member_no,
+        COUNT(DISTINCT record_date) AS week_days,
+        SUM(record_time) AS week_time
+    FROM
+        record
+    WHERE
+        TO_DATE(record_date, 'YYYY-MM-DD') >= TRUNC(SYSDATE) - 7
+    GROUP BY
+        member_no
+) rw ON m.member_no = rw.member_no
+-- 내가 이 사람을 팔로우했는지 여부
+LEFT JOIN (
+    SELECT
+        follow_member_no AS member_no,
+        1 AS is_follow
+    FROM
+        follow
+    WHERE
+        member_no = #{loginMemberNo}
+) f3 ON m.member_no = f3.member_no
+WHERE
+    m.member_no = #{memberNo}
 	</select>
 
 
@@ -182,22 +195,22 @@
 
 	<select id="selectFollowerList" resultType="member">
 		SELECT
-        m.member_no,
-        m.member_id,
-        m.member_name,
-        m.member_thumb,
-        CASE
-            WHEN EXISTS (
-                SELECT 1
-                FROM follow f2
-                WHERE f2.member_no = #{loginMemberNo}
-                  AND f2.follow_member_no = m.member_no
-            ) THEN 1
-            ELSE 0
-        END AS is_follow
-    FROM follow f
-    JOIN member m ON f.member_no = m.member_no
-    WHERE f.follow_member_no = #{memberNo}
+    m.member_no,
+    m.member_id,
+    m.member_name,
+    m.member_thumb,
+    CASE
+        WHEN EXISTS (
+            SELECT 1
+            FROM follow f2
+            WHERE f2.member_no = #{loginMemberNo}
+              AND f2.follow_member_no = m.member_no
+        ) THEN 1
+        ELSE 0
+    END AS is_follow
+FROM follow f
+JOIN member m ON f.member_no = m.member_no
+WHERE f.follow_member_no = #{memberNo} AND m.del_status != 'Y'  -- 탈퇴한 회원 제외
 	</select>
 
 	<select id="selectFollowingList" resultType="member">
@@ -217,7 +230,7 @@
         END AS is_follow
     FROM follow f
     JOIN member m ON f.follow_member_no = m.member_no
-    WHERE f.member_no = #{memberNo}
+    WHERE f.member_no = #{memberNo} AND m.del_status != 'Y'  -- 탈퇴한 회원 제외
 
 	</select>
 
