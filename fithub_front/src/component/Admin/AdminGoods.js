@@ -367,8 +367,8 @@ const AdminGoods = () => {
               }}
             />
             <div>
-              <h4>상품 설명</h4>
-              <div className="textarea-detail">
+              <h4 style={{ color: "black" }}>상품 설명</h4>
+              <div className="textarea-detail" style={{ color: "black" }}>
                 <TextEditor data={goodsExplain} setData={setGoodsExplain} />
               </div>
             </div>

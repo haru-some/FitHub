@@ -605,6 +605,9 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   color: #000;
 }
+.shop-detail-frm-wrap * {
+  color: #000;
+}
 .shop-detail-frm-wrap .main-detail {
   display: flex;
 }
@@ -781,6 +784,15 @@
   width: 459px;
   height: 250px;
   resize: none;
+  color: #000;
+}
+.shop-detail-frm-wrap .ql-editor * {
+  color: #000;
+}
+.shop-detail-frm-wrap .ql-editor p {
+  margin: 0;
+}
+.shop-detail-frm-wrap .ql-picker-label::before {
   color: #000;
 }
 
