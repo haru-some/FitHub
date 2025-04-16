@@ -130,10 +130,10 @@ public class AdminController {
         return ResponseEntity.ok(result);
 	}
 	
-	@Operation(summary = "광고 전체 조회", description = "모든 광고를 조회합니다.")
+	@Operation(summary = "광고 삭제", description = "선택한 광고를 삭제합니다.")
 	@ApiResponses({
-	    @ApiResponse(responseCode = "200", description = "광고 조회 성공"),
-	    @ApiResponse(responseCode = "500", description = "광고 조회 실패")
+	    @ApiResponse(responseCode = "200", description = "광고 삭제 성공"),
+	    @ApiResponse(responseCode = "500", description = "광고 삭제 실패")
 	})
 	@DeleteMapping("/ads")
 	public ResponseEntity<Integer> deleteAds(@RequestParam int adsNo) {

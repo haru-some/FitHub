@@ -778,8 +778,8 @@ const MyResponsivePie = ({ pieChartData }) => {
           innerRadius={0.5}
           padAngle={0.7}
           cornerRadius={3}
-          activeInnerRadiusOffset={20}
-          activeOuterRadiusOffset={20}
+          activeInnerRadiusOffset={2}
+          activeOuterRadiusOffset={2}
           borderWidth={1}
           borderColor={{
             from: "color",
@@ -797,7 +797,7 @@ const MyResponsivePie = ({ pieChartData }) => {
           motionConfig={{
             mass: 1,
             tension: 500,
-            friction: 10,
+            friction: 30,
             clamp: false,
             precision: 0.01,
             velocity: 0,

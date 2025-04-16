@@ -48,3 +48,6 @@
   width: 300px;
   height: 300px;
 }
+.chat-add-icon > svg > path {
+  border: none;
+}
