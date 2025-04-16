@@ -6,6 +6,7 @@ import axios from "axios";
 import { Info } from "@mui/icons-material";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 // import { ShopCart } from "./ShopCart";
 
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -36,12 +37,9 @@ const ShopDetail = () => {
     axios
       .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
-        console.log(res.data);
         setGoods(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [goodsNo, backServer]);
 
   const handleIncrease = () => {
@@ -56,16 +54,13 @@ const ShopDetail = () => {
     axios
       .get(`${backServer}/goods/review/read/${goodsNo}`)
       .then((res) => {
-        console.log(res.data);
         setReview(res.data);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => {});
   }, [setReview]);
 
   const renderContent = () => {
-    const infoArr = goods.goodsInfo.split("&");
+    const infoArr = goods.goodsInfo ? goods.goodsInfo.split("&") : [];
 
     switch (activeTab) {
       case "상품정보":
@@ -246,8 +241,8 @@ const ShopDetail = () => {
   const plusCart = () => {
     if (!isLogin) {
       Swal.fire({
-        title: "회원이 아닙니다.",
-        text: "회원 가입 후 장바구니 기능을 이용해 주세요.",
+        title: "로그인 후 이용하세요.",
+
         icon: "warning",
         confirmButtonText: "확인",
         confirmButtonColor: "#589c5f",
@@ -267,18 +262,15 @@ const ShopDetail = () => {
       goodsEa: quantity,
     };
 
-    axios.post(`${backServer}/goods/cart/add/`, cartItem).then((res) => {
+    axios.put(`${backServer}/goods/cart/add`, cartItem).then((res) => {
       Swal.fire({
         icon: "success",
         title: "장바구니에 보관하였습니다.",
         showConfirmButton: false,
         timer: 2000,
       })
-        .then((res) => {
-          console.log(res);
-        })
+        .then((res) => {})
         .catch((err) => {
-          console.log(err);
           Swal.fire({
             icon: "error",
             title: "장바구니에 추가하는 데 실패했습니다.",
@@ -291,8 +283,7 @@ const ShopDetail = () => {
   const doBuy = () => {
     if (!isLogin) {
       Swal.fire({
-        title: "회원이 아닙니다.",
-        text: "회원 가입 후 상품을 구매 해 주세요.",
+        title: "로그인 후 이용하세요.",
         icon: "warning",
         confirmButtonText: "확인",
         confirmButtonColor: "#589c5f",
@@ -326,6 +317,13 @@ const ShopDetail = () => {
   }
   return (
     <div className="shop-detail-wrap">
+      <div className="back-button">
+        <ExitToAppIcon
+          onClick={() => {
+            navigate("/shop/list");
+          }}
+        />
+      </div>
       <div className="main-detail">
         <div className="goods-image">
           <img

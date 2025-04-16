@@ -11,7 +11,7 @@
   	</select>
   	<insert id="insertGoods">
   		insert into goods values 
-  		(#{goodsNo},#{goodsName},#{goodsExplain},#{goodsPrice},#{goodsStock},#{goodsImage},sysdate,#{goodsCategory}
+  		(#{goodsNo},#{goodsName},#{goodsExplain},#{goodsPrice},0,#{goodsImage},sysdate,#{goodsCategory}
   		,#{goodsDetailImg},#{goodsInfo})
  		<selectKey order="BEFORE" resultType="int" keyProperty="goodsNo">
  			select goods_seq.nextval from dual
@@ -34,6 +34,15 @@
   		delete from cart where cart_no = #{cartNo}
   	</delete>
   	
+  	<select id="existCart" resultType="int">
+  		select count(*) from cart where member_no = #{memberNo} and goods_no=#{goodsNo}
+  	</select>
+  	
+  	<update id="updateCartAmount">
+  		update cart set goods_ea = goods_ea + #{goodsEa} where member_no=#{memberNo} and goods_no=#{goodsNo}
+  	</update>
+  	
+  	
   	<insert id="insertCart">
   		insert into cart values
   		(#{cartNo}, #{goodsNo}, #{memberNo}, #{goodsPrice}, #{goodsEa}, #{goodsImage}, #{goodsName})
@@ -41,6 +50,9 @@
  			select cart_seq.nextval from dual
  		</selectKey> 
   	</insert>
+  	
+  	
+  	
   	
   	<insert id="insertSell">
   		insert into sell values 

@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import { Form, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
-import { Category } from "@mui/icons-material";
 
 const AdminGoods = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -53,7 +52,6 @@ const AdminGoods = () => {
     form.append("goodsName", goodsName);
     form.append("goodsPrice", goodsPrice);
     form.append("goodsExplain", goodsExplain);
-    form.append("goodsStock", goodsStock);
     form.append("goodsCategory", goodsCategory);
 
     if (goodsImage) {
@@ -75,7 +73,7 @@ const AdminGoods = () => {
     console.log(JSON.stringify(obj));
 
     axios
-      .post(`${backServer}/goods`, form, {
+      .post(`${backServer}/goods/add`, form, {
         headers: {
           contentType: "multipart/form-data",
           processData: false,
@@ -89,7 +87,7 @@ const AdminGoods = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/admin");
+        navigate("/shop/list");
       })
       .catch((err) => {
         console.error("상품 등록 실패:", err);
@@ -403,8 +401,9 @@ const AdminGoods = () => {
             </h2>
           </div>
           <div className="goods-buy">
-            <button onClick={plusCart}>장바구니</button>
-            <button onClick={doBuy}>구매하기</button>
+            <button type="button" className="button" onClick={submit}>
+              상품 등록하기
+            </button>
           </div>
         </div>
       </div>
@@ -421,9 +420,6 @@ const AdminGoods = () => {
         ))}
       </div>
       <div className="tab-content">{renderContent()}</div>
-      <button type="button" className="button" onClick={submit}>
-        상품 등록하기
-      </button>
     </div>
   );
 };

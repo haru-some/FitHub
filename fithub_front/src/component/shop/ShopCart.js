@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./shopCart.css";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { memberState, isLoginState } from "../utils/RecoilData";
+import { memberState, isLoginState, logoutState } from "../utils/RecoilData";
 import ClearIcon from "@mui/icons-material/Clear";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -15,21 +15,39 @@ const ShopCart = () => {
   const [cart, setCart] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 항목 ID 관리
   const [selectAll, setSelectAll] = useState(false); // 전체 선택 상태 관리
+  const [logoutST, setLogoutST] = useRecoilState(logoutState);
+
+  useEffect(() => {
+    if (!memberInfo) {
+      navigate("/");
+      Swal.fire({
+        title: "이용 불가",
+        text: "로그인이 필요한 서비스입니다.",
+        icon: "warning",
+        confirmButtonColor: "#589c5f",
+        confirmButtonText: "로그인",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (logoutST) {
+      navigate("/");
+      setLogoutST(false);
+    }
+  }, [logoutST]);
 
   // 장바구니 데이터 로드
   useEffect(() => {
     if (isLogin) {
       axios
-        .get(`${backServer}/goods/cart/read/${memberInfo.memberNo}`)
+        .get(`${backServer}/goods/cart/read/${memberInfo?.memberNo}`)
         .then((res) => {
-          console.log(res.data);
           setCart(res.data);
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .catch((err) => {});
     }
-  }, [isLogin, backServer, memberInfo.memberNo]);
+  }, []);
 
   const handleCheckboxChange = (cartNo) => {
     setSelectedItems(
@@ -53,17 +71,6 @@ const ShopCart = () => {
     });
   };
 
-  const DeleteCart = (cartNo) => {
-    axios
-      .post(`${backServer}/goods/cart/delete`, { cartNos: [cartNo] })
-      .then((res) => {
-        // 삭제 후 장바구니 업데이트
-        setCart(cart.filter((item) => item.cartNo !== cartNo));
-      })
-      .catch((err) => {
-        console.error("Error deleting item:", err);
-      });
-  };
   const cartDelete = (cartNo) => {
     Swal.fire({
       title: "삭제하시겠습니까?",
@@ -76,7 +83,6 @@ const ShopCart = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${backServer}/goods/cart/${cartNo}`).then((res) => {
-          console.log(res);
           // 성공적으로 삭제된 후 상태 업데이트
           setCart(cart.filter((cart) => cart.cartNo !== cartNo));
         });
@@ -94,9 +100,9 @@ const ShopCart = () => {
   const totalAmount = finalAmount + shippingFee; // 최종 결제 금액
 
   const [formData, setFormData] = useState({
-    memberName: memberInfo.memberName,
-    memberPhone: memberInfo.memberPhone,
-    memberAddr: memberInfo.memberAddr,
+    memberName: memberInfo?.memberName,
+    memberPhone: memberInfo?.memberPhone,
+    memberAddr: memberInfo?.memberAddr,
   });
 
   const handleChange = (e) => {
@@ -131,9 +137,9 @@ const ShopCart = () => {
         item.goodsPrice * item.goodsEa +
         (item.goodsPrice * item.goodsEa >= 30000 ? 0 : 3000), // 배송비 조건
       totalPrice: totalAmount,
-      memberName: memberInfo.memberName,
-      memberPhone: memberInfo.memberPhone,
-      memberAddr: memberInfo.memberAddr,
+      memberName: memberInfo?.memberName,
+      memberPhone: memberInfo?.memberPhone,
+      memberAddr: memberInfo?.memberAddr,
     }));
 
     //결제 호출
@@ -152,15 +158,13 @@ const ShopCart = () => {
           .join(", ")}`, // 주문 상품명
         amount: totalAmount, // 결제 금액
         buyer_email: "test@portone.io",
-        buyer_name: memberInfo.memberNo,
-        buyer_tel: memberInfo.memberPhone,
-        buyer_addr: memberInfo.memberAddr,
+        buyer_name: memberInfo?.memberNo,
+        buyer_tel: memberInfo?.memberPhone,
+        buyer_addr: memberInfo?.memberAddr,
         buyer_postcode: "120-120", // 필요시 수정
       },
       (rsp) => {
         if (rsp.success) {
-          console.log("Payment Success:", rsp);
-
           axios
             .post(`${backServer}/goods/sell/payAll/`, paymentData)
 
@@ -174,7 +178,6 @@ const ShopCart = () => {
               });
             })
             .catch((err) => {
-              console.error("Error during checkout:", err);
               Swal.fire({
                 title: "결제 실패",
                 text: "결제 중 오류가 발생했습니다. 다시 시도해주세요.",
@@ -182,7 +185,6 @@ const ShopCart = () => {
               });
             });
         } else {
-          console.error("Payment Failed:", rsp);
           if (rsp.error) {
             alert(`결제 실패: ${rsp.error}`);
           }
@@ -190,7 +192,6 @@ const ShopCart = () => {
       }
     );
   };
-  console.log(totalAmount.toLocaleString());
 
   return (
     <div className="cart-wrap">
@@ -248,7 +249,7 @@ const ShopCart = () => {
                       className="delete-button-item"
                       onClick={(e) => {
                         e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
-                        DeleteCart(item.cartNo);
+
                         cartDelete(item.cartNo);
                       }}
                     >
@@ -256,9 +257,9 @@ const ShopCart = () => {
                     </button>
                   </div>
                   <div className="member-info">
-                    <div>{memberInfo.memberName}</div>
-                    <div>{memberInfo.memberPhone}</div>
-                    <div>{memberInfo.memberAddr}</div>
+                    <div>{memberInfo?.memberName}</div>
+                    <div>{memberInfo?.memberPhone}</div>
+                    <div>{memberInfo?.memberAddr}</div>
                   </div>
                 </div>
               </div>
@@ -273,7 +274,7 @@ const ShopCart = () => {
               : 0}{" "}
             원
           </h3>
-          <span>(30000원 이하 배송비 3000원)</span>
+          <span>(30000원 이상 배송비 무료)</span>
           <button className="pay-all-button" onClick={handlePayAll}>
             결제하기
           </button>

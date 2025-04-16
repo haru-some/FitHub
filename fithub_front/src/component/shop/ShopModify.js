@@ -3,10 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState, logoutState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
-import { data, Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
-import { Category } from "@mui/icons-material";
 
 const ShopModify = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
@@ -102,7 +101,6 @@ const ShopModify = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         Swal.fire({
           icon: "success",
           title: "상품이 수정되었습니다!",
@@ -112,7 +110,6 @@ const ShopModify = () => {
         navigate("/shop/*");
       })
       .catch((err) => {
-        console.error("상품 등록 실패:", err);
         Swal.fire({
           icon: "error",
           title: "상품 등록 실패",
@@ -391,9 +388,7 @@ const ShopModify = () => {
         setGoodsImage(data.goodsImage);
         setGoodsDetailImg(data.goodsDetailImg);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [goodsNo, backServer, activeTab]);
 
   return (
@@ -478,10 +473,9 @@ const ShopModify = () => {
               원
             </h2>
           </div>
-          <div className="goods-buy">
-            <button onClick={plusCart}>장바구니</button>
-            <button onClick={doBuy}>구매하기</button>
-          </div>
+          <button type="button" className="button" onClick={submit}>
+            상품 수정하기
+          </button>
         </div>
       </div>
 
@@ -497,9 +491,6 @@ const ShopModify = () => {
         ))}
       </div>
       <div className="tab-content">{renderContent()}</div>
-      <button type="button" className="button" onClick={submit}>
-        상품 수정하기
-      </button>
     </div>
   );
 };

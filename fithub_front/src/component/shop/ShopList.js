@@ -6,7 +6,6 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import axios from "axios";
 import ClearIcon from "@mui/icons-material/Clear";
 import Swal from "sweetalert2";
-
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
 import AdBanners from "../utils/AdBanners";
@@ -77,13 +76,10 @@ const GoodsList = () => {
     axios
       .get(`${backServer}/goods?reqPage=${reqPage}`)
       .then((res) => {
-        console.log(res.data.list);
         setGoods(res.data.list ? res.data.list : []);
         setCurrentPage(1); // 데이터가 바뀌면 현재 페이지를 초기화
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [reqPage]);
 
   //관리자 삭제

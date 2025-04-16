@@ -53,4 +53,8 @@ public interface ShopDao {
 
 	String getGoodsDetailImg(int goodsNo);
 
+	int existCart(Cart cart);
+
+	int updateCartAmount(Cart cart);
+
 }
