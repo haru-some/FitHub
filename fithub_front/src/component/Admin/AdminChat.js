@@ -30,17 +30,32 @@ const AdminChat = () => {
   }, [alarm, backServer]);
 
   useEffect(() => {
+    axios
+      .patch(
+        `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo?.memberId}`
+      )
+      .then(() => {
+        axios.get(`${backServer}/chat/rooms`).then((res) => {
+          setChatRooms(res.data);
+        });
+      })
+      .catch((err) => {
+        console.error("읽음 처리 실패", err);
+      });
+  }, [selectedChatRoom]);
+
+  useEffect(() => {
     // WebSocket 연결
     const client = new Client({
       // brokerURL: `${socketServer}/inMessage`, // Spring Boot WebSocket 서버 주소
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
 
-      connectHeaders: {
-        Authorization: memberInfo?.memberNo,
-        memberId: memberInfo?.memberId,
-        roomId: selectedChatRoom,
-      },
+      // connectHeaders: {
+      //   Authorization: memberInfo?.memberNo,
+      //   memberId: memberInfo?.memberId,
+      //   roomId: selectedChatRoom,
+      // },
 
       onConnect: () => {
         console.log("Connected to WebSocket");
@@ -61,37 +76,23 @@ const AdminChat = () => {
                     : room
                 )
               );
-
-              // ✅ 읽음 처리는 비동기로 따로 처리
+            }
+            if (selectedChatRoom !== null) {
               axios
                 .patch(
                   `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo?.memberId}`
                 )
                 .then(() => {
-                  axios.get(`${backServer}/chat/rooms`).then((res) => {
-                    setChatRooms(res.data);
-                  });
+                  // ✅ 읽음 처리 끝나면 다시 채팅방 목록 갱신
+                  return axios.get(`${backServer}/chat/rooms`);
+                })
+                .then((res) => {
+                  setChatRooms(res.data); // ✅ UI 갱신 핵심
                 })
                 .catch((err) => {
-                  console.error("읽음 처리 실패", err);
+                  console.error("읽음 처리 후 갱신 실패", err);
                 });
             }
-            // if (selectedChatRoom !== null) {
-            //   axios
-            //     .patch(
-            //       `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo?.memberId}`
-            //     )
-            //     .then(() => {
-            //       // ✅ 읽음 처리 끝나면 다시 채팅방 목록 갱신
-            //       return axios.get(`${backServer}/chat/rooms`);
-            //     })
-            //     .then((res) => {
-            //       setChatRooms(res.data); // ✅ UI 갱신 핵심
-            //     })
-            //     .catch((err) => {
-            //       console.error("읽음 처리 후 갱신 실패", err);
-            //     });
-            // }
           }
         );
 

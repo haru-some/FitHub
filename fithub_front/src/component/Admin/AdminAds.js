@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+import Swal from "sweetalert2";
 
 const AdminAds = () => {
   const [adsList, setAdsList] = useState([]);
-  const [ads, setAds] = useState([
-    {
-      adsName: "",
-      adsLink: "",
-      adsType: "",
-    },
-  ]);
+  const [ads, setAds] = useState({
+    adsName: "",
+    adsLink: "",
+    adsType: "",
+  });
   const [adsImg, setAdsImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
   const [reload, setReload] = useState(false);
@@ -41,7 +40,7 @@ const AdminAds = () => {
         },
       })
       .then((res) => {
-        alert("광고가 성공적으로 등록되었습니다!");
+        Swal.fire("성공", "광고가 등록되었습니다.", "success");
         setAds({ adsName: "", adsLink: "", adsType: "" });
         setAdsImg(null);
         setPreviewImg(null);
@@ -49,20 +48,20 @@ const AdminAds = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert("광고 등록에 실패했습니다.");
+        Swal.fire("실패", "등록 실패.", "warning");
       });
   };
 
   const deleteAds = (adsNo) => {
     axios
-      .delete(`${process.env.REACT_APP_BACK_SERVER}/admin/ads/${adsNo}`)
+      .delete(`${process.env.REACT_APP_BACK_SERVER}/admin/ads?adsNo=${adsNo}`)
       .then((res) => {
-        alert("삭제되었습니다");
+        Swal.fire("성공", "삭제되었습니다.", "success");
         setReload((prev) => !prev);
       })
       .catch((err) => {
         console.error(err);
-        alert("삭제 실패");
+        Swal.fire("실패", "삭제 실패.", "warning");
       });
   };
 
@@ -119,11 +118,11 @@ const AdminAds = () => {
                   <div style={{ width: "5%", textAlign: "center" }}>
                     {ad.adsType}
                   </div>
-                  <div
-                    onClick={() => deleteAds(ad.adsNo)}
-                    style={{ width: "5%", textAlign: "center" }}
-                  >
-                    <DisabledByDefaultIcon />
+                  <div style={{ width: "5%", textAlign: "center" }}>
+                    <DisabledByDefaultIcon
+                      onClick={() => deleteAds(ad.adsNo)}
+                      style={{ cursor: "pointer" }}
+                    />
                   </div>
                 </div>
               );

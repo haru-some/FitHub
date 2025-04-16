@@ -86,12 +86,12 @@ const MemberChat = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 10000,
 
-      connectHeaders: {
-        // 기존 Authorization 외에 memberId, roomId를 추가
-        Authorization: memberInfo.memberNo,
-        memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
-        roomId: roomNo, // 현재 입장한 채팅방 ID
-      },
+      // connectHeaders: {
+      //   // 기존 Authorization 외에 memberId, roomId를 추가
+      //   Authorization: memberInfo.memberNo,
+      //   memberId: memberInfo.memberId, // 유저의 ID (예: kingjoji)
+      //   roomId: roomNo, // 현재 입장한 채팅방 ID
+      // },
 
       onConnect: () => {
         console.log("Connected to WebSocket");
@@ -177,7 +177,7 @@ const MemberChat = () => {
       <div className="page-title">고객센터 문의</div>
       <div className="member-chat-box">
         <div className="chat-box" ref={chatBoxRef}>
-          {roomNo !== null ? (
+          {roomNo !== null &&
             messages.map((msg, index) => (
               <div
                 key={index}
@@ -240,15 +240,7 @@ const MemberChat = () => {
                   </>
                 )}
               </div>
-            ))
-          ) : (
-            <div className="member-chat-none">
-              <div className="chat-add-icon">
-                <AddCommentIcon onClick={adminChatStart} />
-              </div>
-              <div className="chat-notice">관리자 문의 시작하기</div>
-            </div>
-          )}
+            ))}
         </div>
         <div className="chat-input-box">
           {roomNo !== null ? (
