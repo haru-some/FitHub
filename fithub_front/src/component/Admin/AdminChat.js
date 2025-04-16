@@ -134,8 +134,6 @@ const AdminChat = () => {
             chatRooms={chatRooms}
             handleSelectChatRoom={handleSelectChatRoom}
             selectedChatRoom={selectedChatRoom}
-            setVisitRead={setVisitRead}
-            setChatRooms={setChatRooms}
           />
         </div>
         <div className="chat-box-view">

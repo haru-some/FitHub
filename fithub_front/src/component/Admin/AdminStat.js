@@ -452,7 +452,7 @@ const MyResponsiveBar = (props) => {
           data={data}
           keys={type}
           indexBy="date"
-          margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+          margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
           padding={0.3}
           valueScale={{ type: "linear" }}
           indexScale={{ type: "band", round: true }}
@@ -469,7 +469,7 @@ const MyResponsiveBar = (props) => {
             tickRotation: 0,
             legend: "날짜",
             legendPosition: "middle",
-            legendOffset: 32,
+            legendOffset: 40,
             truncateTickAt: 0,
           }}
           axisLeft={{
@@ -478,7 +478,7 @@ const MyResponsiveBar = (props) => {
             tickRotation: 0,
             legend: "(인원 수)명",
             legendPosition: "middle",
-            legendOffset: -40,
+            legendOffset: -60,
             truncateTickAt: 0,
           }}
           enableTotals={true}
@@ -528,7 +528,7 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
         data={daySales}
         keys={type}
         indexBy="country"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        margin={{ top: 50, right: 130, bottom: 50, left: 100 }}
         padding={0.3}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
@@ -545,7 +545,7 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
           tickRotation: 0,
           legend: "날짜",
           legendPosition: "middle",
-          legendOffset: 32,
+          legendOffset: 40,
           truncateTickAt: 0,
         }}
         axisLeft={{
@@ -554,7 +554,7 @@ const MyResponsiveBar2 = ({ daySales, type }) => (
           tickRotation: 0,
           legend: "매출",
           legendPosition: "middle",
-          legendOffset: -40,
+          legendOffset: -90,
           truncateTickAt: 0,
         }}
         labelSkipWidth={12}
@@ -694,7 +694,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
         ) && (
           <ResponsiveLine
             data={lineChartData}
-            margin={{ top: 50, right: 150, bottom: 50, left: 70 }}
+            margin={{ top: 50, right: 150, bottom: 50, left: 90 }}
             xScale={{ type: "point" }}
             yScale={{
               type: "linear",
@@ -711,7 +711,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
               tickPadding: 5,
               tickRotation: 0,
               legend: "날짜",
-              legendOffset: 36,
+              legendOffset: 40,
               legendPosition: "middle",
               truncateTickAt: 0,
             }}
@@ -720,7 +720,7 @@ const MyResponsiveLine = ({ lineChartData, setLineChartData }) => {
               tickPadding: 5,
               tickRotation: 0,
               legend: "수치",
-              legendOffset: -40,
+              legendOffset: -70,
               legendPosition: "middle",
               truncateTickAt: 0,
             }}

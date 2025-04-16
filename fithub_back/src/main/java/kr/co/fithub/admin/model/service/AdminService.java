@@ -64,7 +64,6 @@ public class AdminService {
 	@Transactional
 	public int adminMemberDelete(int memberNo, String adminId) {
 		MemberDTO m = adminDao.selectOneMember(memberNo);
-		System.out.println(m);
 		int result = 0;
 		if(m != null) {			
 			result += adminDao.adminDelMemberInsert(m, adminId);
@@ -72,7 +71,6 @@ public class AdminService {
 		    String newMemberId = m.getMemberId() + "_deleted_" +
 		        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) +
 		        "_" + uuidSuffix;
-		    System.out.println(newMemberId);
 		    result += adminDao.updateMemberKickId(newMemberId, memberNo);
 		}
 		return result;
