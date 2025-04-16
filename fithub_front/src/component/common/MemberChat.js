@@ -21,7 +21,7 @@ const MemberChat = () => {
   const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
   const socket = new SockJS(`${backServer}/inMessage`);
   const [roomNo, setRoomNo] = useState(null);
-  const [newRoom, setNewRoom] = useState(null);
+  const [newRoom, setNewRoom] = useState(false);
 
   if (logoutST) {
     navigate("/");
@@ -41,20 +41,19 @@ const MemberChat = () => {
       });
     }
   }
-  console.log(memberInfo.memberId);
   useEffect(() => {
     // 기존 채팅 기록 불러오기
     axios
       .get(`${backServer}/chat/check/room?memberId=${memberInfo.memberId}`)
       .then((res) => {
         if (res.data.chatRoomNo) {
+          //있으면 시작하기
           setRoomNo(res.data.chatRoomNo);
           axios
             .get(
               `${backServer}/chat/room/member/message?memberId=${memberInfo.memberId}`
             )
             .then((res) => {
-              console.log(res);
               setMessages(res.data);
             })
             .catch((err) => {
@@ -65,7 +64,7 @@ const MemberChat = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [newRoom]);
+  }, [newRoom, roomNo]);
 
   useEffect(() => {
     axios
@@ -101,7 +100,6 @@ const MemberChat = () => {
         client.subscribe(`/topic/chat/messages/${roomNo}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-          console.log(messages);
         });
       },
       onDisconnect: () => {
@@ -155,6 +153,7 @@ const MemberChat = () => {
       setChatInput("");
     }
   };
+  //채팅 시 스크롤 이벤트
   const chatBoxRef = useRef(null);
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -166,13 +165,13 @@ const MemberChat = () => {
     axios
       .post(`${backServer}/chat/room?memberId=${memberInfo.memberId}`)
       .then((res) => {
-        console.log(res);
+        setNewRoom((prev) => !prev);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(memberInfo);
+
   return (
     <section className="member-chat-section">
       <div className="page-title">고객센터 문의</div>

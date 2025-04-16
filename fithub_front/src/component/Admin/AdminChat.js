@@ -1,16 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import CircleIcon from "@mui/icons-material/Circle";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isLoginState, memberState } from "../utils/RecoilData";
-import { useNavigate } from "react-router-dom"; // 관리자만 접근 제한을 위해 추가
+import { useRecoilValue } from "recoil";
+import { memberState } from "../utils/RecoilData";
 import axios from "axios";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const AdminChat = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  const socketServer = backServer.replace("http://", "ws://"); //ws://192.168.10.34:9999
   const socket = new SockJS(`${backServer}/inMessage`);
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
@@ -18,6 +15,7 @@ const AdminChat = () => {
   const [messages, setMessages] = useState([]);
   const [stompClient, setStompClient] = useState(null);
   const memberInfo = useRecoilValue(memberState); // 현재 로그인한 회원 정보 가져오기
+  const [visitRead, setVisitRead] = useState(false);
 
   useEffect(() => {
     axios
@@ -29,20 +27,7 @@ const AdminChat = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [alarm]);
-
-  useEffect(() => {
-    axios
-      .patch(
-        `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo.memberId}`
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [selectedChatRoom]);
+  }, [alarm, backServer]);
 
   useEffect(() => {
     // WebSocket 연결
@@ -52,8 +37,8 @@ const AdminChat = () => {
       reconnectDelay: 10000,
 
       connectHeaders: {
-        Authorization: memberInfo.memberNo,
-        memberId: memberInfo.memberId,
+        Authorization: memberInfo?.memberNo,
+        memberId: memberInfo?.memberId,
         roomId: selectedChatRoom,
       },
 
@@ -66,6 +51,47 @@ const AdminChat = () => {
           (message) => {
             const receivedMessage = JSON.parse(message.body);
             setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+
+            if (selectedChatRoom !== null) {
+              // ✅ 일단 즉시 UI 반영
+              setChatRooms((prevRooms) =>
+                prevRooms.map((room) =>
+                  room.chatRoomNo === selectedChatRoom
+                    ? { ...room, unreadCount: 0 }
+                    : room
+                )
+              );
+
+              // ✅ 읽음 처리는 비동기로 따로 처리
+              axios
+                .patch(
+                  `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo?.memberId}`
+                )
+                .then(() => {
+                  axios.get(`${backServer}/chat/rooms`).then((res) => {
+                    setChatRooms(res.data);
+                  });
+                })
+                .catch((err) => {
+                  console.error("읽음 처리 실패", err);
+                });
+            }
+            // if (selectedChatRoom !== null) {
+            //   axios
+            //     .patch(
+            //       `${backServer}/chat/view?roomNo=${selectedChatRoom}&chatMemberId=${memberInfo?.memberId}`
+            //     )
+            //     .then(() => {
+            //       // ✅ 읽음 처리 끝나면 다시 채팅방 목록 갱신
+            //       return axios.get(`${backServer}/chat/rooms`);
+            //     })
+            //     .then((res) => {
+            //       setChatRooms(res.data); // ✅ UI 갱신 핵심
+            //     })
+            //     .catch((err) => {
+            //       console.error("읽음 처리 후 갱신 실패", err);
+            //     });
+            // }
           }
         );
 
@@ -108,6 +134,8 @@ const AdminChat = () => {
             chatRooms={chatRooms}
             handleSelectChatRoom={handleSelectChatRoom}
             selectedChatRoom={selectedChatRoom}
+            setVisitRead={setVisitRead}
+            setChatRooms={setChatRooms}
           />
         </div>
         <div className="chat-box-view">
@@ -147,6 +175,7 @@ const AdminChatList = ({
               {room.memberThumb ? (
                 <img
                   src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${room.memberThumb}`}
+                  alt=""
                 />
               ) : (
                 <img src="/image/default_img.png" alt="프로필" />
@@ -164,7 +193,7 @@ const AdminChatList = ({
                 </div>
               </div>
             </div>
-            {room.unreadCount > 0 && (
+            {room.chatRoomNo !== selectedChatRoom && room.unreadCount > 0 && (
               <div className="member-chat-alarm">
                 <CircleIcon />
                 <span className="alarm-count">{room.unreadCount}</span>
@@ -200,7 +229,7 @@ const AdminChatView = ({
       .catch((err) => {
         console.log(err);
       });
-  }, [selectedChatRoom]);
+  }, [selectedChatRoom, backServer]);
 
   const sendMessage = () => {
     const date = new Date();
@@ -233,14 +262,12 @@ const AdminChatView = ({
       setChatInput("");
     }
   };
-  console.log(messages);
   const chatBoxRef = useRef(null);
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
-  console.log(memberInfo);
   return (
     <>
       <div className="chat-box" ref={chatBoxRef}>
@@ -259,6 +286,7 @@ const AdminChatView = ({
                   <div className="right-chat-profile">
                     <img
                       src={`${process.env.REACT_APP_BACK_SERVER}/member/profileimg/${msg.memberThumb}`}
+                      alt=""
                     />
                   </div>
                   <div className="chat-content">

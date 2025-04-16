@@ -56,4 +56,8 @@ public interface AdminDao {
 
 	int deleteAds(int adsNo);
 
+	int updateMemberId(String memberName, int memberNo);
+
+	int deleteDelMember(String memberName);
+
 }

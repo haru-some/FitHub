@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import PageNavigation from "../utils/PageNavigation";
 import { useNavigate } from "react-router-dom";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { memberState } from "../utils/RecoilData";
+import Swal from "sweetalert2";
+import ReplayCircleFilledIcon from "@mui/icons-material/ReplayCircleFilled";
 
 const AdminMember = () => {
   const [tabChange, setTabChange] = useState(1);
+  const [updateData, setUpdateData] = useState(false);
 
   const changeTab = (e) => {
     const member = e.target.id;
@@ -43,19 +46,35 @@ const AdminMember = () => {
         {tabChange === 1 ? (
           <div className="member-manage">
             <div className="member-list-tbl">
-              <MemberListTBL tabChange={tabChange} />
+              <MemberListTBL
+                tabChange={tabChange}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+              />
             </div>
             <div className="del-member-list-tbl">
-              <DelMemberListTBL tabChange={tabChange} />
+              <DelMemberListTBL
+                tabChange={tabChange}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+              />
             </div>
           </div>
         ) : (
           <div className="board-manage">
             <div className="board-list-tbl">
-              <CommunityListTBL tabChange={tabChange} />
+              <CommunityListTBL
+                tabChange={tabChange}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+              />
             </div>
             <div className="comment-list-tbl">
-              <CommentListTBL tabChange={tabChange} />
+              <CommentListTBL
+                tabChange={tabChange}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+              />
             </div>
           </div>
         )}
@@ -64,12 +83,12 @@ const AdminMember = () => {
   );
 };
 
-const MemberListTBL = ({ tabChange }, props) => {
+const MemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
   const [memberList, setMemberList] = useState([]);
   const [memberPage, setMemberPage] = useState(1);
   const [memberPagNavi, setMemberPagNavi] = useState(null);
   const memberInfo = useRecoilValue(memberState);
-  const [updateData, setUpdateData] = useState(false);
+
   useEffect(() => {
     axios
       .get(
@@ -82,7 +101,7 @@ const MemberListTBL = ({ tabChange }, props) => {
       .catch((err) => {
         console.log("member 에러");
       });
-  }, [tabChange, memberPage]);
+  }, [tabChange, memberPage, updateData]);
 
   const selectChange = (e, index) => {
     const { name, value } = e.target;
@@ -107,24 +126,53 @@ const MemberListTBL = ({ tabChange }, props) => {
         updateMember
       )
       .then((res) => {
-        console.log("업데이트 성공:", res.data);
         setUpdateData((prev) => !prev);
+        Swal.fire("성공", "성공적으로 업데이트 되었습니다.", "success");
       })
       .catch((err) => {
         console.error("업데이트 실패:", err);
       });
   };
+
   const deleteMember = (memberNo) => {
+    Swal.fire({
+      title: "강퇴하기",
+      text: "강퇴하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#589c5f",
+      confirmButtonText: "강퇴",
+      cancelButtonColor: "red",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberInfo.memberId}?memberNo=${memberNo}`
+          )
+          .then((res) => {
+            console.log(res);
+            setUpdateData((prev) => !prev);
+            Swal.fire("성공", "회원 강퇴에 성공했습니다.", "success");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
+  const rollBackMember = (memberNo) => {
     axios
-      .delete(
-        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberInfo.memberId}?memberNo=${memberNo}`
+      .patch(
+        `${process.env.REACT_APP_BACK_SERVER}/admin/member/${memberNo}/rollBack`
       )
       .then((res) => {
-        console.log(res);
         setUpdateData((prev) => !prev);
+        Swal.fire("성공", "성공적으로 복구 되었습니다.", "success");
       })
       .catch((err) => {
-        console.log(err);
+        console.error("업데이트 실패:", err);
       });
   };
 
@@ -192,11 +240,16 @@ const MemberListTBL = ({ tabChange }, props) => {
                       </select>
                     </div>
                   </td>
-                  <td
-                    style={{ width: "5%" }}
-                    onClick={() => deleteMember(member.memberNo)}
-                  >
-                    <DisabledByDefaultIcon />
+                  <td style={{ width: "5%" }}>
+                    {member.delStatus === "N" ? (
+                      <DisabledByDefaultIcon
+                        onClick={() => deleteMember(member.memberNo)}
+                      />
+                    ) : (
+                      <ReplayCircleFilledIcon
+                        onClick={() => rollBackMember(member.memberNo)}
+                      />
+                    )}
                   </td>
                 </tr>
               );
@@ -218,7 +271,7 @@ const MemberListTBL = ({ tabChange }, props) => {
   );
 };
 
-const DelMemberListTBL = ({ tabChange }, props) => {
+const DelMemberListTBL = ({ tabChange, updateData, setUpdateData }) => {
   const [delMemberList, setDelMemberList] = useState();
   const [delMemberPage, setDelMemberPage] = useState(1);
   const [delMemberPagNavi, setDelMemberPagNavi] = useState(null);
@@ -236,7 +289,7 @@ const DelMemberListTBL = ({ tabChange }, props) => {
       .catch((err) => {
         console.log("delMember 에러");
       });
-  }, [tabChange, delMemberPage]);
+  }, [tabChange, delMemberPage, updateData]);
   console.log(delMemberList);
   return (
     <div>
@@ -282,7 +335,7 @@ const DelMemberListTBL = ({ tabChange }, props) => {
   );
 };
 
-const CommunityListTBL = ({ tabChange }) => {
+const CommunityListTBL = ({ tabChange, updateData, setUpdateData }) => {
   const [communityList, setCommunityList] = useState();
   const [communityPage, setCommunityPage] = useState(1);
   const [communityPagNavi, setCommunityPagNavi] = useState(null);
@@ -302,7 +355,7 @@ const CommunityListTBL = ({ tabChange }) => {
         console.log(err);
         console.log("community 에러");
       });
-  }, [tabChange, communityPage]);
+  }, [tabChange, communityPage, updateData]);
 
   const stripHtml = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
@@ -357,7 +410,7 @@ const CommunityListTBL = ({ tabChange }) => {
   );
 };
 
-const CommentListTBL = ({ tabChange }) => {
+const CommentListTBL = ({ tabChange, updateData, setUpdateData }) => {
   const [commentList, setCommentList] = useState();
   const [commentPage, setCommentPage] = useState(1);
   const [commentPagNavi, setCommentPagNavi] = useState(null);
@@ -376,7 +429,7 @@ const CommentListTBL = ({ tabChange }) => {
       .catch((err) => {
         console.log("comment 에러");
       });
-  }, [tabChange, commentPage]);
+  }, [tabChange, commentPage, updateData]);
   return (
     <div>
       <table className="admin-tbl">
