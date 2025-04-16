@@ -34,6 +34,7 @@
     m.member_id AS other_member_id,
     m.member_name AS other_member_name,
     m.member_thumb AS other_member_thumb,
+    m.del_status as other_member_del_status,
 
     -- 마지막 메시지
     last_msg.dm_content AS last_message_content,

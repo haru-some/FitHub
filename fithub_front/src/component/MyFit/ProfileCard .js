@@ -29,6 +29,14 @@ const ProfileCard = (props) => {
         `${process.env.REACT_APP_BACK_SERVER}/myfit/activity/${memberNo}?loginMemberNo=${loginMember.memberNo}`
       )
       .then((res) => {
+        if (!res.data || res.data.delStatus === "Y") {
+          navigate("/");
+          Swal.fire({
+            title: "결과 없음",
+            text: "존재하지 않는 회원입니다.",
+            icon: "warning",
+          });
+        }
         setActMember(res.data);
       })
       .catch((err) => {});
