@@ -124,6 +124,12 @@
   color: #191c19;
 }
 
+.shop-detail-wrap .back-button {
+  position: relative;
+  left: 1170px;
+  cursor: pointer;
+}
+
 /* 결제 페이지 */
 .shop-pay-wrap {
   margin-top: 30px !important;
@@ -324,7 +330,6 @@ h4 {
 }
 
 .Myreview-wrap .css-1umw9bq-MuiSvgIcon-root {
-  fill: #ffd700;
   display: "inline-block";
   margin-top: 10px;
   padding: 0px;
