@@ -192,7 +192,6 @@ const ShopReview = () => {
       case "작성가능한 리뷰":
         return (
           <div className="before-review-wrap">
-            <h2>작성 가능한 리뷰</h2>
             {currentReviews && currentReviews.length > 0 ? (
               currentReviews.map((item, index) => (
                 <div
@@ -251,7 +250,6 @@ const ShopReview = () => {
       case "내가 작성한 리뷰":
         return (
           <div>
-            <h2>내가 작성한 리뷰</h2>
             {review.length > 0 ? (
               <ul>
                 {review.map((review, index) => (

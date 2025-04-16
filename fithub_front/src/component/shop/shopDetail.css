@@ -5,6 +5,7 @@
   width: 1200px;
   background-color: #fff;
   padding: 20px;
+  border-radius: 8px;
 }
 .shop-detail-wrap .main-detail {
   display: flex;
@@ -50,15 +51,16 @@
 }
 
 .shop-detail-wrap .quantity-controls button {
-  width: 25px;
-  height: 20px;
-  font-size: small;
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
   background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 2px;
+  line-height: 30px;
+  text-align: center;
 }
-
 .shop-detail-wrap .quantity-controls span {
   margin: 0 10px;
   width: 20px;
@@ -73,6 +75,7 @@
 .shop-detail-wrap .goods-buy {
   margin-top: 20px;
   display: flex;
+  gap: 10px;
 }
 .shop-detail-wrap .goods-buy button {
   background-color: #4caf50;
@@ -220,6 +223,7 @@ h4 {
   border-bottom: 2px solid transparent;
   transition: background-color 0.3s, color 0.3s;
   margin-top: 30px;
+  font-size: 20px;
 }
 
 .Myreview-wrap .tabs button.active {
@@ -349,7 +353,6 @@ h4 {
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-  cursor: pointer;
 }
 
 .shop-detail-wrap li div {
