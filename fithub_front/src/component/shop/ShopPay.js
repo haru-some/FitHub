@@ -15,7 +15,7 @@ function ShopPay() {
   const { quantity = 1 } = location.state || {}; // 기본값 설정
 
   const backServer = process.env.REACT_APP_BACK_SERVER;
-  console.log(memberInfo.memberName);
+
   const [formData, setFormData] = useState({
     memberName: memberInfo.memberName,
     goodsNo: "",
@@ -88,8 +88,6 @@ function ShopPay() {
         (goods.goodsPrice * quantity >= 30000 ? 0 : 3000),
     };
 
-    console.log("결제 데이터:", paymentData);
-
     // 결제 API 호출
     const IMP = window.IMP; // iamport
     if (!IMP) {
@@ -129,7 +127,6 @@ function ShopPay() {
       }
     );
   };
-  console.log(formData);
 
   if (!goods) {
     return <div>로딩 중...</div>; // 상품 데이터가 로드되지 않았을 경우
@@ -244,13 +241,6 @@ function ShopPay() {
             </tbody>
           </table>
         </div>
-
-        {/* <div>
-          <label>
-            <input type="checkbox" name="agreement" />
-            약관에 동의합니다.
-          </label>
-        </div> */}
 
         <button type="submit">결제하기</button>
       </form>

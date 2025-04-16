@@ -70,8 +70,7 @@ const ShopCart = () => {
       text: "이 작업은 되돌릴 수 없습니다.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#45a049",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#589c5f",
       confirmButtonText: "예, 삭제합니다!",
       cancelButtonText: "아니요, 취소합니다.",
     }).then((result) => {
@@ -191,6 +190,7 @@ const ShopCart = () => {
       }
     );
   };
+  console.log(totalAmount.toLocaleString());
 
   return (
     <div className="cart-wrap">
@@ -266,7 +266,13 @@ const ShopCart = () => {
           })}
         </div>
         <div className="cart-summary">
-          <h3>총 결제금액: {totalAmount.toLocaleString()} 원</h3>
+          <h3>
+            총 결제금액:{" "}
+            {totalAmount.toLocaleString() !== "3,000"
+              ? totalAmount.toLocaleString()
+              : 0}{" "}
+            원
+          </h3>
           <span>(30000원 이하 배송비 3000원)</span>
           <button className="pay-all-button" onClick={handlePayAll}>
             결제하기
