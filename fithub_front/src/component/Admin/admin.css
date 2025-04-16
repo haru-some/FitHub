@@ -728,7 +728,7 @@
   transition: background-color 0.3s; /* 호버 효과 */
 }
 .shop-detail-frm-wrap .goods-buy button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 
 .shop-detail-frm-wrap .tabs {
@@ -787,7 +787,7 @@
   transition: background-color 0.3s;
 }
 .shop-detail-frm-wrap .button:hover {
-  background-color: #45a049; /* 호버 시 색상 변경 */
+  background-color: #589c5f; /* 호버 시 색상 변경 */
 }
 
 .shop-detail-frm-wrap .ql-editor {

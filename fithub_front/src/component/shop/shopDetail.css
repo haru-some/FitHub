@@ -190,7 +190,7 @@ h4 {
 }
 
 .shop-pay-wrap button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 .shop-pay-wrap .accountForShip {
   font-size: 12px;
@@ -267,7 +267,7 @@ h4 {
 }
 
 .Myreview-wrap .write-review-button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 
 .Myreview-wrap .modal-overlay {
@@ -640,7 +640,7 @@ h4 {
 }
 
 .shipping-modal-wrap .check-button:hover {
-  background-color: #45a049; /* 호버 시 색상 */
+  background-color: #589c5f; /* 호버 시 색상 */
 }
 
 .shop-detail-wrap .faq-container {
@@ -694,7 +694,7 @@ h4 {
 }
 
 .Myreview-wrap .pagination-controls button:hover {
-  background-color: #45a049;
+  background-color: #589c5f;
 }
 
 .Myreview-wrap .pagination-controls button:disabled {
