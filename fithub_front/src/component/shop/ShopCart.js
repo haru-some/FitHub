@@ -69,15 +69,6 @@ const ShopCart = () => {
     });
   };
 
-  const DeleteCart = (cartNo) => {
-    axios
-      .post(`${backServer}/goods/cart/delete`, { cartNos: [cartNo] })
-      .then((res) => {
-        // 삭제 후 장바구니 업데이트
-        setCart(cart.filter((item) => item.cartNo !== cartNo));
-      })
-      .catch((err) => {});
-  };
   const cartDelete = (cartNo) => {
     Swal.fire({
       title: "삭제하시겠습니까?",
@@ -256,7 +247,7 @@ const ShopCart = () => {
                       className="delete-button-item"
                       onClick={(e) => {
                         e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
-                        DeleteCart(item.cartNo);
+
                         cartDelete(item.cartNo);
                       }}
                     >
