@@ -58,9 +58,7 @@ function ShopPay() {
           ["goodsPrice"]: res.data.goodsPrice,
         });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [goodsNo]);
 
   const handleChange = (e) => {
@@ -110,19 +108,13 @@ function ShopPay() {
       },
       (rsp) => {
         if (rsp.success) {
-          console.log("Payment Success:", rsp);
-
           axios
             .post(`${backServer}/goods/sell/add/`, paymentData)
             .then((res) => {
-              console.log(res);
               navigate(`/shop/`);
             })
-            .catch((err) => {
-              console.log(err);
-            });
+            .catch((err) => {});
         } else {
-          console.log("Payment Failed:", rsp);
         }
       }
     );

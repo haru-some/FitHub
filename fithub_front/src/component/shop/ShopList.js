@@ -76,13 +76,10 @@ const GoodsList = () => {
     axios
       .get(`${backServer}/goods?reqPage=${reqPage}`)
       .then((res) => {
-        console.log(res.data.list);
         setGoods(res.data.list ? res.data.list : []);
         setCurrentPage(1); // 데이터가 바뀌면 현재 페이지를 초기화
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [reqPage]);
 
   //관리자 삭제

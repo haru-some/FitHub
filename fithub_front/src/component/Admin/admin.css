@@ -909,6 +909,11 @@
   margin-left: 20px;
   margin-bottom: 10px;
 }
+.shop-detail-frm-wrap .goods-detail-img img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+}
 
 .ad-banner {
   overflow: hidden;

@@ -88,7 +88,7 @@ const AdminGoods = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/admin");
+        navigate("/shop/list");
       })
       .catch((err) => {
         console.error("상품 등록 실패:", err);

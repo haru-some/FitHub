@@ -72,12 +72,9 @@ const ShopOrder = () => {
     axios
       .get(`${backServer}/goods/sell/review/${memberInfo?.memberNo}`)
       .then((res) => {
-        console.log(res.data);
         setOrders(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [setOrders, memberInfo]);
 
   const yymmDate = (dateString) => {

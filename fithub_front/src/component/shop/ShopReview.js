@@ -41,15 +41,12 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, goodsNo, goodsName }) => {
         reviewData
       )
       .then((res) => {
-        console.log("리뷰 제출 성공:", res.data);
         onSubmit(reviewData); // 상태 업데이트
         setRating(0); // 초기화
         setComment(""); // 초기화
         onClose();
       })
-      .catch((err) => {
-        console.log("리뷰 제출 실패:", err);
-      });
+      .catch((err) => {});
   };
 
   ////////////////////////////////////////////////////////////////////////////// 모달 창
@@ -154,7 +151,6 @@ const ShopReview = () => {
         axios
           .delete(`${backServer}/goods/myReview/delete/${reNo}`)
           .then((res) => {
-            console.log(res);
             // 성공적으로 삭제된 후 상태 업데이트
             setReview(review.filter((review) => review.reNo !== reNo));
           });
@@ -166,24 +162,18 @@ const ShopReview = () => {
     axios
       .get(`${backServer}/goods/sell/review/${memberInfo.memberNo}`)
       .then((res) => {
-        console.log(res.data);
         setSell(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [setSell]);
 
   useEffect(() => {
     axios
       .get(`${backServer}/goods/sell/myreview/${memberInfo.memberId}`)
       .then((res) => {
-        console.log(res.data);
         setReview(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [activeTab]);
 
   ///////////////////////////////////////////////////////////////////////// 리뷰 탭
