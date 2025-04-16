@@ -261,7 +261,7 @@ const ChangePw = () => {
             text: "비밀번호가 성공적으로 변경되었습니다.",
             icon: "success",
             confirmButtonColor: "#2f3e2f",
-          }).then(() => navigate("/mypage"));
+          });
           setCurrentPw("");
           setMemberPw("");
           setMemberPwRe("");
