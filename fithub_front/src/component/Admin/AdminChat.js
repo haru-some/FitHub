@@ -57,8 +57,6 @@ const AdminChat = () => {
       // },
 
       onConnect: () => {
-        console.log("Connected to WebSocket");
-
         // 채팅 메시지 구독
         client.subscribe(
           `/topic/chat/messages/${selectedChatRoom}`,
@@ -98,15 +96,12 @@ const AdminChat = () => {
         client.subscribe("/queue/notifications", (message) => {
           const receivedMessage = parseInt(message.body, 10);
           if (receivedMessage === 1) {
-            console.log("New message in another room!");
             setAlarm((prev) => prev + 1);
           }
         });
       },
 
-      onDisconnect: () => {
-        console.log("Disconnected from WebSocket");
-      },
+      onDisconnect: () => {},
     });
 
     client.activate();

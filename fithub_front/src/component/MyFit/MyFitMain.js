@@ -160,25 +160,27 @@ const MyFitMain = () => {
     }
   }, [params]);
 
-  if (logoutST) {
-    navigate("/");
-    setLogoutST(false);
-  } else {
-    if (!member) {
+  useEffect(() => {
+    if (logoutST) {
       navigate("/");
-      Swal.fire({
-        title: "이용 불가",
-        text: "로그인이 필요한 서비스입니다.",
-        icon: "warning",
-        confirmButtonColor: "#589c5f",
-        confirmButtonText: "로그인",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/login");
-        }
-      });
+      setLogoutST(false);
+    } else {
+      if (!member) {
+        navigate("/");
+        Swal.fire({
+          title: "이용 불가",
+          text: "로그인이 필요한 서비스입니다.",
+          icon: "warning",
+          confirmButtonColor: "#589c5f",
+          confirmButtonText: "로그인",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/login");
+          }
+        });
+      }
     }
-  }
+  }, [logoutST]);
 
   useEffect(() => {
     if (!member) {
