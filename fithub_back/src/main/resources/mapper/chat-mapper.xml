@@ -9,6 +9,7 @@
     <select id="chatRoomList" resultType="chatRoom">
     	SELECT cr.*, 
        m.member_thumb,
+       m.member_level,
        (SELECT COUNT(*) 
         FROM chat_message cm 
         WHERE cm.chat_member_id = cr.chat_member_id 
@@ -31,7 +32,8 @@
           AND ROWNUM = 1) AS last_date
 FROM chat_room cr
 LEFT JOIN member m ON cr.chat_member_id = m.member_id
-WHERE EXISTS (
+WHERE m.member_level = 2 -- ✅ member_level이 2인 회원만
+  AND EXISTS (
     SELECT 1
     FROM (
         SELECT chat_room_no, message_content

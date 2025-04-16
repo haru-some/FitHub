@@ -15,17 +15,8 @@ const MemberInfo = () => {
   const isLogin = useRecoilValue(isLoginState);
   useEffect(() => {
     if (!isLogin) {
-      navigate("/login");
-      Swal.fire({
-        title: "로그인 필요",
-        text: "로그인 후 이용할 수 있는 페이지입니다.",
-        icon: "warning",
-        confirmButtonText: "로그인하러 가기",
-        confirmButtonColor: "#2f3e2f",
-      }).then(() => {
-        navigate("/login", {
-          state: { from: location.pathname },
-        });
+      navigate("/login", {
+        state: { from: location.pathname },
       });
     }
   }, [isLogin, navigate, location]);

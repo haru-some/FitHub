@@ -433,17 +433,17 @@ const Comment = (props) => {
   const navigate = useNavigate();
   const comment = props.comment;
   const member = props.member;
-  console.log(comment);
   const [updateComment, setUpdateComment] = useState("");
   useEffect(() => {
     setUpdateComment(comment.commentContent);
   }, []);
   const [anchorEl, setAnchorEl] = useState(null);
-  const menuOpen = Boolean(anchorEl);
+  let menuOpen = Boolean(anchorEl);
 
   const handleMenuClick = (e) => {
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
+    e.currentTarget.blur();
   };
   const handleMenuClose = (e) => {
     e.stopPropagation();
@@ -463,6 +463,10 @@ const Comment = (props) => {
       confirmButtonColor: "#589c5f",
       confirmButtonText: "예",
       cancelButtonText: "아니오",
+      didOpen: () => {
+        const confirmBtn = document.querySelector(".swal2-confirm"); //클래스 네임 찾아서 지정
+        if (confirmBtn) confirmBtn.focus(); // 수동 포커스
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         axios

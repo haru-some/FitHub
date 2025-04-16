@@ -98,6 +98,15 @@ public class AdminController {
 		int result = adminService.adminMemberDelete(memberNo, adminId);
 		return ResponseEntity.ok(result);
 	}
+	@Operation(summary = "회원 정보 복귀", description = "삭제된 회원을 되돌립니다.")
+	@ApiResponses({
+	    @ApiResponse(responseCode = "200", description = "수정 성공")
+	})
+	@PatchMapping("/member/{memberNo}/rollBack")
+	public ResponseEntity<Integer> memberRollBack(@PathVariable int memberNo) {
+		int result = adminService.memberRollBack(memberNo);
+		return ResponseEntity.ok(result);
+	}
 	
 	@Operation(summary = "광고 추가", description = "광고를 추가합니다.")
 	@ApiResponses({

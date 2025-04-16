@@ -73,9 +73,17 @@ FROM dual
     	insert into del_member values(#{m.memberNo}, #{m.memberId}, #{m.memberEmail}, #{m.joinDate}, to_char(sysdate, 'yyyy-mm-dd'), null, #{adminId})
     </insert>
     
-    <delete id="adminMemberDelete">
-    	delete from member where member_no = #{memberNo}
-    </delete>
+    <update id="updateMemberKickId">
+		update member set member_id = #{newMemberId}, del_status = 'Y' where member_no = #{memberNo}
+	</update>
+	
+	<update id="updateMemberId">
+		update member set member_id = #{memberName}, del_status = 'N' where member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteDelMember">
+		delete from del_member where member_id = #{memberName}
+	</delete>
     
     <select id="categoryTotalPrice" resultType="sell">
     	select goods_category, sum(s.goods_total_price) as category_total_price from sell s join goods g on s.goods_no = g.goods_no group by goods_category order by goods_category
@@ -149,10 +157,6 @@ SELECT
 FROM date_range dr
 ORDER BY dr.week_start_date
 </select>
-
-	<update id="updateMemberKickId">
-		update member set member_id = #{newMemberId}, del_status = 'Y' where member_no = #{memberNo}
-	</update>
 
 	
 </mapper>
