@@ -37,12 +37,9 @@ const ShopDetail = () => {
     axios
       .get(`${backServer}/goods/${goodsNo}`)
       .then((res) => {
-        console.log(res.data);
         setGoods(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [goodsNo, backServer]);
 
   const handleIncrease = () => {
@@ -57,12 +54,9 @@ const ShopDetail = () => {
     axios
       .get(`${backServer}/goods/review/read/${goodsNo}`)
       .then((res) => {
-        console.log(res.data);
         setReview(res.data);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => {});
   }, [setReview]);
 
   const renderContent = () => {
@@ -247,8 +241,8 @@ const ShopDetail = () => {
   const plusCart = () => {
     if (!isLogin) {
       Swal.fire({
-        title: "회원이 아닙니다.",
-        text: "회원 가입 후 장바구니 기능을 이용해 주세요.",
+        title: "로그인 후 이용하세요.",
+
         icon: "warning",
         confirmButtonText: "확인",
         confirmButtonColor: "#589c5f",
@@ -275,11 +269,8 @@ const ShopDetail = () => {
         showConfirmButton: false,
         timer: 2000,
       })
-        .then((res) => {
-          console.log(res);
-        })
+        .then((res) => {})
         .catch((err) => {
-          console.log(err);
           Swal.fire({
             icon: "error",
             title: "장바구니에 추가하는 데 실패했습니다.",
@@ -292,8 +283,7 @@ const ShopDetail = () => {
   const doBuy = () => {
     if (!isLogin) {
       Swal.fire({
-        title: "회원이 아닙니다.",
-        text: "회원 가입 후 상품을 구매 해 주세요.",
+        title: "로그인 후 이용하세요.",
         icon: "warning",
         confirmButtonText: "확인",
         confirmButtonColor: "#589c5f",

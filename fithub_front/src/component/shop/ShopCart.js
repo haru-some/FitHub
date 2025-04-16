@@ -30,10 +30,12 @@ const ShopCart = () => {
     }
   }, []);
 
-  if (logoutST) {
-    navigate("/");
-    setLogoutST(false);
-  }
+  useEffect(() => {
+    if (logoutST) {
+      navigate("/");
+      setLogoutST(false);
+    }
+  }, [logoutST]);
 
   // 장바구니 데이터 로드
   useEffect(() => {
@@ -41,12 +43,9 @@ const ShopCart = () => {
       axios
         .get(`${backServer}/goods/cart/read/${memberInfo?.memberNo}`)
         .then((res) => {
-          console.log(res.data);
           setCart(res.data);
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .catch((err) => {});
     }
   }, []);
 
@@ -72,17 +71,6 @@ const ShopCart = () => {
     });
   };
 
-  const DeleteCart = (cartNo) => {
-    axios
-      .post(`${backServer}/goods/cart/delete`, { cartNos: [cartNo] })
-      .then((res) => {
-        // 삭제 후 장바구니 업데이트
-        setCart(cart.filter((item) => item.cartNo !== cartNo));
-      })
-      .catch((err) => {
-        console.error("Error deleting item:", err);
-      });
-  };
   const cartDelete = (cartNo) => {
     Swal.fire({
       title: "삭제하시겠습니까?",
@@ -95,7 +83,6 @@ const ShopCart = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios.delete(`${backServer}/goods/cart/${cartNo}`).then((res) => {
-          console.log(res);
           // 성공적으로 삭제된 후 상태 업데이트
           setCart(cart.filter((cart) => cart.cartNo !== cartNo));
         });
@@ -178,8 +165,6 @@ const ShopCart = () => {
       },
       (rsp) => {
         if (rsp.success) {
-          console.log("Payment Success:", rsp);
-
           axios
             .post(`${backServer}/goods/sell/payAll/`, paymentData)
 
@@ -193,7 +178,6 @@ const ShopCart = () => {
               });
             })
             .catch((err) => {
-              console.error("Error during checkout:", err);
               Swal.fire({
                 title: "결제 실패",
                 text: "결제 중 오류가 발생했습니다. 다시 시도해주세요.",
@@ -201,7 +185,6 @@ const ShopCart = () => {
               });
             });
         } else {
-          console.error("Payment Failed:", rsp);
           if (rsp.error) {
             alert(`결제 실패: ${rsp.error}`);
           }
@@ -209,7 +192,6 @@ const ShopCart = () => {
       }
     );
   };
-  console.log(totalAmount.toLocaleString());
 
   return (
     <div className="cart-wrap">
@@ -267,7 +249,7 @@ const ShopCart = () => {
                       className="delete-button-item"
                       onClick={(e) => {
                         e.stopPropagation(); // 버튼 클릭 시 카드 클릭 이벤트 방지
-                        DeleteCart(item.cartNo);
+
                         cartDelete(item.cartNo);
                       }}
                     >

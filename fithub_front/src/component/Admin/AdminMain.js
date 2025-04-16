@@ -12,8 +12,8 @@ import AdminMember from "./AdminMember";
 import AdminStat from "./AdminStat";
 import AdminChat from "./AdminChat";
 import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isLoginState, logoutState, memberState } from "../utils/RecoilData";
+import { useRecoilState } from "recoil";
+import { logoutState, memberState } from "../utils/RecoilData";
 import AdminGoods from "./AdminGoods";
 import Swal from "sweetalert2";
 

@@ -223,6 +223,9 @@
   border: 1px solid #7c7c7c;
   box-sizing: border-box;
 }
+.admin-section .chat-list::-webkit-scrollbar {
+  display: none;
+}
 .admin-section .chat-room {
   display: flex;
   justify-content: space-between;
@@ -745,7 +748,7 @@
   border: none;
   padding: 15px;
   flex: 1;
-  cursor: pointer;
+
   margin-right: 10px;
   border-radius: 5px;
   font-size: 22px;
@@ -908,6 +911,11 @@
   margin-top: 20px;
   margin-left: 20px;
   margin-bottom: 10px;
+}
+.shop-detail-frm-wrap .goods-detail-img img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
 }
 
 .ad-banner {

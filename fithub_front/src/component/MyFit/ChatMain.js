@@ -170,7 +170,7 @@ const ChatMain = (props) => {
 
               return (
                 <div key={"chat-" + index} className="one-chat">
-                  <p
+                  <div
                     className={
                       chat.senderNo === loginMember.memberNo
                         ? "chat right"
@@ -230,7 +230,7 @@ const ChatMain = (props) => {
                         </div>
                       )}
                     </div>
-                  </p>
+                  </div>
                 </div>
               );
             })}
