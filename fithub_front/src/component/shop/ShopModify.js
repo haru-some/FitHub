@@ -3,10 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState, logoutState } from "../utils/RecoilData";
 import Swal from "sweetalert2";
-import { data, Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../utils/TextEditor";
 import axios from "axios";
-import { Category } from "@mui/icons-material";
 
 const ShopModify = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;

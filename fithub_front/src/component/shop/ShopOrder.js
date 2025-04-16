@@ -9,7 +9,6 @@ import ShippingModal from "./ShippingModal"; // 모달 컴포넌트 임포트
 
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import { Margin } from "@mui/icons-material";
 
 const ShopOrder = () => {
   const [orders, setOrders] = useState([]);
