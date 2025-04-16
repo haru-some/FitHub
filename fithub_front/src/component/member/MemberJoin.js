@@ -21,6 +21,7 @@ const MemberJoin = () => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const agree = useRecoilValue(agreeState);
+  const [emailLocked, setEmailLocked] = useState(false);
   useEffect(() => {
     if (!agree.all) {
       Swal.fire({
@@ -170,6 +171,7 @@ const MemberJoin = () => {
       .then(() => {
         setShowAuthInput(true);
         setAuthTimer(180);
+        setEmailLocked(true);
         Swal.fire({
           title: "인증번호 전송 완료",
           text: "입력한 이메일을 확인하세요.",
@@ -506,6 +508,7 @@ const MemberJoin = () => {
                 value={member.memberEmailFront}
                 onChange={inputMemberData}
                 sx={{ flex: 2 }}
+                InputProps={{ readOnly: emailLocked }}
               />
               <span style={{ alignSelf: "center" }}>@</span>
               {selectedDomain === "직접입력" ? (
@@ -515,6 +518,7 @@ const MemberJoin = () => {
                   value={member.memberEmailBack}
                   onChange={inputMemberData}
                   sx={{ flex: 2 }}
+                  InputProps={{ readOnly: emailLocked }}
                 />
               ) : (
                 <TextField
@@ -524,6 +528,7 @@ const MemberJoin = () => {
                   value={selectedDomain}
                   onChange={handleDomainChange}
                   sx={{ flex: 2 }}
+                  disabled={emailLocked}
                 >
                   <MenuItem value="gmail.com">gmail.com</MenuItem>
                   <MenuItem value="naver.com">naver.com</MenuItem>
