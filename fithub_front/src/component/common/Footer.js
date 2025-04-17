@@ -13,6 +13,7 @@ const Footer = () => {
     if (isLogin) {
       navigate("/myfit/fit");
     } else {
+      window.scrollTo(0, 0);
       navigate("/login");
     }
   };
