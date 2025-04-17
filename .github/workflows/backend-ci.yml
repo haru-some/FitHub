@@ -30,3 +30,8 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+
+      - name: application.properties 생성
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.properties

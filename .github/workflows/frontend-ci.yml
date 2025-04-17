@@ -32,3 +32,7 @@ jobs:
 
       - name: Build Project
         run: npm run build
+
+      - name: .env 파일 생성
+        run: |
+          echo "${{ secrets.ENV }}" > .env
