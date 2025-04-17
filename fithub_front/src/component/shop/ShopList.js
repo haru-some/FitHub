@@ -8,7 +8,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Swal from "sweetalert2";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { memberState, isLoginState } from "../utils/RecoilData";
-import AdBanners from "../utils/AdBanners";
+import AdBanners from "../utils/AdBanners.js";
 import FormatPaintIcon from "@mui/icons-material/FormatPaint";
 
 const categories = [
