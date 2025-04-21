@@ -14,7 +14,7 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 > Java 17, Spring Boot, MyBatis, Oracle 11g XE, React, Recoil, Node.js, AWS EC2, GitHub Actions 기반 개발
 
 | 구분 | 내용 |
-|------|------|
+|--------|---------|
 | **Language** | Java 17, JavaScript, SQL |
 | **Frontend** | React, Recoil, React Router, Axios, MUI |
 | **Backend** | Spring Boot, Spring Security, MyBatis |
@@ -87,7 +87,7 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 ## 📆 개발 일정
 
 | 구분 | 기간 | 내용 |
-|------|------|------|
+|-------|-------|---------|
 | 기획 및 조사 | 03.19 ~ 03.24 | 서비스 분석, ERD 구조 수립 |
 | 디자인 설계 | 03.24 ~ 03.27 | Figma 기반 와이어프레임 작성 |
 | 기능 구현 | 03.26 ~ 04.08 | 프론트/백엔드 모듈 병렬 개발 |
@@ -99,7 +99,7 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 ## 🤝 팀 구성 및 역할
 
 | 이름 | 역할 | 담당 기능 |
-|------|------|-----------|
+|-------|------|------------|
 | **최승현** | Member | 로그인, 회원가입, 소셜 로그인, JWT 인증, 마이페이지, 공통 레이아웃, 메인페이지, 문서화 |
 | 전한기 | My Fit | 루틴 등록, 운동 기록, 활동 로그, 통계, DM |
 | 나한빈 | Community | 커뮤니티 CRUD, 댓글, 좋아요, 팔로우 기능 |
@@ -111,9 +111,9 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 ## 🔗 프로젝트 링크
 
 - 🔗 GitHub Repository: [https://github.com/haru-some/FitHub](https://github.com/haru-some/FitHub)
-- 📑 Notion 포트폴리오: [https://ubertech.notion.site/portfolio](https://ubertech.notion.site/portfolio)
-- 🎨 Figma 와이어프레임: [https://www.figma.com/design/OSrMPywXNgLBfsVaFrVCUc/FitHub](https://www.figma.com/design/OSrMPywXNgLBfsVaFrVCUc/FitHub)
-- 🧠 ERD: [https://www.erdcloud.com/p/RN4KimsQuj8Xq65aK](https://www.erdcloud.com/p/RN4KimsQuj8Xq65aK)
-- 📌 GitMind 흐름도: [https://gitmind.com/app/docs/mnm9yxj0](https://gitmind.com/app/docs/mnm9yxj0)
+- 📑 Notion 포트폴리오: [https://ubertech.notion.site/project-fithub](https://ubertech.notion.site/project-fithub)
+- 🎨 Figma 와이어프레임: [Figma 바로가기](https://www.figma.com/design/OSrMPywXNgLBfsVaFrVCUc/FitHub)
+- 🧠 ERD: [ERD 바로가기 ](https://www.erdcloud.com/p/RN4KimsQuj8Xq65aK)
+- 📌 GitMind 흐름도: [깃마인드 바로가기](https://gitmind.com/app/docs/mnm9yxj0)
 - 📘 프로젝트 개발 보고서 (PDF): [다운로드](./docs/FitHub_프로젝트_개발보고서.pdf)
 
