@@ -115,5 +115,5 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 - 🎨 Figma 와이어프레임: [Figma 바로가기](https://www.figma.com/design/OSrMPywXNgLBfsVaFrVCUc/FitHub)
 - 🧠 ERD: [ERD 바로가기 ](https://www.erdcloud.com/p/RN4KimsQuj8Xq65aK)
 - 📌 GitMind 흐름도: [깃마인드 바로가기](https://gitmind.com/app/docs/mnm9yxj0)
-- 📘 프로젝트 개발 보고서 (PDF): [다운로드](./docs/FitHub_프로젝트_개발보고서.pdf)
+- 📘 프로젝트 개발 보고서 (PDF): [다운로드](./docs/FitHub 프로젝트 개발보고서.pdf)
 
