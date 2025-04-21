@@ -2,10 +2,8 @@
 
 > **기록, 소통, 실천이 연결되는 통합 피트니스 플랫폼**
 
-FitHub는 사용자의 운동 기록과 목표 관리를 기반으로, 커뮤니티 소통 및 운동 상품 거래 기능을
-통합한 웹 기반 소셜 피트니스 플랫폼입니다.  
-React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버를 활용하여 SPA 아키텍처를 구성하고,
-실시간 상호작용과 기술 확장성을 고려한 구조로 개발하였습니다.
+FitHub는 사용자의 운동 기록과 목표 관리를 기반으로, 커뮤니티 소통 및 운동 상품 거래 기능을 통합한 웹 기반 소셜 피트니스 플랫폼입니다.  
+React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버를 활용하여 SPA 아키텍처를 구성하고, 실시간 상호작용과 기술 확장성을 고려한 구조로 개발하였습니다.
 
 ---
 
@@ -108,12 +106,20 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 
 ---
 
+## 🎓 프로젝트를 통해 성장한 점
+
+- JWT 인증과 OAuth를 직접 구현하며 인증 시스템에 대한 깊은 이해를 얻음
+- SPA 구조에서 전역 상태 관리(Recoil)와 컴포넌트 분리 전략을 명확히 설계함
+- 실시간 WebSocket 기반 채팅 기능을 처음 도입하며 데이터 흐름을 설계함
+- MyBatis + Oracle 조합으로 실전형 SQL 튜닝 및 매핑 역량 향상
+
+---
+
 ## 🔗 프로젝트 링크
 
-- 🔗 GitHub Repository: [https://github.com/haru-some/FitHub](https://github.com/haru-some/FitHub)
-- 📑 Notion 포트폴리오: [https://ubertech.notion.site/project-fithub](https://ubertech.notion.site/project-fithub)
-- 🎨 Figma 와이어프레임: [Figma 바로가기](https://www.figma.com/design/OSrMPywXNgLBfsVaFrVCUc/FitHub)
-- 🧠 ERD: [ERD 바로가기 ](https://www.erdcloud.com/p/RN4KimsQuj8Xq65aK)
-- 📌 GitMind 흐름도: [깃마인드 바로가기](https://gitmind.com/app/docs/mnm9yxj0)
-- 📘 프로젝트 개발 보고서 (PDF): [다운로드](./docs/FitHub 프로젝트 개발보고서.pdf)
-
+- 🔗 GitHub Repository: [GitHub Repository](https://github.com/haru-some/FitHub)
+- 📑 Notion: [프로젝트 상세보기](https://ubertech.notion.site/project-fithub)
+- 🎨 Figma 와이어프레임: [Figma 와이어프레임](https://www.figma.com/design/OSrMPywXNgLBfsVaFrVCUc/FitHub)
+- 🧠 ERD: [ERD 전체 구성 ](https://www.erdcloud.com/p/RN4KimsQuj8Xq65aK)
+- 📌 GitMind 흐름도: [GitMind 흐름도](https://gitmind.com/app/docs/mnm9yxj0)
+- 📘 프로젝트 개발 보고서 (PDF): [다운로드](./docs/FitHub_프로젝트_개발보고서.pdf)
