@@ -9,8 +9,7 @@
 FitHub는 운동 기록, 목표 관리, 커뮤니티 소통, 상품 거래를 한 번에 지원하는 웹 기반 소셜 피트니스 플랫폼입니다.  
 사용자 중심의 운동 데이터를 효율적으로 시각화하고, 실시간 소통과 구매 경험까지 아우르는 통합 서비스를 제공합니다.
 
-React 기반 CSR(Client Side Rendering)과  
-Spring Boot 기반 RESTful API 서버를 활용하여 SPA 아키텍처를 구성하고,  
+React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버를 활용하여 SPA 아키텍처를 구성하고,  
 실시간 상호작용과 기술 확장성을 고려한 구조로 개발하였습니다.
 
 
