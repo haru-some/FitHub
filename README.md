@@ -101,10 +101,10 @@ React 기반 CSR(Client Side Rendering)과 Spring Boot 기반 RESTful API 서버
 ## 🧠 트러블 슈팅 사례
 
 &nbsp;&nbsp;&nbsp; 🔄 **JWT 재인증 문제 해결**  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 앱 재로드 시 accessToken 소멸 문제 → refreshToken 활용해 자동 재발급 처리  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 앱 재로드 시 accessToken 소멸 문제 → refreshToken 활용해 자동 재발급 처리  
 
 &nbsp;&nbsp;&nbsp; 🖼 **이미지 삭제 처리 문제 해결**  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 프로필 이미지 재등록 시, 기존 이미지 남는 현상 → FormData에서 명확한 상태값 전달로 해결  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 프로필 이미지 재등록 시, 기존 이미지 남는 현상 → FormData에서 명확한 상태값 전달로 해결  
 
 ---
 <br><br>
